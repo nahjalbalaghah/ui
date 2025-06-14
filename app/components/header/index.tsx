@@ -249,12 +249,12 @@ const Header = () => {
               >
                <Input placeholder='Search sermons...' icon={<Search size={16} />} />
               </motion.div>
-              <motion.button 
+              <motion.div
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <Button variant='solid' icon={<DollarSign size={16} />} >Donate</Button>
-              </motion.button>
+              </motion.div>
               <motion.button
                 className="lg:hidden p-2.5 rounded-xl hover:bg-gray-100 transition-all duration-300 border border-gray-200 hover:border-[#43896B]/30"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}

@@ -60,7 +60,7 @@ const HeroSection = () => {
             </div>
             <div className="space-y-4 sm:space-y-6 mb-8 sm:mb-12">
               <h1 className="text-4xl lg:text-6xl font-black leading-tight text-[#43896B] break-words text-balance tracking-tight" >
-               Imam Ali’s Wisdom & Eloquence
+               Imam Ali's Wisdom & Eloquence
               </h1>
             </div>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-5xl mx-auto mb-8 sm:mb-12 px-4">
@@ -86,53 +86,53 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
-        <div className="fixed bottom-4 sm:bottom-8 left-4 right-4 z-50">
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white/95 backdrop-blur-xl rounded-2xl px-4 sm:px-6 py-3 sm:py-4 shadow-2xl border border-white/20">
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#43896B] rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Disc color='#ffffff' size={20}  />
-                </div>
-                <div className="flex-grow min-w-0">
-                  <h3 className="font-bold text-gray-800 text-sm sm:text-base truncate">{currentSurah}</h3>
-                  <p className="text-xs sm:text-sm text-gray-600">(Tilawat & Translation)</p>
-                </div>
-                <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                  <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
-                    <SkipBack className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-                  </button>
-                  <button
-                    className="p-2 sm:p-3 bg-[#43896B] hover:bg-[#5BA67C] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
-                    onClick={() => setIsPlaying(!isPlaying)}
-                  >
-                    {isPlaying ? (
-                      <Pause className="w-4 h-4 sm:w-5 sm:h-5" />
-                    ) : (
-                      <Play className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" />
-                    )}
-                  </button>
-                  <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
-                    <SkipForward className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-                  </button>
-                  <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
-                    <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-                  </button>
-                </div>
+      </div>
+      <div className="fixed bottom-4 sm:bottom-8 left-4 right-4 z-[999999] pointer-events-none">
+        <div className="max-w-2xl mx-auto pointer-events-auto">
+          <div className="bg-white/95 backdrop-blur-xl rounded-2xl px-4 sm:px-6 py-3 sm:py-4 shadow-2xl border border-white/20">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#43896B] rounded-xl flex items-center justify-center flex-shrink-0">
+                <Disc color='#ffffff' size={20}  />
               </div>
-              <div className="mt-3 flex items-center gap-3">
-                <span className="text-xs text-gray-500 font-mono w-10 text-left">{formatTime(currentTime)}</span>
-                <div className="relative h-1.5 bg-gray-200 rounded-full flex-grow">
-                  <div
-                    className="absolute left-0 top-0 h-full bg-[#43896B] rounded-full transition-all duration-300"
-                    style={{ width: `${progress}%` }}
-                  />
-                  <div
-                    className="absolute top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white border-2 border-[#43896B] rounded-full shadow-lg transition-all duration-300"
-                    style={{ left: `calc(${progress}% - 6px)` }}
-                  />
-                </div>
-                <span className="text-xs text-gray-500 font-mono w-10 text-right">{formatTime(duration)}</span>
+              <div className="flex-grow min-w-0">
+                <h3 className="font-bold text-gray-800 text-sm sm:text-base truncate">{currentSurah}</h3>
+                <p className="text-xs sm:text-sm text-gray-600">(Tilawat & Translation)</p>
               </div>
+              <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
+                  <SkipBack className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                </button>
+                <button
+                  className="p-2 sm:p-3 bg-[#43896B] hover:bg-[#5BA67C] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+                  onClick={() => setIsPlaying(!isPlaying)}
+                >
+                  {isPlaying ? (
+                    <Pause className="w-4 h-4 sm:w-5 sm:h-5" />
+                  ) : (
+                    <Play className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" />
+                  )}
+                </button>
+                <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
+                  <SkipForward className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                </button>
+                <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
+                  <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                </button>
+              </div>
+            </div>
+            <div className="mt-3 flex items-center gap-3">
+              <span className="text-xs text-gray-500 font-mono w-10 text-left">{formatTime(currentTime)}</span>
+              <div className="relative h-1.5 bg-gray-200 rounded-full flex-grow">
+                <div
+                  className="absolute left-0 top-0 h-full bg-[#43896B] rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+                <div
+                  className="absolute top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white border-2 border-[#43896B] rounded-full shadow-lg transition-all duration-300"
+                  style={{ left: `calc(${progress}% - 6px)` }}
+                />
+              </div>
+              <span className="text-xs text-gray-500 font-mono w-10 text-right">{formatTime(duration)}</span>
             </div>
           </div>
         </div>

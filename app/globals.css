@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #ffffff;
@@ -24,18 +25,3 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans) !important;
 }
-
-/* @layer base {
-  .text-primary {
-    color: #43896B
-  }
-  .text-secondary {
-    background: #E8B873;
-  }
-  .bg-primary {
-    color: #43896B
-  }
-  .bg-secondary {
-    background: #E8B873;
-  } */
-/* } */
