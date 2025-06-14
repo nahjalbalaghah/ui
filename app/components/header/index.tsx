@@ -246,12 +246,14 @@ const Header = () => {
               <motion.div 
                 whileFocus={{ scale: 1.02, borderColor: "#43896B" }}
                 whileHover={{ scale: 1.02 }}
+                className='hidden lg:block'
               >
                <Input placeholder='Search sermons...' icon={<Search size={16} />} />
               </motion.div>
               <motion.div
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
+                className='hidden lg:block'
               >
                 <Button variant='solid' icon={<DollarSign size={16} />} >Donate</Button>
               </motion.div>

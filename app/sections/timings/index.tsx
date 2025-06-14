@@ -100,7 +100,7 @@ const TimingsSection = () => {
               ASSOCIATED MOSQUE
             </span>
           </div>
-          <h1 className="text-6xl font-black text-gray-900 mb-6 tracking-tight">
+          <h1 className="text-3xl lg:text-5xl font-black text-gray-900 mb-6 tracking-tight">
             Prayer <span className='text-[#43896B]'>Timings</span>
           </h1>
           <div className="flex justify-center mb-8">

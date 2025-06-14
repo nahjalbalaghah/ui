@@ -122,9 +122,9 @@ const AboutSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-4xl lg:text-5xl font-black text-[#43896B] tracking-tight leading-tight"
+                className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight"
               >
-                About Nahj al-Balagha
+                About <span className='text-[#43896B]'>Nahj al-Balagha</span>
               </motion.h2>
               <motion.div
                 initial={{ width: 0 }}
@@ -151,7 +151,7 @@ const AboutSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="grid grid-cols-2 gap-4 mt-8"
+              className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-8"
             >
               {features.map((feature, index) => (
                 <motion.div
@@ -192,7 +192,7 @@ const AboutSection = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 1.0 }}
-          className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="mt-24 grid grid-cols-3 md:grid-cols-3 gap-8"
         >
           {[
             { icon: Scroll, label: "Sermons", value: "241" },

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Heart, Users, Droplets, Zap, Settings, ArrowRight, Sparkles } from 'lucide-react'
 import Input from '@/app/components/input'
+import Button from '@/app/components/button'
 
 const DonationSection = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -109,9 +110,9 @@ const DonationSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-4xl lg:text-5xl font-black text-gray-800 tracking-tight leading-tight"
+                className="text-3xl lg:text-5xl font-black text-gray-800 tracking-tight leading-tight"
               >
-                Make Your Donation
+                Make Your <span className='text-[#43896B]' >Donation</span>
               </motion.h2>
               <motion.div
                 initial={{ width: 0 }}
@@ -221,14 +222,12 @@ const DonationSection = () => {
               transition={{ duration: 0.6, delay: 1.6 }}
               className="pt-4"
             >
-              <motion.button
+              <motion.div
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-[#43896B] hover:bg-[#3A7A5B] text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 text-lg"
               >
-                <Heart className="w-5 h-5" />
-                Donate Now
-              </motion.button>
+                <Button icon={<Heart size={16} />} variant='solid' >Donate Now</Button>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
