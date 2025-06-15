@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, MapPin, Clock, Phone, Mail, Search, ChevronDown, Home, Calendar, Headphones, GraduationCap, FileText, MessageCircle, DollarSign, Facebook, Twitter, Youtube, Star } from 'lucide-react'
 import Link from 'next/link'
-import Input from '../input'
-import Button from '../button'
+import Input from '../../input'
+import Button from '../../button'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
