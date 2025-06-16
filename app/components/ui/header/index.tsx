@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, MapPin, Clock, Phone, Mail, Search, ChevronDown, Home, Calendar, Headphones, GraduationCap, FileText, MessageCircle, DollarSign, Facebook, Twitter, Youtube, Star } from 'lucide-react'
 import Link from 'next/link'
-import Input from '../input'
-import Button from '../button'
+import Input from '../../input'
+import Button from '../../button'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -246,15 +246,17 @@ const Header = () => {
               <motion.div 
                 whileFocus={{ scale: 1.02, borderColor: "#43896B" }}
                 whileHover={{ scale: 1.02 }}
+                className='hidden lg:block'
               >
                <Input placeholder='Search sermons...' icon={<Search size={16} />} />
               </motion.div>
-              <motion.button 
+              <motion.div
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
+                className='hidden lg:block'
               >
                 <Button variant='solid' icon={<DollarSign size={16} />} >Donate</Button>
-              </motion.button>
+              </motion.div>
               <motion.button
                 className="lg:hidden p-2.5 rounded-xl hover:bg-gray-100 transition-all duration-300 border border-gray-200 hover:border-[#43896B]/30"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
