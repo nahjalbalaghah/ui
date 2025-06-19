@@ -44,8 +44,8 @@ const Header = () => {
       href: '/more',
       hasDropdown: true,
       dropdownItems: [
-        { name: 'About Us', href: '/about' },
-        { name: 'Prayer Times', href: '/prayer-times' },
+        { name: 'About Us', href: '/about-us' },
+        { name: 'Explore', href: '/explore' },
         { name: 'Islamic Calendar', href: '/calendar' },
         { name: 'Resources', href: '/resources' },
         { name: 'Gallery', href: '/gallery' }
