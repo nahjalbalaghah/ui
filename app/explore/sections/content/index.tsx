@@ -136,11 +136,11 @@ const OrationsLettersSayingsSection = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Button variant="outlined" className="w-full">
-                    <Link href="/listings" className="flex items-center justify-center gap-2 w-full">
+                  <Link href="/listings" className="flex items-center justify-center gap-2 w-full">
+                    <Button variant="outlined" className="w-full">
                       View Listings
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 </motion.div>
               </div>
             </motion.div>

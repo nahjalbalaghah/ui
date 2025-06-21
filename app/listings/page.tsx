@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import TopFilterBar from './sections/top-filter-bar';
 import LeftFilterSidebar from './sections/left-filter-sidebar';
 import SermonListing from './sections/sermon-listing';
+import { sermons } from '../data';
 
 export default function Page() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,64 +18,6 @@ export default function Page() {
     hasMusicalNotations: false,
     dateRange: [700, 1900]
   });
-
-  // Sample sermon data
-  const sermons = [
-    {
-      id: 1,
-      title: "Khutbah al-Shaqshaqiyyah",
-      arabicTitle: "أما والله لقد تقمصها ابن أبي قحافة",
-      description: "This is the most debated and powerful khutbah discussing the usurpation of his right to leadership",
-      chapter: 3,
-      type: "Sermon",
-      date: "7th Century"
-    },
-    {
-      id: 2,
-      title: "On Divine Unity",
-      arabicTitle: "في وصف الله سبحانه وتعالى",
-      description: "A profound discourse on the unity and attributes of Allah, demonstrating deep theological understanding",
-      chapter: 1,
-      type: "Sermon",
-      date: "7th Century"
-    },
-    {
-      id: 3,
-      title: "The Hammer Sermon",
-      arabicTitle: "خطبة المطرقة",
-      description: "A powerful sermon about the trials and tribulations that test human faith and character",
-      chapter: 192,
-      type: "Sermon",
-      date: "7th Century"
-    },
-    {
-      id: 4,
-      title: "On Righteousness",
-      arabicTitle: "في صفة المتقين",
-      description: "Description of the righteous believers and their characteristics in worship and daily life",
-      chapter: 193,
-      type: "Sermon",
-      date: "7th Century"
-    },
-    {
-      id: 5,
-      title: "On Leadership",
-      arabicTitle: "في أمر الولاية والحكم",
-      description: "Guidelines for just leadership and governance according to Islamic principles",
-      chapter: 216,
-      type: "Sermon",
-      date: "7th Century"
-    },
-    {
-      id: 6,
-      title: "On Knowledge",
-      arabicTitle: "في فضل العلم والعلماء",
-      description: "The importance of seeking knowledge and the elevated status of scholars in society",
-      chapter: 154,
-      type: "Sermon",
-      date: "7th Century"
-    }
-  ];
 
   const sortOptions = [
     { value: 'title-asc', label: 'Title A-Z' },

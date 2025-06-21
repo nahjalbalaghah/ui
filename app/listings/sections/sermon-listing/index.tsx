@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Button from '@/app/components/button';
-import SermonCard from '@/app/components/cards/sermon';
+import ListingCard from '@/app/components/cards/listing';
 
 interface Sermon {
   id: number;
@@ -42,7 +42,7 @@ export default function SermonListing({
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {sermons.map((sermon) => (
-          <SermonCard
+          <ListingCard
             key={sermon.id}
             sermon={sermon}
             onClick={() => onSermonClick?.(sermon)}
