@@ -5,11 +5,34 @@ import LeftFilterSidebar from './sections/left-filter-sidebar';
 import SermonListing from './sections/sermon-listing';
 import { sermons } from '../data';
 
+interface ActiveFilters {
+  objectType: string[];
+  language: string[];
+  collection: string[];
+  project: string[];
+  fullyDigitized: boolean;
+  hasMusicalNotations: boolean;
+  dateRange: [number, number];
+}
+
+interface FilterOption {
+  id: string;
+  label: string;
+  count: number;
+}
+
+interface FilterOptions {
+  objectType: FilterOption[];
+  language: FilterOption[];
+  collection: FilterOption[];
+  project: FilterOption[];
+}
+
 export default function Page() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  const [activeFilters, setActiveFilters] = useState({
+  const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
     objectType: [],
     language: [],
     collection: [],
@@ -27,7 +50,7 @@ export default function Page() {
     { value: 'relevance', label: 'Relevance' }
   ];
 
-  const filterOptions = {
+  const filterOptions: FilterOptions = {
     objectType: [
       { id: 'manuscripts', label: 'Archives and Manuscripts', count: 12 },
       { id: 'maps', label: 'Maps', count: 12 }
@@ -47,12 +70,16 @@ export default function Page() {
     ]
   };
 
-  const handleFilterChange = (category: any, id: any, checked: any) => {
-    setActiveFilters((prev: any) => ({
+  const handleFilterChange = (
+    category: keyof Pick<ActiveFilters, 'objectType' | 'language' | 'collection' | 'project'>,
+    id: string,
+    checked: boolean
+  ) => {
+    setActiveFilters(prev => ({
       ...prev,
-      [category]: checked 
+      [category]: checked
         ? [...prev[category], id]
-        : prev[category].filter((item: any) => item !== id)
+        : prev[category].filter(item => item !== id)
     }));
   };
 
@@ -68,9 +95,14 @@ export default function Page() {
     });
   };
 
-  const activeFilterCount = Object.values(activeFilters).flat().length + 
-    (activeFilters.fullyDigitized ? 1 : 0) + 
-    (activeFilters.hasMusicalNotations ? 1 : 0);
+  const activeFilterCount = [
+    ...activeFilters.objectType,
+    ...activeFilters.language,
+    ...activeFilters.collection,
+    ...activeFilters.project
+  ].length + 
+  (activeFilters.fullyDigitized ? 1 : 0) + 
+  (activeFilters.hasMusicalNotations ? 1 : 0);
 
   const handleSermonClick = (sermon: any) => {
     console.log('Sermon clicked:', sermon);

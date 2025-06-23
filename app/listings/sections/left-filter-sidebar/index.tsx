@@ -34,7 +34,11 @@ interface LeftFilterSidebarProps {
   setActiveFilters: React.Dispatch<React.SetStateAction<ActiveFilters>>;
   activeFilterCount: number;
   filterOptions: FilterOptions;
-  handleFilterChange: (category: string, id: string, checked: boolean) => void;
+  handleFilterChange: (
+    category: keyof Pick<ActiveFilters, 'objectType' | 'language' | 'collection' | 'project'>,
+    id: string,
+    checked: boolean
+  ) => void;
   clearAllFilters: () => void;
 }
 
@@ -106,12 +110,12 @@ export default function LeftFilterSidebar({
                 <span>700 CE</span>
                 <span>1900 CE</span>
               </div>
-              <div className='px-5' >
+              <div className='px-5'>
                 <RangeSlider
                   min={700}
                   max={1900}
                   value={activeFilters.dateRange}
-                  onChange={(range) => setActiveFilters(prev => ({
+                  onChange={(range: [number, number]) => setActiveFilters(prev => ({
                     ...prev,
                     dateRange: range
                   }))}

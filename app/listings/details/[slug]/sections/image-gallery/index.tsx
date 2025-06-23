@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Eye } from 'lucide-react';
 import Button from '@/app/components/button';
 
@@ -22,7 +22,7 @@ export default function ManuscriptImageGallery({
   onImageClick, 
   onViewGallery 
 }: ManuscriptImageGalleryProps) {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -33,7 +33,7 @@ export default function ManuscriptImageGallery({
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { 
       opacity: 0, 
       y: 20,
@@ -45,19 +45,19 @@ export default function ManuscriptImageGallery({
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: [0.4, 0, 0.2, 1]
+        ease: "easeOut"
       }
     }
   };
 
-  const headerVariants = {
+  const headerVariants: Variants = {
     hidden: { opacity: 0, y: -20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.4, 0, 0.2, 1]
+        ease: "easeOut"
       }
     }
   };
@@ -67,7 +67,7 @@ export default function ManuscriptImageGallery({
       className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
     >
       <motion.div 
         className="flex items-center justify-between mb-6"

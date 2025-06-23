@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { X } from 'lucide-react';
 
 interface ModalProps {
@@ -11,25 +11,25 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, children, title }: ModalProps) {
-  const backdropVariants = {
+  const backdropVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
       transition: {
         duration: 0.3,
-        ease: [0.4, 0, 0.2, 1]
+        ease: "easeOut"
       }
     },
     exit: { 
       opacity: 0,
       transition: {
         duration: 0.2,
-        ease: [0.4, 0, 0.2, 1]
+        ease: "easeOut"
       }
     }
   };
 
-  const modalVariants = {
+  const modalVariants: Variants = {
     hidden: { 
       opacity: 0, 
       scale: 0.75,
@@ -52,12 +52,12 @@ export default function Modal({ isOpen, onClose, children, title }: ModalProps) 
       y: 100,
       transition: {
         duration: 0.2,
-        ease: [0.4, 0, 0.2, 1]
+        ease: "easeOut"
       }
     }
   };
 
-  const headerVariants = {
+  const headerVariants: Variants = {
     hidden: { opacity: 0, y: -20 },
     visible: { 
       opacity: 1, 
@@ -65,12 +65,12 @@ export default function Modal({ isOpen, onClose, children, title }: ModalProps) 
       transition: {
         delay: 0.1,
         duration: 0.3,
-        ease: [0.4, 0, 0.2, 1]
+        ease: "easeOut"
       }
     }
   };
 
-  const contentVariants = {
+  const contentVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
       opacity: 1, 
@@ -78,12 +78,12 @@ export default function Modal({ isOpen, onClose, children, title }: ModalProps) 
       transition: {
         delay: 0.15,
         duration: 0.4,
-        ease: [0.4, 0, 0.2, 1]
+        ease: "easeOut"
       }
     }
   };
 
-  const closeButtonVariants = {
+  const closeButtonVariants: Variants = {
     hidden: { opacity: 0, scale: 0 },
     visible: { 
       opacity: 1, 
