@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
-import { Book, Calendar, FileText } from 'lucide-react';
+import { Book, Calendar, FileText, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import Button from '../../button';
 
-interface SermonCardProps {
+interface ListingCardProps {
   sermon: {
     id: number;
     title: string;
@@ -15,7 +17,13 @@ interface SermonCardProps {
   onClick?: () => void;
 }
 
-export default function SermonCard({ sermon, onClick }: SermonCardProps) {
+export default function ListingCard({ sermon, onClick }: ListingCardProps) {
+  const router = useRouter();
+
+  const handleViewDetails = (id: number) => {
+    router.push(`/listings/details/${id}`);
+  };
+
   return (
     <div 
       onClick={onClick}
@@ -54,7 +62,7 @@ export default function SermonCard({ sermon, onClick }: SermonCardProps) {
         <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">
           {sermon.description}
         </p>
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
           <div className="flex items-center gap-1">
             <Calendar className="w-3 h-3" />
             <span>{sermon.date}</span>
@@ -64,6 +72,9 @@ export default function SermonCard({ sermon, onClick }: SermonCardProps) {
             <span>{sermon.type}</span>
           </div>
         </div>
+        <Button variant='outlined' onClick={() => handleViewDetails(sermon.id)} >
+            View Details
+        </Button>
       </div>
     </div>
   );
