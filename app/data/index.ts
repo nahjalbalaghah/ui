@@ -102,8 +102,23 @@ export const manuscriptData = {
     id: 1,
     title: "Khutbah al-Shaqshaqiyyah",
     arabicTitle: "خطبة الشقشقية",
+    subtitle: "This is the most debated and powerful khutbah discussing the usurpation of his right to leadership",
     description: "One of the most famous sermons of Imam Ali, known for its powerful rhetoric and profound political commentary. This manuscript contains the complete text with extensive marginalia and commentary from various scholars throughout the centuries.",
     fullDescription: "This exceptional manuscript represents one of the finest examples of Islamic calligraphy and scholarly tradition. The Khutbah al-Shaqshaqiyyah, delivered by Imam Ali ibn Abi Talib, is preserved here in its original Arabic with detailed commentary and annotations. The manuscript features exquisite illumination work, gold leaf decorations, and represents centuries of Islamic scholarly tradition. The text addresses themes of justice, leadership, and spiritual governance that remain relevant to Islamic political thought today.",
+    arabicText: [
+        "أَمَا وَاللهِ لَقَدْ تَقَمَّصَهَا ابْنُ أَبِي قُحَافَةَ، وَإِنَّهُ لَيَعْلَمُ أَنَّ مَحَلِّي مِنْهَا مَحَلُّ الْقُطْبِ مِنَ الرَّحَا، يَنْحَدِرُ عَنِّي السَّيْلُ، وَلاَ يَرْقَى إِلَى الطَّيْرُ، فَسَدَلْتُ دُونَهَا ثَوْباً، وَطَوَيْتُ عَنْهَا كَشْحاً، وَطَفِقْتُ أَرْتَئِي بَيْنَ أَنْ أَصُولَ بِيَدٍ جَذَّاءَ، أَوْ أَصْبِرَ عَلَى طَخْيَةٍ عَمْيَاءَ، يَهْرَمُ فِيهَا الْكَبِيرُ، وَيَشِيبُ فِيهَا الصَّغِيرُ، وَيَكْدَحُ فِيهَا مُؤْمِنٌ حَتَّى يَلْقَى رَبَّهُ، فَرَأَيْتُ أَنَّ الصَّبْرَ عَلَى هَاتَا أَحْجَى، فَصَبَرْتُ وَفِي الْعَيْنِ قَذًى، وَفِي الْحَلْقِ شَجاً، أَرَى تُرَاثِي نَهْباً...",
+        "إِلَى أَنْ قَالَ:",
+        "فَصَيَّرَهَا فِي حَوْزَةِ خَشْنَاءَ، يَغْلُظُ كَلْمُهَا، وَيَخْشُنُ مَسُّهَا، وَيَكْثُرُ الْعِثَارُ فِيهَا، وَالاِعْتِذَارُ مِنْهَا، فَصَاحِبُهَا كَرَاكِبِ الصَّعْبَةِ، إِنْ أَشْنَقَ لَهَا خَرَمَ، وَإِنْ أَسْلَسَ لَهَا تَقَحَّمَ، فَمُنِيَ النَّاسُ ـ لَعَمْرُ اللهِ ـ بِخَبْطٍ وَشِمَاسٍ، وَتَلَوُّنٍ وَاعْتِرَاضٍ...",
+        "ثُمَّ قَالَ: فَصَاحِبُهَا",
+        "اللَّهُمَّ إِنَّكَ تَعْلَمُ أَنَّهُ لَمْ يَكُنْ الَّذِي كَانَ مِنَّا مُنَافَسَةً فِي سُلْطَانٍ، وَلاَ الْتِمَاسَ شَيْءٍ مِنْ فُضُولِ الْحُطَامِ، وَلكِنْ لِنَرُدَّ الْمَعَالِمَ مِنْ دِينِكَ، وَنُظْهِرَ الإِصْلاَحَ فِي بِلاَدِكَ، فَيَأْمَنَ الْمَظْلُومُونَ مِنْ عِبَادِكَ، وَتُقَامَ الْمُعَطَّلَةُ مِنْ حُدُودِكَ"
+    ],
+    urduTranslation: [
+        "قسم خدا ابوبکر کے خلافت کا پہلا کہ میرا خلافت سے وہ تعلق ہے جو چکی کی محور کا چکی سے ہوتا ہے میرے ساتھی سے سیلاب اترتا ہے اور پرندوں پر پرندہ نہیں پہ نہیں مار سکتا۔",
+        "میں نے خلافت سے منہ موڑ لیا، اور اس سے دامن بچا لیا، اور سوچنے یا کہ خالی ہاتھ حملہ کروں یا اس اندھی فتنہ خیز مشکل میں رہا یے، میں یہ پرہیز دشمن وار جوانوں کو پیر جوان صحیف کو جانے پین، اور مؤمن مسلسل مشقت میں رہا یے، میں نے صبر کو بہتر جانا خلافت، آنکھ میں کانٹا تھا، اور گلے میں ہڈی ہڈی ہونے باعث کی میں اپنی میراث کو لُٹتے دیکھتا رہا۔",
+        "یہاں تک کہ پہلا چل گیا اور خلافت کو دوسرے کے سپرد کر گیا۔",
+        "(یہاں امام علی نے فرمایا:)",
+        "اے اللہ! تو جانتا کہ میں جانتا ہے کہ ہمارا مقصد اقتدار حاصل کرنا یا دنیوی دولت کا بچھوڑا کرنا نہ تھا، بلکہ یہ چاہتے تھے کہ تیرے دین کے نشانات کو کروں، تیرے ملک میں اصلاح کریں، تاکہ تیرے مظلوم بندے امن میں رہیں اور تیرے ضائع کردہ حدود کو نافذ کو نافذ کیا جائے"
+    ],
     chapter: 3,
     type: "Political Sermon",
     date: "12th Century CE",
@@ -116,41 +131,41 @@ export const manuscriptData = {
     script: "Naskh",
     digitized: true,
     images: [
-      {
-        id: 1,
-        url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
-        title: "Opening Page with Illuminated Header",
-        description: "The opening folio featuring elaborate geometric patterns and calligraphy"
-      },
-      {
-        id: 2,
-        url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
-        title: "Main Text with Commentary",
-        description: "Central pages showing the main text with scholarly annotations in the margins"
-      },
-      {
-        id: 3,
-        url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
-        title: "Decorative Border Detail",
-        description: "Close-up of the intricate border decorations and gold leaf work"
-      },
-      {
-        id: 4,
-        url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
-        title: "Colophon and Scribal Notes",
-        description: "Final page containing the scribe's signature and completion date"
-      },
-      {
-        id: 5,
-        url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
-        title: "Marginal Commentary",
-        description: "Detailed view of the scholarly commentary written in the margins"
-      },
-      {
-        id: 6,
-        url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
-        title: "Calligraphic Excellence",
-        description: "Showcase of the exceptional Naskh calligraphy throughout the manuscript"
-      }
+        {
+            id: 1,
+            url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
+            title: "Opening Page with Illuminated Header",
+            description: "The opening folio featuring elaborate geometric patterns and calligraphy"
+        },
+        {
+            id: 2,
+            url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
+            title: "Main Text with Commentary",
+            description: "Central pages showing the main text with scholarly annotations in the margins"
+        },
+        {
+            id: 3,
+            url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
+            title: "Decorative Border Detail",
+            description: "Close-up of the intricate border decorations and gold leaf work"
+        },
+        {
+            id: 4,
+            url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
+            title: "Colophon and Scribal Notes",
+            description: "Final page containing the scribe's signature and completion date"
+        },
+        {
+            id: 5,
+            url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
+            title: "Marginal Commentary",
+            description: "Detailed view of the scholarly commentary written in the margins"
+        },
+        {
+            id: 6,
+            url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
+            title: "Calligraphic Excellence",
+            description: "Showcase of the exceptional Naskh calligraphy throughout the manuscript"
+        }
     ]
-  };
+};

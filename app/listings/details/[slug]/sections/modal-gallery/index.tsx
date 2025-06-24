@@ -93,7 +93,7 @@ export default function ImageModalGallery({
           <Modal
             isOpen={true}
             onClose={handleClose}
-            title="Manuscript Gallery"
+            title="Manuscripts"
           >
             <motion.div 
               className="relative"
@@ -176,24 +176,6 @@ export default function ImageModalGallery({
                 transition={{ delay: 0.1 }}
               >
                 <div className="max-w-4xl mx-auto">
-                  <motion.h4 
-                    className="text-lg font-semibold mb-2 text-gray-900"
-                    key={`title-${selectedImageIndex}`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {currentImage.title}
-                  </motion.h4>
-                  <motion.p 
-                    className="text-gray-600"
-                    key={`desc-${selectedImageIndex}`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                  >
-                    {currentImage.description}
-                  </motion.p>
                   <motion.div 
                     className="flex items-center justify-between mt-4"
                     initial={{ opacity: 0 }}
@@ -329,24 +311,6 @@ export default function ImageModalGallery({
               transition={{ delay: 0.2, duration: 0.4 }}
             >
               <div className="max-w-7xl mx-auto">
-                <motion.h4 
-                  className="text-xl font-semibold mb-2 text-white"
-                  key={`fs-title-${selectedImageIndex}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {currentImage.title}
-                </motion.h4>
-                <motion.p 
-                  className="text-gray-200 mb-4"
-                  key={`fs-desc-${selectedImageIndex}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
-                >
-                  {currentImage.description}
-                </motion.p>
                 <motion.div 
                   className="flex items-center justify-between"
                   initial={{ opacity: 0 }}
