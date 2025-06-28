@@ -1,11 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import ManuscriptHeader from './sections/header';
-import ManuscriptImageGallery from './sections/image-gallery';
 import ManuscriptDescription from './sections/description';
-import ManuscriptDetailsSidebar from './sections/sidebar';
 import ImageModalGallery from './sections/modal-gallery';
 import { manuscriptData } from '@/app/data';
+import { Eye } from 'lucide-react';
+import Button from '@/app/components/button';
 
 export default function ManuscriptDetailsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,58 +12,33 @@ export default function ManuscriptDetailsPage() {
 
   const openImageModal = (index: any) => {
     setSelectedImageIndex(index);
-    setIsModalOpen(true);
+    setIsModalOpen(true)
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  const handleDownload = () => {
-    console.log('Download manuscript');
-  };
-
-  const handleShare = () => {
-    console.log('Share manuscript');
-  };
-
-  const handleBack = () => {
-    window.history.back();
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <ManuscriptHeader
-          manuscript={manuscriptData}
-          onBack={handleBack}
-          onDownload={handleDownload}
-          onShare={handleShare}
-        />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-2/3">
-            <ManuscriptImageGallery
-              images={manuscriptData.images}
-              onImageClick={openImageModal}
-              onViewGallery={() => openImageModal(0)}
-            />
+          <div className='w-full' >
             <ManuscriptDescription
+              title={manuscriptData.title}
+              subtitle={manuscriptData.subtitle}
+              arabicText={manuscriptData.arabicText}
+              urduTranslation={manuscriptData.urduTranslation}
               description={manuscriptData.fullDescription}
             />
-          </div>
-          <div className="lg:w-1/3">
-            <ManuscriptDetailsSidebar
-              details={{
-                date: manuscriptData.date,
-                location: manuscriptData.location,
-                language: manuscriptData.language,
-                folios: manuscriptData.folios,
-                dimensions: manuscriptData.dimensions,
-                script: manuscriptData.script,
-                collection: manuscriptData.collection,
-                project: manuscriptData.project
-              }}
-            />
+           <div className='mt-5' > 
+            <Button
+              icon={<Eye className="w-4 h-4" />}
+              onClick={() => openImageModal(0)}
+              >
+              View Manuscripts
+            </Button>
+           </div>
           </div>
         </div>
       </div>
