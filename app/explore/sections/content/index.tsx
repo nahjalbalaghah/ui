@@ -1,0 +1,169 @@
+'use client'
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { MessageSquare, Mail, Quote, Scroll, Calendar, Archive } from 'lucide-react'
+import Button from '@/app/components/button'
+import Link from 'next/link'
+
+const OrationsLettersSayingsSection = () => {
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    const section = document.getElementById('orations-letters-sayings-section')
+    if (section) {
+      observer.observe(section)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  const collections = [
+    {
+      icon: MessageSquare,
+      title: "Orations",
+      items: [
+        "Classical Arabic rhetorical speeches",
+        "Political addresses from Abbasid period",
+        "Religious sermons and Friday prayers",
+        "Ceremonial speeches for court occasions"
+      ],
+      period: "8th-15th Century"
+    },
+    {
+      icon: Mail,
+      title: "Letters",
+      items: [
+        "Diplomatic correspondence between rulers",
+        "Personal letters of scholars and poets",
+        "Commercial trade agreements",
+        "Administrative documents and decrees"
+      ],
+      period: "9th-16th Century"
+    },
+    {
+      icon: Quote,
+      title: "Sayings",
+      items: [
+        "Prophetic traditions and wisdom",
+        "Philosophical maxims of great thinkers",
+        "Poetic aphorisms and literary quotes",
+        "Moral teachings from Islamic scholars"
+      ],
+      period: "7th-14th Century"
+    }
+  ]
+
+  return (
+    <section id="orations-letters-sayings-section" className="py-24 bg-[#f9fafb] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex justify-center items-center gap-3"
+          >
+            <Scroll className="w-6 h-6 text-[#43896B]" />
+            <span className="text-[#43896B] font-bold text-lg tracking-wide">Literary Heritage</span>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight mt-4"
+          >
+            <span className="text-[#43896B]">Orations</span>, Letters & Sayings
+          </motion.h2>
+          <motion.div
+            initial={{ width: 0 }}
+            animate={isVisible ? { width: "120px" } : {}}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="h-1 bg-[#43896B] rounded-full mx-auto mt-6"
+          ></motion.div>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mb-16 max-w-4xl mx-auto text-center"
+        >
+          <p className="text-lg text-gray-600 leading-relaxed">
+            Discover the eloquent voices of Islamic civilization through our collection of orations, personal correspondence, 
+            and timeless sayings. These literary treasures capture the wisdom, diplomacy, and cultural richness that shaped 
+            centuries of Islamic thought and expression.
+          </p>
+        </motion.div>
+        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+          {collections.map((collection, index) => (
+            <motion.div
+              key={collection.title}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.7 + (index * 0.1) }}
+              className="bg-white rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-[#43896B]/10 rounded-xl flex items-center justify-center">
+                  <collection.icon className="w-6 h-6 text-[#43896B]" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-gray-800">{collection.title}</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-gray-500">{collection.period}</span>
+                  </div>
+                </div>
+              </div>
+              <ul className="space-y-3 pl-2 mb-6">
+                {collection.items.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#43896B] mt-2 flex-shrink-0"></div>
+                    <span className="text-gray-600 leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="pt-4 border-t border-gray-100">
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Link href="/listings" className="flex items-center justify-center gap-2 w-full">
+                    <Button variant="outlined" className="w-full">
+                      View Listings
+                    </Button>
+                  </Link>
+                </motion.div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 1.0 }}
+          className="text-center mt-16"
+        >
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Button variant="outlined" icon={<Archive size={16} />}>
+              Browse Literary Collection
+            </Button>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+export default OrationsLettersSayingsSection
