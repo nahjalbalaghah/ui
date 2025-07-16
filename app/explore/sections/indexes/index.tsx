@@ -29,22 +29,22 @@ const IndexesSection = () => {
     {
       icon: MapPin,
       title: "Index of Names and Places",
-      description: "Locate people, tribes, and geographic regions mentioned in Nahj al-Balaghah"
+      description: "Locate people, tribes, and geographic regions mentioned in Nahj al-Balagha"
     },
     {
       icon: Languages,
       title: "Index of Terms",
-      description: "Understand key Arabic and Islamic terminology used in the sermons and letters"
+      description: "Understand key Arabic and Islamic terminology used in the sermons, letters, and sayings of Nahj al-Balagha"
     },
     {
       icon: Bookmark,
       title: "Index of Qur'an, Hadith, Poetry, and Proverbs",
-      description: "Find scriptural references, poetic verses, and traditional wisdom quoted throughout the text"
+      description: "Find scriptural references, poetic verses, and traditional wisdom quoted throughout Nahj al-Balagha"
     },
     {
       icon: Scale,
       title: "Index of Religious and Ethical Concepts",
-      description: "Explore core values and concepts like justice, piety, and ethics as emphasized by Imam Ali"
+      description: "Explore core values and concepts like justice, piety, and ethics as emphasized by Imam Ali in Nahj al-Balagha"
     }
   ]
 
