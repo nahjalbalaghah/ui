@@ -31,22 +31,22 @@ const AboutSection = () => {
     {
       icon: Scroll,
       title: "Authentic Compilation",
-      description: "Original sermons, letters, and sayings of Imam Ali (AS)"
+      description: "Original sermons, letters, and sayings of Imam Ali (AS) compiled by Sharif al-Radi"
     },
     {
       icon: Lightbulb,
       title: "Timeless Wisdom",
-      description: "Profound insights on life, governance, and spirituality"
+      description: "Profound insights on life, governance, and spirituality from Nahj al-Balagha"
     },
     {
       icon: Heart,
       title: "Spiritual Guidance",
-      description: "Path to self-purification and divine connection"
+      description: "Path to self-purification and divine connection through the teachings of Imam Ali (AS)"
     },
     {
       icon: Award,
       title: "Literary Excellence",
-      description: "Masterpiece of Arabic literature and eloquence"
+      description: "A masterpiece of Arabic literature and eloquence, revered by scholars for centuries"
     }
   ]
 

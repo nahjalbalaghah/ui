@@ -29,33 +29,41 @@ const ServicesSection = () => {
     {
       id: 1,
       icon: BookOpen,
-      title: "Digital Library",
-      description: "Complete collection of sermons, letters, and sayings in multiple formats",
+      title: "Digital Nahj al-Balagha Library",
+      description: "Access the complete collection of sermons, letters, and sayings in multiple formats",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=faces",
       gradient: "from-[#43896B] to-[#43896B]/80"
     },
     {
       id: 2,
       icon: Search,
-      title: "Advanced Search",
-      description: "Find specific teachings by topic, theme, or keyword across all texts",
+      title: "Advanced Text Search",
+      description: "Find specific teachings by topic, theme, or keyword across Nahj al-Balagha",
       image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=300&fit=crop",
       gradient: "from-[#43896B] to-[#43896B]/80"
     },
     {
       id: 3,
       icon: Globe,
-      title: "Multi-Language Support",
-      description: "Access translations in Arabic, English, Urdu, Persian, and more languages",
+      title: "Multi-Language Translations",
+      description: "Read Nahj al-Balagha in Arabic, English, Urdu, Persian, and more languages",
       image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop",
       gradient: "from-[#43896B] to-[#43896B]/80"
     },
     {
       id: 4,
-      icon: Play,
-      title: "Audio Recitations",
-      description: "Listen to beautiful recitations of sermons and teachings by renowned scholars",
-      image: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=400&h=300&fit=crop",
+      icon: Lightbulb,
+      title: "Scholarly Commentary",
+      description: "Access classical and modern commentaries on Nahj al-Balagha",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop",
+      gradient: "from-[#43896B] to-[#43896B]/80"
+    },
+    {
+      id: 5,
+      icon: MessageCircle,
+      title: "Community Discussions",
+      description: "Join discussions and share insights on the teachings of Imam Ali (AS)",
+      image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=400&h=300&fit=crop",
       gradient: "from-[#43896B] to-[#43896B]/80"
     }
   ]

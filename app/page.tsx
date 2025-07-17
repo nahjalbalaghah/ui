@@ -1,24 +1,43 @@
 import AboutSection from "./sections/about";
-import BlogEventsSection from "./sections/blogs";
-import CausesSection from "./sections/causes";
-import DonationSection from "./sections/donation";
 import HeroSection from "./sections/hero";
-import PillarsSection from "./sections/pillars";
 import IslamicScholarsSection from "./sections/scholars";
 import ServicesSection from "./sections/services";
-import TimingsSection from "./sections/timings";
+
+export const metadata = {
+  title: "Home | Nahj al-Balagha",
+  description: "Discover the wisdom and eloquence of Imam Ali (AS) through Nahj al-Balagha. Explore sermons, letters, and sayings with translations and commentary.",
+  openGraph: {
+    title: "Home | Nahj al-Balagha",
+    description: "Discover the wisdom and eloquence of Imam Ali (AS) through Nahj al-Balagha. Explore sermons, letters, and sayings with translations and commentary.",
+    url: "https://nahj-al-balagha.com/",
+    images: [
+      {
+        url: "/globe.svg",
+        width: 1200,
+        height: 630,
+        alt: "Nahj al-Balagha Logo"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Home | Nahj al-Balagha",
+    description: "Discover the wisdom and eloquence of Imam Ali (AS) through Nahj al-Balagha. Explore sermons, letters, and sayings with translations and commentary.",
+    images: [
+      {
+        url: "/globe.svg",
+        alt: "Nahj al-Balagha Logo"
+      }
+    ]
+  }
+};
 
 export default function Home() {
   return (
     <div className="" >
       <HeroSection />
-      <AboutSection />
-      <TimingsSection />
-      <DonationSection />
+      <AboutSection /> 
       <ServicesSection />
-      <PillarsSection />
-      <CausesSection />
-      <BlogEventsSection />
       <IslamicScholarsSection />
     </div>
   );

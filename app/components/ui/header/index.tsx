@@ -1,10 +1,9 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, MapPin, Clock, Phone, Mail, Search, ChevronDown, Home, Calendar, Headphones, GraduationCap, FileText, MessageCircle, DollarSign, Facebook, Twitter, Youtube, Star } from 'lucide-react'
+import { Menu, X, MapPin, Clock, Phone, Mail, Search, ChevronDown, Home, Calendar, Headphones, GraduationCap, FileText, MessageCircle, DollarSign, Facebook, Twitter, Youtube, Star, List } from 'lucide-react'
 import Link from 'next/link'
 import Input from '../../input'
-import Button from '../../button'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -27,29 +26,16 @@ const Header = () => {
       hasDropdown: false
     },
     {
-      name: 'Scholars',
-      icon: GraduationCap,
-      href: '/scholars',
-      hasDropdown: true,
-      dropdownItems: [
-        { name: 'Our Scholars', href: '/scholars/our-team' },
-        { name: 'Guest Speakers', href: '/scholars/guests' },
-        { name: 'Lectures', href: '/scholars/lectures' },
-        { name: 'Q&A Sessions', href: '/scholars/qa' }
-      ]
+      name: 'About',
+      icon: List,
+      href: '/about-us',
+      hasDropdown: false
     },
     {
-      name: 'More',
-      icon: FileText,
-      href: '/more',
-      hasDropdown: true,
-      dropdownItems: [
-        { name: 'About Us', href: '/about-us' },
-        { name: 'Explore', href: '/explore' },
-        { name: 'Islamic Calendar', href: '/calendar' },
-        { name: 'Resources', href: '/resources' },
-        { name: 'Gallery', href: '/gallery' }
-      ]
+      name: 'Explore',
+      icon: Search,
+      href: '/explore',
+      hasDropdown: false
     },
     {
       name: 'Contact',
@@ -82,60 +68,22 @@ const Header = () => {
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <MapPin className="w-4 h-4 text-[#E8B873]" />
-              <span className="text-sm font-medium">New Orleans, Jamia Mosque</span>
+              <Star className="w-4 h-4 text-[#E8B873]" />
+              <span className="text-sm font-medium">A Treasury of Imam Ali’s Wisdom</span>
             </motion.div>
             <motion.div 
               className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1.5"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Clock className="w-4 h-4 text-[#E8B873]" />
-              <span className="text-sm font-medium">Mon - Sat 8:00 am - 18:00 pm</span>
+              <FileText className="w-4 h-4 text-[#E8B873]" />
+              <span className="text-sm font-medium">240+ Sermons, Letters & Sayings</span>
             </motion.div>
           </div>
           <div className="flex items-center gap-6">
-            <div className="hidden sm:flex items-center gap-4">
-              <motion.div 
-                className="flex items-center gap-2 hover:bg-white/10 rounded-full px-3 py-1.5 transition-all duration-200"
-                whileHover={{ scale: 1.02 }}
-              >
-                <Phone className="w-4 h-4 text-[#E8B873]" />
-                <span className="text-sm font-medium">(00) 123-345-11</span>
-              </motion.div>
-              <motion.div 
-                className="flex items-center gap-2 hover:bg-white/10 rounded-full px-3 py-1.5 transition-all duration-200"
-                whileHover={{ scale: 1.02 }}
-              >
-                <Mail className="w-4 h-4 text-[#E8B873]" />
-                <span className="text-sm font-medium">help@example.com</span>
-              </motion.div>
-            </div>
             <div className="flex items-center gap-4">
-              <span className="text-xs font-medium opacity-90">Follow Us:</span>
-              <div className="flex gap-2">
-                <motion.div
-                  whileHover={{ scale: 1.2, y: -2 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="cursor-pointer"
-                >
-                  <Facebook className="w-4 h-4 hover:text-[#E8B873] transition-colors duration-200" />
-                </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.2, y: -2 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="cursor-pointer"
-                >
-                  <Twitter className="w-4 h-4 hover:text-[#E8B873] transition-colors duration-200" />
-                </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.2, y: -2 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="cursor-pointer"
-                >
-                  <Youtube className="w-4 h-4 hover:text-[#E8B873] transition-colors duration-200" />
-                </motion.div>
-              </div>
+              <Link href="/explore" className="text-xs font-medium opacity-90 hover:underline">Explore</Link>
+              <Link href="/contact" className="text-xs font-medium opacity-90 hover:underline">Contact</Link>
             </div>
           </div>
         </div>
@@ -209,36 +157,6 @@ const Header = () => {
                       </motion.div>
                     </Link>
                   )}
-                  <AnimatePresence>
-                    {item.hasDropdown && activeDropdown === item.name && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -15, scale: 0.92 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -15, scale: 0.92 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-3 z-50 backdrop-blur-xl"
-                      >
-                        <div className="absolute -top-2 left-6 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45"></div>
-                        {item.dropdownItems?.map((dropdownItem, subIndex) => (
-                          <Link key={dropdownItem.name} href={dropdownItem.href}>
-                            <motion.div
-                              className="px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-[#43896B]/10 hover:to-[#E8B873]/10 hover:text-[#43896B] transition-all duration-300 mx-2 rounded-xl cursor-pointer group"
-                              initial={{ opacity: 0, x: -15 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ duration: 0.3, delay: subIndex * 0.1 }}
-                              onClick={closeDropdown}
-                              whileHover={{ x: 4 }}
-                            >
-                              <div className="flex items-center justify-between">
-                                <span className="font-medium">{dropdownItem.name}</span>
-                                <div className="w-1.5 h-1.5 bg-[#E8B873] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                              </div>
-                            </motion.div>
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </div>
               ))}
             </nav>
@@ -249,13 +167,6 @@ const Header = () => {
                 className='hidden lg:block'
               >
                <Input placeholder='Search sermons...' icon={<Search size={16} />} />
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className='hidden lg:block'
-              >
-                <Button variant='solid' icon={<DollarSign size={16} />} >Donate</Button>
               </motion.div>
               <motion.button
                 className="lg:hidden p-2.5 rounded-xl hover:bg-gray-100 transition-all duration-300 border border-gray-200 hover:border-[#43896B]/30"
@@ -351,36 +262,6 @@ const Header = () => {
                         </div>
                       </Link>
                     )}
-                    <AnimatePresence>
-                      {item.hasDropdown && activeDropdown === item.name && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.4 }}
-                          className="bg-gradient-to-r from-gray-50 to-gray-100 overflow-hidden"
-                        >
-                          <div className="px-5 py-3 space-y-2">
-                            {item.dropdownItems?.map((dropdownItem, subIndex) => (
-                              <Link key={dropdownItem.name} href={dropdownItem.href}>
-                                <motion.div
-                                  className="block px-4 py-3 text-gray-700 hover:text-[#43896B] hover:bg-white rounded-xl transition-all duration-300 cursor-pointer group"
-                                  initial={{ opacity: 0, x: -20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ duration: 0.3, delay: subIndex * 0.1 }}
-                                  onClick={closeMenu}
-                                >
-                                  <div className="flex items-center justify-between">
-                                    <span className="font-medium">{dropdownItem.name}</span>
-                                    <div className="w-2 h-2 bg-[#E8B873] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                                  </div>
-                                </motion.div>
-                              </Link>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </motion.div>
                 ))}
                 <motion.button 
