@@ -27,54 +27,35 @@ const ManuscriptsSection = () => {
 
   const collections = [
     {
-      icon: Layers,
-      title: "Bodleian Library Foundations",
+      icon: BookOpen,
+      title: "Earliest Nahj al-Balagha Manuscripts",
       items: [
-        "MS. Bodl. Or. 322 - Early Qur'an manuscript (1601)",
-        "17th century Arabic studies revival",
-        "John Wrothe's diplomatic gift"
+        "10th-century Arabic manuscripts compiled by Sharif al-Radi",
+        "Earliest extant copies preserved in Middle Eastern libraries",
+        "Notable marginalia and commentaries from classical scholars"
       ],
-      period: "Early 17th Century"
+      period: "10th-12th Century"
     },
     {
       icon: Archive,
-      title: "Laud & Pococke Collections",
+      title: "Commentaries & Translations",
       items: [
-        "MS. Pococke 400 - Kalilah wa-Dinnah (14th c.)",
-        "MS. Pococke 375 - al-Idrisi's Book of Roger",
-        "MS. Greaves 42 - Partial Book of Roger"
+        "Classical Arabic commentaries (e.g., Ibn Abi al-Hadid)",
+        "Persian, Urdu, and English translations from the 19th-21st centuries",
+        "Modern annotated editions and research publications"
       ],
-      period: "1630s-1650s"
+      period: "13th Century–Present"
     },
     {
-      icon: Map,
-      title: "Huntington Collection",
+      icon: Globe,
+      title: "The Book of Curiosities",
       items: [
-        "MS. Huntington 212 - al-Şüf's Book of Fixed Stars (12th c.)",
-        "MS. Huntington 264 - Military arts for Saladin's treasury",
-        "Robert Huntington's Middle Eastern acquisitions"
+        "A unique illustrated Arabic manuscript from the 11th century",
+        "Contains some of the earliest known maps from the Islamic world",
+        "Features diagrams of the heavens, earth, and seas",
+        "Valuable for understanding medieval Islamic geography and science"
       ],
-      period: "Late 17th Century"
-    },
-    {
-      icon: Library,
-      title: "Marsh Collection",
-      items: [
-        "MS. Marsh 144 - Illustrated Book of Fixed Stars",
-        "MS. Marsh 294 - al-Sjifāqsi's Portolan Atlas (16th c.)",
-        "1714 bequest of Archbishop Narcissus Marsh"
-      ],
-      period: "Early 18th Century"
-    },
-    {
-      icon: Star,
-      title: "Notable Individual Manuscripts",
-      items: [
-        "MS. Bodl. Or. 793 - Safavid era Qur'an (ex-Tipū Sultān)",
-        "MS. Bodl. Or. 133 - Kitāb al-Bulhān (15th c. Baghdad)",
-        "MS. Arab. c. 90 - Book of Curiosities (recent acquisition)"
-      ],
-      period: "Various Periods"
+      period: "11th Century"
     }
   ]
 
@@ -113,9 +94,7 @@ const ManuscriptsSection = () => {
           className="mb-16 max-w-4xl mx-auto text-center"
         >
           <p className="text-lg text-gray-600 leading-relaxed">
-            Since the Bodleian Library's opening in 1602, its collections have grown to include extraordinary Islamic manuscripts
-            and maps, beginning with an early Qur'an manuscript gifted by diplomat John Wrothe. These treasures reflect centuries
-            of scholarly exchange between Europe and the Islamic world.
+            Discover the manuscript heritage of Nahj al-Balagha, from the earliest Arabic compilations to modern translations and commentaries. These treasures reflect centuries of devotion to preserving and understanding the words of Imam Ali (AS).
           </p>
         </motion.div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

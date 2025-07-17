@@ -1,0 +1,8 @@
+# pack-refs with: peeled fully-peeled sorted 
+19670b8e27eac79aefa2f360bb6f872a25b930c1 refs/remotes/origin/chore/listing-details-ui
+4b29ec18e5d8ec969be7cdb27591310cc52d0f08 refs/remotes/origin/feat/explore-about-pages
+1831c74fb980f3f9c914f34d3e713e9b02f3e404 refs/remotes/origin/feat/homepage-1
+092a5bc5975842da2334ea331df57d956ce9dfd5 refs/remotes/origin/feat/listing-details-page
+eb12b35302939d98af5c8ec638d3c76d0a48fdf4 refs/remotes/origin/feat/listings-page
+8be8bb97a6d80455e440f7a8ac0592500a51925e refs/remotes/origin/fix/build-exception-1
+7f2a2c11333b36f3dec5aca07c27b462f7c1e5fe refs/remotes/origin/main

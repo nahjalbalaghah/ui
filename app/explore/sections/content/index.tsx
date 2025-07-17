@@ -29,36 +29,36 @@ const OrationsLettersSayingsSection = () => {
   const collections = [
     {
       icon: MessageSquare,
-      title: "Orations",
+      title: "Sermons (Khutbahs)",
       items: [
-        "Classical Arabic rhetorical speeches",
-        "Political addresses from Abbasid period",
-        "Religious sermons and Friday prayers",
-        "Ceremonial speeches for court occasions"
+        "Eloquent discourses on faith, justice, and governance by Imam Ali (AS)",
+        "Guidance on spiritual and ethical conduct",
+        "Addresses on social justice and leadership",
+        "Reflections on the nature of the world and the hereafter"
       ],
-      period: "8th-15th Century"
+      period: "Collected 10th Century (by Sharif al-Radi)"
     },
     {
       icon: Mail,
       title: "Letters",
       items: [
-        "Diplomatic correspondence between rulers",
-        "Personal letters of scholars and poets",
-        "Commercial trade agreements",
-        "Administrative documents and decrees"
+        "Correspondence to governors and officials on justice and administration",
+        "Letters to family and companions with moral and spiritual advice",
+        "Political and diplomatic letters during Imam Ali's caliphate",
+        "Testaments and instructions for posterity"
       ],
-      period: "9th-16th Century"
+      period: "Collected 10th Century (by Sharif al-Radi)"
     },
     {
       icon: Quote,
-      title: "Sayings",
+      title: "Sayings (Short Wisdoms)",
       items: [
-        "Prophetic traditions and wisdom",
-        "Philosophical maxims of great thinkers",
-        "Poetic aphorisms and literary quotes",
-        "Moral teachings from Islamic scholars"
+        "Concise maxims and aphorisms on life, knowledge, and virtue",
+        "Guidance on humility, patience, and piety",
+        "Reflections on the human condition and society",
+        "Timeless advice for personal development"
       ],
-      period: "7th-14th Century"
+      period: "Collected 10th Century (by Sharif al-Radi)"
     }
   ]
 
@@ -97,9 +97,7 @@ const OrationsLettersSayingsSection = () => {
           className="mb-16 max-w-4xl mx-auto text-center"
         >
           <p className="text-lg text-gray-600 leading-relaxed">
-            Discover the eloquent voices of Islamic civilization through our collection of orations, personal correspondence, 
-            and timeless sayings. These literary treasures capture the wisdom, diplomacy, and cultural richness that shaped 
-            centuries of Islamic thought and expression.
+            Explore the eloquence and wisdom of Imam Ali ibn Abi Talib (AS) through the Nahj al-Balagha—a collection of sermons, letters, and sayings compiled by Sharif al-Radi. These texts offer profound insights into faith, justice, leadership, and the human experience.
           </p>
         </motion.div>
         <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
