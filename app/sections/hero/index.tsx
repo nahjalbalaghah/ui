@@ -87,7 +87,7 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      <div className="fixed bottom-4 sm:bottom-8 left-4 right-4 z-[999999] pointer-events-none">
+      {/* <div className="fixed bottom-4 sm:bottom-8 left-4 right-4 z-[999999] pointer-events-none">
         <div className="max-w-2xl mx-auto pointer-events-auto">
           <div className="bg-white/95 backdrop-blur-xl rounded-2xl px-4 sm:px-6 py-3 sm:py-4 shadow-2xl border border-white/20">
             <div className="flex items-center gap-3 sm:gap-4">
@@ -136,7 +136,7 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -13,27 +13,27 @@ const ExploreHero = () => {
   }, []);
 
   const stats = [
-    { icon: ScrollText, label: "Sermons", value: "241+" },
-    { icon: Quote, label: "Letters", value: "79+" },
-    { icon: BookOpen, label: "Sayings", value: "480+" },
+    { icon: ScrollText, label: "Sermons", value: "241" },
+    { icon: Quote, label: "Letters", value: "79" },
+    { icon: BookOpen, label: "Sayings", value: "480" },
     { icon: Globe, label: "Translations", value: "30+" }
   ];
 
   const features = [
     { 
       icon: Search, 
-      title: "Comprehensive Search", 
-      description: "Find wisdom by topic, keyword, or phrase across the entire collection" 
+      title: "Comprehensive Nahj al-Balagha Search", 
+      description: "Find wisdom by topic, keyword, or phrase across the entire Nahj al-Balagha collection" 
     },
     { 
       icon: BookOpen, 
       title: "Detailed Commentary", 
-      description: "Access scholarly explanations and historical context for each passage" 
+      description: "Access scholarly explanations and historical context for each passage of Nahj al-Balagha" 
     },
     { 
       icon: Users, 
       title: "Community Insights", 
-      description: "Discover how others interpret and apply these timeless teachings" 
+      description: "Discover how others interpret and apply the teachings of Imam Ali (AS)" 
     }
   ];
 
@@ -73,12 +73,10 @@ const ExploreHero = () => {
                   <h2 className="text-2xl font-bold text-[#43896B] mb-6">About Nahj al-Balagha</h2>
                   <div className="space-y-4 text-gray-700">
                     <p className="leading-relaxed">
-                      Nahj al-Balagha (Peak of Eloquence) is a collection of sermons, letters, and sayings 
-                      attributed to Imam Ali ibn Abi Talib (AS), compiled by Sharif al-Radi in the 10th century.
+                      Nahj al-Balagha (Peak of Eloquence) is a collection of 241 sermons, 79 letters, and 480 sayings attributed to Imam Ali ibn Abi Talib (AS), compiled by Sharif al-Radi in the 10th century.
                     </p>
                     <p className="leading-relaxed">
-                      This monumental work represents the pinnacle of Islamic eloquence and wisdom, covering 
-                      theology, philosophy, governance, ethics, and spirituality.
+                      This monumental work represents the pinnacle of Islamic eloquence and wisdom, covering theology, philosophy, governance, ethics, and spirituality, and has inspired generations of scholars and seekers.
                     </p>
                   </div>
                   <div className="mt-8 flex items-center gap-4">
