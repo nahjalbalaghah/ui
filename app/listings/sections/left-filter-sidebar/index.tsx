@@ -54,7 +54,7 @@ export default function LeftFilterSidebar({
 }: LeftFilterSidebarProps) {
   return (
     <div className={`lg:w-1/4 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sticky top-24">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sticky top-5">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900">Filters</h3>
           <div className="flex items-center gap-2">

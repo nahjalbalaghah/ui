@@ -29,7 +29,7 @@ const OrationsLettersSayingsSection = () => {
   const collections = [
     {
       icon: MessageSquare,
-      title: "Sermons (Khutbahs)",
+      title: "Orations",
       items: [
         "Eloquent discourses on faith, justice, and governance by Imam Ali (AS)",
         "Guidance on spiritual and ethical conduct",
@@ -51,7 +51,7 @@ const OrationsLettersSayingsSection = () => {
     },
     {
       icon: Quote,
-      title: "Sayings (Short Wisdoms)",
+      title: "Sayings",
       items: [
         "Concise maxims and aphorisms on life, knowledge, and virtue",
         "Guidance on humility, patience, and piety",
@@ -121,14 +121,14 @@ const OrationsLettersSayingsSection = () => {
                   </div>
                 </div>
               </div>
-              <ul className="space-y-3 pl-2 mb-6">
+              <div className="space-y-3 pl-2 mb-6">
                 {collection.items.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2">
+                  <div key={i} className="flex items-start gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#43896B] mt-2 flex-shrink-0"></div>
                     <span className="text-gray-600 leading-relaxed">{item}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
               <div className="pt-4 border-t border-gray-100">
                 <motion.div
                   whileHover={{ scale: 1.02 }}
@@ -136,7 +136,7 @@ const OrationsLettersSayingsSection = () => {
                 >
                   <Link href="/listings" className="flex items-center justify-center gap-2 w-full">
                     <Button variant="outlined" className="w-full">
-                      View Listings
+                      Read
                     </Button>
                   </Link>
                 </motion.div>

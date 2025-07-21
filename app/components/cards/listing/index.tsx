@@ -73,7 +73,7 @@ export default function ListingCard({ sermon, onClick }: ListingCardProps) {
           </div>
         </div>
         <Button variant='outlined' onClick={() => handleViewDetails(sermon.id)} >
-            View Details
+            Read
         </Button>
       </div>
     </div>

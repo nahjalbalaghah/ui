@@ -11,6 +11,7 @@
 !.yarn/versions
 .gitk
 .gitold
+.gitkhurram
 # testing
 /coverage
 
