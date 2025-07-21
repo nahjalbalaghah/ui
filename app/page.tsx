@@ -1,15 +1,15 @@
-import AboutSection from "./sections/about";
-import HeroSection from "./sections/hero";
-import IslamicScholarsSection from "./sections/scholars";
-import ServicesSection from "./sections/services";
+import OrationsLettersSayingsSection from "./sections/content";
+import ExploreHero from "./sections/hero";
+import IndexesSection from "./sections/indexes";
+import ManuscriptsSection from "./sections/manuscripts";
 
 export const metadata = {
-  title: "Home | Nahj al-Balagha",
-  description: "Discover the wisdom and eloquence of Imam Ali (AS) through Nahj al-Balagha. Explore sermons, letters, and sayings with translations and commentary.",
+  title: "Explore | Nahj al-Balagha",
+  description: "Explore sermons, letters, sayings, and manuscripts in Nahj al-Balagha. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
   openGraph: {
-    title: "Home | Nahj al-Balagha",
-    description: "Discover the wisdom and eloquence of Imam Ali (AS) through Nahj al-Balagha. Explore sermons, letters, and sayings with translations and commentary.",
-    url: "https://nahj-al-balagha.com/",
+    title: "Explore | Nahj al-Balagha",
+    description: "Explore sermons, letters, sayings, and manuscripts in Nahj al-Balagha. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
+    url: "https://nahj-al-balagha.com/explore",
     images: [
       {
         url: "/globe.svg",
@@ -21,8 +21,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Home | Nahj al-Balagha",
-    description: "Discover the wisdom and eloquence of Imam Ali (AS) through Nahj al-Balagha. Explore sermons, letters, and sayings with translations and commentary.",
+    title: "Explore | Nahj al-Balagha",
+    description: "Explore sermons, letters, sayings, and manuscripts in Nahj al-Balagha. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
     images: [
       {
         url: "/globe.svg",
@@ -32,13 +32,13 @@ export const metadata = {
   }
 };
 
-export default function Home() {
-  return (
-    <div className="" >
-      <HeroSection />
-      <AboutSection /> 
-      <ServicesSection />
-      <IslamicScholarsSection />
-    </div>
-  );
+export default function Page() {
+    return (
+        <div>
+            <ExploreHero />
+            <OrationsLettersSayingsSection />
+            <IndexesSection />
+            <ManuscriptsSection />
+        </div>        
+    )
 }
