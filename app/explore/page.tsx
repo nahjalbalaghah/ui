@@ -1,15 +1,16 @@
-import OrationsLettersSayingsSection from "./sections/content";
+import AboutSection from "@/app/sections/about";
+import HeroSection from "@/app/sections/hero";
+import IslamicScholarsSection from "@/app/sections/scholars";
+import ServicesSection from "@/app/sections/services";
 import ExploreHero from "./sections/hero";
-import IndexesSection from "./sections/indexes";
-import ManuscriptsSection from "./sections/manuscripts";
 
 export const metadata = {
-  title: "Explore | Nahj al-Balagha",
-  description: "Explore sermons, letters, sayings, and manuscripts in Nahj al-Balagha. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
+  title: "Home | Nahj al-Balagha",
+  description: "Discover the wisdom and eloquence of Imam Ali (AS) through Nahj al-Balagha. Explore sermons, letters, and sayings with translations and commentary.",
   openGraph: {
-    title: "Explore | Nahj al-Balagha",
-    description: "Explore sermons, letters, sayings, and manuscripts in Nahj al-Balagha. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
-    url: "https://nahj-al-balagha.com/explore",
+    title: "Home | Nahj al-Balagha",
+    description: "Discover the wisdom and eloquence of Imam Ali (AS) through Nahj al-Balagha. Explore sermons, letters, and sayings with translations and commentary.",
+    url: "https://nahj-al-balagha.com/",
     images: [
       {
         url: "/globe.svg",
@@ -21,8 +22,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Explore | Nahj al-Balagha",
-    description: "Explore sermons, letters, sayings, and manuscripts in Nahj al-Balagha. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
+    title: "Home | Nahj al-Balagha",
+    description: "Discover the wisdom and eloquence of Imam Ali (AS) through Nahj al-Balagha. Explore sermons, letters, and sayings with translations and commentary.",
     images: [
       {
         url: "/globe.svg",
@@ -32,13 +33,13 @@ export const metadata = {
   }
 };
 
-export default function Page() {
-    return (
-        <div>
-            <ExploreHero />
-            <OrationsLettersSayingsSection />
-            <IndexesSection />
-            <ManuscriptsSection />
-        </div>        
-    )
+export default function Home() {
+  return (
+    <div className="" >
+      <ExploreHero />
+      <AboutSection /> 
+      <ServicesSection />
+      <IslamicScholarsSection />
+    </div>
+  );
 }
