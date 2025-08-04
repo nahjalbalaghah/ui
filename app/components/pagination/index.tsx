@@ -47,6 +47,11 @@ export default function Pagination({
     return rangeWithDots;
   };
 
+  const handlePageChange = (page: number) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    onPageChange(page);
+  };
+
   if (totalPages <= 1) {
     return null;
   }
@@ -56,12 +61,12 @@ export default function Pagination({
   return (
     <div className={`flex items-center justify-center space-x-2 ${className}`}>
       <button
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 ${
           currentPage === 1
             ? 'border-gray-200 text-gray-400 cursor-not-allowed'
-            : 'border-gray-300 text-gray-700 hover:bg-[#43896B] hover:border-[#43896B] hover:text-white'
+            : 'border-gray-300 text-gray-700 hover:bg-[#43896B] hover:border-[#43896B] hover:text-white cursor-pointer'
         }`}
       >
         <ChevronLeft className="w-4 h-4" />
@@ -75,8 +80,8 @@ export default function Pagination({
             </span>
           ) : (
             <button
-              onClick={() => onPageChange(page as number)}
-              className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 font-medium ${
+              onClick={() => handlePageChange(page as number)}
+              className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 font-medium cursor-pointer ${
                 currentPage === page
                   ? 'bg-[#43896B] border-[#43896B] text-white'
                   : 'border-gray-300 text-gray-700 hover:bg-[#43896B] hover:border-[#43896B] hover:text-white'
@@ -89,12 +94,12 @@ export default function Pagination({
       ))}
 
       <button
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 ${
           currentPage === totalPages
             ? 'border-gray-200 text-gray-400 cursor-not-allowed'
-            : 'border-gray-300 text-gray-700 hover:bg-[#43896B] hover:border-[#43896B] hover:text-white'
+            : 'border-gray-300 text-gray-700 hover:bg-[#43896B] hover:border-[#43896B] hover:text-white cursor-pointer'
         }`}
       >
         <ChevronRight className="w-4 h-4" />

@@ -49,12 +49,18 @@ export default function OrationsPage() {
   const loadOrations = async (page = 1, search = '', filters = activeFilters) => {
     try {
       setLoading(true);
+      setError(null);
+      
       let response;
       
       if (search) {
         response = await orationsApi.searchOrations(search, page, 9);
       } else {
         response = await orationsApi.getOrations(page, 9);
+      }
+
+      if (!response || !response.data) {
+        throw new Error('Invalid response format from API');
       }
 
       let filteredData = response.data;
@@ -98,12 +104,13 @@ export default function OrationsPage() {
       
       setOrations(filteredData);
       setCurrentPage(page);
-      setTotalPages(response.meta.pagination.pageCount);
-      setTotal(response.meta.pagination.total);
-      setError(null);
+      setTotalPages(response.meta?.pagination?.pageCount || 1);
+      setTotal(response.meta?.pagination?.total || filteredData.length);
     } catch (err) {
-      setError('Failed to load orations. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      setError(`Failed to load orations: ${errorMessage}`);
       console.error('Error loading orations:', err);
+      setOrations([]);
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Book } from 'lucide-react';
+import { Book, Tag as TagIcon } from 'lucide-react';
 import Link from 'next/link';
 import { type Post } from '@/api/orations';
 
@@ -70,9 +70,29 @@ export default function ListingCard({ sermon, oration, onClick }: ListingCardPro
             <p className="text-right text-gray-800 mb-2 font-arabic text-base leading-relaxed" dir="rtl">
               {truncateText(arabicTitle, 90)}
             </p>
-            <h3 className="font-medium text-gray-600 text-sm line-clamp-2 group-hover:text-[#43896B] transition-colors">
+            <h3 className="font-medium text-gray-600 text-sm line-clamp-2 group-hover:text-[#43896B] transition-colors mb-3">
               {truncateText(englishTranslation, 100)}
             </h3>
+            
+            {/* Tags Display */}
+            {isOration && oration!.tags && oration!.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {oration!.tags.slice(0, 3).map((tag) => (
+                  <span
+                    key={tag.id}
+                    className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-[#43896B]/10 text-[#43896B] rounded-full border border-[#43896B]/20 group-hover:bg-[#43896B]/20 transition-colors"
+                  >
+                    <TagIcon className="w-3 h-3" />
+                    {tag.name}
+                  </span>
+                ))}
+                {oration!.tags.length > 3 && (
+                  <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
+                    +{oration!.tags.length - 3} more
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

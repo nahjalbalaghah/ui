@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tag as TagIcon } from 'lucide-react';
 import { type Post } from '@/api/orations';
 
 interface OrationsDescriptionProps {
@@ -37,6 +38,23 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
           <p className="text-lg text-gray-600 mb-4 leading-relaxed">
             {englishTitle}
           </p>
+        )}
+
+        {/* Tags Display */}
+        {oration.tags && oration.tags.length > 0 && (
+          <div className="mt-4">
+            <div className="flex flex-wrap gap-2">
+              {oration.tags.map((tag) => (
+                <span
+                  key={tag.id}
+                  className="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium bg-[#43896B]/10 text-[#43896B] rounded-full border border-[#43896B]/20 hover:bg-[#43896B]/20 transition-colors"
+                >
+                  <TagIcon className="w-3 h-3" />
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          </div>
         )}
       </div>
 
