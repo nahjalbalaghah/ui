@@ -1,0 +1,46 @@
+'use client';
+import React from 'react';
+import { Search } from 'lucide-react';
+import Input from '@/app/components/input';
+import Select from '@/app/components/select';
+
+interface TopFilterBarProps {
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+  sortBy: string;
+  setSortBy: (value: string) => void;
+  sortOptions: Array<{ value: string; label: string }>;
+}
+
+export default function TopFilterBar({
+  searchTerm,
+  setSearchTerm,
+  sortBy,
+  setSortBy,
+  sortOptions
+}: TopFilterBarProps) {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex-1">
+          <Input
+            placeholder="Search orations, topics, or keywords..."
+            value={searchTerm}
+            onChange={(e: any) => setSearchTerm(e.target.value)}
+            icon={<Search className="w-5 h-5 text-gray-400" />}
+            className="text-base"
+          />
+        </div>
+        <div className="flex gap-3">
+          <Select
+            options={sortOptions}
+            value={sortBy}
+            onChange={setSortBy}
+            placeholder="Sort By"
+            className="w-full lg:w-60"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
