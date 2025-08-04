@@ -45,7 +45,6 @@ export default function RangeSlider({
 
   return (
     <div className={`relative h-12 w-full ${className}`}>
-      {/* Track */}
       <div className="absolute top-1/2 h-1.5 w-full bg-gray-200 rounded-full -translate-y-1/2" />
       <motion.div
         className="absolute top-1/2 h-1.5 bg-[#43896B] rounded-full -translate-y-1/2"
