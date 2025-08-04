@@ -134,7 +134,7 @@ const OrationsLettersSayingsSection = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Link href="/listings" className="flex items-center justify-center gap-2 w-full">
+                  <Link href="/orations" className="flex items-center justify-center gap-2 w-full">
                     <Button variant="outlined" className="w-full">
                       Read
                     </Button>

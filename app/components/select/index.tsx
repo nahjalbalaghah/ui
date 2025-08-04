@@ -99,7 +99,7 @@ const Select = ({
               key={option.value}
               role="option"
               aria-selected={selected?.value === option.value}
-              className="px-4 py-2 cursor-pointer hover:bg-[#E2E3E9] transition"
+              className="px-4 text-sm py-2 cursor-pointer hover:bg-[#E2E3E9] transition"
               onClick={() => handleSelect(option)}
             >
               {option.label}

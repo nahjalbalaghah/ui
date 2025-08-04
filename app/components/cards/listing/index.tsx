@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
-import { Book, Calendar, FileText, ArrowRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import Button from '../../button';
+import { Book } from 'lucide-react';
+import Link from 'next/link';
+import { type Post } from '@/api/orations';
 
 interface ListingCardProps {
-  sermon: {
+  sermon?: {
     id: number;
     title: string;
     arabicTitle: string;
@@ -14,68 +14,68 @@ interface ListingCardProps {
     type: string;
     date: string;
   };
+  oration?: Post;
   onClick?: () => void;
 }
 
-export default function ListingCard({ sermon, onClick }: ListingCardProps) {
-  const router = useRouter();
-
-  const handleViewDetails = (id: number) => {
-    router.push(`/listings/details/${id}`);
+export default function ListingCard({ sermon, oration, onClick }: ListingCardProps) {
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
   };
 
+  const getCardLink = () => {
+    if (oration) {
+      return `/orations/details/${oration.slug}`;
+    } else if (sermon) {
+      return `/listings/details/${sermon.id}`;
+    }
+    return '#';
+  };
+
+  const isOration = !!oration;
+  const data = isOration ? oration : sermon;
+
+  if (!data) return null;
+
+  const title = isOration ? oration!.title : sermon!.title;
+  const arabicTitle = isOration ? oration!.title : sermon!.arabicTitle;
+  const englishTranslation = isOration 
+    ? oration!.translations?.find((t: any) => t.type === 'en')?.text || ''
+    : sermon!.description;
+
   return (
-    <div 
-      onClick={onClick}
-      className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-[#43896B]/20 transition-all duration-300 cursor-pointer group"
-    >
-      <div className="h-56 bg-gradient-to-br from-amber-50 via-amber-100 to-orange-100 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-4 left-4 right-4">
-            {[1, 2, 3, 4, 5, 6].map((line) => (
-              <div 
-                key={line} 
-                className="h-1 bg-amber-800 rounded mb-3 transition-all duration-500 group-hover:bg-[#43896B]" 
-              ></div>
-            ))}
+    <Link href={getCardLink()} className="block h-full">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-[#43896B]/20 transition-all duration-300 cursor-pointer group h-full flex flex-col">
+        <div className="h-40 bg-gradient-to-br from-amber-50 via-amber-100 to-orange-100 relative overflow-hidden flex-shrink-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-3 left-3 right-3">
+              {[1, 2, 3, 4].map((line) => (
+                <div 
+                  key={line} 
+                  className="h-1 bg-amber-800 rounded mb-2 transition-all duration-500 group-hover:bg-[#43896B]" 
+                ></div>
+              ))}
+            </div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-16 h-20 bg-white/80 backdrop-blur-sm rounded-lg border border-amber-200 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <Book className="w-6 h-6 text-[#43896B]" />
+            </div>
           </div>
         </div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-20 h-24 bg-white/80 backdrop-blur-sm rounded-lg border border-amber-200 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-            <Book className="w-8 h-8 text-[#43896B]" />
+        <div className="p-4 flex-grow flex flex-col justify-between">
+          <div>
+            <p className="text-right text-gray-800 mb-2 font-arabic text-base leading-relaxed" dir="rtl">
+              {truncateText(arabicTitle, 90)}
+            </p>
+            <h3 className="font-medium text-gray-600 text-sm line-clamp-2 group-hover:text-[#43896B] transition-colors">
+              {truncateText(englishTranslation, 100)}
+            </h3>
           </div>
-        </div>
-        <div className="absolute top-4 right-4 bg-[#43896B] text-white px-3 py-1 rounded-full text-sm font-semibold">
-          Ch. {sermon.chapter}
         </div>
       </div>
-      <div className="p-6">
-        <div className="mb-4">
-          <h3 className="font-bold text-gray-900 text-lg mb-2 line-clamp-2 group-hover:text-[#43896B] transition-colors">
-            {sermon.title}
-          </h3>
-          <p className="text-right text-gray-700 mb-3 font-arabic text-lg leading-relaxed" dir="rtl">
-            {sermon.arabicTitle}
-          </p>
-        </div>
-        <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">
-          {sermon.description}
-        </p>
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-          <div className="flex items-center gap-1">
-            <Calendar className="w-3 h-3" />
-            <span>{sermon.date}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <FileText className="w-3 h-3" />
-            <span>{sermon.type}</span>
-          </div>
-        </div>
-        <Button variant='outlined' onClick={() => handleViewDetails(sermon.id)} >
-            Read
-        </Button>
-      </div>
-    </div>
+    </Link>
   );
 }
