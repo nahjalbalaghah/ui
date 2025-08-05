@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { orationsApi, type Post } from '@/api/orations';
 import OrationsDescription from './sections/description';
 import { ArrowLeft } from 'lucide-react';
@@ -8,11 +8,18 @@ import Link from 'next/link';
 
 export default function OrationsDetailsPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const slug = params.slug as string;
+  const returnPage = searchParams.get('returnPage');
   
   const [oration, setOration] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Create the back URL with the correct page
+  const getBackUrl = () => {
+    return returnPage ? `/orations?page=${returnPage}` : '/orations';
+  };
 
   useEffect(() => {
     const loadOration = async () => {
@@ -63,7 +70,7 @@ export default function OrationsDetailsPage() {
             {error || 'Oration not found'}
           </h2>
           <Link 
-            href="/orations" 
+            href={getBackUrl()} 
             className="bg-[#43896B] text-white px-6 py-2 rounded-lg hover:bg-[#367556] inline-flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -78,7 +85,7 @@ export default function OrationsDetailsPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link 
-          href="/orations" 
+          href={getBackUrl()} 
           className="inline-flex items-center gap-2 text-[#43896B] hover:text-[#367556] mb-6 font-medium"
         >
           <ArrowLeft className="w-4 h-4" />

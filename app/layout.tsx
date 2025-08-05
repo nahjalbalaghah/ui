@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/ui/header";
@@ -67,7 +67,6 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
     apple: "/favicon.ico"
   },
-  themeColor: "#43896B",
   alternates: {
     canonical: "/",
     languages: {
@@ -76,6 +75,10 @@ export const metadata: Metadata = {
       ur: "/ur"
     }
   }
+};
+
+export const viewport: Viewport = {
+  themeColor: "#43896B",
 };
 
 export default function RootLayout({
