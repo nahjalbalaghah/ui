@@ -7,7 +7,7 @@ interface OrationsDescriptionProps {
 }
 
 const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
-  const englishTitle = oration.translations?.find(t => t.type === 'en')?.text || oration.title;
+  const heading = oration.heading;
   
   const sortedParagraphs = [...oration.paragraphs].sort((a, b) => {
     const parseNumber = (num: string) => {
@@ -30,17 +30,10 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-8">
       <div className="mb-8 pb-6 border-b border-gray-200">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4 text-right font-arabic leading-relaxed" dir="rtl">
-          {oration.title}
+        <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed">
+          {heading || 'Oration Details'}
         </h1>
-        
-        {englishTitle && englishTitle !== oration.title && (
-          <p className="text-lg text-gray-600 mb-4 leading-relaxed">
-            {englishTitle}
-          </p>
-        )}
 
-        {/* Tags Display */}
         {oration.tags && oration.tags.length > 0 && (
           <div className="mt-4">
             <div className="flex flex-wrap gap-2">

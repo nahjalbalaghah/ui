@@ -8,6 +8,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
   showRange?: boolean;
   className?: string;
+  loading?: boolean;
 }
 
 export default function Pagination({
@@ -15,7 +16,8 @@ export default function Pagination({
   totalPages,
   onPageChange,
   showRange = true,
-  className = ''
+  className = '',
+  loading = false
 }: PaginationProps) {
   const getVisiblePageNumbers = () => {
     const delta = 2;
@@ -48,6 +50,7 @@ export default function Pagination({
   };
 
   const handlePageChange = (page: number) => {
+    if (loading) return;
     window.scrollTo({ top: 0, behavior: 'smooth' });
     onPageChange(page);
   };
@@ -62,9 +65,9 @@ export default function Pagination({
     <div className={`flex items-center justify-center space-x-2 ${className}`}>
       <button
         onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        disabled={currentPage === 1 || loading}
         className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 ${
-          currentPage === 1
+          currentPage === 1 || loading
             ? 'border-gray-200 text-gray-400 cursor-not-allowed'
             : 'border-gray-300 text-gray-700 hover:bg-[#43896B] hover:border-[#43896B] hover:text-white cursor-pointer'
         }`}
@@ -81,7 +84,12 @@ export default function Pagination({
           ) : (
             <button
               onClick={() => handlePageChange(page as number)}
-              className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 font-medium cursor-pointer ${
+              disabled={loading}
+              className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 font-medium ${
+                loading 
+                  ? 'cursor-not-allowed opacity-50'
+                  : 'cursor-pointer'
+              } ${
                 currentPage === page
                   ? 'bg-[#43896B] border-[#43896B] text-white'
                   : 'border-gray-300 text-gray-700 hover:bg-[#43896B] hover:border-[#43896B] hover:text-white'
@@ -95,9 +103,9 @@ export default function Pagination({
 
       <button
         onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === totalPages || loading}
         className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 ${
-          currentPage === totalPages
+          currentPage === totalPages || loading
             ? 'border-gray-200 text-gray-400 cursor-not-allowed'
             : 'border-gray-300 text-gray-700 hover:bg-[#43896B] hover:border-[#43896B] hover:text-white cursor-pointer'
         }`}

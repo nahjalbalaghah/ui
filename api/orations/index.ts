@@ -41,6 +41,7 @@ export interface Post {
   publishedAt: string;
   translations: Translation[] | null;
   sermonNumber: string | null;
+  heading?: string;
   paragraphs: Paragraph[];
   tags: Tag[];
 }
