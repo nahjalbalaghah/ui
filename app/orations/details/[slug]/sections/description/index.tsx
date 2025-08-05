@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tag as TagIcon } from 'lucide-react';
 import { type Post } from '@/api/orations';
 
 interface OrationsDescriptionProps {
@@ -6,7 +7,7 @@ interface OrationsDescriptionProps {
 }
 
 const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
-  const englishTitle = oration.translations?.find(t => t.type === 'en')?.text || oration.title;
+  const heading = oration.heading;
   
   const sortedParagraphs = [...oration.paragraphs].sort((a, b) => {
     const parseNumber = (num: string) => {
@@ -29,14 +30,24 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-8">
       <div className="mb-8 pb-6 border-b border-gray-200">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4 text-right font-arabic leading-relaxed" dir="rtl">
-          {oration.title}
+        <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed">
+          {heading || 'Oration Details'}
         </h1>
-        
-        {englishTitle && englishTitle !== oration.title && (
-          <p className="text-lg text-gray-600 mb-4 leading-relaxed">
-            {englishTitle}
-          </p>
+
+        {oration.tags && oration.tags.length > 0 && (
+          <div className="mt-4">
+            <div className="flex flex-wrap gap-2">
+              {oration.tags.map((tag) => (
+                <span
+                  key={tag.id}
+                  className="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium bg-[#43896B]/10 text-[#43896B] rounded-full border border-[#43896B]/20 hover:bg-[#43896B]/20 transition-colors"
+                >
+                  <TagIcon className="w-3 h-3" />
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          </div>
         )}
       </div>
 

@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import TopFilterBar from './sections/top-filter-bar';
 import LeftFilterSidebar from './sections/left-filter-sidebar';
 import OrationsListing from './sections/orations-listing';
@@ -29,6 +30,8 @@ interface FilterOptions {
 }
 
 export default function OrationsPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [orations, setOrations] = useState<Post[]>([]);
@@ -46,9 +49,28 @@ export default function OrationsPage() {
     sortBy: ''
   });
 
-  const loadOrations = async (page = 1, search = '', filters = activeFilters) => {
+  useEffect(() => {
+    const page = searchParams.get('page');
+    if (page) {
+      setCurrentPage(parseInt(page, 10));
+    }
+  }, [searchParams]);
+
+  const updatePageInUrl = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (page === 1) {
+      params.delete('page');
+    } else {
+      params.set('page', page.toString());
+    }
+    router.replace(`/orations?${params.toString()}`, { scroll: false });
+  };
+
+  const loadOrations = async (page = 1, search = '', filters = activeFilters, updateUrl = true) => {
     try {
       setLoading(true);
+      setError(null);
+      
       let response;
       
       if (search) {
@@ -57,7 +79,13 @@ export default function OrationsPage() {
         response = await orationsApi.getOrations(page, 9);
       }
 
+      if (!response || !response.data) {
+        throw new Error('Invalid response format from API');
+      }
+
       let filteredData = response.data;
+
+      filteredData = filteredData.filter(oration => oration.heading);
 
       if (filters.type.length > 0) {
         filteredData = filteredData.filter(oration => 
@@ -98,29 +126,37 @@ export default function OrationsPage() {
       
       setOrations(filteredData);
       setCurrentPage(page);
-      setTotalPages(response.meta.pagination.pageCount);
-      setTotal(response.meta.pagination.total);
-      setError(null);
+      setTotalPages(response.meta?.pagination?.pageCount || 1);
+      setTotal(response.meta?.pagination?.total || filteredData.length);
+      
+      if (updateUrl) {
+        updatePageInUrl(page);
+      }
     } catch (err) {
-      setError('Failed to load orations. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      setError(`Failed to load orations: ${errorMessage}`);
       console.error('Error loading orations:', err);
+      setOrations([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadOrations();
+    const page = searchParams.get('page');
+    const initialPage = page ? parseInt(page, 10) : 1;
+    loadOrations(initialPage, searchTerm, activeFilters, false);
   }, []);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchTerm !== '') {
         setCurrentPage(1);
-        loadOrations(1, searchTerm);
+        loadOrations(1, searchTerm, activeFilters, true);
       } else {
-        setCurrentPage(1);
-        loadOrations(1);
+        const page = searchParams.get('page');
+        const currentPageFromUrl = page ? parseInt(page, 10) : 1;
+        loadOrations(currentPageFromUrl, '', activeFilters, false);
       }
     }, 500);
 
@@ -129,12 +165,12 @@ export default function OrationsPage() {
 
   useEffect(() => {
     setCurrentPage(1);
-    loadOrations(1, searchTerm, activeFilters);
+    loadOrations(1, searchTerm, activeFilters, true);
   }, [activeFilters]);
 
   useEffect(() => {
     setCurrentPage(1);
-    loadOrations(1, searchTerm, activeFilters);
+    loadOrations(1, searchTerm, activeFilters, true);
   }, [sortBy]);
 
   const sortOptions = [
@@ -214,7 +250,8 @@ export default function OrationsPage() {
   };
 
   const handlePageChange = (page: number) => {
-    loadOrations(page, searchTerm, activeFilters);
+    setLoading(true);
+    loadOrations(page, searchTerm, activeFilters, true);
   };
 
   if (error) {
