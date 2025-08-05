@@ -6,6 +6,18 @@ export interface Translation {
   text: string;
 }
 
+export interface Tag {
+  id: number;
+  documentId: string;
+  name: string;
+  slug: string;
+  description?: string;
+  color?: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
 export interface Paragraph {
   id: number;
   documentId: string;
@@ -29,7 +41,9 @@ export interface Post {
   publishedAt: string;
   translations: Translation[] | null;
   sermonNumber: string | null;
+  heading?: string;
   paragraphs: Paragraph[];
+  tags: Tag[];
 }
 
 export interface ApiResponse {
