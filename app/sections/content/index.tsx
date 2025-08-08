@@ -134,9 +134,16 @@ const OrationsLettersSayingsSection = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Link href="/orations" className="flex items-center justify-center gap-2 w-full">
+                  <Link 
+                    href={
+                      collection.title === 'Orations' ? '/orations' :
+                      collection.title === 'Letters' ? '/letters' :
+                      collection.title === 'Sayings' ? '/sayings' : '/orations'
+                    } 
+                    className="flex items-center justify-center gap-2 w-full"
+                  >
                     <Button variant="outlined" className="w-full">
-                      Read
+                      Read {collection.title}
                     </Button>
                   </Link>
                 </motion.div>
