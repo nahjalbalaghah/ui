@@ -29,7 +29,7 @@ const OrationsLettersSayingsSection = () => {
   const collections = [
     {
       icon: MessageSquare,
-      title: "Oration",
+      title: "Orations",
       items: [
         "Eloquent discourses on faith, justice, and governance by Imam Ali (AS)",
         "Guidance on spiritual and ethical conduct",
@@ -40,7 +40,7 @@ const OrationsLettersSayingsSection = () => {
     },
     {
       icon: Mail,
-      title: "Letter",
+      title: "Letters",
       items: [
         "Correspondence to governors and officials on justice and administration",
         "Letters to family and companions with moral and spiritual advice",
@@ -51,7 +51,7 @@ const OrationsLettersSayingsSection = () => {
     },
     {
       icon: Quote,
-      title: "Saying",
+      title: "Sayings",
       items: [
         "Concise maxims and aphorisms on life, knowledge, and virtue",
         "Guidance on humility, patience, and piety",
