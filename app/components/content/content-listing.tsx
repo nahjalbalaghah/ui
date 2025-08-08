@@ -4,9 +4,9 @@ import ListingCard from '@/app/components/cards/listing';
 import Pagination from '@/app/components/pagination';
 import { type Post } from '@/api/posts';
 
-interface OrationsListingProps {
-  orations: Post[];
-  onOrationsClick?: (oration: Post) => void;
+interface ContentListingProps {
+  content: Post[];
+  onContentClick?: (item: Post) => void;
   onPageChange?: (page: number) => void;
   loading?: boolean;
   total?: number;
@@ -14,26 +14,28 @@ interface OrationsListingProps {
   totalPages?: number;
   title?: string;
   subtitle?: string;
+  contentType: 'orations' | 'letters' | 'sayings';
 }
 
-export default function OrationsListing({
-  orations,
-  onOrationsClick,
+export default function ContentListing({
+  content,
+  onContentClick,
   onPageChange,
   loading = false,
   total = 0,
   currentPage = 1,
   totalPages = 1,
-  title = "Orations",
-  subtitle
-}: OrationsListingProps) {
+  title = "Content",
+  subtitle,
+  contentType
+}: ContentListingProps) {
   return (
     <div className="lg:w-3/4 relative">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
           <p className="text-gray-600 mt-1">
-            {loading ? "Loading..." : (subtitle || `Showing ${orations.length} of ${total} results`)}
+            {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
           </p>
         </div>
       </div>
@@ -58,12 +60,12 @@ export default function OrationsListing({
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {orations.map((oration) => (
+            {content.map((item) => (
               <ListingCard
-                key={oration.id}
-                oration={oration}
-                onClick={() => onOrationsClick?.(oration)}
-                contentType="orations"
+                key={item.id}
+                oration={item}
+                onClick={() => onContentClick?.(item)}
+                contentType={contentType}
               />
             ))}
           </div>

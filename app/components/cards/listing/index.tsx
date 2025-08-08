@@ -3,7 +3,7 @@ import React from 'react';
 import { Book, Tag as TagIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { type Post } from '@/api/orations';
+import { type Post } from '@/api/posts';
 
 interface ListingCardProps {
   sermon?: {
@@ -17,9 +17,10 @@ interface ListingCardProps {
   };
   oration?: Post;
   onClick?: () => void;
+  contentType?: 'orations' | 'letters' | 'sayings';
 }
 
-export default function ListingCard({ sermon, oration, onClick }: ListingCardProps) {
+export default function ListingCard({ sermon, oration, onClick, contentType = 'orations' }: ListingCardProps) {
   const searchParams = useSearchParams();
   
   const truncateText = (text: string, maxLength: number) => {
@@ -30,7 +31,7 @@ export default function ListingCard({ sermon, oration, onClick }: ListingCardPro
   const getCardLink = () => {
     if (oration) {
       const currentPage = searchParams.get('page');
-      const baseUrl = `/orations/details/${oration.slug}`;
+      const baseUrl = `/${contentType}/details/${oration.slug}`;
       return currentPage ? `${baseUrl}?returnPage=${currentPage}` : baseUrl;
     } else if (sermon) {
       return `/listings/details/${sermon.id}`;

@@ -29,7 +29,7 @@ const OrationsLettersSayingsSection = () => {
   const collections = [
     {
       icon: MessageSquare,
-      title: "Orations",
+      title: "Oration",
       items: [
         "Eloquent discourses on faith, justice, and governance by Imam Ali (AS)",
         "Guidance on spiritual and ethical conduct",
@@ -40,7 +40,7 @@ const OrationsLettersSayingsSection = () => {
     },
     {
       icon: Mail,
-      title: "Letters",
+      title: "Letter",
       items: [
         "Correspondence to governors and officials on justice and administration",
         "Letters to family and companions with moral and spiritual advice",
@@ -51,7 +51,7 @@ const OrationsLettersSayingsSection = () => {
     },
     {
       icon: Quote,
-      title: "Sayings",
+      title: "Saying",
       items: [
         "Concise maxims and aphorisms on life, knowledge, and virtue",
         "Guidance on humility, patience, and piety",
@@ -134,9 +134,16 @@ const OrationsLettersSayingsSection = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Link href="/orations" className="flex items-center justify-center gap-2 w-full">
+                  <Link 
+                    href={
+                      collection.title === 'Orations' ? '/orations' :
+                      collection.title === 'Letters' ? '/letters' :
+                      collection.title === 'Sayings' ? '/sayings' : '/orations'
+                    } 
+                    className="flex items-center justify-center gap-2 w-full"
+                  >
                     <Button variant="outlined" className="w-full">
-                      Read
+                      Read {collection.title}
                     </Button>
                   </Link>
                 </motion.div>
