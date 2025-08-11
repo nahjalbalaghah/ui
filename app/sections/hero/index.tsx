@@ -1,9 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react'
-import { Play, Pause, SkipForward, SkipBack, Volume2, BookOpen, Users, Star, ArrowRight, Calendar, MapPin, Clock, Disc, ChevronRight } from 'lucide-react'
+import { Play, Pause, SkipForward, SkipBack, Volume2, BookOpen, Users, Star, ArrowRight, Calendar, MapPin, Clock, Disc, ChevronRight, MessageSquare, Mail, ArrowRightCircle } from 'lucide-react'
 import HeroMosqueImage from '@/app/assets/images/hero-mosque.jpg'
 import Image from 'next/image';
+import Link from 'next/link';
 import Button from '@/app/components/button';
+import { orationsApi, lettersApi, sayingsApi } from '@/api';
 
 const HeroSection = () => {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -11,9 +13,16 @@ const HeroSection = () => {
   const [duration] = useState(38)
   const [currentSurah] = useState("Surah Fatiha")
   const [isVisible, setIsVisible] = useState(false)
+  const [counts, setCounts] = useState({
+    orations: 0,
+    letters: 0,
+    sayings: 0
+  })
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsVisible(true)
+    fetchCounts()
     const interval = setInterval(() => {
       if (isPlaying && currentTime < duration) {
         setCurrentTime(prev => prev + 1)
@@ -21,6 +30,33 @@ const HeroSection = () => {
     }, 1000)
     return () => clearInterval(interval)
   }, [isPlaying, currentTime, duration])
+
+  const fetchCounts = async () => {
+    try {
+      setIsLoading(true)
+      const [orationsResponse, lettersResponse, sayingsResponse] = await Promise.all([
+        orationsApi.getOrations(1, 1), // Get just one item to get total count
+        lettersApi.getLetters(1, 1),
+        sayingsApi.getSayings(1, 1)
+      ])
+
+      setCounts({
+        orations: orationsResponse.meta.pagination.total,
+        letters: lettersResponse.meta.pagination.total,
+        sayings: sayingsResponse.meta.pagination.total
+      })
+    } catch (error) {
+      console.error('Error fetching counts:', error)
+      // Fallback counts if API fails
+      setCounts({
+        orations: 241,
+        letters: 79,
+        sayings: 479
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const formatTime = (seconds: any) => {
     const mins = Math.floor(seconds / 60)
@@ -30,10 +66,28 @@ const HeroSection = () => {
 
   const progress = (currentTime / duration) * 100
 
-  const stats = [
-    { icon: BookOpen, label: "Sermons", value: "150+" },
-    { icon: Users, label: "Scholars", value: "25+" },
-    { icon: Star, label: "Years", value: "20+" }
+  const contentTypes = [
+    { 
+      icon: MessageSquare, 
+      label: "Orations", 
+      value: isLoading ? "Loading..." : counts.orations.toString(),
+      href: "/orations",
+      type: "Oration"
+    },
+    { 
+      icon: Mail, 
+      label: "Letters", 
+      value: isLoading ? "Loading..." : counts.letters.toString(),
+      href: "/letters",
+      type: "Letter"
+    },
+    { 
+      icon: BookOpen, 
+      label: "Sayings", 
+      value: isLoading ? "Loading..." : counts.sayings.toString(),
+      href: "/sayings",
+      type: "Saying"
+    }
   ]
 
   return (
@@ -51,36 +105,44 @@ const HeroSection = () => {
         <div className="flex-grow flex items-center justify-center pb-32 pt-16">
           <div className="max-w-7xl mx-auto text-center w-full">
             <div className="mb-8 space-y-3">
-              <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-black mb-4 tracking-wider leading-relaxed" >
-                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+              <div className="text-3xl font-taha sm:text-4xl lg:text-5xl xl:text-6xl font-black text-black mb-4 tracking-wider leading-relaxed" >
+              نهج البلاغة  
               </div>
               <p className="text-sm sm:text-base text-gray-600 italic font-medium">
-                In the name of Allah, the Most Gracious, the Most Merciful
+                A Parallel English-Arabic Text
               </p>
             </div>
             <div className="space-y-4 sm:space-y-6 mb-8 sm:mb-12">
               <h1 className="text-4xl lg:text-6xl font-black leading-tight text-[#43896B] break-words text-balance tracking-tight" >
-               Imam Ali's Wisdom & Eloquence
+               The Wisdom and Eloquence of Ali
               </h1>
             </div>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-5xl mx-auto mb-8 sm:mb-12 px-4">
-              Embark on a spiritual journey through the timeless wisdom of Nahj al-Balagha. 
+              Embark on a spiritual journey through the timeless wisdom of Nahj al-Balaghah. 
               Learn from renowned scholars and discover the profound teachings that guide millions.
             </p>
-            <div className="mb-12 flex justify-center sm:mb-16">
-              <Button variant='solid' icon={<ChevronRight size={24} />} >Learn More</Button>
+            <div className="text-center mb-8 sm:mb-12">
+              <p className="text-base sm:text-lg text-gray-600 mb-2">Compiled By</p>
+              <p className="text-xl sm:text-2xl font-bold">
+                AL-SHARĪF AL-RADĪ
+              </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto px-4">
-              {stats.map((stat, index) => (
+              {contentTypes.map((content, index) => (
                 <div
-                  key={stat.label}
+                  key={content.label}
                   className="bg-white/90 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
                 >
                   <div className={`w-14 h-14 sm:w-16 sm:h-16 bg-[#43896B] rounded-2xl flex items-center justify-center mx-auto mb-4`}>
-                    <stat.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                    <content.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">{stat.value}</div>
-                  <div className="text-base sm:text-lg text-gray-600 font-medium">{stat.label}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">{content.value}</div>
+                  <div className="text-base sm:text-lg text-gray-600 font-medium mb-4">{content.label}</div>
+                  <Link href={content.href}>
+                    <Button icon={ <ArrowRightCircle size={16} />} className="w-full bg-[#43896B] hover:bg-[#5BA67C] text-white font-medium py-2 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
+                      Read {content.type}
+                    </Button>
+                  </Link>
                 </div>
               ))}
             </div>

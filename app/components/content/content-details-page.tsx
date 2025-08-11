@@ -47,7 +47,7 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
     if (slug) {
       loadContent();
     }
-  }, [slug]);
+  }, [slug, api, contentType]);
 
   if (loading) {
     return (
@@ -70,13 +70,35 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
     );
   }
 
-  if (error || !content) {
+  // Only show error page if there's an actual error, not just null content
+  if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            {error || `${title.slice(0, -1)} not found`}
+            {error}
           </h2>
+          <Link 
+            href={getBackUrl()} 
+            className="bg-[#43896B] text-white px-6 py-2 rounded-lg hover:bg-[#367556] inline-flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to {title}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // If no content but no error, show "not found" page instead of redirecting
+  if (!content) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            {title.slice(0, -1)} not found
+          </h2>
+          <p className="text-gray-600 mb-6">The requested {contentType.slice(0, -1)} could not be found.</p>
           <Link 
             href={getBackUrl()} 
             className="bg-[#43896B] text-white px-6 py-2 rounded-lg hover:bg-[#367556] inline-flex items-center gap-2"

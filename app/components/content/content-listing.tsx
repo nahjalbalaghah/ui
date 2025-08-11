@@ -6,7 +6,6 @@ import { type Post } from '@/api/posts';
 
 interface ContentListingProps {
   content: Post[];
-  onContentClick?: (item: Post) => void;
   onPageChange?: (page: number) => void;
   loading?: boolean;
   total?: number;
@@ -19,7 +18,6 @@ interface ContentListingProps {
 
 export default function ContentListing({
   content,
-  onContentClick,
   onPageChange,
   loading = false,
   total = 0,
@@ -30,19 +28,16 @@ export default function ContentListing({
   contentType
 }: ContentListingProps) {
   return (
-    <div className="lg:w-3/4 relative">
+    <div className="w-full relative">
       <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-          <p className="text-gray-600 mt-1">
-            {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
-          </p>
-        </div>
+        <p className="text-gray-600">
+          {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
+        </p>
       </div>
       
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {[...Array(9)].map((_, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+          {[...Array(12)].map((_, index) => (
             <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-pulse">
               <div className="h-40 bg-gray-200"></div>
               <div className="p-4">
@@ -59,12 +54,11 @@ export default function ContentListing({
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
             {content.map((item) => (
               <ListingCard
                 key={item.id}
                 oration={item}
-                onClick={() => onContentClick?.(item)}
                 contentType={contentType}
               />
             ))}
