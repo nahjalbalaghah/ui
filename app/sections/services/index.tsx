@@ -29,7 +29,7 @@ const ServicesSection = () => {
     {
       id: 1,
       icon: BookOpen,
-      title: "Digital Nahj al-Balagha Library",
+      title: "Digital Nahj al-Balaghah Library",
       description: "Access the complete collection of sermons, letters, and sayings in multiple formats",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=faces",
       gradient: "from-[#43896B] to-[#43896B]/80"
@@ -38,7 +38,7 @@ const ServicesSection = () => {
       id: 2,
       icon: Search,
       title: "Advanced Text Search",
-      description: "Find specific teachings by topic, theme, or keyword across Nahj al-Balagha",
+      description: "Find specific teachings by topic, theme, or keyword across Nahj al-Balaghah",
       image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=300&fit=crop",
       gradient: "from-[#43896B] to-[#43896B]/80"
     },
@@ -46,7 +46,7 @@ const ServicesSection = () => {
       id: 3,
       icon: Globe,
       title: "Multi-Language Translations",
-      description: "Read Nahj al-Balagha in Arabic, English, Urdu, Persian, and more languages",
+      description: "Read Nahj al-Balaghah in Arabic, English, Urdu, Persian, and more languages",
       image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop",
       gradient: "from-[#43896B] to-[#43896B]/80"
     },
@@ -54,7 +54,7 @@ const ServicesSection = () => {
       id: 4,
       icon: Lightbulb,
       title: "Scholarly Commentary",
-      description: "Access classical and modern commentaries on Nahj al-Balagha",
+      description: "Access classical and modern commentaries on Nahj al-Balaghah",
       image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop",
       gradient: "from-[#43896B] to-[#43896B]/80"
     },

@@ -28,7 +28,7 @@ const ManuscriptsSection = () => {
   const collections = [
     {
       icon: BookOpen,
-      title: "Earliest Nahj al-Balagha Manuscripts",
+      title: "Earliest Nahj al-Balaghah Manuscripts",
       items: [
         "10th-century Arabic manuscripts compiled by Sharif al-Radi",
         "Earliest extant copies preserved in Middle Eastern libraries",
@@ -94,7 +94,7 @@ const ManuscriptsSection = () => {
           className="mb-16 max-w-4xl mx-auto text-center"
         >
           <p className="text-lg text-gray-600 leading-relaxed">
-            Discover the manuscript heritage of Nahj al-Balagha, from the earliest Arabic compilations to modern translations and commentaries. These treasures reflect centuries of devotion to preserving and understanding the words of Imam Ali (AS).
+            Discover the manuscript heritage of Nahj al-Balaghah, from the earliest Arabic compilations to modern translations and commentaries. These treasures reflect centuries of devotion to preserving and understanding the words of Imam Ali (AS).
           </p>
         </motion.div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

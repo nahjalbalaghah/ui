@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tag as TagIcon } from 'lucide-react';
 import { type Post } from '@/api/posts';
+import { formatTextWithBold, isArabicText } from '@/app/utils/text-formatting';
 
 interface ContentDescriptionProps {
   content: Post;
@@ -27,6 +28,8 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
     }
     return 0;
   });
+
+  const mainTranslation = content.translations?.find(t => t.type === 'en');
 
   const getContentLabel = () => {
     switch (contentType) {
@@ -65,6 +68,29 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
         )}
       </div>
 
+      {/* Main Title and Translation as First Paragraph */}
+      {(content.title || mainTranslation) && (
+        <div className="space-y-8 mb-8">
+          <div className="border-b border-gray-100 pb-8">
+            <div className="bg-[#F8F9FA] rounded-lg p-6 mb-4 border-r-4 border-[#43896B]">
+              <div className="text-right">
+                <p className="text-xl leading-relaxed text-gray-900 font-taha">
+                  {formatTextWithBold(content.title, true)}
+                </p>
+              </div>
+            </div>
+            
+            {mainTranslation && (
+              <div className="bg-white rounded-lg p-6 border border-gray-200">
+                <p className="text-lg leading-relaxed text-gray-700 font-serif italic">
+                  {formatTextWithBold(mainTranslation.text, false)}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {sortedParagraphs.length > 0 && (
         <div className="space-y-8">
           {sortedParagraphs.map((paragraph) => {
@@ -74,8 +100,8 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
               <div key={paragraph.id} className="border-b border-gray-100 pb-8 last:border-b-0 last:pb-0">
                 <div className="bg-[#F8F9FA] rounded-lg p-6 mb-4 border-r-4 border-[#43896B]">
                   <div className="text-right">
-                    <p className="text-xl leading-relaxed text-gray-900 font-arabic">
-                      {paragraph.arabic}
+                    <p className="text-xl leading-relaxed text-gray-900 font-taha">
+                      {formatTextWithBold(paragraph.arabic, true)}
                     </p>
                   </div>
                 </div>
@@ -83,7 +109,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 {englishTranslation && (
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
                     <p className="text-lg leading-relaxed text-gray-700 font-serif italic">
-                      {englishTranslation.text}
+                      {formatTextWithBold(englishTranslation.text, false)}
                     </p>
                   </div>
                 )}
@@ -93,7 +119,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
         </div>
       )}
 
-      {sortedParagraphs.length === 0 && (
+      {sortedParagraphs.length === 0 && !(content.title || mainTranslation) && (
         <div className="text-center py-12">
           <p className="text-gray-500">No content available for this {contentType.slice(0, -1)}.</p>
         </div>

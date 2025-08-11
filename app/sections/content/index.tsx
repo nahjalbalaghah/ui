@@ -97,7 +97,7 @@ const OrationsLettersSayingsSection = () => {
           className="mb-16 max-w-4xl mx-auto text-center"
         >
           <p className="text-lg text-gray-600 leading-relaxed">
-            Explore the eloquence and wisdom of Imam Ali ibn Abi Talib (AS) through the Nahj al-Balagha—a collection of sermons, letters, and sayings compiled by Sharif al-Radi. These texts offer profound insights into faith, justice, leadership, and the human experience.
+            Explore the eloquence and wisdom of Imam Ali ibn Abi Talib (AS) through the Nahj al-Balaghah—a collection of sermons, letters, and sayings compiled by Sharif al-Radi. These texts offer profound insights into faith, justice, leadership, and the human experience.
           </p>
         </motion.div>
         <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">

@@ -64,8 +64,8 @@ export const orationsApi = {
       const response = await api.get('/api/posts', {
         params: {
           'filters[type][$eq]': 'Oration',
-          'populate[paragraphs][populate][translations]': true,
-          'populate': 'tags',
+          'populate[0]': 'tags',
+          'populate[1]': 'paragraphs.translations',
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
         },
@@ -83,8 +83,8 @@ export const orationsApi = {
         params: {
           'filters[slug][$eq]': slug,
           'filters[type][$eq]': 'Oration',
-          'populate[paragraphs][populate][translations]': true,
-          'populate': 'tags',
+          'populate[0]': 'tags',
+          'populate[1]': 'paragraphs.translations',
         },
       });
       

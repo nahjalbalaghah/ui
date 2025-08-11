@@ -125,19 +125,6 @@ const ImpactCommunitySection = () => {
                 </motion.div>
               ))}
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 1.2 }}
-              className="pt-4"
-            >
-              <motion.div
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Button variant='solid' icon={<Users size={16} />} >Join Our Community</Button>
-              </motion.div>
-            </motion.div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: -50 }}
