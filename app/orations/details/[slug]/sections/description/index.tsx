@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tag as TagIcon } from 'lucide-react';
 import { type Post } from '@/api/posts';
+import { formatTextWithBold, isArabicText } from '@/app/utils/text-formatting';
 
 interface OrationsDescriptionProps {
   oration: Post;
@@ -27,6 +28,8 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
     return 0;
   });
 
+  const mainTranslation = oration.translations?.find(t => t.type === 'en');
+
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-8">
       <div className="mb-8 pb-6 border-b border-gray-200">
@@ -51,6 +54,29 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
         )}
       </div>
 
+      {/* Main Title and Translation as First Paragraph */}
+      {(oration.title || mainTranslation) && (
+        <div className="space-y-8 mb-8">
+          <div className="border-b border-gray-100 pb-8">
+            <div className="bg-[#F8F9FA] rounded-lg p-6 mb-4 border-r-4 border-[#43896B]">
+              <div className="text-right">
+                <p className="text-xl leading-relaxed text-gray-900 font-taha">
+                  {formatTextWithBold(oration.title, true)}
+                </p>
+              </div>
+            </div>
+            
+            {mainTranslation && (
+              <div className="bg-white rounded-lg p-6 border border-gray-200">
+                <p className="text-lg leading-relaxed text-gray-700 font-serif italic">
+                  {formatTextWithBold(mainTranslation.text, false)}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {sortedParagraphs.length > 0 && (
         <div className="space-y-8">
           {sortedParagraphs.map((paragraph) => {
@@ -65,15 +91,15 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
                 </div>
                 
                 <div className="mb-6">
-                  <div className="text-right leading-loose text-xl text-gray-800 font-arabic" dir="rtl">
-                    {paragraph.arabic}
+                  <div className="text-right leading-loose text-xl text-gray-800 font-taha" dir="rtl">
+                    {formatTextWithBold(paragraph.arabic, true)}
                   </div>
                 </div>
                 
                 {englishTranslation && (
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="leading-relaxed text-gray-700">
-                      {englishTranslation}
+                      {formatTextWithBold(englishTranslation, false)}
                     </div>
                   </div>
                 )}
@@ -83,7 +109,7 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
         </div>
       )}
 
-      {sortedParagraphs.length === 0 && (
+      {sortedParagraphs.length === 0 && !(oration.title || mainTranslation) && (
         <div className="text-center py-12">
           <p className="text-gray-500">No content available for this oration.</p>
         </div>

@@ -1,15 +1,15 @@
 {
 "data": [
 {
-"id": 2266,
-"documentId": "hva1i1ollewsbh0lr81v5rr1",
+"id": 3772,
+"documentId": "szirmkx7r17f6tq6r5rmpy4c",
 "title": "من كتاب له عليه السلام إلى أهل الكوفة عند مسيره من المدينة إلى البصرة من عبد الله عليّ أمير المؤمنين إلى أهل الكوفة جبهة الأنصار وسنام العرب. أمّا بعد. فإنّي أخبركم عن أمر عثمان حتّى يكون سمعه كعِيانه. إنّ الناس طعنوا عليه فكنت رجلًا من المهاجرين أُكثر ٱستعتابه وأُقلّ عتابه وكان طلحة والزبير أهوَن سَيرهما فيه الوجيف وأرفق حِدائهما العنيف وكان من عائشة فيه فَلتة غضب فأتيح له قوم فقتلوه وبايعني الناس غير مستكرهين ولا مُجبَرين بل طائعين مخيَّرين. وٱعلموا أنّ دار الهجرة قد قَلَعَتْ بأهلها وقُلِعوا بها وجاشت جيش المِرجل وقامت الفتنة على القطب فأسرعوا إلى أميركم وبادروا جهاد عدوّكم إن شاء الله.",
 "slug": "to-the-people-of-kufa-as-al-marched-on-iraq-from-medina-on-events-preceding-and-after-uthm-n-s-death",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:43.343Z",
-"updatedAt": "2025-08-07T18:21:43.343Z",
-"publishedAt": "2025-08-07T18:21:43.353Z",
+"createdAt": "2025-08-11T14:10:01.795Z",
+"updatedAt": "2025-08-11T14:10:01.795Z",
+"publishedAt": "2025-08-11T14:10:01.812Z",
 "translations": [
 {
 "text": "From ʿAlī’s dispatch to the residents of Kufa, when he was about to march from Medina on Basra: From God’s servant, ʿAlī, Commander of the Faithful, to the residents of Kufa—renowned face of the Allies, crest of the Arabs. And now to the matter at hand: I write to inform you of what happened to ʿUthmān, and when you hear my words, you will see the events unfold before your eyes: The public censured ʿUthmān for his conduct, and the Emigrants each took their stand. I tried hard to reconcile and lower the heat, while Ṭalḥah and Zubayr galloped to escalate the affair, harshly driving the camels of castigation toward their destination, and ʿĀʾishah fired out an angry outburst. A group, emboldened, killed ʿUthmān. The Muslims then pledged allegiance to me as their caliph, willingly and of their free choice, without any coercion or force. Kufans, know that Medina reels, and its people reel with it. It boils like a cauldron and revolt has raised its banner, so hasten to join your ruler and advance to fight your enemy! Battle, if that be God’s will, looms ahead.",
@@ -18,47 +18,18 @@
 ],
 "sermonNumber": "2.1",
 "heading": "To the people of Kufa, as ʿAlī marched on Iraq from Medina, on events preceding and after ʿUthmān’s death",
-"paragraphs": [
-{
-"id": 3199,
-"documentId": "e7trgrge3szwe8z8abmb6lvm",
-"arabic": "من كتاب له عليه السلام إلى أهل الكوفة عند مسيره من المدينة إلى البصرة من عبد الله عليّ أمير المؤمنين إلى أهل الكوفة جبهة الأنصار وسنام العرب. أمّا بعد. فإنّي أخبركم عن أمر عثمان حتّى يكون سمعه كعِيانه. إنّ الناس طعنوا عليه فكنت رجلًا من المهاجرين أُكثر ٱستعتابه وأُقلّ عتابه وكان طلحة والزبير أهوَن سَيرهما فيه الوجيف وأرفق حِدائهما العنيف وكان من عائشة فيه فَلتة غضب فأتيح له قوم فقتلوه وبايعني الناس غير مستكرهين ولا مُجبَرين بل طائعين مخيَّرين. وٱعلموا أنّ دار الهجرة قد قَلَعَتْ بأهلها وقُلِعوا بها وجاشت جيش المِرجل وقامت الفتنة على القطب فأسرعوا إلى أميركم وبادروا جهاد عدوّكم إن شاء الله.",
-"createdAt": "2025-08-07T18:19:56.679Z",
-"updatedAt": "2025-08-07T18:19:56.679Z",
-"publishedAt": "2025-08-07T18:19:56.786Z",
-"number": "2.1.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "من كتاب له عليه السلام إلى أهل الكوفة عند مسيره من المدينة إلى البصرة من عبد الله عليّ أمير المؤمنين إلى أهل الكوفة جبهة الأنصار وسنام العرب. أمّا بعد. فإنّي أخبركم عن أمر عثمان حتّى يكون سمعه كعِيانه. إنّ الناس طعنوا عليه فكنت رجلًا من المهاجرين أُكثر ٱستعتابه وأُقلّ عتابه وكان طلحة والزبير أهوَن سَيرهما فيه الوجيف وأرفق حِدائهما العنيف وكان من عائشة فيه فَلتة غضب فأتيح له قوم فقتلوه وبايعني الناس غير مستكرهين ولا مُجبَرين بل طائعين مخيَّرين. وٱعلموا أنّ دار الهجرة قد قَلَعَتْ بأهلها وقُلِعوا بها وجاشت جيش المِرجل وقامت الفتنة على القطب فأسرعوا إلى أميركم وبادروا جهاد عدوّكم إن شاء الله.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3239,
-"type": "en",
-"text": "From ʿAlī’s dispatch to the residents of Kufa, when he was about to march from Medina on Basra: From God’s servant, ʿAlī, Commander of the Faithful, to the residents of Kufa—renowned face of the Allies, crest of the Arabs. And now to the matter at hand: I write to inform you of what happened to ʿUthmān, and when you hear my words, you will see the events unfold before your eyes: The public censured ʿUthmān for his conduct, and the Emigrants each took their stand. I tried hard to reconcile and lower the heat, while Ṭalḥah and Zubayr galloped to escalate the affair, harshly driving the camels of castigation toward their destination, and ʿĀʾishah fired out an angry outburst. A group, emboldened, killed ʿUthmān. The Muslims then pledged allegiance to me as their caliph, willingly and of their free choice, without any coercion or force. Kufans, know that Medina reels, and its people reel with it. It boils like a cauldron and revolt has raised its banner, so hasten to join your ruler and advance to fight your enemy! Battle, if that be God’s will, looms ahead."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2268,
-"documentId": "tywxp7l42s9x4lzzv0lxdhiy",
+"id": 3774,
+"documentId": "qzz70j76mizlx7iq7r069yw6",
 "title": "ومن كتاب له عليه السلام إليهم بعد فتح البصرة وجزاكم الله من أهل مصرٍ عن أهل بيت نبيّكم أحسن ما يجزي العاملين بطاعته والشاكرين لنعمته فقد سمعتم وأطعتم ودعيتم فأجبتم.",
 "slug": "to-the-people-of-kufa-after-the-victory-at-the-battle-of-the-camel-at-basra",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:43.685Z",
-"updatedAt": "2025-08-07T18:21:43.685Z",
-"publishedAt": "2025-08-07T18:21:43.699Z",
+"createdAt": "2025-08-11T14:10:02.544Z",
+"updatedAt": "2025-08-11T14:10:02.544Z",
+"publishedAt": "2025-08-11T14:10:02.564Z",
 "translations": [
 {
 "text": "From ʿAlī’s dispatch to the residents of Kufa, after his victory at Basra: Residents of Kufa, may God reward you on behalf of your Prophet’s family! May he bestow on you the reward he reserves for those who obey him through their actions and thank him for his favors! You heard and you obeyed, you were called, and you answered.",
@@ -67,47 +38,18 @@
 ],
 "sermonNumber": "2.2",
 "heading": "To the people of Kufa, after the victory at the Battle of the Camel at Basra",
-"paragraphs": [
-{
-"id": 3204,
-"documentId": "c0gcn6jo6y7oooa67bcpwyub",
-"arabic": "ومن كتاب له عليه السلام إليهم بعد فتح البصرة وجزاكم الله من أهل مصرٍ عن أهل بيت نبيّكم أحسن ما يجزي العاملين بطاعته والشاكرين لنعمته فقد سمعتم وأطعتم ودعيتم فأجبتم.",
-"createdAt": "2025-08-07T18:19:56.760Z",
-"updatedAt": "2025-08-07T18:19:56.760Z",
-"publishedAt": "2025-08-07T18:19:56.867Z",
-"number": "2.2.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إليهم بعد فتح البصرة وجزاكم الله من أهل مصرٍ عن أهل بيت نبيّكم أحسن ما يجزي العاملين بطاعته والشاكرين لنعمته فقد سمعتم وأطعتم ودعيتم فأجبتم.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3244,
-"type": "en",
-"text": "From ʿAlī’s dispatch to the residents of Kufa, after his victory at Basra: Residents of Kufa, may God reward you on behalf of your Prophet’s family! May he bestow on you the reward he reserves for those who obey him through their actions and thank him for his favors! You heard and you obeyed, you were called, and you answered."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2270,
-"documentId": "x4d0xe8ktlyg83r9n6hb1i87",
+"id": 3776,
+"documentId": "gqgznkj0t84e5vhj6pux8ef5",
 "title": "ومن كتاب كتبه عليه السلام لشُرَيح بن الحارث قاضيه. روي أنّ شريح بن الحارث قاضي أمير المؤمنين ٱشترى على عهده دارًا بثمانين دينارًا فبلغه عليه السلام ذلك فٱستدعى شريحًا وقال له بلغني أنّك ٱبتعت دارًا بثمانين دينارًا وكتبت كتابًا وأشهدت شهودًا. فقال شريح قد كان ذلك يا أمير المؤمنين. قال فنظر إليه نظر مُغضَب ثمّ قال له يا شريح أما إنّه سيأتيك من لا ينظر في كتابك ولا يسألك عن بيّنتك حتّى يُخرجك منها شاخصًا ويسلّمك إلى قبرك خالصًا. فٱنظر يا شريح لا تكون ٱبتعت هذه الدار من غير ماِلكَ أو نقدت الثمن من غير حِلٍّ لك فإذا أنت قد خسرت دار الدنيا ودار الآخرة. أما إنّك لو كنت أتيتني عند شرائك ما ٱشتريت لكتبت لك كتابًا على هذه النسخة فلم ترغب في شراء هذه الدار بدرهم فما فوقه. والنسخة هذا ما ٱشترى عبد ذليل من ميّت قد أُزعج للرحيل ٱشترى منه دارًا من دار الغرور من جانب الفانين وخِطّة الهالكين. وتجمع هذه الدار حدودٌ أربعة الحدّ الأوّل ينتهي إلى دواعي الآفات والحدّ الثاني ينتهي إلى دواعي المصيبات والحدّ الثالث ينتهي إلى الهوى المردي والحدّ الرابع ينتهي إلى الشيطان المغوي وفيه يُشرَع باب هذه الدار. اشترى هذا المغترّ بالأمل من هذا المُزعَج بالأجل هذه الدار بالخروج من عزّ القناعة والدخول في ذلّ الطلب والضَّراعة فما أدرك هذا المشتري فيما ٱشترى مِن دَرَك. فعلى مُبلبِل أجسام الملوك وسالب نفوس الجبابرة ومزيل ملك الفراعنة مثل كسرى وقيصر وتُبَّع وحِمْيَر ومن جمع المال على المال فأكثر ومن بنى وشيّد وزخرف ونجّد وٱدّخر وٱعتقد ونظر بزعمه للولد. إشخاصُهم جميعًا إلى موقف العرض والحساب وموضع الثواب والعقاب إذا وقع الأمر بفصل القضاء ﴿وَخَسِرَ هُنَالِكَ الْمُبْطِلُونَ﴾. شهد على ذلك العقل إذا خرج من أسر الهوى وسلم من علائق الدنيا.",
 "slug": "to-his-judge-shuray-who-had-just-bought-a-large-house-a-contract",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:44.032Z",
-"updatedAt": "2025-08-07T18:21:44.032Z",
-"publishedAt": "2025-08-07T18:21:44.041Z",
+"createdAt": "2025-08-11T14:10:04.714Z",
+"updatedAt": "2025-08-11T14:10:04.714Z",
+"publishedAt": "2025-08-11T14:10:04.740Z",
 "translations": [
 {
 "text": "From a missive that ʿAlī wrote to his judge, Shurayḥ ibn al-Ḥārith. It is related that during ʿAlī’s reign, Shurayḥ ibn al-Ḥārith, a judge appointed by the Commander of the Faithful, purchased a house for eighty gold dinars. The news reached ʿAlī, who summoned Shurayḥ and said, “I’m told that you have bought a house for eighty gold dinars, and that you wrote up a contract and called witnesses to attest to the purchase.” Shurayḥ responded, “That is correct, Commander of the Faithful.” ʿAlī looked at Shurayḥ with some anger, then said to him: Shurayḥ, soon there will come to you one who will not look at your written contract nor ask for your testimonials but will turn you out of your house and over to your grave. Take heed, Shurayḥ! You had better not have bought this house with money that doesn’t belong to you or in coin gained from unlawful sources. If so, you will have lost the abode of this world and the abode of the hereafter. If you had come to me when you were about to buy the house, I would have written up a different kind of contract, in this manner. You would not then have wished to purchase this house for a single silver dirham, let alone for the sum you paid. The transcript: This is what a humble servant has bought from a soon-to-be-dead man whose departure from the world has already begun. The humble servant bought from the soon-to-be-dead man one of the houses of calamity located in the district of those soon-to-perish in the quarter of the dead. There are four borders to this house: The first extends to the summons of calamity, the second extends to the summons of catastrophe, the third extends to destructive passions, and the fourth extends to Satan, the great deceiver. The door of this house opens from this side. This man, deceived by false hopes, has bought this house from that man, who is soon to be evicted by death. The buyer has left the protective might of contentment and entered the shameful condition of petition and entreaty—he has not purchased anything good. Might belongs to God, who decomposes the bodies of kings, snatches the souls of pharaohs, destroys the empire of despots such as Chosroes, Caesar, Tubbaʿ, and Ḥimyar, rulers who amassed wealth, who constructed, fortified, decorated, furnished, hoarded, and stockpiled, thinking they were providing for their children. When the command comes for the final judgment, all will be forced to the dock of review and reckoning, the station of reward and punishment, «and there shall the falsifiers lose everything.» This contract has been witnessed by an intellect liberated from the shackles of passion and protected from worldly attachments.",
@@ -116,47 +58,18 @@
 ],
 "sermonNumber": "2.3",
 "heading": "To his judge, Shurayḥ, who had just bought a large house: a “contract”",
-"paragraphs": [
-{
-"id": 3230,
-"documentId": "vip2u17yvuvfxi41kag9n34g",
-"arabic": "ومن كتاب كتبه عليه السلام لشُرَيح بن الحارث قاضيه. روي أنّ شريح بن الحارث قاضي أمير المؤمنين ٱشترى على عهده دارًا بثمانين دينارًا فبلغه عليه السلام ذلك فٱستدعى شريحًا وقال له بلغني أنّك ٱبتعت دارًا بثمانين دينارًا وكتبت كتابًا وأشهدت شهودًا. فقال شريح قد كان ذلك يا أمير المؤمنين. قال فنظر إليه نظر مُغضَب ثمّ قال له يا شريح أما إنّه سيأتيك من لا ينظر في كتابك ولا يسألك عن بيّنتك حتّى يُخرجك منها شاخصًا ويسلّمك إلى قبرك خالصًا. فٱنظر يا شريح لا تكون ٱبتعت هذه الدار من غير ماِلكَ أو نقدت الثمن من غير حِلٍّ لك فإذا أنت قد خسرت دار الدنيا ودار الآخرة. أما إنّك لو كنت أتيتني عند شرائك ما ٱشتريت لكتبت لك كتابًا على هذه النسخة فلم ترغب في شراء هذه الدار بدرهم فما فوقه. والنسخة هذا ما ٱشترى عبد ذليل من ميّت قد أُزعج للرحيل ٱشترى منه دارًا من دار الغرور من جانب الفانين وخِطّة الهالكين. وتجمع هذه الدار حدودٌ أربعة الحدّ الأوّل ينتهي إلى دواعي الآفات والحدّ الثاني ينتهي إلى دواعي المصيبات والحدّ الثالث ينتهي إلى الهوى المردي والحدّ الرابع ينتهي إلى الشيطان المغوي وفيه يُشرَع باب هذه الدار. اشترى هذا المغترّ بالأمل من هذا المُزعَج بالأجل هذه الدار بالخروج من عزّ القناعة والدخول في ذلّ الطلب والضَّراعة فما أدرك هذا المشتري فيما ٱشترى مِن دَرَك. فعلى مُبلبِل أجسام الملوك وسالب نفوس الجبابرة ومزيل ملك الفراعنة مثل كسرى وقيصر وتُبَّع وحِمْيَر ومن جمع المال على المال فأكثر ومن بنى وشيّد وزخرف ونجّد وٱدّخر وٱعتقد ونظر بزعمه للولد. إشخاصُهم جميعًا إلى موقف العرض والحساب وموضع الثواب والعقاب إذا وقع الأمر بفصل القضاء ﴿وَخَسِرَ هُنَالِكَ الْمُبْطِلُونَ﴾. شهد على ذلك العقل إذا خرج من أسر الهوى وسلم من علائق الدنيا.",
-"createdAt": "2025-08-07T18:19:57.225Z",
-"updatedAt": "2025-08-07T18:19:57.225Z",
-"publishedAt": "2025-08-07T18:19:57.299Z",
-"number": "2.3.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب كتبه عليه السلام لشُرَيح بن الحارث قاضيه. روي أنّ شريح بن الحارث قاضي أمير المؤمنين ٱشترى على عهده دارًا بثمانين دينارًا فبلغه عليه السلام ذلك فٱستدعى شريحًا وقال له بلغني أنّك ٱبتعت دارًا بثمانين دينارًا وكتبت كتابًا وأشهدت شهودًا. فقال شريح قد كان ذلك يا أمير المؤمنين. قال فنظر إليه نظر مُغضَب ثمّ قال له يا شريح أما إنّه سيأتيك من لا ينظر في كتابك ولا يسألك عن بيّنتك حتّى يُخرجك منها شاخصًا ويسلّمك إلى قبرك خالصًا. فٱنظر يا شريح لا تكون ٱبتعت هذه الدار من غير ماِلكَ أو نقدت الثمن من غير حِلٍّ لك فإذا أنت قد خسرت دار الدنيا ودار الآخرة. أما إنّك لو كنت أتيتني عند شرائك ما ٱشتريت لكتبت لك كتابًا على هذه النسخة فلم ترغب في شراء هذه الدار بدرهم فما فوقه. والنسخة هذا ما ٱشترى عبد ذليل من ميّت قد أُزعج للرحيل ٱشترى منه دارًا من دار الغرور من جانب الفانين وخِطّة الهالكين. وتجمع هذه الدار حدودٌ أربعة الحدّ الأوّل ينتهي إلى دواعي الآفات والحدّ الثاني ينتهي إلى دواعي المصيبات والحدّ الثالث ينتهي إلى الهوى المردي والحدّ الرابع ينتهي إلى الشيطان المغوي وفيه يُشرَع باب هذه الدار. اشترى هذا المغترّ بالأمل من هذا المُزعَج بالأجل هذه الدار بالخروج من عزّ القناعة والدخول في ذلّ الطلب والضَّراعة فما أدرك هذا المشتري فيما ٱشترى مِن دَرَك. فعلى مُبلبِل أجسام الملوك وسالب نفوس الجبابرة ومزيل ملك الفراعنة مثل كسرى وقيصر وتُبَّع وحِمْيَر ومن جمع المال على المال فأكثر ومن بنى وشيّد وزخرف ونجّد وٱدّخر وٱعتقد ونظر بزعمه للولد. إشخاصُهم جميعًا إلى موقف العرض والحساب وموضع الثواب والعقاب إذا وقع الأمر بفصل القضاء ﴿وَخَسِرَ هُنَالِكَ الْمُبْطِلُونَ﴾. شهد على ذلك العقل إذا خرج من أسر الهوى وسلم من علائق الدنيا.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3270,
-"type": "en",
-"text": "From a missive that ʿAlī wrote to his judge, Shurayḥ ibn al-Ḥārith. It is related that during ʿAlī’s reign, Shurayḥ ibn al-Ḥārith, a judge appointed by the Commander of the Faithful, purchased a house for eighty gold dinars. The news reached ʿAlī, who summoned Shurayḥ and said, “I’m told that you have bought a house for eighty gold dinars, and that you wrote up a contract and called witnesses to attest to the purchase.” Shurayḥ responded, “That is correct, Commander of the Faithful.” ʿAlī looked at Shurayḥ with some anger, then said to him: Shurayḥ, soon there will come to you one who will not look at your written contract nor ask for your testimonials but will turn you out of your house and over to your grave. Take heed, Shurayḥ! You had better not have bought this house with money that doesn’t belong to you or in coin gained from unlawful sources. If so, you will have lost the abode of this world and the abode of the hereafter. If you had come to me when you were about to buy the house, I would have written up a different kind of contract, in this manner. You would not then have wished to purchase this house for a single silver dirham, let alone for the sum you paid. The transcript: This is what a humble servant has bought from a soon-to-be-dead man whose departure from the world has already begun. The humble servant bought from the soon-to-be-dead man one of the houses of calamity located in the district of those soon-to-perish in the quarter of the dead. There are four borders to this house: The first extends to the summons of calamity, the second extends to the summons of catastrophe, the third extends to destructive passions, and the fourth extends to Satan, the great deceiver. The door of this house opens from this side. This man, deceived by false hopes, has bought this house from that man, who is soon to be evicted by death. The buyer has left the protective might of contentment and entered the shameful condition of petition and entreaty—he has not purchased anything good. Might belongs to God, who decomposes the bodies of kings, snatches the souls of pharaohs, destroys the empire of despots such as Chosroes, Caesar, Tubbaʿ, and Ḥimyar, rulers who amassed wealth, who constructed, fortified, decorated, furnished, hoarded, and stockpiled, thinking they were providing for their children. When the command comes for the final judgment, all will be forced to the dock of review and reckoning, the station of reward and punishment, «and there shall the falsifiers lose everything.» This contract has been witnessed by an intellect liberated from the shackles of passion and protected from worldly attachments."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2272,
-"documentId": "mj27s46fbg1ok2thdjsvmi3l",
+"id": 3778,
+"documentId": "o02jlw5ixsqa8ax8d5phkg24",
 "title": "ومن كتاب له عليه السلام إلى بعض أمراء جيشه فإن عادوا إلى ظلّ الطاعة فذاك الذي نحبّ وإن توافت الأمور بالقوم إلى الشقاق والعصيان فٱنهد بمن أطاعك إلى من عصاك وٱستغن بمن ٱنقاد معك عمّن تقاعس عنك فإنّ المتكاره مَغيبه خير من مشهده وقعوده أغنى من نهوضه.",
 "slug": "to-ibn-unayf-governor-of-basra-when-al-ah-zubayr-and-ishah-marched-there-and-many-residents-turned-a",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:44.380Z",
-"updatedAt": "2025-08-07T18:21:44.380Z",
-"publishedAt": "2025-08-07T18:21:44.390Z",
+"createdAt": "2025-08-11T14:10:06.113Z",
+"updatedAt": "2025-08-11T14:10:06.113Z",
+"publishedAt": "2025-08-11T14:10:06.126Z",
 "translations": [
 {
 "text": "From ʿAlī’s dispatch to one of his army commanders:If they reenter the canopy of obedience, then that is what we desire. But if their affairs direct them to dissent and disobey, then rise up with those who obey you to fight those who disobey, make do with those who accept your leadership, without seeking the help of the recalcitrant. One who marches against his will is better absent than present. He is more helpful to us sitting than standing.",
@@ -165,47 +78,18 @@
 ],
 "sermonNumber": "2.4",
 "heading": "To Ibn Ḥunayf, governor of Basra, when Ṭalḥah, Zubayr, and ʿĀʾishah marched there, and many residents turned against ʿAlī",
-"paragraphs": [
-{
-"id": 3205,
-"documentId": "vkzzso7nke54tohjcjv2glst",
-"arabic": "ومن كتاب له عليه السلام إلى بعض أمراء جيشه فإن عادوا إلى ظلّ الطاعة فذاك الذي نحبّ وإن توافت الأمور بالقوم إلى الشقاق والعصيان فٱنهد بمن أطاعك إلى من عصاك وٱستغن بمن ٱنقاد معك عمّن تقاعس عنك فإنّ المتكاره مَغيبه خير من مشهده وقعوده أغنى من نهوضه.",
-"createdAt": "2025-08-07T18:19:56.767Z",
-"updatedAt": "2025-08-07T18:19:56.767Z",
-"publishedAt": "2025-08-07T18:19:56.878Z",
-"number": "2.4.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى بعض أمراء جيشه فإن عادوا إلى ظلّ الطاعة فذاك الذي نحبّ وإن توافت الأمور بالقوم إلى الشقاق والعصيان فٱنهد بمن أطاعك إلى من عصاك وٱستغن بمن ٱنقاد معك عمّن تقاعس عنك فإنّ المتكاره مَغيبه خير من مشهده وقعوده أغنى من نهوضه.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3245,
-"type": "en",
-"text": "From ʿAlī’s dispatch to one of his army commanders:If they reenter the canopy of obedience, then that is what we desire. But if their affairs direct them to dissent and disobey, then rise up with those who obey you to fight those who disobey, make do with those who accept your leadership, without seeking the help of the recalcitrant. One who marches against his will is better absent than present. He is more helpful to us sitting than standing."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2274,
-"documentId": "vfngo4e7vn2lxtzdqhoer9ak",
+"id": 3780,
+"documentId": "f10eyyy0fbwbza53rz322rgn",
 "title": "ومن كتاب له عليه السلام إلى الأشعث بن قيس وهو عامل أَذْرَبِيجان وإنّ عملك ليس لك بطُعمة ولكنّه في عنقك أمانة وأنت مُسترعًى لمن فوقك ليس لك أن تَفتاتَ في رعيّة ولا تخاطر إلّا بوثيقة وفي يديك مال من مال الله عزّ وجلّ وأنت من خزّاني حتّى تسلّمه إليّ ولَعلّي ألّا أكون شرّ ولاتك لك. والسلام.",
 "slug": "to-ash-ath-governor-of-azerbaijan-who-had-embezzled-treasury-funds",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:44.719Z",
-"updatedAt": "2025-08-07T18:21:44.719Z",
-"publishedAt": "2025-08-07T18:21:44.726Z",
+"createdAt": "2025-08-11T14:10:08.313Z",
+"updatedAt": "2025-08-11T14:10:08.313Z",
+"publishedAt": "2025-08-11T14:10:08.336Z",
 "translations": [
 {
 "text": "From ʿAlī’s dispatch to al-Ashʿath ibn Qays, his governor in Azerbaijan: Your governorship is not a meal for you to devour but a trust to which your neck is shackled. You have been charged with taking care of it by a man who is superior to you in rank, and are not authorized to order your subjects around, or to imperil their funds—those must be secured. What you have in your hands is property belonging to God—you have been entrusted with safeguarding it and submitting it to me. Rest assured, however, that I shall be one of the kinder rulers you encounter. Go in peace.",
@@ -214,47 +98,18 @@
 ],
 "sermonNumber": "2.5",
 "heading": "To Ashʿath, governor of Azerbaijan, who had embezzled treasury funds",
-"paragraphs": [
-{
-"id": 3200,
-"documentId": "zwqeraltlck5u365p9niit4f",
-"arabic": "ومن كتاب له عليه السلام إلى الأشعث بن قيس وهو عامل أَذْرَبِيجان وإنّ عملك ليس لك بطُعمة ولكنّه في عنقك أمانة وأنت مُسترعًى لمن فوقك ليس لك أن تَفتاتَ في رعيّة ولا تخاطر إلّا بوثيقة وفي يديك مال من مال الله عزّ وجلّ وأنت من خزّاني حتّى تسلّمه إليّ ولَعلّي ألّا أكون شرّ ولاتك لك. والسلام.",
-"createdAt": "2025-08-07T18:19:56.686Z",
-"updatedAt": "2025-08-07T18:19:56.686Z",
-"publishedAt": "2025-08-07T18:19:56.791Z",
-"number": "2.5.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى الأشعث بن قيس وهو عامل أَذْرَبِيجان وإنّ عملك ليس لك بطُعمة ولكنّه في عنقك أمانة وأنت مُسترعًى لمن فوقك ليس لك أن تَفتاتَ في رعيّة ولا تخاطر إلّا بوثيقة وفي يديك مال من مال الله عزّ وجلّ وأنت من خزّاني حتّى تسلّمه إليّ ولَعلّي ألّا أكون شرّ ولاتك لك. والسلام.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3240,
-"type": "en",
-"text": "From ʿAlī’s dispatch to al-Ashʿath ibn Qays, his governor in Azerbaijan: Your governorship is not a meal for you to devour but a trust to which your neck is shackled. You have been charged with taking care of it by a man who is superior to you in rank, and are not authorized to order your subjects around, or to imperil their funds—those must be secured. What you have in your hands is property belonging to God—you have been entrusted with safeguarding it and submitting it to me. Rest assured, however, that I shall be one of the kinder rulers you encounter. Go in peace."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2276,
-"documentId": "qt9lt2nvx61pj6hdutnqnp8j",
+"id": 3782,
+"documentId": "rterw2ic9b70oix56yy8o2q6",
 "title": "ومن كتاب له عليه السلام إلى معاوية إنّه بايعني القوم الذين بايعوا أبا بكر وعمر وعثمان على ما بايعوهم عليه فلم يكن للشاهد أن يختار ولا للغائب أن يردّ وإنّما الشورى للمهاجرين والأنصار فإن ٱجتمعوا على رجل وسمّوه إمامًا كان ذلك لله رضًى فإن خرج من أمرهم خارج بطعن أو بدعة رَدّوه إلى ما خرج منه فإن أبى قاتلوه على ٱتّباعه غير سبيل المؤمنين وولّاه الله ما تولّى. ولعمري يا معاوية لئن نظرت بعقلك دون هواك لتجدنّي أبرأ الناس من دم عثمان ولتعلمنّ أنّي كنت في عزلة عنه إلّا أن تتجنّى فتَجَنَّ ما بَدا لك. والسلام.",
 "slug": "sent-with-jar-r-following-the-battle-of-the-camel-to-mu-wiyah-persuading-him-to-pledge-allegiance",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:45.052Z",
-"updatedAt": "2025-08-07T18:21:45.052Z",
-"publishedAt": "2025-08-07T18:21:45.064Z",
+"createdAt": "2025-08-11T14:10:09.000Z",
+"updatedAt": "2025-08-11T14:10:09.000Z",
+"publishedAt": "2025-08-11T14:10:09.012Z",
 "translations": [
 {
 "text": "From ʿAlī’s letter to Muʿāwiyah: The same people who pledged allegiance to Abū Bakr, ʿUmar, and ʿUthmān pledged allegiance to me, and they did so on the same basis. Those who were present did not have the right to choose, and those absent did not have the right to object—consultation is reserved for the Emigrants and Allies alone, and if they agree on someone and name him their leader, then that is God’s will. Afterward, if a person secedes from the consensus with accusations and excuses, they should compel him to return. If he refuses, they should fight him, for he has strayed from the path of believers, and God will shun him for as long as he continues his recalcitrance. By my life, Muʿāwiyah, if you would look with your mind and not your passion, you would find me of all people to have the least share of blame in the matter of ʿUthmān’s blood, you would know that I kept away from the fray. Unless you insist on making a patently false accusation—if so, then go ahead and accuse me of what you will! Go in peace.",
@@ -263,47 +118,18 @@
 ],
 "sermonNumber": "2.6",
 "heading": "Sent with Jarīr following the Battle of the Camel, to Muʿāwiyah, persuading him to pledge allegiance",
-"paragraphs": [
-{
-"id": 3222,
-"documentId": "p8ia0z220im8qxj8fl7fx3ou",
-"arabic": "ومن كتاب له عليه السلام إلى معاوية إنّه بايعني القوم الذين بايعوا أبا بكر وعمر وعثمان على ما بايعوهم عليه فلم يكن للشاهد أن يختار ولا للغائب أن يردّ وإنّما الشورى للمهاجرين والأنصار فإن ٱجتمعوا على رجل وسمّوه إمامًا كان ذلك لله رضًى فإن خرج من أمرهم خارج بطعن أو بدعة رَدّوه إلى ما خرج منه فإن أبى قاتلوه على ٱتّباعه غير سبيل المؤمنين وولّاه الله ما تولّى. ولعمري يا معاوية لئن نظرت بعقلك دون هواك لتجدنّي أبرأ الناس من دم عثمان ولتعلمنّ أنّي كنت في عزلة عنه إلّا أن تتجنّى فتَجَنَّ ما بَدا لك. والسلام.",
-"createdAt": "2025-08-07T18:19:57.088Z",
-"updatedAt": "2025-08-07T18:19:57.088Z",
-"publishedAt": "2025-08-07T18:19:57.216Z",
-"number": "2.6.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى معاوية إنّه بايعني القوم الذين بايعوا أبا بكر وعمر وعثمان على ما بايعوهم عليه فلم يكن للشاهد أن يختار ولا للغائب أن يردّ وإنّما الشورى للمهاجرين والأنصار فإن ٱجتمعوا على رجل وسمّوه إمامًا كان ذلك لله رضًى فإن خرج من أمرهم خارج بطعن أو بدعة رَدّوه إلى ما خرج منه فإن أبى قاتلوه على ٱتّباعه غير سبيل المؤمنين وولّاه الله ما تولّى. ولعمري يا معاوية لئن نظرت بعقلك دون هواك لتجدنّي أبرأ الناس من دم عثمان ولتعلمنّ أنّي كنت في عزلة عنه إلّا أن تتجنّى فتَجَنَّ ما بَدا لك. والسلام.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3262,
-"type": "en",
-"text": "From ʿAlī’s letter to Muʿāwiyah: The same people who pledged allegiance to Abū Bakr, ʿUmar, and ʿUthmān pledged allegiance to me, and they did so on the same basis. Those who were present did not have the right to choose, and those absent did not have the right to object—consultation is reserved for the Emigrants and Allies alone, and if they agree on someone and name him their leader, then that is God’s will. Afterward, if a person secedes from the consensus with accusations and excuses, they should compel him to return. If he refuses, they should fight him, for he has strayed from the path of believers, and God will shun him for as long as he continues his recalcitrance. By my life, Muʿāwiyah, if you would look with your mind and not your passion, you would find me of all people to have the least share of blame in the matter of ʿUthmān’s blood, you would know that I kept away from the fray. Unless you insist on making a patently false accusation—if so, then go ahead and accuse me of what you will! Go in peace."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2278,
-"documentId": "otqho33skgnlw12wzh3ooxra",
+"id": 3784,
+"documentId": "c0jut3p36dsh8elxsxpdvgej",
 "title": "ومن كتاب له عليه السلام إليه أيضًا أمّا بعد. فقد أتتني منك موعظة مُوَصَّلة ورسالة محبَّرة نَمّقتَها بضلالك وأمضيتها بسوء رأيك.وكتاب ٱمرئ ليس له بصر يهديه ولا قائد يرشده قد دعاه الهوى فأجابه وقاده الضلال فٱتّبعه فهجر لاغطًا وضلّ خابطًا. منه لأنّها بيعة واحدة لا يثنّى فيها النظر ولا يُستأنَف فيها الخِيار الخارج منها طاعن والمُروّي فيها مُداهن.",
 "slug": "to-mu-wiyah-toward-the-end-of-the-battle-of-iff-n",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:45.395Z",
-"updatedAt": "2025-08-07T18:21:45.395Z",
-"publishedAt": "2025-08-07T18:21:45.403Z",
+"createdAt": "2025-08-11T14:10:09.675Z",
+"updatedAt": "2025-08-11T14:10:09.675Z",
+"publishedAt": "2025-08-11T14:10:09.684Z",
 "translations": [
 {
 "text": "From another letter sent by ʿAlī to Muʿāwiyah: I have received from you a string of advice, enclosed in an embroidered epistle, embellished with your misguidance, and dispatched by your specious views. It is the letter of a man with no perception to direct him and no guide to show him the way, a man who answered the call of his passions, who was led by the reins of misguidance, a delirious man who rambles and blunders from the path. From the same letter: The pledge of allegiance happens once. It is not open to reconsideration or a second round of selection. One who breaks the pledge is an aggressor, one who holds back and wavers is a traitor.",
@@ -312,47 +138,18 @@
 ],
 "sermonNumber": "2.7",
 "heading": "To Muʿāwiyah, toward the end of the Battle of Ṣiffīn",
-"paragraphs": [
-{
-"id": 3208,
-"documentId": "d1fqy4egef0h2sy4antrk0b6",
-"arabic": "ومن كتاب له عليه السلام إليه أيضًا أمّا بعد. فقد أتتني منك موعظة مُوَصَّلة ورسالة محبَّرة نَمّقتَها بضلالك وأمضيتها بسوء رأيك.وكتاب ٱمرئ ليس له بصر يهديه ولا قائد يرشده قد دعاه الهوى فأجابه وقاده الضلال فٱتّبعه فهجر لاغطًا وضلّ خابطًا. منه لأنّها بيعة واحدة لا يثنّى فيها النظر ولا يُستأنَف فيها الخِيار الخارج منها طاعن والمُروّي فيها مُداهن.",
-"createdAt": "2025-08-07T18:19:56.901Z",
-"updatedAt": "2025-08-07T18:19:56.901Z",
-"publishedAt": "2025-08-07T18:19:56.985Z",
-"number": "2.7.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إليه أيضًا أمّا بعد. فقد أتتني منك موعظة مُوَصَّلة ورسالة محبَّرة نَمّقتَها بضلالك وأمضيتها بسوء رأيك.وكتاب ٱمرئ ليس له بصر يهديه ولا قائد يرشده قد دعاه الهوى فأجابه وقاده الضلال فٱتّبعه فهجر لاغطًا وضلّ خابطًا. منه لأنّها بيعة واحدة لا يثنّى فيها النظر ولا يُستأنَف فيها الخِيار الخارج منها طاعن والمُروّي فيها مُداهن.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3248,
-"type": "en",
-"text": "From another letter sent by ʿAlī to Muʿāwiyah: I have received from you a string of advice, enclosed in an embroidered epistle, embellished with your misguidance, and dispatched by your specious views. It is the letter of a man with no perception to direct him and no guide to show him the way, a man who answered the call of his passions, who was led by the reins of misguidance, a delirious man who rambles and blunders from the path. From the same letter: The pledge of allegiance happens once. It is not open to reconsideration or a second round of selection. One who breaks the pledge is an aggressor, one who holds back and wavers is a traitor."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2280,
-"documentId": "tsutz8aiqsrpolvry6x31f6a",
+"id": 3786,
+"documentId": "t4g1o7phwc1kaz4v9hdsk0i6",
 "title": "ومن كتاب له عليه السلام إلى جرير بن عبد الله البَجَليّ لمّا أرسله إلى معاوية أمّا بعد. فإذا أتاك كتابي فٱحمل معاوية على الفصل وخذه بالأمر الجَزْم ثمّ خَيِّره بين حرب مُجلية أو سِلم مُخزية فإن ٱختار الحرب فٱنبذ إليه وإن ٱختار السلم فخذ بيعته. والسلام.",
 "slug": "to-jar-r-emissary-to-mu-wiyah-before-the-battle-of-iff-n-pressing-for-a-decision",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:45.734Z",
-"updatedAt": "2025-08-07T18:21:45.734Z",
-"publishedAt": "2025-08-07T18:21:45.743Z",
+"createdAt": "2025-08-11T14:10:10.341Z",
+"updatedAt": "2025-08-11T14:10:10.341Z",
+"publishedAt": "2025-08-11T14:10:10.354Z",
 "translations": [
 {
 "text": "From ʿAlī’s missive to Jarīr ibn ʿAbdallāh al-Bajalī, his emissary to Muʿāwiyah: When you receive my letter, tell Muʿāwiyah that he must take a final decision and give a binding response. Then ask him to choose between a war that displaces or a settlement that disgraces. If he chooses war, then dissolve the covenant of peace and fling that threat at him. If he chooses to settle, then make him give me the pledge of allegiance. Go in peace.",
@@ -361,47 +158,18 @@
 ],
 "sermonNumber": "2.8",
 "heading": "To Jarīr, emissary to Muʿāwiyah, before the Battle of Ṣiffīn, pressing for a decision",
-"paragraphs": [
-{
-"id": 3210,
-"documentId": "z2h6gsjd9x1hqher6xglfnmn",
-"arabic": "ومن كتاب له عليه السلام إلى جرير بن عبد الله البَجَليّ لمّا أرسله إلى معاوية أمّا بعد. فإذا أتاك كتابي فٱحمل معاوية على الفصل وخذه بالأمر الجَزْم ثمّ خَيِّره بين حرب مُجلية أو سِلم مُخزية فإن ٱختار الحرب فٱنبذ إليه وإن ٱختار السلم فخذ بيعته. والسلام.",
-"createdAt": "2025-08-07T18:19:56.891Z",
-"updatedAt": "2025-08-07T18:19:56.891Z",
-"publishedAt": "2025-08-07T18:19:56.989Z",
-"number": "2.8.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى جرير بن عبد الله البَجَليّ لمّا أرسله إلى معاوية أمّا بعد. فإذا أتاك كتابي فٱحمل معاوية على الفصل وخذه بالأمر الجَزْم ثمّ خَيِّره بين حرب مُجلية أو سِلم مُخزية فإن ٱختار الحرب فٱنبذ إليه وإن ٱختار السلم فخذ بيعته. والسلام.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3250,
-"type": "en",
-"text": "From ʿAlī’s missive to Jarīr ibn ʿAbdallāh al-Bajalī, his emissary to Muʿāwiyah: When you receive my letter, tell Muʿāwiyah that he must take a final decision and give a binding response. Then ask him to choose between a war that displaces or a settlement that disgraces. If he chooses war, then dissolve the covenant of peace and fling that threat at him. If he chooses to settle, then make him give me the pledge of allegiance. Go in peace."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2282,
-"documentId": "i4y652a4s0d5x0irm57qdq6g",
+"id": 3788,
+"documentId": "beobjxywzj5j41h0c8nnyf04",
 "title": "ومن كتاب له عليه السلام إلى معاوية فأراد قومنا قتل نبيّنا وٱجتياح أصلنا وهمّوا بنا الهموم وفعلوا بنا الأفاعيل ومنعونا العَذْب وأَحلسونا الخوف وٱضطرّونا إلى جبل وَعْر وأوقدوا لنا نار الحرب فعزم الله لنا على الذبّ عن حوزته والرمي من وراء حرمته مؤمنُنا يبغي بذلك الأجر وكافرنا يحامي عن الأصل ومن أسلم من قريش خِلْوٌ ممّا نحن فيه بحِلْف يمنعه أو عشيرة تقوم دونه فهم من القتل بمكان أمن. وكان رسول الله صلّى الله عليه وآله إذا ٱحمرّ البأس وأحجم الناس قدّم أهل بيته فوقى بهم أصحابه حرّ السيوف والأسنّة. فقُتل عبيدة بن الحارث يوم بدر وقتل حمزة يوم أحد وقتل جعفر يوم مؤتة وأراد من لو شئت ذكرت ٱسمه مثل الذي أرادوا من الشهادة ولكنّ آجالهم عجّلت ومنيّته أخّرت. فيا عجبًا للدهر إذ صرت يقرن بي من لم يسع بقدمي ولم يكن له كسابقتي التي لا يدلي أحد بمثلها إلّا أن يدّعي مدّعٍ ما لا أعرفه ولا أظنّ الله يعرفه. والحمد لله على كلّ حال. وأمّا ما سألت من دفع قتلة عثمان إليك فإنّي نظرت في هذا الأمر فلم أره يسعني دفعهم إليك ولا إلى غيرك. ولعمري لئن لم تنزع عن غيّك وشقاقك لتعرفنّهم عن قليل يطلبونك لا يكلّفونك طلبهم في برّ ولا بحر ولا جبل ولا سهل إلّا أنّه طلب يسوءك وجدانه وزَور لا يسرّك لُقيانه. والسلام لأهله.",
 "slug": "before-the-battle-of-iff-n-to-mu-wiyah-who-had-accused-al-of-envying-the-earlier-caliphs",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:46.074Z",
-"updatedAt": "2025-08-07T18:21:46.074Z",
-"publishedAt": "2025-08-07T18:21:46.083Z",
+"createdAt": "2025-08-11T14:10:11.030Z",
+"updatedAt": "2025-08-11T14:10:11.030Z",
+"publishedAt": "2025-08-11T14:10:11.041Z",
 "translations": [
 {
 "text": "From ʿAlī’s letter to Muʿāwiyah: Our tribe decided to kill our Prophet and extirpate our root. They came at us with evil intentions and spiteful actions, denying us the sweetness of life, throwing over us a blanket of fear, forcing us into the rugged mountains, and kindling the flames of war. But God willed that we should protect the enclosure of his religion and shield its sanctity from piercing arrows. Those of us who were believers did so in the hope of God’s reward, and those who were unbelievers acted in defense of their kin. Muslims from other clans of Quraysh—protected by a pact or by kin—were not exposed to our hardships but were protected from lethal assault. Whenever red flames of battle blazed, moreover, whenever the Muslims drew back in fear, the Messenger would send men of his own family to the front, and, through them, he would shield his Companions from the heat of swords and spears. ʿUbaydah ibn al-Ḥārith was killed at the Battle of Badr, Ḥamzah was killed at the Battle of Uḥud, Jaʿfar was killed at the Battle of Muʾtah. Another man—and I could name him if I wished—sought to attain martyrdom just as they did, but their deaths were decreed early, while his was deferred. What a strange age we live in, when I am placed on the same level as men who have not raced out in front, who do not possess my precedence! If any man were to make this, or any similar claim, they would be claiming a status I do not recognize, nor, I believe, does God. But God deserves praise in every situation. You demand that ʿUthmān’s killers be handed over—I have looked into the matter and have concluded that I am unable to hand them over to you, or to anyone else. By my life, if you do not desist in your deceit and dissent, you will very soon see those same men seeking you out, saving you the trouble of seeking them out on land, or sea, or mountains, or plains. Your search will end badly—these are visitors you will not enjoy meeting. Peace to the deserving.",
@@ -410,47 +178,18 @@
 ],
 "sermonNumber": "2.9",
 "heading": "Before the Battle of Ṣiffīn to Muʿāwiyah, who had accused ʿAlī of envying the earlier caliphs",
-"paragraphs": [
-{
-"id": 3232,
-"documentId": "bsc8t4nmjiq8ng4vcbvse36g",
-"arabic": "ومن كتاب له عليه السلام إلى معاوية فأراد قومنا قتل نبيّنا وٱجتياح أصلنا وهمّوا بنا الهموم وفعلوا بنا الأفاعيل ومنعونا العَذْب وأَحلسونا الخوف وٱضطرّونا إلى جبل وَعْر وأوقدوا لنا نار الحرب فعزم الله لنا على الذبّ عن حوزته والرمي من وراء حرمته مؤمنُنا يبغي بذلك الأجر وكافرنا يحامي عن الأصل ومن أسلم من قريش خِلْوٌ ممّا نحن فيه بحِلْف يمنعه أو عشيرة تقوم دونه فهم من القتل بمكان أمن. وكان رسول الله صلّى الله عليه وآله إذا ٱحمرّ البأس وأحجم الناس قدّم أهل بيته فوقى بهم أصحابه حرّ السيوف والأسنّة. فقُتل عبيدة بن الحارث يوم بدر وقتل حمزة يوم أحد وقتل جعفر يوم مؤتة وأراد من لو شئت ذكرت ٱسمه مثل الذي أرادوا من الشهادة ولكنّ آجالهم عجّلت ومنيّته أخّرت. فيا عجبًا للدهر إذ صرت يقرن بي من لم يسع بقدمي ولم يكن له كسابقتي التي لا يدلي أحد بمثلها إلّا أن يدّعي مدّعٍ ما لا أعرفه ولا أظنّ الله يعرفه. والحمد لله على كلّ حال. وأمّا ما سألت من دفع قتلة عثمان إليك فإنّي نظرت في هذا الأمر فلم أره يسعني دفعهم إليك ولا إلى غيرك. ولعمري لئن لم تنزع عن غيّك وشقاقك لتعرفنّهم عن قليل يطلبونك لا يكلّفونك طلبهم في برّ ولا بحر ولا جبل ولا سهل إلّا أنّه طلب يسوءك وجدانه وزَور لا يسرّك لُقيانه. والسلام لأهله.",
-"createdAt": "2025-08-07T18:19:57.314Z",
-"updatedAt": "2025-08-07T18:19:57.314Z",
-"publishedAt": "2025-08-07T18:19:57.381Z",
-"number": "2.9.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى معاوية فأراد قومنا قتل نبيّنا وٱجتياح أصلنا وهمّوا بنا الهموم وفعلوا بنا الأفاعيل ومنعونا العَذْب وأَحلسونا الخوف وٱضطرّونا إلى جبل وَعْر وأوقدوا لنا نار الحرب فعزم الله لنا على الذبّ عن حوزته والرمي من وراء حرمته مؤمنُنا يبغي بذلك الأجر وكافرنا يحامي عن الأصل ومن أسلم من قريش خِلْوٌ ممّا نحن فيه بحِلْف يمنعه أو عشيرة تقوم دونه فهم من القتل بمكان أمن. وكان رسول الله صلّى الله عليه وآله إذا ٱحمرّ البأس وأحجم الناس قدّم أهل بيته فوقى بهم أصحابه حرّ السيوف والأسنّة. فقُتل عبيدة بن الحارث يوم بدر وقتل حمزة يوم أحد وقتل جعفر يوم مؤتة وأراد من لو شئت ذكرت ٱسمه مثل الذي أرادوا من الشهادة ولكنّ آجالهم عجّلت ومنيّته أخّرت. فيا عجبًا للدهر إذ صرت يقرن بي من لم يسع بقدمي ولم يكن له كسابقتي التي لا يدلي أحد بمثلها إلّا أن يدّعي مدّعٍ ما لا أعرفه ولا أظنّ الله يعرفه. والحمد لله على كلّ حال. وأمّا ما سألت من دفع قتلة عثمان إليك فإنّي نظرت في هذا الأمر فلم أره يسعني دفعهم إليك ولا إلى غيرك. ولعمري لئن لم تنزع عن غيّك وشقاقك لتعرفنّهم عن قليل يطلبونك لا يكلّفونك طلبهم في برّ ولا بحر ولا جبل ولا سهل إلّا أنّه طلب يسوءك وجدانه وزَور لا يسرّك لُقيانه. والسلام لأهله.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3272,
-"type": "en",
-"text": "From ʿAlī’s letter to Muʿāwiyah: Our tribe decided to kill our Prophet and extirpate our root. They came at us with evil intentions and spiteful actions, denying us the sweetness of life, throwing over us a blanket of fear, forcing us into the rugged mountains, and kindling the flames of war. But God willed that we should protect the enclosure of his religion and shield its sanctity from piercing arrows. Those of us who were believers did so in the hope of God’s reward, and those who were unbelievers acted in defense of their kin. Muslims from other clans of Quraysh—protected by a pact or by kin—were not exposed to our hardships but were protected from lethal assault. Whenever red flames of battle blazed, moreover, whenever the Muslims drew back in fear, the Messenger would send men of his own family to the front, and, through them, he would shield his Companions from the heat of swords and spears. ʿUbaydah ibn al-Ḥārith was killed at the Battle of Badr, Ḥamzah was killed at the Battle of Uḥud, Jaʿfar was killed at the Battle of Muʾtah. Another man—and I could name him if I wished—sought to attain martyrdom just as they did, but their deaths were decreed early, while his was deferred. What a strange age we live in, when I am placed on the same level as men who have not raced out in front, who do not possess my precedence! If any man were to make this, or any similar claim, they would be claiming a status I do not recognize, nor, I believe, does God. But God deserves praise in every situation. You demand that ʿUthmān’s killers be handed over—I have looked into the matter and have concluded that I am unable to hand them over to you, or to anyone else. By my life, if you do not desist in your deceit and dissent, you will very soon see those same men seeking you out, saving you the trouble of seeking them out on land, or sea, or mountains, or plains. Your search will end badly—these are visitors you will not enjoy meeting. Peace to the deserving."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2284,
-"documentId": "nl0h6mh4h9krfhlht2sq5jth",
+"id": 3790,
+"documentId": "vmmz2crwtvjqyosja3p9oy94",
 "title": "ومن كتاب له عليه السلام إليه أيضًا وكيف أنت صانع إذا تكشّفت عنك جلابيب ما أنت فيه من دنيا قد تبهّجت بزينتها وخدعت بلذّتها دعتك فأجبتها وقادتك فٱتبعتها وأمرتك فأطعتها وإنّه يوشِك أن يقفك واقف على ما لا يُنجيك منه مِجَنّ فٱقعس عن هذا الأمر وخذ أُهبة الحساب وشمّر لما قد نزل بك ولا تمكّن الغواة من سمعك وإلّا تفعل أُعلمك ما أغفلت من نفسك فإنّك مُترَفٌ قد أخذ الشيطان منك مأخذه وبلغ فيك أمله وجرى منك مجرى الروح والدم. ومتى كنتم يا معاوية ساسة الرعيّة وولاة أمر الأمّة بغير قدم سابق ولا شرف باسق ونعوذ بالله من لزوم سوابق الشقاء. وأحذّرك أن تكون متماديًا في غِرّة الأمنيّة مختلف العلانية والسريرة. وقد دعوت إلى الحرب فدع الناس جانبًا وٱخرج إليّ وأَعْفِ الفريقين من القتال لتعلم أيّنا المَرين على قلبه والمغطّى على بصره فأنا أبو حسن قاتل جدّك وخالك وأخيك شَدْخًا يوم بدر وذلك السيف معي وبذلك القلب ألقى عدوّي ما ٱستبدلت دينًا ولا ٱستحدثت نبيًّا. وإنّي لعلى المنهاج الذي تركتموه طائعين ودخلتم فيه مكرَهين. وزعمت أنّك جئت ثائرًا بعثمان ولقد علمت حيث وقع دم عثمان فٱطلبه من هناك إن كنت طالبًا فكأنّي قد رأيتك تضجّ من الحرب إذا عضّتك ضجيج الجِمال بالأثقال وكأنّي بجماعتك تدعوني جزعًا من الضرب المتتابع والقضاء الواقع ومصارع بعد مصارع إلى كتاب الله وهي كافرة جاحدة أو مبايعة حائدة.",
 "slug": "to-mu-wiyah-just-before-marching-to-iff-n",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:46.413Z",
-"updatedAt": "2025-08-07T18:21:46.413Z",
-"publishedAt": "2025-08-07T18:21:46.422Z",
+"createdAt": "2025-08-11T14:10:16.354Z",
+"updatedAt": "2025-08-11T14:10:16.354Z",
+"publishedAt": "2025-08-11T14:10:16.363Z",
 "translations": [
 {
 "text": "From another letter sent by ʿAlī to Muʿāwiyah: How will you fare when the robes with which this world adorns herself, with whose beauty she has ensnared you, are stripped off? She called, and you answered, she led, and you followed, she commanded, and you obeyed. Very soon, you will face something no shield can protect you from. Stand down from this path, gather provisions for the final reckoning, roll up your sleeves to prepare for life’s imminent end, and do not give ear to the wicked. Desist, or let me inform you about your own situation, a situation that you appear not to know: You live a life of excess. Satan has had his way with you, he has achieved his fullest hopes of you, and he now moves inside you as your own blood and spirit. When were your family ever rulers of the people, Muʿāwiyah, or guardians of the community’s affairs? You can claim no high honor there, no winning horse! We should all seek refuge in God from clinging to the stakes of wretchedness! I give you warning: Cease to be deceived by false hopes. Cease to hide intentions that differ from your speech. You call me to war, do you? Leave the people out of this and take the field! Meet me yourself and spare our armies the killing! Let it be known to all which of us possesses a blinded heart and blindfolded eyes! I am Abū Ḥasan, who killed your grandfather, your uncle, and your brother in the Battle of Badr with the cutting blow of my sword—that same sword is with me today, and so too that same heart with which I shall meet my enemy! I have not changed my religion or adopted a new prophet. I walk the path that you abandoned so willingly, that you had joined only under compulsion. You claim to seek vengeance for ʿUthmān—you know well who was responsible for shedding ʿUthmān’s blood, so seek vengeance there if you wish! I can see you now, mauled by battle, screaming like a camel grumbling under a heavy load. I can see your faction panicked by unrelenting sword strikes, by the descent of fate, by death after death, inviting me, ironically, to follow the Qurʾan’s judgment, while you yourselves are unbelieving deniers, or men who swore allegiance then broke the pledge!",
@@ -459,47 +198,18 @@
 ],
 "sermonNumber": "2.10",
 "heading": "To Muʿāwiyah, just before marching to Ṣiffīn",
-"paragraphs": [
-{
-"id": 3231,
-"documentId": "j9asz5jzcypb3w5ccsgyrwbp",
-"arabic": "ومن كتاب له عليه السلام إليه أيضًا وكيف أنت صانع إذا تكشّفت عنك جلابيب ما أنت فيه من دنيا قد تبهّجت بزينتها وخدعت بلذّتها دعتك فأجبتها وقادتك فٱتبعتها وأمرتك فأطعتها وإنّه يوشِك أن يقفك واقف على ما لا يُنجيك منه مِجَنّ فٱقعس عن هذا الأمر وخذ أُهبة الحساب وشمّر لما قد نزل بك ولا تمكّن الغواة من سمعك وإلّا تفعل أُعلمك ما أغفلت من نفسك فإنّك مُترَفٌ قد أخذ الشيطان منك مأخذه وبلغ فيك أمله وجرى منك مجرى الروح والدم. ومتى كنتم يا معاوية ساسة الرعيّة وولاة أمر الأمّة بغير قدم سابق ولا شرف باسق ونعوذ بالله من لزوم سوابق الشقاء. وأحذّرك أن تكون متماديًا في غِرّة الأمنيّة مختلف العلانية والسريرة. وقد دعوت إلى الحرب فدع الناس جانبًا وٱخرج إليّ وأَعْفِ الفريقين من القتال لتعلم أيّنا المَرين على قلبه والمغطّى على بصره فأنا أبو حسن قاتل جدّك وخالك وأخيك شَدْخًا يوم بدر وذلك السيف معي وبذلك القلب ألقى عدوّي ما ٱستبدلت دينًا ولا ٱستحدثت نبيًّا. وإنّي لعلى المنهاج الذي تركتموه طائعين ودخلتم فيه مكرَهين. وزعمت أنّك جئت ثائرًا بعثمان ولقد علمت حيث وقع دم عثمان فٱطلبه من هناك إن كنت طالبًا فكأنّي قد رأيتك تضجّ من الحرب إذا عضّتك ضجيج الجِمال بالأثقال وكأنّي بجماعتك تدعوني جزعًا من الضرب المتتابع والقضاء الواقع ومصارع بعد مصارع إلى كتاب الله وهي كافرة جاحدة أو مبايعة حائدة.",
-"createdAt": "2025-08-07T18:19:57.315Z",
-"updatedAt": "2025-08-07T18:19:57.315Z",
-"publishedAt": "2025-08-07T18:19:57.380Z",
-"number": "2.10.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إليه أيضًا وكيف أنت صانع إذا تكشّفت عنك جلابيب ما أنت فيه من دنيا قد تبهّجت بزينتها وخدعت بلذّتها دعتك فأجبتها وقادتك فٱتبعتها وأمرتك فأطعتها وإنّه يوشِك أن يقفك واقف على ما لا يُنجيك منه مِجَنّ فٱقعس عن هذا الأمر وخذ أُهبة الحساب وشمّر لما قد نزل بك ولا تمكّن الغواة من سمعك وإلّا تفعل أُعلمك ما أغفلت من نفسك فإنّك مُترَفٌ قد أخذ الشيطان منك مأخذه وبلغ فيك أمله وجرى منك مجرى الروح والدم. ومتى كنتم يا معاوية ساسة الرعيّة وولاة أمر الأمّة بغير قدم سابق ولا شرف باسق ونعوذ بالله من لزوم سوابق الشقاء. وأحذّرك أن تكون متماديًا في غِرّة الأمنيّة مختلف العلانية والسريرة. وقد دعوت إلى الحرب فدع الناس جانبًا وٱخرج إليّ وأَعْفِ الفريقين من القتال لتعلم أيّنا المَرين على قلبه والمغطّى على بصره فأنا أبو حسن قاتل جدّك وخالك وأخيك شَدْخًا يوم بدر وذلك السيف معي وبذلك القلب ألقى عدوّي ما ٱستبدلت دينًا ولا ٱستحدثت نبيًّا. وإنّي لعلى المنهاج الذي تركتموه طائعين ودخلتم فيه مكرَهين. وزعمت أنّك جئت ثائرًا بعثمان ولقد علمت حيث وقع دم عثمان فٱطلبه من هناك إن كنت طالبًا فكأنّي قد رأيتك تضجّ من الحرب إذا عضّتك ضجيج الجِمال بالأثقال وكأنّي بجماعتك تدعوني جزعًا من الضرب المتتابع والقضاء الواقع ومصارع بعد مصارع إلى كتاب الله وهي كافرة جاحدة أو مبايعة حائدة.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3271,
-"type": "en",
-"text": "From another letter sent by ʿAlī to Muʿāwiyah: How will you fare when the robes with which this world adorns herself, with whose beauty she has ensnared you, are stripped off? She called, and you answered, she led, and you followed, she commanded, and you obeyed. Very soon, you will face something no shield can protect you from. Stand down from this path, gather provisions for the final reckoning, roll up your sleeves to prepare for life’s imminent end, and do not give ear to the wicked. Desist, or let me inform you about your own situation, a situation that you appear not to know: You live a life of excess. Satan has had his way with you, he has achieved his fullest hopes of you, and he now moves inside you as your own blood and spirit. When were your family ever rulers of the people, Muʿāwiyah, or guardians of the community’s affairs? You can claim no high honor there, no winning horse! We should all seek refuge in God from clinging to the stakes of wretchedness! I give you warning: Cease to be deceived by false hopes. Cease to hide intentions that differ from your speech. You call me to war, do you? Leave the people out of this and take the field! Meet me yourself and spare our armies the killing! Let it be known to all which of us possesses a blinded heart and blindfolded eyes! I am Abū Ḥasan, who killed your grandfather, your uncle, and your brother in the Battle of Badr with the cutting blow of my sword—that same sword is with me today, and so too that same heart with which I shall meet my enemy! I have not changed my religion or adopted a new prophet. I walk the path that you abandoned so willingly, that you had joined only under compulsion. You claim to seek vengeance for ʿUthmān—you know well who was responsible for shedding ʿUthmān’s blood, so seek vengeance there if you wish! I can see you now, mauled by battle, screaming like a camel grumbling under a heavy load. I can see your faction panicked by unrelenting sword strikes, by the descent of fate, by death after death, inviting me, ironically, to follow the Qurʾan’s judgment, while you yourselves are unbelieving deniers, or men who swore allegiance then broke the pledge!"
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2286,
-"documentId": "wn119hvf46ocv0vz3fpljsef",
+"id": 3792,
+"documentId": "v9rqn56xl6ooe3q168ppn08a",
 "title": "ومن وصيّة له وصّى بها عليه السلام جيشًا بعثه إلى العدوّ فإذا نزلتم بعدوّ أو نزل بكم فليكن معسكركم في قُبُل الأشراف أو سِفاح الجبال أو أثناء الأنهار كيما تكون لكم رِدءًا ودونكم مَرَدًّا ولتكن مقاتلتكم من وجه أو ٱثنين وٱجعلوا لكم رقباء في صَياصي الجبال وبمناكب الهِضاب لئلّا يأتيكم العدوّ من مكان مخافة أو أمن وٱعلموا أنّ مقدّمة القوم عيونهم وعيون المقدّمة طلائعهم وإيّاكم والتفرّق فإذا نزلتم فٱنزلوا جميعًا وإذا ٱرتحلتم فٱرتحلوا جميعًا وإذا غشيكم الليل فٱجعلوا الرماح كِفّة ولا تذوقوا النوم إلّا غِرارًا أو مضمضة.",
 "slug": "instructions-sent-from-al-s-camp-at-nukhaylah-to-ziy-d-ibn-al-na-r-and-shuray-commanders-of-his-vang",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:46.760Z",
-"updatedAt": "2025-08-07T18:21:46.760Z",
-"publishedAt": "2025-08-07T18:21:46.775Z",
+"createdAt": "2025-08-11T14:10:17.621Z",
+"updatedAt": "2025-08-11T14:10:17.621Z",
+"publishedAt": "2025-08-11T14:10:17.630Z",
 "translations": [
 {
 "text": "From ʿAlī’s instructions to a battalion he had dispatched against the enemy:When you reach the enemy, or when they reach you, set up camp just before the high ground, or on the foothills of a mountain, or at the bend of a river, so these can serve as protection and barrier. Attack from a single side or from two at most. Place sentries on the horns of mountains and the shoulders of knolls—the enemy should not be able to take you by surprise, whether from a side you fear or even one you think is secure. Know that the eyes of the army are its vanguard, and the eyes of its vanguard are its scouts. Don’t split up into separate groups—stay together when you set up camp and stay together when you set off. When night descends, place your spears in a circle around you and sip the cup of sleep only from time to time.",
@@ -508,47 +218,18 @@
 ],
 "sermonNumber": "2.11",
 "heading": "Instructions sent from ʿAlī’s camp at Nukhaylah to Ziyād ibn al-Naḍr and Shurayḥ, commanders of his vanguard to Syria",
-"paragraphs": [
-{
-"id": 3224,
-"documentId": "rqnsuqws4x6h02f0ivwjdntx",
-"arabic": "ومن وصيّة له وصّى بها عليه السلام جيشًا بعثه إلى العدوّ فإذا نزلتم بعدوّ أو نزل بكم فليكن معسكركم في قُبُل الأشراف أو سِفاح الجبال أو أثناء الأنهار كيما تكون لكم رِدءًا ودونكم مَرَدًّا ولتكن مقاتلتكم من وجه أو ٱثنين وٱجعلوا لكم رقباء في صَياصي الجبال وبمناكب الهِضاب لئلّا يأتيكم العدوّ من مكان مخافة أو أمن وٱعلموا أنّ مقدّمة القوم عيونهم وعيون المقدّمة طلائعهم وإيّاكم والتفرّق فإذا نزلتم فٱنزلوا جميعًا وإذا ٱرتحلتم فٱرتحلوا جميعًا وإذا غشيكم الليل فٱجعلوا الرماح كِفّة ولا تذوقوا النوم إلّا غِرارًا أو مضمضة.",
-"createdAt": "2025-08-07T18:19:57.172Z",
-"updatedAt": "2025-08-07T18:19:57.172Z",
-"publishedAt": "2025-08-07T18:19:57.256Z",
-"number": "2.11.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن وصيّة له وصّى بها عليه السلام جيشًا بعثه إلى العدوّ فإذا نزلتم بعدوّ أو نزل بكم فليكن معسكركم في قُبُل الأشراف أو سِفاح الجبال أو أثناء الأنهار كيما تكون لكم رِدءًا ودونكم مَرَدًّا ولتكن مقاتلتكم من وجه أو ٱثنين وٱجعلوا لكم رقباء في صَياصي الجبال وبمناكب الهِضاب لئلّا يأتيكم العدوّ من مكان مخافة أو أمن وٱعلموا أنّ مقدّمة القوم عيونهم وعيون المقدّمة طلائعهم وإيّاكم والتفرّق فإذا نزلتم فٱنزلوا جميعًا وإذا ٱرتحلتم فٱرتحلوا جميعًا وإذا غشيكم الليل فٱجعلوا الرماح كِفّة ولا تذوقوا النوم إلّا غِرارًا أو مضمضة.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3264,
-"type": "en",
-"text": "From ʿAlī’s instructions to a battalion he had dispatched against the enemy:When you reach the enemy, or when they reach you, set up camp just before the high ground, or on the foothills of a mountain, or at the bend of a river, so these can serve as protection and barrier. Attack from a single side or from two at most. Place sentries on the horns of mountains and the shoulders of knolls—the enemy should not be able to take you by surprise, whether from a side you fear or even one you think is secure. Know that the eyes of the army are its vanguard, and the eyes of its vanguard are its scouts. Don’t split up into separate groups—stay together when you set up camp and stay together when you set off. When night descends, place your spears in a circle around you and sip the cup of sleep only from time to time."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2288,
-"documentId": "yzsoenbn18g7r0cg9yjbdsbc",
+"id": 3794,
+"documentId": "udlsh1678gsinsar6ztedi22",
 "title": "ومن وصيّته عليه السلام لمَعْقِل بن قيس الرِّياحيّ حين أنفذه إلى الشام في ثلاثة آلاف مقدّمة له اتّق الله الذي لا بدّ لك من لقائه ولا منتهى لك دونه ولا تقاتلنّ إلّا من قاتلك وسِر البَرْدَين وغَوِّر بالناس ورَفِّه في السير ولا تسر أوّل الليل فإنّ الله جعله سكنًا وقدّره مُقامًا لا ظعنًا فأَرِح فيه بدنك وروّح ظهرك فإذا وقفت حين ينتطح السحَر أو حين ينفجر الفجر فسر على بركة الله. فإذا لقيت العدوّ فقف من أصحابك وسطًا ولا تَدْنُ من القوم دنوّ من يريد أن يُنشب الحرب ولا تباعد منهم تباعد من يهاب البأس حتّى يأتيك أمري. ولا يحملنّكم سِبابهم على قتالهم قبل دعائهم والإعذار إليهم.",
 "slug": "instructions-sent-from-kufa-to-ma-qil-commander-of-troops-who-were-likely-sent-against-the-kharijite",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:47.120Z",
-"updatedAt": "2025-08-07T18:21:47.120Z",
-"publishedAt": "2025-08-07T18:21:47.130Z",
+"createdAt": "2025-08-11T14:10:18.279Z",
+"updatedAt": "2025-08-11T14:10:18.279Z",
+"publishedAt": "2025-08-11T14:10:18.338Z",
 "translations": [
 {
 "text": "From ʿAlī’s instructions to Maʿqil ibn Qays al-Riyāḥī, when he dispatched him to Syria at the head of a three-thousand-man vanguard: Fear God, whom you must meet, and beyond whom you have no goal. Fight only those who fight you. March during the two cooler periods of the day, alight at noon so your men can rest, and drive your camels at a comfortable pace. Don’t march in the first part of the night, for God has made it a time for repose and ordained it as a time of quiet and calm, not as a time for marching—so rest your body and your mounts. Then, when you rise at the spread of dawn, at the break of day, march forward with God’s blessing. When you meet the enemy, stand at the center of your men. Don’t allow your army to draw so near to the enemy that they fear you are on the verge of battle, but don’t stay so far away from them that they think you fear their attack. Wait on my further orders. Don’t let their insults incite you to begin the fight before you have called on them to make peace and exhausted your pleas.",
@@ -557,47 +238,18 @@
 ],
 "sermonNumber": "2.12",
 "heading": "Instructions sent from Kufa to Maʿqil, commander of troops who were likely sent against the Kharijite Ḥurayth in Ramhormoz",
-"paragraphs": [
-{
-"id": 3228,
-"documentId": "k50186tvdx0z58rrken9qwgs",
-"arabic": "ومن وصيّته عليه السلام لمَعْقِل بن قيس الرِّياحيّ حين أنفذه إلى الشام في ثلاثة آلاف مقدّمة له اتّق الله الذي لا بدّ لك من لقائه ولا منتهى لك دونه ولا تقاتلنّ إلّا من قاتلك وسِر البَرْدَين وغَوِّر بالناس ورَفِّه في السير ولا تسر أوّل الليل فإنّ الله جعله سكنًا وقدّره مُقامًا لا ظعنًا فأَرِح فيه بدنك وروّح ظهرك فإذا وقفت حين ينتطح السحَر أو حين ينفجر الفجر فسر على بركة الله. فإذا لقيت العدوّ فقف من أصحابك وسطًا ولا تَدْنُ من القوم دنوّ من يريد أن يُنشب الحرب ولا تباعد منهم تباعد من يهاب البأس حتّى يأتيك أمري. ولا يحملنّكم سِبابهم على قتالهم قبل دعائهم والإعذار إليهم.",
-"createdAt": "2025-08-07T18:19:57.180Z",
-"updatedAt": "2025-08-07T18:19:57.180Z",
-"publishedAt": "2025-08-07T18:19:57.268Z",
-"number": "2.12.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن وصيّته عليه السلام لمَعْقِل بن قيس الرِّياحيّ حين أنفذه إلى الشام في ثلاثة آلاف مقدّمة له اتّق الله الذي لا بدّ لك من لقائه ولا منتهى لك دونه ولا تقاتلنّ إلّا من قاتلك وسِر البَرْدَين وغَوِّر بالناس ورَفِّه في السير ولا تسر أوّل الليل فإنّ الله جعله سكنًا وقدّره مُقامًا لا ظعنًا فأَرِح فيه بدنك وروّح ظهرك فإذا وقفت حين ينتطح السحَر أو حين ينفجر الفجر فسر على بركة الله. فإذا لقيت العدوّ فقف من أصحابك وسطًا ولا تَدْنُ من القوم دنوّ من يريد أن يُنشب الحرب ولا تباعد منهم تباعد من يهاب البأس حتّى يأتيك أمري. ولا يحملنّكم سِبابهم على قتالهم قبل دعائهم والإعذار إليهم.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3267,
-"type": "en",
-"text": "From ʿAlī’s instructions to Maʿqil ibn Qays al-Riyāḥī, when he dispatched him to Syria at the head of a three-thousand-man vanguard: Fear God, whom you must meet, and beyond whom you have no goal. Fight only those who fight you. March during the two cooler periods of the day, alight at noon so your men can rest, and drive your camels at a comfortable pace. Don’t march in the first part of the night, for God has made it a time for repose and ordained it as a time of quiet and calm, not as a time for marching—so rest your body and your mounts. Then, when you rise at the spread of dawn, at the break of day, march forward with God’s blessing. When you meet the enemy, stand at the center of your men. Don’t allow your army to draw so near to the enemy that they fear you are on the verge of battle, but don’t stay so far away from them that they think you fear their attack. Wait on my further orders. Don’t let their insults incite you to begin the fight before you have called on them to make peace and exhausted your pleas."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2290,
-"documentId": "gb4qknrxtxhb8979o10ucucm",
+"id": 3796,
+"documentId": "txa5asb7no46nb3h5qyrphie",
 "title": "ومن كتاب له عليه السلام إلى أميرين من أمراء جيشه وقد أمّرت عليكما وعلى من في حيّزكما مالك بن الحارث الأشتر فٱسمعا له وأطيعا وٱجعلاه دِرعًا ومِجَنًّا فإنّه ممّن لا يُخاف وهنه ولا سقطته ولا بطؤه عمّا الإسراع إليه أحزم ولا إسراعه إلى ما البُطْءُ عنه أمثل.",
 "slug": "to-ziy-d-ibn-al-na-r-and-shuray-commanders-of-the-vanguard-to-syria-appointing-ashtar-over-them",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:47.464Z",
-"updatedAt": "2025-08-07T18:21:47.464Z",
-"publishedAt": "2025-08-07T18:21:47.475Z",
+"createdAt": "2025-08-11T14:10:19.058Z",
+"updatedAt": "2025-08-11T14:10:19.058Z",
+"publishedAt": "2025-08-11T14:10:19.066Z",
 "translations": [
 {
 "text": "From ʿAlī’s missive to two of his army commanders: I have appointed Mālik ibn al-Ḥārith al-Ashtar over both of you and over all those under your command. Listen to him and obey his orders, consider him your armor and shield. He is a person from whom neither weakness nor error is to be feared—he will not delay when speed is of the essence, nor hasten when measured steps are called for.",
@@ -606,47 +258,18 @@
 ],
 "sermonNumber": "2.13",
 "heading": "To Ziyād ibn al-Naḍr and Shurayḥ, commanders of the vanguard to Syria, appointing Ashtar over them",
-"paragraphs": [
-{
-"id": 3218,
-"documentId": "w39jwr42nxsd17dk7n0ic3ll",
-"arabic": "ومن كتاب له عليه السلام إلى أميرين من أمراء جيشه وقد أمّرت عليكما وعلى من في حيّزكما مالك بن الحارث الأشتر فٱسمعا له وأطيعا وٱجعلاه دِرعًا ومِجَنًّا فإنّه ممّن لا يُخاف وهنه ولا سقطته ولا بطؤه عمّا الإسراع إليه أحزم ولا إسراعه إلى ما البُطْءُ عنه أمثل.",
-"createdAt": "2025-08-07T18:19:57.031Z",
-"updatedAt": "2025-08-07T18:19:57.031Z",
-"publishedAt": "2025-08-07T18:19:57.165Z",
-"number": "2.13.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى أميرين من أمراء جيشه وقد أمّرت عليكما وعلى من في حيّزكما مالك بن الحارث الأشتر فٱسمعا له وأطيعا وٱجعلاه دِرعًا ومِجَنًّا فإنّه ممّن لا يُخاف وهنه ولا سقطته ولا بطؤه عمّا الإسراع إليه أحزم ولا إسراعه إلى ما البُطْءُ عنه أمثل.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3258,
-"type": "en",
-"text": "From ʿAlī’s missive to two of his army commanders: I have appointed Mālik ibn al-Ḥārith al-Ashtar over both of you and over all those under your command. Listen to him and obey his orders, consider him your armor and shield. He is a person from whom neither weakness nor error is to be feared—he will not delay when speed is of the essence, nor hasten when measured steps are called for."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2292,
-"documentId": "uaoso6wf1ns8mn9iwzb61zkz",
+"id": 3798,
+"documentId": "f8mf7vkg2afg8zz77y2mzje7",
 "title": "ومن وصيّته عليه السلام لعسكره قبل لقاء العدوّ بصفّين لا تقاتلوهم حتّى يبدؤوكم فإنّكم بحمد الله على حجّة وترككم إيّاهم حتّى يبدؤوكم حجّة أخرى لكم عليهم فإذا كانت الهزيمة بإذن الله فلا تقتلوا مدبرًا ولا تصيبوا مُعورًا ولا تُجهزوا على جريح. ولا تَهيجوا النساء بأذًى وإن شَتَمْنَ أعراضكم وسببن أمراءكم فإنّهن ضعيفات القوى والأنفس والعقول إن كنّا لنؤمر بالكفّ عنهنّ وإنّهنّ لمشركات وإن كان الرجل ليتناول المرأة في الجاهليّة بالفِهر أو الهِراوة فيُعيَّر بها وعَقِبُه من بعده.",
 "slug": "instructions-to-the-army-just-before-the-battle-of-iff-n",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:47.828Z",
-"updatedAt": "2025-08-07T18:21:47.828Z",
-"publishedAt": "2025-08-07T18:21:47.844Z",
+"createdAt": "2025-08-11T14:10:19.713Z",
+"updatedAt": "2025-08-11T14:10:19.713Z",
+"publishedAt": "2025-08-11T14:10:19.724Z",
 "translations": [
 {
 "text": "From ʿAlī’s instructions to his army just before confronting the enemy at Ṣiffīn: Don’t attack them unless they attack you first. Praise God, you already possess proof of righteousness, and waiting until they begin the fighting will be yet another proof against them and in your favor. If we defeat the enemy—and with God’s permission, we shall!—then don’t kill those who flee, don’t strike the unarmed, and don’t bear down on the wounded. Don’t threaten or hurt women, even if they insult your honor or abuse your leaders, for women are weak in strength, spirit, and mind, and we were commanded not to hurt them even when they were unbelievers. Even in the Age of Ignorance, if a man struck a woman with as much as a pebble or a small stick, he was held in shame for his act evermore, and so too were his descendants after him.",
@@ -655,47 +278,18 @@
 ],
 "sermonNumber": "2.14",
 "heading": "Instructions to the army just before the Battle of Ṣiffīn",
-"paragraphs": [
-{
-"id": 3229,
-"documentId": "vktyxqji5eugu1utqtkmgute",
-"arabic": "ومن وصيّته عليه السلام لعسكره قبل لقاء العدوّ بصفّين لا تقاتلوهم حتّى يبدؤوكم فإنّكم بحمد الله على حجّة وترككم إيّاهم حتّى يبدؤوكم حجّة أخرى لكم عليهم فإذا كانت الهزيمة بإذن الله فلا تقتلوا مدبرًا ولا تصيبوا مُعورًا ولا تُجهزوا على جريح. ولا تَهيجوا النساء بأذًى وإن شَتَمْنَ أعراضكم وسببن أمراءكم فإنّهن ضعيفات القوى والأنفس والعقول إن كنّا لنؤمر بالكفّ عنهنّ وإنّهنّ لمشركات وإن كان الرجل ليتناول المرأة في الجاهليّة بالفِهر أو الهِراوة فيُعيَّر بها وعَقِبُه من بعده.",
-"createdAt": "2025-08-07T18:19:57.219Z",
-"updatedAt": "2025-08-07T18:19:57.219Z",
-"publishedAt": "2025-08-07T18:19:57.294Z",
-"number": "2.14.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن وصيّته عليه السلام لعسكره قبل لقاء العدوّ بصفّين لا تقاتلوهم حتّى يبدؤوكم فإنّكم بحمد الله على حجّة وترككم إيّاهم حتّى يبدؤوكم حجّة أخرى لكم عليهم فإذا كانت الهزيمة بإذن الله فلا تقتلوا مدبرًا ولا تصيبوا مُعورًا ولا تُجهزوا على جريح. ولا تَهيجوا النساء بأذًى وإن شَتَمْنَ أعراضكم وسببن أمراءكم فإنّهن ضعيفات القوى والأنفس والعقول إن كنّا لنؤمر بالكفّ عنهنّ وإنّهنّ لمشركات وإن كان الرجل ليتناول المرأة في الجاهليّة بالفِهر أو الهِراوة فيُعيَّر بها وعَقِبُه من بعده.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3269,
-"type": "en",
-"text": "From ʿAlī’s instructions to his army just before confronting the enemy at Ṣiffīn: Don’t attack them unless they attack you first. Praise God, you already possess proof of righteousness, and waiting until they begin the fighting will be yet another proof against them and in your favor. If we defeat the enemy—and with God’s permission, we shall!—then don’t kill those who flee, don’t strike the unarmed, and don’t bear down on the wounded. Don’t threaten or hurt women, even if they insult your honor or abuse your leaders, for women are weak in strength, spirit, and mind, and we were commanded not to hurt them even when they were unbelievers. Even in the Age of Ignorance, if a man struck a woman with as much as a pebble or a small stick, he was held in shame for his act evermore, and so too were his descendants after him."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2294,
-"documentId": "ey941iftkoz4zzp3frzhxjmw",
+"id": 3800,
+"documentId": "kj85mkbqctk35gop9w63cgqb",
 "title": "وكان عليه السلام يقول إذا لقي العدوّ محاربًا اللّٰهمّ إليك أفضت القلوب ومُدّت الأعناق وشخصت الأبصار ونُقلت الأقدام وأُنضيت الأبدان. اللّٰهمّ قد صَرّح مكتوم الشنآن وجاشت مَراجِل الأضغان. اللّٰهمّ إنّا نشكو إليك غيبة نبيّنا وكثرة عدوّنا وتشتّت أهوائنا ﴿رَبَّنَا افْتَحْ بَيْنَنَا وَبَيْنَ قَوْمِنَا بِالْحَقِّ وَأَنتَ خَيْرُ الْفَاتِحِينَ﴾.",
 "slug": "battlefield-supplication",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:48.204Z",
-"updatedAt": "2025-08-07T18:21:48.204Z",
-"publishedAt": "2025-08-07T18:21:48.216Z",
+"createdAt": "2025-08-11T14:10:20.400Z",
+"updatedAt": "2025-08-11T14:10:20.400Z",
+"publishedAt": "2025-08-11T14:10:20.442Z",
 "translations": [
 {
 "text": "ʿAlī would offer this supplication whenever he met his enemy on the battlefield: God, it is to you that our hearts flow, our necks stretch, our eyes are raised, and our feet move. It is from the swiftness of our journey to you that our bodies have become emaciated. God, buried rancor has surfaced today, and cauldrons of malice simmer. God, we complain to you of our Prophet’s death, our enemies’ numbers, and our community’s implosion. «Lord, decide between us and our tribesmen with truth, for you are the best conqueror.»",
@@ -704,47 +298,18 @@
 ],
 "sermonNumber": "2.15",
 "heading": "Battlefield supplication",
-"paragraphs": [
-{
-"id": 3212,
-"documentId": "tw1xc3sa60rd11eyewr28hpz",
-"arabic": "وكان عليه السلام يقول إذا لقي العدوّ محاربًا اللّٰهمّ إليك أفضت القلوب ومُدّت الأعناق وشخصت الأبصار ونُقلت الأقدام وأُنضيت الأبدان. اللّٰهمّ قد صَرّح مكتوم الشنآن وجاشت مَراجِل الأضغان. اللّٰهمّ إنّا نشكو إليك غيبة نبيّنا وكثرة عدوّنا وتشتّت أهوائنا ﴿رَبَّنَا افْتَحْ بَيْنَنَا وَبَيْنَ قَوْمِنَا بِالْحَقِّ وَأَنتَ خَيْرُ الْفَاتِحِينَ﴾.",
-"createdAt": "2025-08-07T18:19:56.935Z",
-"updatedAt": "2025-08-07T18:19:56.935Z",
-"publishedAt": "2025-08-07T18:19:57.021Z",
-"number": "2.15.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "وكان عليه السلام يقول إذا لقي العدوّ محاربًا اللّٰهمّ إليك أفضت القلوب ومُدّت الأعناق وشخصت الأبصار ونُقلت الأقدام وأُنضيت الأبدان. اللّٰهمّ قد صَرّح مكتوم الشنآن وجاشت مَراجِل الأضغان. اللّٰهمّ إنّا نشكو إليك غيبة نبيّنا وكثرة عدوّنا وتشتّت أهوائنا ﴿رَبَّنَا افْتَحْ بَيْنَنَا وَبَيْنَ قَوْمِنَا بِالْحَقِّ وَأَنتَ خَيْرُ الْفَاتِحِينَ﴾.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3252,
-"type": "en",
-"text": "ʿAlī would offer this supplication whenever he met his enemy on the battlefield: God, it is to you that our hearts flow, our necks stretch, our eyes are raised, and our feet move. It is from the swiftness of our journey to you that our bodies have become emaciated. God, buried rancor has surfaced today, and cauldrons of malice simmer. God, we complain to you of our Prophet’s death, our enemies’ numbers, and our community’s implosion. «Lord, decide between us and our tribesmen with truth, for you are the best conqueror.»"
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2296,
-"documentId": "nnjrbken87lecqpbh3cdhdeq",
+"id": 3802,
+"documentId": "c2wx50xoixha69qarledrw7y",
 "title": "وكان يقول عليه السلام لأصحابه عند الحرب لا تَشتَدَّنّ عليكم فَرّةٌ بعدها كرّة ولا جَولة بعدها حملة. وأعطوا السيوف حقوقها ووَطِّنوا للجُنوب مصارعها وٱذمُروا أنفسكم على الطعن الدَّعْسيّ والضرب الطِّلَخْفيّ. وأميتوا الأصوات فإنّه أطرد للفشل. والذي فلق الحبّة وبرأ النسمة ما أسلموا ولكن ٱستسلموا وأسرّوا الكفر فلمّا وجدوا أعوانًا عليه أظهروه.",
 "slug": "instructions-to-the-army-at-the-battle-of-iff-n",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:48.572Z",
-"updatedAt": "2025-08-07T18:21:48.572Z",
-"publishedAt": "2025-08-07T18:21:48.581Z",
+"createdAt": "2025-08-11T14:10:21.118Z",
+"updatedAt": "2025-08-11T14:10:21.118Z",
+"publishedAt": "2025-08-11T14:10:21.129Z",
 "translations": [
 {
 "text": "ʿAlī would give his supporters these instructions ahead of battle: Don’t hesitate to retreat then assail, to withdraw then attack. Give your swords their due. Think of the place where your body may fall as your home. Prepare your frames for piercing spear-throws and powerful sword-strikes. Deaden your voices, for this will drive out your fear. I swear by him who split the grain and created the soul—your enemies have never really accepted Islam! They had to surrender but concealed their unbelief. When they found supporters, they revealed it again.",
@@ -753,47 +318,18 @@
 ],
 "sermonNumber": "2.16",
 "heading": "Instructions to the army at the Battle of Ṣiffīn",
-"paragraphs": [
-{
-"id": 3203,
-"documentId": "n35i28g8dq70k6v7vg43ggl2",
-"arabic": "وكان يقول عليه السلام لأصحابه عند الحرب لا تَشتَدَّنّ عليكم فَرّةٌ بعدها كرّة ولا جَولة بعدها حملة. وأعطوا السيوف حقوقها ووَطِّنوا للجُنوب مصارعها وٱذمُروا أنفسكم على الطعن الدَّعْسيّ والضرب الطِّلَخْفيّ. وأميتوا الأصوات فإنّه أطرد للفشل. والذي فلق الحبّة وبرأ النسمة ما أسلموا ولكن ٱستسلموا وأسرّوا الكفر فلمّا وجدوا أعوانًا عليه أظهروه.",
-"createdAt": "2025-08-07T18:19:56.727Z",
-"updatedAt": "2025-08-07T18:19:56.727Z",
-"publishedAt": "2025-08-07T18:19:56.847Z",
-"number": "2.16.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "وكان يقول عليه السلام لأصحابه عند الحرب لا تَشتَدَّنّ عليكم فَرّةٌ بعدها كرّة ولا جَولة بعدها حملة. وأعطوا السيوف حقوقها ووَطِّنوا للجُنوب مصارعها وٱذمُروا أنفسكم على الطعن الدَّعْسيّ والضرب الطِّلَخْفيّ. وأميتوا الأصوات فإنّه أطرد للفشل. والذي فلق الحبّة وبرأ النسمة ما أسلموا ولكن ٱستسلموا وأسرّوا الكفر فلمّا وجدوا أعوانًا عليه أظهروه.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3243,
-"type": "en",
-"text": "ʿAlī would give his supporters these instructions ahead of battle: Don’t hesitate to retreat then assail, to withdraw then attack. Give your swords their due. Think of the place where your body may fall as your home. Prepare your frames for piercing spear-throws and powerful sword-strikes. Deaden your voices, for this will drive out your fear. I swear by him who split the grain and created the soul—your enemies have never really accepted Islam! They had to surrender but concealed their unbelief. When they found supporters, they revealed it again."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2298,
-"documentId": "tajvl4fhy0dzsk2cufagzpxr",
+"id": 3804,
+"documentId": "jci4zh59jz14qw3ikm5h30nr",
 "title": "ومن كتاب له عليه السلام إلى معاوية جوابًا عن كتاب منه فأمّا طلبك إليّ الشام فإنّي لم أكن لأعطيك اليوم ما منعتك أمس. وأمّا ٱستواؤنا في الحرب والرجال فلست بأمضى على الشكّ منّي على اليقين وليس أهل الشام بأحرص على الدنيا من أهل العراق على الآخرة. وأمّا قولك إنّا بنو عبد مناف فكذلك نحن وليس أميّة كهاشم ولا حَرْب كعبد المطّلب ولا أبو سفيان كأبي طالب ولا المهاجر كالطليق ولا الصريح كاللصيق ولا المحقّ كالمبطل ولا المؤمن كالمُدغِل. ولبئس الخلف خلف يتبع سلفًا هوى في نار جهنّم. وفي أيدينا بَعْدُ فضل النبوّة التي أذللنا بها العزيز ونعشنا بها الذليل. ولمّا أدخل الله العرب في دينه أفواجًا وأسلمت له هذه الأمّة طوعًا وكرهًا كنتم ممّن دخل في الدين إمّا رغبةً وإمّا رهبةً على حين فاز أهل السبق بسبقهم وذهب المهاجرون الأوّلون بفضلهم. فلا تجعلنّ للشيطان فيك نصيبًا ولا على نفسك سبيلًا.",
 "slug": "to-mu-wiyah-at-iff-n-refusing-to-make-him-governor-of-syria-denying-that-they-were-peers",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:48.935Z",
-"updatedAt": "2025-08-07T18:21:48.935Z",
-"publishedAt": "2025-08-07T18:21:48.947Z",
+"createdAt": "2025-08-11T14:10:21.788Z",
+"updatedAt": "2025-08-11T14:10:21.788Z",
+"publishedAt": "2025-08-11T14:10:21.801Z",
 "translations": [
 {
 "text": "From ʿAlī’s letter replying to Muʿāwiyah: You demand Syria, but I’m not about to give you today what I refused you yesterday. We are not equal in war and men—you in your state of doubt don’t possess sharper perception than I do in my certainty, and the people of Syria don’t covet this world more than the people of Iraq covet the hereafter. You say, “We are all sons of ʿAbd Manāf”—yes, we are, but Umayyah is not the equal of Hāshim, Ḥarb is not the equal of ʿAbd al-Muṭṭalib, Abū Sufyān is not the equal of Abū Ṭālib, the Emigrant is not like the Freedman, the purebred is not like the adopted, the righteous is not like the falsifier, and the believer is not like the closet antagonist! The worst son is one who follows his forebears into the Fire of Gehenna! Our hands possess the honor of prophecy, with it we brought low the mighty and raised the humble. When God brought the Arabs in droves into the fold of his religion, when this nation submitted to Islam, some willingly and some by force, you were among those who did so out of greed or fear. By that time, the true winners had already attained precedence, and the first Emigrants had already won distinction. Don’t let Satan have a share in you, Muʿāwiyah, don’t show him a way to control your soul.",
@@ -802,47 +338,18 @@
 ],
 "sermonNumber": "2.17",
 "heading": "To Muʿāwiyah at Ṣiffīn, refusing to make him governor of Syria, denying that they were peers",
-"paragraphs": [
-{
-"id": 3220,
-"documentId": "yodfi49itdikl8qb3h0wqcbh",
-"arabic": "ومن كتاب له عليه السلام إلى معاوية جوابًا عن كتاب منه فأمّا طلبك إليّ الشام فإنّي لم أكن لأعطيك اليوم ما منعتك أمس. وأمّا ٱستواؤنا في الحرب والرجال فلست بأمضى على الشكّ منّي على اليقين وليس أهل الشام بأحرص على الدنيا من أهل العراق على الآخرة. وأمّا قولك إنّا بنو عبد مناف فكذلك نحن وليس أميّة كهاشم ولا حَرْب كعبد المطّلب ولا أبو سفيان كأبي طالب ولا المهاجر كالطليق ولا الصريح كاللصيق ولا المحقّ كالمبطل ولا المؤمن كالمُدغِل. ولبئس الخلف خلف يتبع سلفًا هوى في نار جهنّم. وفي أيدينا بَعْدُ فضل النبوّة التي أذللنا بها العزيز ونعشنا بها الذليل. ولمّا أدخل الله العرب في دينه أفواجًا وأسلمت له هذه الأمّة طوعًا وكرهًا كنتم ممّن دخل في الدين إمّا رغبةً وإمّا رهبةً على حين فاز أهل السبق بسبقهم وذهب المهاجرون الأوّلون بفضلهم. فلا تجعلنّ للشيطان فيك نصيبًا ولا على نفسك سبيلًا.",
-"createdAt": "2025-08-07T18:19:57.052Z",
-"updatedAt": "2025-08-07T18:19:57.052Z",
-"publishedAt": "2025-08-07T18:19:57.174Z",
-"number": "2.17.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى معاوية جوابًا عن كتاب منه فأمّا طلبك إليّ الشام فإنّي لم أكن لأعطيك اليوم ما منعتك أمس. وأمّا ٱستواؤنا في الحرب والرجال فلست بأمضى على الشكّ منّي على اليقين وليس أهل الشام بأحرص على الدنيا من أهل العراق على الآخرة. وأمّا قولك إنّا بنو عبد مناف فكذلك نحن وليس أميّة كهاشم ولا حَرْب كعبد المطّلب ولا أبو سفيان كأبي طالب ولا المهاجر كالطليق ولا الصريح كاللصيق ولا المحقّ كالمبطل ولا المؤمن كالمُدغِل. ولبئس الخلف خلف يتبع سلفًا هوى في نار جهنّم. وفي أيدينا بَعْدُ فضل النبوّة التي أذللنا بها العزيز ونعشنا بها الذليل. ولمّا أدخل الله العرب في دينه أفواجًا وأسلمت له هذه الأمّة طوعًا وكرهًا كنتم ممّن دخل في الدين إمّا رغبةً وإمّا رهبةً على حين فاز أهل السبق بسبقهم وذهب المهاجرون الأوّلون بفضلهم. فلا تجعلنّ للشيطان فيك نصيبًا ولا على نفسك سبيلًا.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3260,
-"type": "en",
-"text": "From ʿAlī’s letter replying to Muʿāwiyah: You demand Syria, but I’m not about to give you today what I refused you yesterday. We are not equal in war and men—you in your state of doubt don’t possess sharper perception than I do in my certainty, and the people of Syria don’t covet this world more than the people of Iraq covet the hereafter. You say, “We are all sons of ʿAbd Manāf”—yes, we are, but Umayyah is not the equal of Hāshim, Ḥarb is not the equal of ʿAbd al-Muṭṭalib, Abū Sufyān is not the equal of Abū Ṭālib, the Emigrant is not like the Freedman, the purebred is not like the adopted, the righteous is not like the falsifier, and the believer is not like the closet antagonist! The worst son is one who follows his forebears into the Fire of Gehenna! Our hands possess the honor of prophecy, with it we brought low the mighty and raised the humble. When God brought the Arabs in droves into the fold of his religion, when this nation submitted to Islam, some willingly and some by force, you were among those who did so out of greed or fear. By that time, the true winners had already attained precedence, and the first Emigrants had already won distinction. Don’t let Satan have a share in you, Muʿāwiyah, don’t show him a way to control your soul."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2300,
-"documentId": "s55x2xs86p9z60x4lphzwgfp",
+"id": 3806,
+"documentId": "zej8fxlmixvq1d7my9mqli5v",
 "title": "ومن كتاب له عليه السلام إلى عبد الله بن العبّاس رحمهما الله وهو عامله على البصرة وٱعلم أنّ البصرة مَهبِط إبليس ومَغرِس الفتن فحادِثْ أهلها بالإحسان إليهم وٱحلل عقدة الخوف عن قلوبهم. وقد بلغني تَنَمُّرُك لبني تميم وغلظتك عليهم وإنّ بني تميم لم يغب لهم نجم إلّا طلع لهم آخر وإنّهم لم يُسبَقوا بوَغْمٍ في جاهليّة ولا إسلام وإنّ لهم بنا رحمًا ماسّة وقرابة خاصّة نحن مأجورون على صلتها ومأزورون على قطيعتها. فٱربَعْ أبا العبّاس رحمك الله فيما جرى على يدك ولسانك من خير وشرّ فإنّا شريكان في ذلك وكن عند صالح ظنّي بك ولا يَفيلنّ رأيي فيك. والسلام.",
 "slug": "after-the-battle-of-the-camel-to-abdall-h-ibn-al-abb-s-governor-of-basra-instructing-kindness-to-tam",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:49.286Z",
-"updatedAt": "2025-08-07T18:21:49.286Z",
-"publishedAt": "2025-08-07T18:21:49.295Z",
+"createdAt": "2025-08-11T14:10:22.462Z",
+"updatedAt": "2025-08-11T14:10:22.462Z",
+"publishedAt": "2025-08-11T14:10:22.473Z",
 "translations": [
 {
 "text": "From ʿAlī’s missive to ʿAbdallāh ibn al-ʿAbbās, his governor in Basra: Know that Basra is where Iblīs landed after his fall from grace and where the trees of sedition have taken root, so tame its people with kindness and unravel from their heart the knot of fear. It has reached me that you have castigated the Tamīm tribesmen and spoken with them harshly. Know that no star of Tamīm has ever set except that another has risen in its place, and no one has dared to attack them either in the Age of Ignorance or since the coming of Islam. They are our intimate kin and our close relations—we shall be rewarded for fostering their bonds and incur sin if we sever them. Exercise restraint, Abū al-ʿAbbās—may God have mercy on you!—in whatever flows from your hand or your tongue, be it good or bad, for we are partners in this endeavor. Behave as I hope you will behave, and don’t make me change my opinion of you. Go in peace.",
@@ -851,47 +358,18 @@
 ],
 "sermonNumber": "2.18",
 "heading": "After the Battle of the Camel to ʿAbdallāh ibn al-ʿAbbās, governor of Basra, instructing kindness to Tamīm tribesmen",
-"paragraphs": [
-{
-"id": 3241,
-"documentId": "j52y2h12lkf66v223wdbfn6u",
-"arabic": "ومن كتاب له عليه السلام إلى عبد الله بن العبّاس رحمهما الله وهو عامله على البصرة وٱعلم أنّ البصرة مَهبِط إبليس ومَغرِس الفتن فحادِثْ أهلها بالإحسان إليهم وٱحلل عقدة الخوف عن قلوبهم. وقد بلغني تَنَمُّرُك لبني تميم وغلظتك عليهم وإنّ بني تميم لم يغب لهم نجم إلّا طلع لهم آخر وإنّهم لم يُسبَقوا بوَغْمٍ في جاهليّة ولا إسلام وإنّ لهم بنا رحمًا ماسّة وقرابة خاصّة نحن مأجورون على صلتها ومأزورون على قطيعتها. فٱربَعْ أبا العبّاس رحمك الله فيما جرى على يدك ولسانك من خير وشرّ فإنّا شريكان في ذلك وكن عند صالح ظنّي بك ولا يَفيلنّ رأيي فيك. والسلام.",
-"createdAt": "2025-08-07T18:19:57.836Z",
-"updatedAt": "2025-08-07T18:19:57.836Z",
-"publishedAt": "2025-08-07T18:19:57.934Z",
-"number": "2.18.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى عبد الله بن العبّاس رحمهما الله وهو عامله على البصرة وٱعلم أنّ البصرة مَهبِط إبليس ومَغرِس الفتن فحادِثْ أهلها بالإحسان إليهم وٱحلل عقدة الخوف عن قلوبهم. وقد بلغني تَنَمُّرُك لبني تميم وغلظتك عليهم وإنّ بني تميم لم يغب لهم نجم إلّا طلع لهم آخر وإنّهم لم يُسبَقوا بوَغْمٍ في جاهليّة ولا إسلام وإنّ لهم بنا رحمًا ماسّة وقرابة خاصّة نحن مأجورون على صلتها ومأزورون على قطيعتها. فٱربَعْ أبا العبّاس رحمك الله فيما جرى على يدك ولسانك من خير وشرّ فإنّا شريكان في ذلك وكن عند صالح ظنّي بك ولا يَفيلنّ رأيي فيك. والسلام.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3281,
-"type": "en",
-"text": "From ʿAlī’s missive to ʿAbdallāh ibn al-ʿAbbās, his governor in Basra: Know that Basra is where Iblīs landed after his fall from grace and where the trees of sedition have taken root, so tame its people with kindness and unravel from their heart the knot of fear. It has reached me that you have castigated the Tamīm tribesmen and spoken with them harshly. Know that no star of Tamīm has ever set except that another has risen in its place, and no one has dared to attack them either in the Age of Ignorance or since the coming of Islam. They are our intimate kin and our close relations—we shall be rewarded for fostering their bonds and incur sin if we sever them. Exercise restraint, Abū al-ʿAbbās—may God have mercy on you!—in whatever flows from your hand or your tongue, be it good or bad, for we are partners in this endeavor. Behave as I hope you will behave, and don’t make me change my opinion of you. Go in peace."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2302,
-"documentId": "kh89xy0ruzms25b9rd4qztpo",
+"id": 3808,
+"documentId": "zv7loshpj90sh1gh8ag4mvey",
 "title": "ومن كتاب له عليه السلام إلى بعض عمّاله أمّا بعد. فإنّ دَهاقين أهل بلدك شكوا منك غلظة وقسوة وٱحتقارًا وجفوة فنظرت فلم أَرَهم أهلًا لأن يُدنَوا لشركهم ولا أن يُقصَوا ويُجفَوا لعهدهم فٱلبس لهم جِلبابًا من اللين تشوبه بطرف من الشدّة وداوِل بهم بين القسوة والرأفة وٱمزج لهم بين التقريب والإدناء والإبعاد والإقصاء إن شاء الله.",
 "slug": "to-amr-ibn-salamah-governor-of-isfahan-in-rebuke-for-harshness-to-the-populace",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:49.628Z",
-"updatedAt": "2025-08-07T18:21:49.628Z",
-"publishedAt": "2025-08-07T18:21:49.640Z",
+"createdAt": "2025-08-11T14:10:23.140Z",
+"updatedAt": "2025-08-11T14:10:23.140Z",
+"publishedAt": "2025-08-11T14:10:23.150Z",
 "translations": [
 {
 "text": "From ʿAlī’s missive to one of his governors: The Dihqān landowners in your province have complained of your harshness, strictness, contempt, and ill-treatment. I have looked into this matter, and although I find them unworthy of being your close associates because of their polytheism, yet they certainly do not deserve to be alienated or to be treated harshly, for they have entered into our compact. In dealing with them, wear a soft garment with an edge of toughness, and alternate between strictness and compassion. Mix intimacy and closeness with remoteness and reserve. You will do this, God willing.",
@@ -900,47 +378,18 @@
 ],
 "sermonNumber": "2.19",
 "heading": "To ʿAmr ibn Salamah, governor of Isfahan, in rebuke for harshness to the populace",
-"paragraphs": [
-{
-"id": 3243,
-"documentId": "ztglwmgir7tgo7l94km2ejb5",
-"arabic": "ومن كتاب له عليه السلام إلى بعض عمّاله أمّا بعد. فإنّ دَهاقين أهل بلدك شكوا منك غلظة وقسوة وٱحتقارًا وجفوة فنظرت فلم أَرَهم أهلًا لأن يُدنَوا لشركهم ولا أن يُقصَوا ويُجفَوا لعهدهم فٱلبس لهم جِلبابًا من اللين تشوبه بطرف من الشدّة وداوِل بهم بين القسوة والرأفة وٱمزج لهم بين التقريب والإدناء والإبعاد والإقصاء إن شاء الله.",
-"createdAt": "2025-08-07T18:19:57.867Z",
-"updatedAt": "2025-08-07T18:19:57.867Z",
-"publishedAt": "2025-08-07T18:19:57.969Z",
-"number": "2.19.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى بعض عمّاله أمّا بعد. فإنّ دَهاقين أهل بلدك شكوا منك غلظة وقسوة وٱحتقارًا وجفوة فنظرت فلم أَرَهم أهلًا لأن يُدنَوا لشركهم ولا أن يُقصَوا ويُجفَوا لعهدهم فٱلبس لهم جِلبابًا من اللين تشوبه بطرف من الشدّة وداوِل بهم بين القسوة والرأفة وٱمزج لهم بين التقريب والإدناء والإبعاد والإقصاء إن شاء الله.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3283,
-"type": "en",
-"text": "From ʿAlī’s missive to one of his governors: The Dihqān landowners in your province have complained of your harshness, strictness, contempt, and ill-treatment. I have looked into this matter, and although I find them unworthy of being your close associates because of their polytheism, yet they certainly do not deserve to be alienated or to be treated harshly, for they have entered into our compact. In dealing with them, wear a soft garment with an edge of toughness, and alternate between strictness and compassion. Mix intimacy and closeness with remoteness and reserve. You will do this, God willing."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2304,
-"documentId": "x9l3rkk93fv9jl4oggblmep4",
+"id": 3810,
+"documentId": "qknld55au7a2apskfx4074qk",
 "title": "ومن كتاب له عليه السلام إلى زياد بن أبيه وهو خليفة عامله عبد الله بن العبّاس رحمة الله عليه على البصرة. وعبد الله عامل أمير المؤمنين عليه السلام يومئذ عليها وعلى كور الأهواز وفارس وكرمان وإنّي أقسم بالله قسمًا صادقًا لئن بلغني أنّك خُنْتَ من فَيء المسلمين شيئًا صغيرًا أو كبيرًا لأَشُدَّنّ عليك شَدّةً تدعك قليل الوفر ثقيل الظهر ضئيل الأمر. والسلام.",
 "slug": "to-ziy-d-deputy-governor-of-basra-warning-against-misappropriating-treasury-funds",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:49.983Z",
-"updatedAt": "2025-08-07T18:21:49.983Z",
-"publishedAt": "2025-08-07T18:21:49.995Z",
+"createdAt": "2025-08-11T14:10:23.812Z",
+"updatedAt": "2025-08-11T14:10:23.812Z",
+"publishedAt": "2025-08-11T14:10:23.820Z",
 "translations": [
 {
 "text": "From ʿAlī’s missive to Ziyād ibn Abīhi, who was acting as deputy for ʿAlī’s governor ʿAbdallāh ibn al-ʿAbbās in Basra. ʿAbdallāh was then ʿAlī’s governor in Basra and he also had jurisdiction over the provinces of Ahwaz, Fars, and Kirman. I swear this by God, in all truth: If I hear that you have misappropriated funds from the Muslims’ treasury, whether it be a small or a large amount, I shall inflict on you a harsh punishment that will leave you short of wealth, diminished in strength, and burdened with shame. Go in peace.",
@@ -949,47 +398,18 @@
 ],
 "sermonNumber": "2.20",
 "heading": "To Ziyād, deputy governor of Basra, warning against misappropriating treasury funds",
-"paragraphs": [
-{
-"id": 3245,
-"documentId": "u97vml9rcfj6j9nb8822gv21",
-"arabic": "ومن كتاب له عليه السلام إلى زياد بن أبيه وهو خليفة عامله عبد الله بن العبّاس رحمة الله عليه على البصرة. وعبد الله عامل أمير المؤمنين عليه السلام يومئذ عليها وعلى كور الأهواز وفارس وكرمان وإنّي أقسم بالله قسمًا صادقًا لئن بلغني أنّك خُنْتَ من فَيء المسلمين شيئًا صغيرًا أو كبيرًا لأَشُدَّنّ عليك شَدّةً تدعك قليل الوفر ثقيل الظهر ضئيل الأمر. والسلام.",
-"createdAt": "2025-08-07T18:19:57.892Z",
-"updatedAt": "2025-08-07T18:19:57.892Z",
-"publishedAt": "2025-08-07T18:19:58.014Z",
-"number": "2.20.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى زياد بن أبيه وهو خليفة عامله عبد الله بن العبّاس رحمة الله عليه على البصرة. وعبد الله عامل أمير المؤمنين عليه السلام يومئذ عليها وعلى كور الأهواز وفارس وكرمان وإنّي أقسم بالله قسمًا صادقًا لئن بلغني أنّك خُنْتَ من فَيء المسلمين شيئًا صغيرًا أو كبيرًا لأَشُدَّنّ عليك شَدّةً تدعك قليل الوفر ثقيل الظهر ضئيل الأمر. والسلام.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3285,
-"type": "en",
-"text": "From ʿAlī’s missive to Ziyād ibn Abīhi, who was acting as deputy for ʿAlī’s governor ʿAbdallāh ibn al-ʿAbbās in Basra. ʿAbdallāh was then ʿAlī’s governor in Basra and he also had jurisdiction over the provinces of Ahwaz, Fars, and Kirman. I swear this by God, in all truth: If I hear that you have misappropriated funds from the Muslims’ treasury, whether it be a small or a large amount, I shall inflict on you a harsh punishment that will leave you short of wealth, diminished in strength, and burdened with shame. Go in peace."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2306,
-"documentId": "tnw10ausgc6wpvw0vnu2ezek",
+"id": 3812,
+"documentId": "rynct8ocmaxk64sr20wrq0mg",
 "title": "ومن كتاب له عليه السلام إليه أيضًا فدَع الإسراف مقتصدًا وٱذكر في اليوم غدًا وأمسك من المال بقدر ضرورتك وقدّم الفضل ليوم حاجتك أترجو أن يؤتيك الله أجر المتواضعين وأنت عنده من المتكبّرين وتطمع وأنت متمرّغ في النعيم تمنعه الضعيف والأرملة أن يوجب لك ثواب المتصدّقين وإنّما المرء مَجزِيّ بما سَلَف وقادم على ما قدّم. والسلام.",
 "slug": "to-ziy-d-deputy-governor-of-basra-warning-against-extravagance",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:50.327Z",
-"updatedAt": "2025-08-07T18:21:50.327Z",
-"publishedAt": "2025-08-07T18:21:50.337Z",
+"createdAt": "2025-08-11T14:10:25.940Z",
+"updatedAt": "2025-08-11T14:10:25.940Z",
+"publishedAt": "2025-08-11T14:10:25.950Z",
 "translations": [
 {
 "text": "From another missive sent by ʿAlī to Ziyād: Turn from extravagance to moderation, think today of tomorrow, and spend what you must, but put by the rest for your day of want. Do you expect God to remunerate you with the humble if he counts you among the arrogant? Do you think he will reward you with the charitable when you wallow in luxuries and refuse to help the weak and the widowed? A man is recompensed for the work he has accomplished. He advances to meet what he sent on. Go in peace.",
@@ -998,47 +418,18 @@
 ],
 "sermonNumber": "2.21",
 "heading": "To Ziyād, deputy governor of Basra, warning against extravagance",
-"paragraphs": [
-{
-"id": 3244,
-"documentId": "iw9des265eshtx7h3ncb7y81",
-"arabic": "ومن كتاب له عليه السلام إليه أيضًا فدَع الإسراف مقتصدًا وٱذكر في اليوم غدًا وأمسك من المال بقدر ضرورتك وقدّم الفضل ليوم حاجتك أترجو أن يؤتيك الله أجر المتواضعين وأنت عنده من المتكبّرين وتطمع وأنت متمرّغ في النعيم تمنعه الضعيف والأرملة أن يوجب لك ثواب المتصدّقين وإنّما المرء مَجزِيّ بما سَلَف وقادم على ما قدّم. والسلام.",
-"createdAt": "2025-08-07T18:19:57.881Z",
-"updatedAt": "2025-08-07T18:19:57.881Z",
-"publishedAt": "2025-08-07T18:19:57.985Z",
-"number": "2.21.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إليه أيضًا فدَع الإسراف مقتصدًا وٱذكر في اليوم غدًا وأمسك من المال بقدر ضرورتك وقدّم الفضل ليوم حاجتك أترجو أن يؤتيك الله أجر المتواضعين وأنت عنده من المتكبّرين وتطمع وأنت متمرّغ في النعيم تمنعه الضعيف والأرملة أن يوجب لك ثواب المتصدّقين وإنّما المرء مَجزِيّ بما سَلَف وقادم على ما قدّم. والسلام.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3284,
-"type": "en",
-"text": "From another missive sent by ʿAlī to Ziyād: Turn from extravagance to moderation, think today of tomorrow, and spend what you must, but put by the rest for your day of want. Do you expect God to remunerate you with the humble if he counts you among the arrogant? Do you think he will reward you with the charitable when you wallow in luxuries and refuse to help the weak and the widowed? A man is recompensed for the work he has accomplished. He advances to meet what he sent on. Go in peace."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2308,
-"documentId": "hvr2lylmnh35zjx9lb6lkj0n",
+"id": 3814,
+"documentId": "s8hxwca6gi77h6qehe757ajm",
 "title": "ومن كتاب له عليه السلام إلى عبد الله بن العبّاس. كان ٱبن عبّاس يقول ما ٱنتفعت بكلام بعد كلام رسول الله صلّى الله عليه وآله كٱنتفاعي بهذا الكلام أمّا بعد. فإنّ المرء يسرّه دَرَك ما لم يكن ليفوته ويسوءه فوت ما لم يكن ليدركه فليكن سرورك بما نلت من آخرتك وليكن أسفك على ما فاتك منها وما نلت من دنياك فلا تكثر به فرحًا وما فاتك منها فلا تأسَ عليه جزعًا وليكن همّك فيما بعد الموت.",
 "slug": "to-abdall-h-ibn-al-abb-s-in-mecca-following-his-misappropriation-of-treasury-funds-counselling-focus",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:50.673Z",
-"updatedAt": "2025-08-07T18:21:50.673Z",
-"publishedAt": "2025-08-07T18:21:50.682Z",
+"createdAt": "2025-08-11T14:10:26.631Z",
+"updatedAt": "2025-08-11T14:10:26.631Z",
+"publishedAt": "2025-08-11T14:10:26.647Z",
 "translations": [
 {
 "text": "From ʿAlī’s letter to ʿAbdallāh ibn al-ʿAbbās. Ibn al-ʿAbbās used to say: After the words of the Prophet, I have benefited from no words as much as I have benefited from these: A man is gladdened by obtaining a thing he was not going to lose and saddened by the loss of a thing he was not going to obtain. Be glad for what you have achieved for the hereafter. Be sad for what you have lost of it. Whatever you achieve of this world, don’t exult over it excessively. Whatever you may lose of it, don’t grieve too much. Save your worries for what comes after death.",
@@ -1047,47 +438,18 @@
 ],
 "sermonNumber": "2.22",
 "heading": "To ʿAbdallāh ibn al-ʿAbbās in Mecca, following his misappropriation of treasury funds, counselling focus on the hereafter",
-"paragraphs": [
-{
-"id": 3248,
-"documentId": "ofx3hv9b4wtoy1diewci8k89",
-"arabic": "ومن كتاب له عليه السلام إلى عبد الله بن العبّاس. كان ٱبن عبّاس يقول ما ٱنتفعت بكلام بعد كلام رسول الله صلّى الله عليه وآله كٱنتفاعي بهذا الكلام أمّا بعد. فإنّ المرء يسرّه دَرَك ما لم يكن ليفوته ويسوءه فوت ما لم يكن ليدركه فليكن سرورك بما نلت من آخرتك وليكن أسفك على ما فاتك منها وما نلت من دنياك فلا تكثر به فرحًا وما فاتك منها فلا تأسَ عليه جزعًا وليكن همّك فيما بعد الموت.",
-"createdAt": "2025-08-07T18:19:57.939Z",
-"updatedAt": "2025-08-07T18:19:57.939Z",
-"publishedAt": "2025-08-07T18:19:58.087Z",
-"number": "2.22.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كتاب له عليه السلام إلى عبد الله بن العبّاس. كان ٱبن عبّاس يقول ما ٱنتفعت بكلام بعد كلام رسول الله صلّى الله عليه وآله كٱنتفاعي بهذا الكلام أمّا بعد. فإنّ المرء يسرّه دَرَك ما لم يكن ليفوته ويسوءه فوت ما لم يكن ليدركه فليكن سرورك بما نلت من آخرتك وليكن أسفك على ما فاتك منها وما نلت من دنياك فلا تكثر به فرحًا وما فاتك منها فلا تأسَ عليه جزعًا وليكن همّك فيما بعد الموت.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3288,
-"type": "en",
-"text": "From ʿAlī’s letter to ʿAbdallāh ibn al-ʿAbbās. Ibn al-ʿAbbās used to say: After the words of the Prophet, I have benefited from no words as much as I have benefited from these: A man is gladdened by obtaining a thing he was not going to lose and saddened by the loss of a thing he was not going to obtain. Be glad for what you have achieved for the hereafter. Be sad for what you have lost of it. Whatever you achieve of this world, don’t exult over it excessively. Whatever you may lose of it, don’t grieve too much. Save your worries for what comes after death."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2310,
-"documentId": "jplfjm65jvnbgvyrp0xr4b07",
+"id": 3816,
+"documentId": "uejh9cchdxj9u7ir62dfpwy2",
 "title": "ومن كلام له عليه السلام قاله قبيل موته لمّا ضربه ٱبن ملجم على سبيل الوصيّة وصيّتي لكم ألّا تشركوا بالله شيئًا ومحمّدٌ صلّى الله عليه وآله فلا تضيّعوا سنّته أقيموا هذين العمودين وخَلاكم ذمّ. أنا بالأمس صاحبكم واليوم عبرة لكم وغدًا مفارقكم. إن أَبْقَ فأنا وليّ دمي وإن أَفْنَ فالفناء ميعادي وإن أَعْفُ فالعفو لي قربة وهو لكم حسنة فٱعفوا ﴿أَلَا تُحِبُّونَ أَن يَغْفِرَ اللَّهُ لَكُمْ﴾. والله ما فَجِئَني من الموت واردٌ كرهتُه ولا طالع أنكرته وما كنت إلّا كقاربٍ ورد وطالب وجد ﴿وَمَا عِندَ اللَّهِ خَيْرٌ لِّلْأَبْرَارِ﴾. وقد مضى بعض هذا الكلام فيما تقدّم من الخطب إلّا أنّ فيه هٰهنا زيادة أوجبت تكريره.",
 "slug": "testament-to-family-and-close-associates-after-the-death-blow",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:51.030Z",
-"updatedAt": "2025-08-07T18:21:51.030Z",
-"publishedAt": "2025-08-07T18:21:51.043Z",
+"createdAt": "2025-08-11T14:10:27.332Z",
+"updatedAt": "2025-08-11T14:10:27.332Z",
+"publishedAt": "2025-08-11T14:10:27.341Z",
 "translations": [
 {
 "text": "From ʿAlī’s address after Ibn Muljam struck him with his sword, spoken as a testament just before ʿAlī’s death: This is my testament to you: Do not assign partners to God or abandon the Sunnah of the Prophet—keep these two pillars upright, and you shall be free of blame. Yesterday I was your companion, today I serve as a plain lesson for you, and tomorrow I shall be gone from your midst. If I survive, I shall claim my own blood-wit, and if I die, well, death is what we are promised. If I forgive, my action will gain me nearness to God, and if you do the same, you too will earn God’s reward. Choose forgiveness—«Do you not wish that God should forgive you?» By God, death has not surprised me as an unwelcome visitor, or as a sudden arrival that I find unpleasant. I am like a person who has arrived at the watering hole he sought, who found the object he pursued. «What God has prepared for people of virtue is the best!» Raḍī: Part of this address was previously recorded in the Orations section. This version contains some additions, which is why I have found it necessary to repeat it here.",
@@ -1096,47 +458,18 @@
 ],
 "sermonNumber": "2.23",
 "heading": "Testament to family and close associates after the death blow",
-"paragraphs": [
-{
-"id": 3279,
-"documentId": "noq51ej4mzh2ehbgexc11047",
-"arabic": "ومن كلام له عليه السلام قاله قبيل موته لمّا ضربه ٱبن ملجم على سبيل الوصيّة وصيّتي لكم ألّا تشركوا بالله شيئًا ومحمّدٌ صلّى الله عليه وآله فلا تضيّعوا سنّته أقيموا هذين العمودين وخَلاكم ذمّ. أنا بالأمس صاحبكم واليوم عبرة لكم وغدًا مفارقكم. إن أَبْقَ فأنا وليّ دمي وإن أَفْنَ فالفناء ميعادي وإن أَعْفُ فالعفو لي قربة وهو لكم حسنة فٱعفوا ﴿أَلَا تُحِبُّونَ أَن يَغْفِرَ اللَّهُ لَكُمْ﴾. والله ما فَجِئَني من الموت واردٌ كرهتُه ولا طالع أنكرته وما كنت إلّا كقاربٍ ورد وطالب وجد ﴿وَمَا عِندَ اللَّهِ خَيْرٌ لِّلْأَبْرَارِ﴾. وقد مضى بعض هذا الكلام فيما تقدّم من الخطب إلّا أنّ فيه هٰهنا زيادة أوجبت تكريره.",
-"createdAt": "2025-08-07T18:19:58.731Z",
-"updatedAt": "2025-08-07T18:19:58.731Z",
-"publishedAt": "2025-08-07T18:19:58.841Z",
-"number": "2.23.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن كلام له عليه السلام قاله قبيل موته لمّا ضربه ٱبن ملجم على سبيل الوصيّة وصيّتي لكم ألّا تشركوا بالله شيئًا ومحمّدٌ صلّى الله عليه وآله فلا تضيّعوا سنّته أقيموا هذين العمودين وخَلاكم ذمّ. أنا بالأمس صاحبكم واليوم عبرة لكم وغدًا مفارقكم. إن أَبْقَ فأنا وليّ دمي وإن أَفْنَ فالفناء ميعادي وإن أَعْفُ فالعفو لي قربة وهو لكم حسنة فٱعفوا ﴿أَلَا تُحِبُّونَ أَن يَغْفِرَ اللَّهُ لَكُمْ﴾. والله ما فَجِئَني من الموت واردٌ كرهتُه ولا طالع أنكرته وما كنت إلّا كقاربٍ ورد وطالب وجد ﴿وَمَا عِندَ اللَّهِ خَيْرٌ لِّلْأَبْرَارِ﴾. وقد مضى بعض هذا الكلام فيما تقدّم من الخطب إلّا أنّ فيه هٰهنا زيادة أوجبت تكريره.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3319,
-"type": "en",
-"text": "From ʿAlī’s address after Ibn Muljam struck him with his sword, spoken as a testament just before ʿAlī’s death: This is my testament to you: Do not assign partners to God or abandon the Sunnah of the Prophet—keep these two pillars upright, and you shall be free of blame. Yesterday I was your companion, today I serve as a plain lesson for you, and tomorrow I shall be gone from your midst. If I survive, I shall claim my own blood-wit, and if I die, well, death is what we are promised. If I forgive, my action will gain me nearness to God, and if you do the same, you too will earn God’s reward. Choose forgiveness—«Do you not wish that God should forgive you?» By God, death has not surprised me as an unwelcome visitor, or as a sudden arrival that I find unpleasant. I am like a person who has arrived at the watering hole he sought, who found the object he pursued. «What God has prepared for people of virtue is the best!» Raḍī: Part of this address was previously recorded in the Orations section. This version contains some additions, which is why I have found it necessary to repeat it here."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2312,
-"documentId": "qhileoa8hqaf3qqdihq8lv5v",
+"id": 3818,
+"documentId": "b9n69lxsr7gvnt6lhar93qxb",
 "title": "ومن وصيّة له عليه السلام بما يُعمل في أمواله كتبها بعد منصَرفه من صفّين هذا ما أمر به عبد الله عليّ بن أبي طالب أمير المؤمنين في ماله ٱبتغاء وجه الله ليولجني به الجنّة ويعطيني الأمنة. منها وإنّه يقوم بذلك الحسن بن عليّ يأكل منه بالمعروف وينفق منه في المعروف فإن حدث بحسن حدث وحسين حيّ قام بالأمر بعده وأصدره مصدره. وإنّ لٱبني فاطمة من صدقة عليّ مثل الذي لبني عليّ وإنّي إنّما جعلت القيام بذلك إلى ٱبني فاطمة ٱبتغاء وجه الله وقربة إلى رسول الله صلّى الله عليه وآله وتكريمًا لحرمته وتشريفًا لوصلته. ويَشترِط على الذي يجعله إليه أن يترك المال على أصوله وينفق من ثمره حيث أُمر به وهدي له وأن لا يبيع من نخيل هذه القرى وديّة حتّى تُشكِل أرضُها غِراسًا. ومن كان من إمائي اللاتي أطوف عليهنّ لها ولد أو هي حامل فتُمسَك على ولدها وهي من حظّه فإن مات ولدها وهي حيّة فهي عتيقة قد أُفرج عنها الرقّ وحرّرها العتق. قوله عليه السلام في هذه الوصيّة <وألّا يبيع من نخلها وديّة> فإنّ الوديّة الفسيلة وجمعها وَدِيّ. وقوله <حتّى تشكل أرضها غراسًا> هو من أفصح الكلام والمراد به أنّ الأرض يكثر فيها غراس النخل حتّى يراها الناظر على غير تلك الصفة التي عرفها بها فيُشكِل عليه أمرها ويحسبها غيرها.",
 "slug": "al-s-will-written-after-iff-n-regarding-distribution-of-properties",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:51.384Z",
-"updatedAt": "2025-08-07T18:21:51.384Z",
-"publishedAt": "2025-08-07T18:21:51.393Z",
+"createdAt": "2025-08-11T14:10:28.021Z",
+"updatedAt": "2025-08-11T14:10:28.021Z",
+"publishedAt": "2025-08-11T14:10:28.032Z",
 "translations": [
 {
 "text": "From a testament ʿAlī wrote after turning back from Ṣiffīn, regarding the distribution of his properties: This is what I—God’s servant, ʿAlī ibn Abī Ṭālib, Commander of the Faithful—have directed with regard to my property in the pursuance of God’s pleasure, in the hope that God will allow me entry into the celestial garden and grant me his protection. From the same testament: My property shall be administered by al-Ḥasan ibn ʿAlī. He should use a portion from it in licit ways and disburse from it also in licit ways. If something happens to Ḥasan while Ḥusayn lives, Ḥusayn shall administer the property thereafter and in the same way. Fāṭimah’s sons are both to have the same share from my trusts as my other sons, but I have selected them for the charge of administering my trusts in order to obtain God’s pleasure, gain closeness to God’s Messenger, honor his sanctity, and privilege his kinship. The administrator is to leave the property’s principal in its original form and spend only from its fruits as he has been directed and instructed. He may not sell the estates’ date-palm shoots until the entire land has ripened with them and become a fully green plantation. If any of my concubines with whom I cohabit has a child or is pregnant, then the cost of freeing her is to be deducted from her child’s share. If her child dies and she lives, she is still free, for her bondage has already been removed, and my freeing her has certified her liberty. Raḍī: As for ʿAlī’s words in this testament, “He may not sell the estates’ date-palm shoots (wadiyyah)”: wadiyyah are saplings, and the plural is wadī. His words: “until the land has ripened with them and become (an tushkila) a green plantation” is among the most eloquent of expressions. It means that date-palm plantings will grow with such abundance in that land that the beholder will think it a landscape different to the one before; he will be thrown into doubt (ashkala, which also means ripen) and will think it is a different piece of land altogether.",
@@ -1145,47 +478,18 @@
 ],
 "sermonNumber": "2.24",
 "heading": "ʿAlī’s will, written after Ṣiffīn, regarding distribution of properties",
-"paragraphs": [
-{
-"id": 3302,
-"documentId": "n3pq77gcqq2umzr5q797m1zk",
-"arabic": "ومن وصيّة له عليه السلام بما يُعمل في أمواله كتبها بعد منصَرفه من صفّين هذا ما أمر به عبد الله عليّ بن أبي طالب أمير المؤمنين في ماله ٱبتغاء وجه الله ليولجني به الجنّة ويعطيني الأمنة. منها وإنّه يقوم بذلك الحسن بن عليّ يأكل منه بالمعروف وينفق منه في المعروف فإن حدث بحسن حدث وحسين حيّ قام بالأمر بعده وأصدره مصدره. وإنّ لٱبني فاطمة من صدقة عليّ مثل الذي لبني عليّ وإنّي إنّما جعلت القيام بذلك إلى ٱبني فاطمة ٱبتغاء وجه الله وقربة إلى رسول الله صلّى الله عليه وآله وتكريمًا لحرمته وتشريفًا لوصلته. ويَشترِط على الذي يجعله إليه أن يترك المال على أصوله وينفق من ثمره حيث أُمر به وهدي له وأن لا يبيع من نخيل هذه القرى وديّة حتّى تُشكِل أرضُها غِراسًا. ومن كان من إمائي اللاتي أطوف عليهنّ لها ولد أو هي حامل فتُمسَك على ولدها وهي من حظّه فإن مات ولدها وهي حيّة فهي عتيقة قد أُفرج عنها الرقّ وحرّرها العتق. قوله عليه السلام في هذه الوصيّة <وألّا يبيع من نخلها وديّة> فإنّ الوديّة الفسيلة وجمعها وَدِيّ. وقوله <حتّى تشكل أرضها غراسًا> هو من أفصح الكلام والمراد به أنّ الأرض يكثر فيها غراس النخل حتّى يراها الناظر على غير تلك الصفة التي عرفها بها فيُشكِل عليه أمرها ويحسبها غيرها.",
-"createdAt": "2025-08-07T18:19:59.105Z",
-"updatedAt": "2025-08-07T18:19:59.105Z",
-"publishedAt": "2025-08-07T18:19:59.198Z",
-"number": "2.24.0",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "ومن وصيّة له عليه السلام بما يُعمل في أمواله كتبها بعد منصَرفه من صفّين هذا ما أمر به عبد الله عليّ بن أبي طالب أمير المؤمنين في ماله ٱبتغاء وجه الله ليولجني به الجنّة ويعطيني الأمنة. منها وإنّه يقوم بذلك الحسن بن عليّ يأكل منه بالمعروف وينفق منه في المعروف فإن حدث بحسن حدث وحسين حيّ قام بالأمر بعده وأصدره مصدره. وإنّ لٱبني فاطمة من صدقة عليّ مثل الذي لبني عليّ وإنّي إنّما جعلت القيام بذلك إلى ٱبني فاطمة ٱبتغاء وجه الله وقربة إلى رسول الله صلّى الله عليه وآله وتكريمًا لحرمته وتشريفًا لوصلته. ويَشترِط على الذي يجعله إليه أن يترك المال على أصوله وينفق من ثمره حيث أُمر به وهدي له وأن لا يبيع من نخيل هذه القرى وديّة حتّى تُشكِل أرضُها غِراسًا. ومن كان من إمائي اللاتي أطوف عليهنّ لها ولد أو هي حامل فتُمسَك على ولدها وهي من حظّه فإن مات ولدها وهي حيّة فهي عتيقة قد أُفرج عنها الرقّ وحرّرها العتق. قوله عليه السلام في هذه الوصيّة <وألّا يبيع من نخلها وديّة> فإنّ الوديّة الفسيلة وجمعها وَدِيّ. وقوله <حتّى تشكل أرضها غراسًا> هو من أفصح الكلام والمراد به أنّ الأرض يكثر فيها غراس النخل حتّى يراها الناظر على غير تلك الصفة التي عرفها بها فيُشكِل عليه أمرها ويحسبها غيرها.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": true,
-"translations": [
-{
-"id": 3342,
-"type": "en",
-"text": "From a testament ʿAlī wrote after turning back from Ṣiffīn, regarding the distribution of his properties: This is what I—God’s servant, ʿAlī ibn Abī Ṭālib, Commander of the Faithful—have directed with regard to my property in the pursuance of God’s pleasure, in the hope that God will allow me entry into the celestial garden and grant me his protection. From the same testament: My property shall be administered by al-Ḥasan ibn ʿAlī. He should use a portion from it in licit ways and disburse from it also in licit ways. If something happens to Ḥasan while Ḥusayn lives, Ḥusayn shall administer the property thereafter and in the same way. Fāṭimah’s sons are both to have the same share from my trusts as my other sons, but I have selected them for the charge of administering my trusts in order to obtain God’s pleasure, gain closeness to God’s Messenger, honor his sanctity, and privilege his kinship. The administrator is to leave the property’s principal in its original form and spend only from its fruits as he has been directed and instructed. He may not sell the estates’ date-palm shoots until the entire land has ripened with them and become a fully green plantation. If any of my concubines with whom I cohabit has a child or is pregnant, then the cost of freeing her is to be deducted from her child’s share. If her child dies and she lives, she is still free, for her bondage has already been removed, and my freeing her has certified her liberty. Raḍī: As for ʿAlī’s words in this testament, “He may not sell the estates’ date-palm shoots (wadiyyah)”: wadiyyah are saplings, and the plural is wadī. His words: “until the land has ripened with them and become (an tushkila) a green plantation” is among the most eloquent of expressions. It means that date-palm plantings will grow with such abundance in that land that the beholder will think it a landscape different to the one before; he will be thrown into doubt (ashkala, which also means ripen) and will think it is a different piece of land altogether."
-}
-]
-}
-]
+"paragraphs": []
 },
 {
-"id": 2314,
-"documentId": "da79x1wvwhwwbosqvzkyfloc",
+"id": 3820,
+"documentId": "x1y4uvk77x5ggkzmi8sbh2zk",
 "title": "ومن وصيّة له عليه السلام كان يكتبها لمن يستعمله على الصدقات وإنّما ذكرنا منها جملًا هٰهنا ليعلم بها أنّه عليه السلام كان يقيم عماد الحقّ ويشرع أمثلة العدل في صغير الأمور وكبيرها ودقيقها وجليلها",
 "slug": "instructions-to-tax-collectors-about-compassion-to-subjects-when-assessing-their-herds-and-care-whil",
 "type": "Letter",
 "availableTranslations": null,
-"createdAt": "2025-08-07T18:21:51.742Z",
-"updatedAt": "2025-08-07T18:21:51.742Z",
-"publishedAt": "2025-08-07T18:21:51.754Z",
+"createdAt": "2025-08-11T14:10:28.695Z",
+"updatedAt": "2025-08-11T14:10:28.695Z",
+"publishedAt": "2025-08-11T14:10:28.707Z",
 "translations": [
 {
 "text": "From a testament ʿAlī would customarily inscribe for tax collectors he appointed to oversee collection of the alms-levy. I have recorded some sections from it here to show how ʿAlī raised the pillar of right and followed the path of justice in matters small and large, and in affairs trivial and momentous:",
@@ -1196,68 +500,12 @@
 "heading": "Instructions to tax collectors about compassion to subjects when assessing their herds, and care while bringing animals to the treasury",
 "paragraphs": [
 {
-"id": 3062,
-"documentId": "f0a8uzvnkiwlkuog90np9ejh",
-"arabic": "انطلق على تقوى الله وحده لا شريك له ولا تُرَوِّعَنّ مسلمًا ولا تحتازَنّ عليه كارهًا ولا تأخذنّ منه أكثر من حقّ الله في ماله.",
-"createdAt": "2025-08-07T18:19:53.999Z",
-"updatedAt": "2025-08-07T18:19:53.999Z",
-"publishedAt": "2025-08-07T18:19:54.106Z",
-"number": "2.25.1",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "انطلق على تقوى الله وحده لا شريك له ولا تُرَوِّعَنّ مسلمًا ولا تحتازَنّ عليه كارهًا ولا تأخذنّ منه أكثر من حقّ الله في ماله.",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": false,
-"translations": [
-{
-"id": 3102,
-"type": "en",
-"text": "Set out in consciousness of God, who is one and has no partner. Don’t threaten a Muslim, don’t survey his property without his consent, and don’t take from his possessions more than what is due to God."
-}
-]
-},
-{
-"id": 3064,
-"documentId": "brn6jhsxkis3wyubq11k7vzv",
-"arabic": "مهّيلوىلإهلصويىّتحنيملسملالامباًقفارهنيدبقثتنماّلإاهيلعّننمأتالو الوفِنْعُمريغاًظيفحاًنيمأواًقيفشاًحصاناّلإاهبلّكوتالومهنيبهمسقيف م الوفحج هبهللارمأثيحهرّيصُنكدنععمتجٱامانيلإرُدحٱّمثبعتمالوبغلم . اهذخأاذإف أفكنيمأ َ زِعْو ْ اهدلوبكلذّرضيفاهنبلرُصمَيالواهليصفنيبوةقاننيبلوحياّلأهيلإ أَتْسَيْلوبغاللاىلعْهِّفَرُيْلواهنيبوكلذيفاهتابحاوَصنيبلدعيلواًبوكراهّندهجيالو ْ ِن ّنلاب َ علاظلاوبِق ّداوجىلإضرألاتبننعاهبلدعيالورُدُغلانمهبّرمتاماهدرويلو ١ هللانذإبانيتأتىّتحباشعألاوفاطِّنلادنعاهلهميلوتاعاسلايفاهحّوريلوقرطلا",
-"createdAt": "2025-08-07T18:19:54.027Z",
-"updatedAt": "2025-08-07T18:19:54.027Z",
-"publishedAt": "2025-08-07T18:19:54.130Z",
-"number": "2.25.3",
-"richtext": [
-{
-"type": "paragraph",
-"children": [
-{
-"text": "مهّيلوىلإهلصويىّتحنيملسملالامباًقفارهنيدبقثتنماّلإاهيلعّننمأتالو الوفِنْعُمريغاًظيفحاًنيمأواًقيفشاًحصاناّلإاهبلّكوتالومهنيبهمسقيف م الوفحج هبهللارمأثيحهرّيصُنكدنععمتجٱامانيلإرُدحٱّمثبعتمالوبغلم . اهذخأاذإف أفكنيمأ َ زِعْو ْ اهدلوبكلذّرضيفاهنبلرُصمَيالواهليصفنيبوةقاننيبلوحياّلأهيلإ أَتْسَيْلوبغاللاىلعْهِّفَرُيْلواهنيبوكلذيفاهتابحاوَصنيبلدعيلواًبوكراهّندهجيالو ْ ِن ّنلاب َ علاظلاوبِق ّداوجىلإضرألاتبننعاهبلدعيالورُدُغلانمهبّرمتاماهدرويلو ١ هللانذإبانيتأتىّتحباشعألاوفاطِّنلادنعاهلهميلوتاعاسلايفاهحّوريلوقرطلا",
-"type": "text"
-}
-]
-}
-],
-"wasTitle": false,
-"translations": [
-{
-"id": 3104,
-"type": "en",
-"text": "Assign the animals only to the care of someone you know to be pious and who will be gentle with these flocks that belong to the Muslim community, until he delivers them to their leader, and that leader distributes the animals among them. Entrust the animals only to the care of someone who is kind and sincere, a vigilant custodian who won’t treat them roughly, overburden them, fatigue them, or drive them too hard. Then hasten to send me all the animals that have been collected under your supervision so that I may distribute them in the manner commanded by God. When your deputy takes charge of them, instruct him not to separate a camel from her calf, or to milk her to the extent that it harms the calf, or to ride her so hard that she collapses. He should divide his riding evenly between her and her fellow mares. He should allow tired animals to rest and be unhurried in herding the animals with worn hooves or a limp. He should let them drink whenever they pass a pool of water and not force them from green shoots to the beaten road. He should let them have a respite every few hours and pause wherever there is water and grass. He should do this until he delivers the animals to me, with God’s permission, healthy and fat with marrow, neither fatigued nor distressed, so that I may distribute them according to God’s Book and the Prophet’s Sunnah. Do this, and God willing, it will increase your reward and bring you closer to the way of guidance."
-}
-]
-},
-{
-"id": 3088,
-"documentId": "dmbp4jvlbm8jq4fhgabz66ox",
+"id": 5140,
+"documentId": "j3sxi54p6zmr9fc5inaa2hre",
 "arabic": "فإذا قدمت على الحيّ فأنزل بمائهم من غير أن تخالط أبياتهم ثمّ ٱمض إليهم بالسكينة والوقار حتّى تقوم بينهم فتسلّم عليهم ولا تُخدِج بالتحيّة لهم ثمّ تقول عباد الله أرسلني إليكم وليّ الله وخليفته لآخذ منكم حقّ الله في أموالكم فهل لله في أموالكم من حقّ فتؤدّوه إلى وليّه. فإن قال قائل لا فلا تراجعه وإن أنعم لك منعم فٱنطلق معه من غير أن تخيفه أو توعده أو تَعسِفه أو تَرهَقه فخذ ما أعطاك من ذهب أو فضّة. فإن كانت له ماشية أو إبل فلا تدخلها إلّا بإذنه فإنّ أكثرها له فإذا أتيتها فلا تدخلها دخول متسلّط عليه ولا عنيف به ولا تُنَفِّرَنّ بهيمة ولا تُفَزِّعَنّها ولا تَسُوءَنّ صاحبها فيها. وٱصْدَع المال صَدْعين ثمّ خَيِّرْه فإذا ٱختار فلا تَعرِضنّ لما ٱختار ثمّ ٱصدع الباقي صدعين ثمّ خيّره فإذا ٱختار فلا تعرضنّ لما ٱختار فلا تزال بذلك حتّى يبقى ما فيه وفاء لحقّ الله في ماله فٱقبض حقّ الله منه فإن ٱستقالك فأَقِلْهُ ثمّ ٱخلطهما ثمّ ٱصنع مثل الذي صنعت أوّلًا حتّى تأخذ حقّ الله في ماله. ولا تأخذنّ عَودًا ولا هَرِمة ولا مكسورة ولا مهلوسة ولا ذات عَوار.",
-"createdAt": "2025-08-07T18:19:54.427Z",
-"updatedAt": "2025-08-07T18:19:54.427Z",
-"publishedAt": "2025-08-07T18:19:54.492Z",
+"createdAt": "2025-08-11T14:03:02.022Z",
+"updatedAt": "2025-08-11T14:03:02.022Z",
+"publishedAt": "2025-08-11T14:03:02.048Z",
 "number": "2.25.2",
 "richtext": [
 {
@@ -1273,9 +521,65 @@
 "wasTitle": false,
 "translations": [
 {
-"id": 3128,
+"id": 5180,
 "type": "en",
 "text": "When you arrive in the lands of a tribe, pitch your tent at their watering hole and don’t enter their residential areas. Then walk toward them calmly and with dignity and stand in their midst. Then hail them in peace and don’t stint with your greeting. Then say, “Servants of God, God’s vicegerent, his caliph, has sent me to secure God’s due from your property. Is there anything you owe God from your property that you should submit to his vicegerent?” If a person says no, don’t ask him again. If a person is forthcoming, set out with him, but don’t frighten, threaten, force, or oppress him—accept whatever gold or silver he submits to you freely. If he has goats or camels, don’t enter their pens without his permission, for most of the animals belong to him. When you do enter, don’t behave rudely or with violence. Don’t frighten the animals or startle them, and don’t cause the owner distress by maltreating them. Divide the animals into two groups and have the owner select one set. When he has made his selection, don’t object. Then divide the remaining the animals again into two groups, and have the owner select one set. When he has made his selection, don’t object. Keep doing this until God’s due is fulfilled by the number of animals that remain in your share, then accept them as God’s due from the owner. If, after that, he asks you to rescind the operation, rescind it. Then bring all the animals together once again and repeat what you had done earlier until you have secured his acceptance of God’s due from his property. Make sure, however, that you don’t accept animals that are old, decrepit, broken-boned, sickly, or defective."
+}
+]
+},
+{
+"id": 5170,
+"documentId": "en1dtd2effk3jo3oi9umfd0m",
+"arabic": "مهّيلوىلإهلصويىّتحنيملسملالامباًقفارهنيدبقثتنماّلإاهيلعّننمأتالو الوفِنْعُمريغاًظيفحاًنيمأواًقيفشاًحصاناّلإاهبلّكوتالومهنيبهمسقيف م الوفحج هبهللارمأثيحهرّيصُنكدنععمتجٱامانيلإرُدحٱّمثبعتمالوبغلم . اهذخأاذإف أفكنيمأ َ زِعْو ْ اهدلوبكلذّرضيفاهنبلرُصمَيالواهليصفنيبوةقاننيبلوحياّلأهيلإ أَتْسَيْلوبغاللاىلعْهِّفَرُيْلواهنيبوكلذيفاهتابحاوَصنيبلدعيلواًبوكراهّندهجيالو ْ ِن ّنلاب َ علاظلاوبِق ّداوجىلإضرألاتبننعاهبلدعيالورُدُغلانمهبّرمتاماهدرويلو ١ هللانذإبانيتأتىّتحباشعألاوفاطِّنلادنعاهلهميلوتاعاسلايفاهحّوريلوقرطلا",
+"createdAt": "2025-08-11T14:03:02.944Z",
+"updatedAt": "2025-08-11T14:03:02.944Z",
+"publishedAt": "2025-08-11T14:03:03.106Z",
+"number": "2.25.3",
+"richtext": [
+{
+"type": "paragraph",
+"children": [
+{
+"text": "مهّيلوىلإهلصويىّتحنيملسملالامباًقفارهنيدبقثتنماّلإاهيلعّننمأتالو الوفِنْعُمريغاًظيفحاًنيمأواًقيفشاًحصاناّلإاهبلّكوتالومهنيبهمسقيف م الوفحج هبهللارمأثيحهرّيصُنكدنععمتجٱامانيلإرُدحٱّمثبعتمالوبغلم . اهذخأاذإف أفكنيمأ َ زِعْو ْ اهدلوبكلذّرضيفاهنبلرُصمَيالواهليصفنيبوةقاننيبلوحياّلأهيلإ أَتْسَيْلوبغاللاىلعْهِّفَرُيْلواهنيبوكلذيفاهتابحاوَصنيبلدعيلواًبوكراهّندهجيالو ْ ِن ّنلاب َ علاظلاوبِق ّداوجىلإضرألاتبننعاهبلدعيالورُدُغلانمهبّرمتاماهدرويلو ١ هللانذإبانيتأتىّتحباشعألاوفاطِّنلادنعاهلهميلوتاعاسلايفاهحّوريلوقرطلا",
+"type": "text"
+}
+]
+}
+],
+"wasTitle": false,
+"translations": [
+{
+"id": 5210,
+"type": "en",
+"text": "Assign the animals only to the care of someone you know to be pious and who will be gentle with these flocks that belong to the Muslim community, until he delivers them to their leader, and that leader distributes the animals among them. Entrust the animals only to the care of someone who is kind and sincere, a vigilant custodian who won’t treat them roughly, overburden them, fatigue them, or drive them too hard. Then hasten to send me all the animals that have been collected under your supervision so that I may distribute them in the manner commanded by God. When your deputy takes charge of them, instruct him not to separate a camel from her calf, or to milk her to the extent that it harms the calf, or to ride her so hard that she collapses. He should divide his riding evenly between her and her fellow mares. He should allow tired animals to rest and be unhurried in herding the animals with worn hooves or a limp. He should let them drink whenever they pass a pool of water and not force them from green shoots to the beaten road. He should let them have a respite every few hours and pause wherever there is water and grass. He should do this until he delivers the animals to me, with God’s permission, healthy and fat with marrow, neither fatigued nor distressed, so that I may distribute them according to God’s Book and the Prophet’s Sunnah. Do this, and God willing, it will increase your reward and bring you closer to the way of guidance."
+}
+]
+},
+{
+"id": 5192,
+"documentId": "e0h2uziz74th5o2zer0tfnec",
+"arabic": "انطلق على تقوى الله وحده لا شريك له ولا تُرَوِّعَنّ مسلمًا ولا تحتازَنّ عليه كارهًا ولا تأخذنّ منه أكثر من حقّ الله في ماله.",
+"createdAt": "2025-08-11T14:03:03.407Z",
+"updatedAt": "2025-08-11T14:03:03.407Z",
+"publishedAt": "2025-08-11T14:03:03.486Z",
+"number": "2.25.1",
+"richtext": [
+{
+"type": "paragraph",
+"children": [
+{
+"text": "انطلق على تقوى الله وحده لا شريك له ولا تُرَوِّعَنّ مسلمًا ولا تحتازَنّ عليه كارهًا ولا تأخذنّ منه أكثر من حقّ الله في ماله.",
+"type": "text"
+}
+]
+}
+],
+"wasTitle": false,
+"translations": [
+{
+"id": 5232,
+"type": "en",
+"text": "Set out in consciousness of God, who is one and has no partner. Don’t threaten a Muslim, don’t survey his property without his consent, and don’t take from his possessions more than what is due to God."
 }
 ]
 }

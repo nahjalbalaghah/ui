@@ -18,7 +18,7 @@ const ContactHero = () => {
         <Image
           className="w-full h-full object-cover"
           src={HeroMosqueImage}
-          alt="Contact Nahj al-Balagha"
+          alt="Contact Nahj al-Balaghah"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/85 to-[#43896B]/20"></div>
       </div>

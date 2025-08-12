@@ -16,12 +16,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Nahj al-Balagha | The Path of Timeless Eloquence",
-    template: "%s | Nahj al-Balagha"
+    default: "Nahj al-Balaghah | The Path of Timeless Eloquence",
+    template: "%s | Nahj al-Balaghah"
   },
-  description: "Explore Nahj al-Balagha: sermons, letters, and sayings of Imam Ali (AS) with translations, commentaries, and scholarly insights. Discover timeless wisdom and eloquence.",
+  description: "Explore Nahj al-Balaghah: sermons, letters, and sayings of Imam Ali (AS) with translations, commentaries, and scholarly insights. Discover timeless wisdom and eloquence.",
   keywords: [
-    "Nahj al-Balagha",
+    "Nahj al-Balaghah",
     "Imam Ali",
     "Islamic sermons",
     "Islamic wisdom",
@@ -34,16 +34,16 @@ export const metadata: Metadata = {
   ],
   metadataBase: new URL("https://nahj-al-balagha.com"),
   openGraph: {
-    title: "Nahj al-Balagha | The Path of Timeless Eloquence",
-    description: "Explore Nahj al-Balagha: sermons, letters, and sayings of Imam Ali (AS) with translations, commentaries, and scholarly insights.",
+    title: "Nahj al-Balaghah | The Path of Timeless Eloquence",
+    description: "Explore Nahj al-Balaghah: sermons, letters, and sayings of Imam Ali (AS) with translations, commentaries, and scholarly insights.",
     url: "https://nahj-al-balagha.com",
-    siteName: "Nahj al-Balagha",
+    siteName: "Nahj al-Balaghah",
     images: [
       {
         url: "/globe.svg",
         width: 1200,
         height: 630,
-        alt: "Nahj al-Balagha Logo"
+        alt: "Nahj al-Balaghah Logo"
       }
     ],
     locale: "en_US",
@@ -51,14 +51,14 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nahj al-Balagha | The Path of Timeless Eloquence",
-    description: "Explore Nahj al-Balagha: sermons, letters, and sayings of Imam Ali (AS) with translations, commentaries, and scholarly insights.",
+    title: "Nahj al-Balaghah | The Path of Timeless Eloquence",
+    description: "Explore Nahj al-Balaghah: sermons, letters, and sayings of Imam Ali (AS) with translations, commentaries, and scholarly insights.",
     site: "@nahjbalagha",
     creator: "@nahjbalagha",
     images: [
       {
         url: "/globe.svg",
-        alt: "Nahj al-Balagha Logo"
+        alt: "Nahj al-Balaghah Logo"
       }
     ]
   },

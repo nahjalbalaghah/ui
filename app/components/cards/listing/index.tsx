@@ -4,6 +4,7 @@ import { Book, Tag as TagIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { type Post } from '@/api/posts';
+import { formatTextWithBold, isArabicText } from '@/app/utils/text-formatting';
 
 interface ListingCardProps {
   sermon?: {
@@ -51,33 +52,46 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
 
   const displayTitle = isOration ? (oration!.heading || englishTranslation || title) : title;
 
+  const getDisplayNumber = () => {
+    if (isOration && oration!.sermonNumber) {
+      const parts = oration!.sermonNumber.split('.');
+      return parts.length > 1 ? parts[1] : parts[0];
+    }
+    return '';
+  };
+
   return (
     <Link href={getCardLink()} className="block h-full">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-[#43896B]/20 transition-all duration-300 cursor-pointer group h-full flex flex-col">
-        <div className="h-40 bg-gradient-to-br from-amber-50 via-amber-100 to-orange-100 relative overflow-hidden flex-shrink-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-3 left-3 right-3">
-              {[1, 2, 3, 4].map((line) => (
-                <div 
-                  key={line} 
-                  className="h-1 bg-amber-800 rounded mb-2 transition-all duration-500 group-hover:bg-[#43896B]" 
-                ></div>
-              ))}
-            </div>
+        <div className="h-28 bg-gradient-to-b from-[#43896B] via-[#43896B]/80 to-white relative overflow-hidden flex-shrink-0">
+          <div className="absolute inset-0 flex items-center justify-start pl-6">
+            {isOration && getDisplayNumber() ? (
+              <div className="relative">
+                <span className="text-7xl font-black text-white/90 group-hover:text-white group-hover:scale-105 transition-all duration-300 select-none">
+                  {getDisplayNumber()}
+                </span>
+                <div className="absolute inset-0 flex items-center justify-start">
+                  <span className="text-7xl font-black text-white/20 blur-sm group-hover:text-white/30 transition-all duration-300">
+                    {getDisplayNumber()}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="w-14 h-16 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <Book className="w-5 h-5 text-white" />
+              </div>
+            )}
           </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-20 bg-white/80 backdrop-blur-sm rounded-lg border border-amber-200 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-              <Book className="w-6 h-6 text-[#43896B]" />
-            </div>
-          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
         </div>
         <div className="p-4 flex-grow flex flex-col justify-between">
           <div>
-            <h3 className="font-medium text-gray-900 text-base line-clamp-3 group-hover:text-[#43896B] transition-colors mb-3 leading-relaxed">
-              {truncateText(displayTitle, 120)}
+            <h3 className={`font-medium text-gray-900 text-base line-clamp-3 group-hover:text-[#43896B] transition-colors mb-3 leading-relaxed ${typeof displayTitle === 'string' && isArabicText(displayTitle) ? 'font-taha' : ''}`}>
+              {typeof displayTitle === 'string' 
+                ? formatTextWithBold(truncateText(displayTitle, 120), isArabicText(displayTitle))
+                : truncateText(displayTitle, 120)
+              }
             </h3>
-            
             {isOration && oration!.tags && oration!.tags.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
                 {oration!.tags.slice(0, 3).map((tag) => (

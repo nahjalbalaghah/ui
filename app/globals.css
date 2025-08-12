@@ -37,3 +37,14 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+@font-face {
+  font-family: 'UthmanTaha';
+  src: url('./assets/fonts/uthman-taha.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-taha {
+  font-family: 'UthmanTaha', sans-serif;
+}

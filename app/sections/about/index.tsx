@@ -5,9 +5,22 @@ import { Star, Users, BookOpen, Heart, Clock, MapPin, Award, Sparkles, Scroll, L
 import Button from '@/app/components/button'
 import Image from 'next/image'
 import AboutImage from '@/app/assets/images/about.svg'
+import { orationsApi, lettersApi, sayingsApi } from '@/api'
+
+interface ContentCounts {
+  orations: number
+  letters: number
+  sayings: number
+}
 
 const AboutSection = () => {
   const [isVisible, setIsVisible] = useState(false)
+  const [contentCounts, setContentCounts] = useState<ContentCounts>({
+    orations: 0,
+    letters: 0,
+    sayings: 0
+  })
+  const [isLoadingCounts, setIsLoadingCounts] = useState(true)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,6 +40,37 @@ const AboutSection = () => {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    const fetchContentCounts = async () => {
+      try {
+        setIsLoadingCounts(true)
+        
+        const [orationsResponse, lettersResponse, sayingsResponse] = await Promise.all([
+          orationsApi.getOrations(1, 1),
+          lettersApi.getLetters(1, 1),
+          sayingsApi.getSayings(1, 1)
+        ])
+
+        setContentCounts({
+          orations: orationsResponse.meta.pagination.total,
+          letters: lettersResponse.meta.pagination.total,
+          sayings: sayingsResponse.meta.pagination.total
+        })
+      } catch (error) {
+        console.error('Error fetching content counts:', error)
+        setContentCounts({
+          orations: 241,
+          letters: 79,
+          sayings: 489
+        })
+      } finally {
+        setIsLoadingCounts(false)
+      }
+    }
+
+    fetchContentCounts()
+  }, [])
+
   const features = [
     {
       icon: Scroll,
@@ -36,7 +80,7 @@ const AboutSection = () => {
     {
       icon: Lightbulb,
       title: "Timeless Wisdom",
-      description: "Profound insights on life, governance, and spirituality from Nahj al-Balagha"
+      description: "Profound insights on life, governance, and spirituality from Nahj al-Balaghah"
     },
     {
       icon: Heart,
@@ -64,7 +108,7 @@ const AboutSection = () => {
               <div className="relative">
                 <Image
                   src={AboutImage}
-                  alt="Nahj al-Balagha"
+                  alt="Nahj al-Balaghah"
                   className="w-full object-cover transform hover:scale-105 transition-transform duration-700"
                 />
                 <motion.div
@@ -94,7 +138,9 @@ const AboutSection = () => {
                       <BookOpen className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-gray-800">241</div>
+                      <div className="text-2xl font-bold text-gray-800">
+                        {isLoadingCounts ? '...' : contentCounts.orations}
+                      </div>
                       <div className="text-sm text-gray-600">Sermons</div>
                     </div>
                   </div>
@@ -124,7 +170,7 @@ const AboutSection = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight"
               >
-                About <span className='text-[#43896B]'>Nahj al-Balagha</span>
+                About <span className='text-[#43896B]'>Nahj al-Balaghah</span>
               </motion.h2>
               <motion.div
                 initial={{ width: 0 }}
@@ -140,7 +186,7 @@ const AboutSection = () => {
               className="space-y-6"
             >
               <p className="text-lg text-gray-600 leading-relaxed">
-                Nahj al-Balagha, meaning <span className="font-semibold text-[#43896B]">"Peak of Eloquence"</span>, is a collection of sermons, letters, and sayings attributed to Imam Ali ibn Abi Talib (AS). Compiled by Sharif al-Radi in the 10th century, it stands as one of the most revered texts in Islamic literature.
+                Nahj al-Balaghah, meaning <span className="font-semibold text-[#43896B]">"Peak of Eloquence"</span>, is a collection of sermons, letters, and sayings attributed to Imam Ali ibn Abi Talib (AS). Compiled by Sharif al-Radi in the 10th century, it stands as one of the most revered texts in Islamic literature.
               </p>
               
               <p className="text-lg text-gray-600 leading-relaxed">
@@ -195,9 +241,21 @@ const AboutSection = () => {
           className="mt-24 grid grid-cols-3 md:grid-cols-3 gap-8"
         >
           {[
-            { icon: Scroll, label: "Sermons", value: "241" },
-            { icon: Heart, label: "Letters", value: "79" },
-            { icon: Lightbulb, label: "Sayings", value: "489" }
+            { 
+              icon: Scroll, 
+              label: "Sermons", 
+              value: isLoadingCounts ? "..." : contentCounts.orations.toString() 
+            },
+            { 
+              icon: Heart, 
+              label: "Letters", 
+              value: isLoadingCounts ? "..." : contentCounts.letters.toString() 
+            },
+            { 
+              icon: Lightbulb, 
+              label: "Sayings", 
+              value: isLoadingCounts ? "..." : contentCounts.sayings.toString() 
+            }
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
