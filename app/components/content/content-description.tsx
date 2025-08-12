@@ -67,6 +67,13 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
           </div>
         )}
       </div>
+        {content.sermonNumber && (
+          <div className="mb-4">
+            <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-[#43896B] bg-[#43896B]/10 rounded-full border border-[#43896B]/20">
+              {content.sermonNumber}
+            </span>
+          </div>
+        )}
 
       {/* Main Title and Translation as First Paragraph */}
       {(content.title || mainTranslation) && (
@@ -98,6 +105,14 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
             
             return (
               <div key={paragraph.id} className="border-b border-gray-100 pb-8 last:border-b-0 last:pb-0">
+                {paragraph.number && (
+                  <div className="mb-3">
+                    <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-[#43896B] bg-[#43896B]/10 rounded-full border border-[#43896B]/20">
+                      {paragraph.number}
+                    </span>
+                  </div>
+                )}
+                
                 <div className="bg-[#F8F9FA] rounded-lg p-6 mb-4 border-r-4 border-[#43896B]">
                   <div className="text-right">
                     <p className="text-xl leading-relaxed text-gray-900 font-taha">
