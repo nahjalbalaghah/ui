@@ -25,7 +25,7 @@ export const postsApi = {
         page = 1,
         pageSize = 9,
         filters = {},
-        populate = ['tags', 'paragraphs.translations'],
+        populate = ['tags', 'paragraphs.translations', 'translations'],
         sort
       } = options;
 
@@ -49,8 +49,8 @@ export const postsApi = {
         });
       }
 
-      params['populate[paragraphs][populate][translations]'] = true;
-      params['populate'] = 'tags';
+      params['populate[0]'] = 'tags';
+      params['populate[1]'] = 'paragraphs.translations';
 
       if (sort) {
         params['sort'] = sort;
@@ -71,8 +71,8 @@ export const postsApi = {
       const filters: PostFilters = { search: undefined };
       const params: any = {
         'filters[slug][$eq]': slug,
-        'populate[paragraphs][populate][translations]': true,
-        'populate': 'tags',
+        'populate[0]': 'tags',
+        'populate[1]': 'paragraphs.translations',
       };
 
       if (type) {

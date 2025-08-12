@@ -69,7 +69,7 @@ const AboutUsHero = () => {
                   <div className="space-y-4 text-gray-700">
                     <p className="leading-relaxed">
                       Founded in 2005, our organization began as a humble initiative to make the profound 
-                      teachings of Nahj al-Balagha accessible to seekers of wisdom worldwide. What started 
+                      teachings of Nahj al-Balaghah accessible to seekers of wisdom worldwide. What started 
                       as a small gathering of devoted scholars has grown into a global community.
                     </p>
                     <p className="leading-relaxed">

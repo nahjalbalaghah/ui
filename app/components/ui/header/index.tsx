@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, MapPin, Clock, Phone, Mail, Search, ChevronDown, Home, Calendar, Headphones, GraduationCap, FileText, MessageCircle, DollarSign, Facebook, Twitter, Youtube, Star, List } from 'lucide-react'
+import { Menu, X, MapPin, Clock, Phone, Mail, Search, ChevronDown, Home, Calendar, Headphones, GraduationCap, FileText, MessageCircle, Facebook, Twitter, Youtube, Star, List } from 'lucide-react'
 import Link from 'next/link'
 import Input from '../../input'
 
@@ -60,34 +60,6 @@ const Header = () => {
 
   return (
     <header className="relative">
-      <div className="bg-gradient-to-r from-[#43896B] via-[#4a9473] to-[#43896B] text-white py-3.5 px-4 shadow-sm">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
-          <div className="flex flex-col sm:flex-row items-center gap-4 lg:gap-8">
-            <motion.div 
-              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1.5"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Star className="w-4 h-4 text-[#E8B873]" />
-              <span className="text-sm font-medium">A Treasury of Imam Ali’s Wisdom</span>
-            </motion.div>
-            <motion.div 
-              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1.5"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <FileText className="w-4 h-4 text-[#E8B873]" />
-              <span className="text-sm font-medium">240+ Sermons, Letters & Sayings</span>
-            </motion.div>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-4">
-              <Link href="/explore" className="text-xs font-medium opacity-90 hover:underline">Explore</Link>
-              <Link href="/contact" className="text-xs font-medium opacity-90 hover:underline">Contact</Link>
-            </div>
-          </div>
-        </div>
-      </div>
       <motion.div 
         className={`sticky top-0 z-50 transition-all duration-500 ${
           isScrolled 
@@ -107,18 +79,20 @@ const Header = () => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="relative">
-                  <div className="w-14 h-14 bg-[#43896B] rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
-                    <span className="text-white font-bold text-lg">البلاغة</span>
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#E8B873] rounded-full flex items-center justify-center">
-                    <Star className="w-2.5 h-2.5 text-white" />
+                  <div className="w-18 h-16 bg-[#43896B] rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 border border-[#43896B]/20">
+                    <div className="text-center leading-none font-taha">
+                      <div className="text-white font-bold text-lg mb-0.5">نهج</div>
+                      <div className="text-white font-bold text-base -mt-1">البلاغة</div>
+                    </div>
                   </div>
                 </div>
                 <div className="group-hover:translate-x-1 transition-transform duration-300">
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-[#43896B] to-[#4a9473] bg-clip-text text-transparent">
-                    Nahj al-Balagha
+                  <h1 className="text-xl font-bold text-[#43896B] leading-tight">
+                    Nahj al-Balaghah
                   </h1>
-                  <p className="text-sm text-gray-600 font-medium">The Path of Timeless Eloquence</p>
+                  <p className="text-sm text-gray-600 font-medium mt-0.5">
+                    Path of Eloquence
+                  </p>
                 </div>
               </motion.div>
             </Link>
@@ -264,16 +238,6 @@ const Header = () => {
                     )}
                   </motion.div>
                 ))}
-                <motion.button 
-                  className="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-[#E8B873] to-[#d4a961] hover:from-[#d4a961] hover:to-[#E8B873] text-white px-6 py-4 rounded-2xl font-semibold shadow-lg transition-all duration-300 mt-6"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.6 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <DollarSign className="w-5 h-5" />
-                  <span>Make Donation</span>
-                </motion.button>
               </div>
             </motion.div>
           )}

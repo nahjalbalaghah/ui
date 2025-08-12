@@ -4,31 +4,86 @@ import { BookOpen, Users, Star, Heart, Globe, Award, ChevronRight, Search, Quote
 import HeroMosqueImage from '@/app/assets/images/hero-mosque.jpg';
 import Image from 'next/image';
 import Button from '@/app/components/button';
+import { orationsApi, lettersApi, sayingsApi } from '@/api';
+
+interface ContentCounts {
+  orations: number
+  letters: number
+  sayings: number
+}
 
 const ExploreHero = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [contentCounts, setContentCounts] = useState<ContentCounts>({
+    orations: 0,
+    letters: 0,
+    sayings: 0
+  });
+  const [isLoadingCounts, setIsLoadingCounts] = useState(true);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
+  useEffect(() => {
+    const fetchContentCounts = async () => {
+      try {
+        setIsLoadingCounts(true);
+        
+        const [orationsResponse, lettersResponse, sayingsResponse] = await Promise.all([
+          orationsApi.getOrations(1, 1),
+          lettersApi.getLetters(1, 1),
+          sayingsApi.getSayings(1, 1)
+        ]);
+
+        setContentCounts({
+          orations: orationsResponse.meta.pagination.total,
+          letters: lettersResponse.meta.pagination.total,
+          sayings: sayingsResponse.meta.pagination.total
+        });
+      } catch (error) {
+        console.error('Error fetching content counts:', error);
+        setContentCounts({
+          orations: 241,
+          letters: 79,
+          sayings: 480
+        });
+      } finally {
+        setIsLoadingCounts(false);
+      }
+    };
+
+    fetchContentCounts();
+  }, []);
+
   const stats = [
-    { icon: ScrollText, label: "Sermons", value: "241" },
-    { icon: Quote, label: "Letters", value: "79" },
-    { icon: BookOpen, label: "Sayings", value: "480" },
-    { icon: Globe, label: "Translations", value: "30+" }
+    { 
+      icon: ScrollText, 
+      label: "Sermons", 
+      value: isLoadingCounts ? "..." : contentCounts.orations.toString() 
+    },
+    { 
+      icon: Quote, 
+      label: "Letters", 
+      value: isLoadingCounts ? "..." : contentCounts.letters.toString() 
+    },
+    { 
+      icon: BookOpen, 
+      label: "Sayings", 
+      value: isLoadingCounts ? "..." : contentCounts.sayings.toString() 
+    },
   ];
 
   const features = [
     { 
       icon: Search, 
-      title: "Comprehensive Nahj al-Balagha Search", 
-      description: "Find wisdom by topic, keyword, or phrase across the entire Nahj al-Balagha collection" 
+      title: "Comprehensive Nahj al-Balaghah Search", 
+      description: "Find wisdom by topic, keyword, or phrase across the entire Nahj al-Balaghah collection" 
     },
     { 
       icon: BookOpen, 
       title: "Detailed Commentary", 
-      description: "Access scholarly explanations and historical context for each passage of Nahj al-Balagha" 
+      description: "Access scholarly explanations and historical context for each passage of Nahj al-Balaghah" 
     },
     { 
       icon: Users, 
@@ -55,7 +110,7 @@ const ExploreHero = () => {
             <div className="text-center mb-16">
               <div className="space-y-4 sm:space-y-6 mb-8">
                 <h1 className="text-4xl lg:text-6xl font-black leading-tight text-[#43896B] break-words text-balance tracking-tight">
-                  Explore Nahj al-Balagha
+                  Explore Nahj al-Balaghah
                 </h1>
                 <p className="text-xl sm:text-2xl text-gray-700 font-semibold max-w-3xl mx-auto">
                   Dive into the timeless wisdom of Imam Ali (AS) through sermons, letters, and sayings
@@ -70,10 +125,10 @@ const ExploreHero = () => {
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-16">
               <div className="space-y-6">
                 <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-white/50">
-                  <h2 className="text-2xl font-bold text-[#43896B] mb-6">About Nahj al-Balagha</h2>
+                  <h2 className="text-2xl font-bold text-[#43896B] mb-6">About Nahj al-Balaghah</h2>
                   <div className="space-y-4 text-gray-700">
                     <p className="leading-relaxed">
-                      Nahj al-Balagha (Peak of Eloquence) is a collection of 241 sermons, 79 letters, and 480 sayings attributed to Imam Ali ibn Abi Talib (AS), compiled by Sharif al-Radi in the 10th century.
+                      Nahj al-Balaghah (Peak of Eloquence) is a collection of {isLoadingCounts ? '...' : contentCounts.orations} sermons, {isLoadingCounts ? '...' : contentCounts.letters} letters, and {isLoadingCounts ? '...' : contentCounts.sayings} sayings attributed to Imam Ali ibn Abi Talib (AS), compiled by Sharif al-Radi in the 10th century.
                     </p>
                     <p className="leading-relaxed">
                       This monumental work represents the pinnacle of Islamic eloquence and wisdom, covering theology, philosophy, governance, ethics, and spirituality, and has inspired generations of scholars and seekers.
@@ -113,7 +168,7 @@ const ExploreHero = () => {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
               {stats.map((stat, index) => (
                 <div
                   key={stat.label}
