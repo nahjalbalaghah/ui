@@ -91,7 +91,7 @@ const Header = () => {
                     Nahj al-Balaghah
                   </h1>
                   <p className="text-sm text-gray-600 font-medium mt-0.5">
-                    Path of Eloquence
+                    Way of Eloquence
                   </p>
                 </div>
               </motion.div>

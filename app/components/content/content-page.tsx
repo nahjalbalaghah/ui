@@ -13,6 +13,7 @@ interface ContentPageConfig {
     getContent: (page?: number, pageSize?: number) => Promise<ApiResponse>;
     searchContent: (query: string, page?: number, pageSize?: number) => Promise<ApiResponse>;
   };
+  forceListView?: boolean;
 }
 
 interface ContentPageProps {
@@ -24,7 +25,7 @@ function ContentPageContent({ config }: ContentPageProps) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
-  const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [view, setView] = useState<'grid' | 'list'>(config.forceListView ? 'list' : 'grid');
   const [content, setContent] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,11 +43,10 @@ function ContentPageContent({ config }: ContentPageProps) {
     }
   }, [searchParams]);
 
-  // Add minimum loading time for better UX
   useEffect(() => {
     const timer = setTimeout(() => {
       setMinLoadingTime(false);
-    }, 800); // 800ms minimum loading time
+    }, 800);
 
     return () => clearTimeout(timer);
   }, []);
@@ -84,10 +84,8 @@ function ContentPageContent({ config }: ContentPageProps) {
 
       let filteredData = response.data;
 
-      // Filter out items without heading
       filteredData = filteredData.filter(item => item.heading);
 
-      // Apply sorting if specified
       if (sortBy) {
         filteredData = [...filteredData].sort((a, b) => {
           switch (sortBy) {
@@ -125,7 +123,6 @@ function ContentPageContent({ config }: ContentPageProps) {
       console.error(`Error loading ${config.contentType}:`, err);
       setContent([]);
     } finally {
-      // Wait for minimum loading time before hiding skeleton
       if (minLoadingTime) {
         setTimeout(() => {
           setLoading(false);
@@ -138,7 +135,6 @@ function ContentPageContent({ config }: ContentPageProps) {
     }
   };
 
-  // Handle infinite scroll load more
   const handleLoadMore = () => {
     if (hasNextPage && !isInfiniteLoading) {
       const nextPage = currentPage + 1;
@@ -146,11 +142,10 @@ function ContentPageContent({ config }: ContentPageProps) {
     }
   };
 
-  // Handle view change - reset to first page for list view
   const handleViewChange = (newView: 'grid' | 'list') => {
+    if (config.forceListView) return;
     setView(newView);
     if (newView === 'list') {
-      // Reset to first page and reload content for list view
       setCurrentPage(1);
       loadContent(1, searchTerm, true, false);
     }
