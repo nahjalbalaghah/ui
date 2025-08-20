@@ -1,10 +1,10 @@
-'use client'
+"use client"
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, Globe, Layers, Archive, Map, Star, Calendar, Library } from 'lucide-react'
 import Button from '@/app/components/button'
 
-const ManuscriptsSection = () => {
+const ResourcesSection = () => {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const ManuscriptsSection = () => {
       { threshold: 0.1 }
     )
 
-    const section = document.getElementById('manuscripts-section')
+    const section = document.getElementById('Resources-section')
     if (section) {
       observer.observe(section)
     }
@@ -28,9 +28,9 @@ const ManuscriptsSection = () => {
   const collections = [
     {
       icon: BookOpen,
-      title: "Earliest Nahj al-Balaghah Manuscripts",
+      title: "Earliest Nahj al-Balaghah Resources",
       items: [
-        "10th-century Arabic manuscripts compiled by Sharif al-Radi",
+        "10th-century Arabic Resources compiled by Sharif al-Radi",
         "Earliest extant copies preserved in Middle Eastern libraries",
         "Notable marginalia and commentaries from classical scholars"
       ],
@@ -60,7 +60,7 @@ const ManuscriptsSection = () => {
   ]
 
   return (
-    <section id="manuscripts-section" className="py-24 bg-[#f9fafb] overflow-hidden">
+    <section id="Resources-section" className="py-24 bg-[#f9fafb] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.div
@@ -78,7 +78,7 @@ const ManuscriptsSection = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight mt-4"
           >
-            Islamic <span className="text-[#43896B]">Manuscripts & Maps</span>
+            Islamic <span className="text-[#43896B]">Resources & Maps</span>
           </motion.h2>
           <motion.div
             initial={{ width: 0 }}
@@ -149,4 +149,4 @@ const ManuscriptsSection = () => {
   )
 }
 
-export default ManuscriptsSection
+export default ResourcesSection
