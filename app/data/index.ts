@@ -124,7 +124,7 @@ export const manuscriptData = {
     date: "12th Century CE",
     location: "Baghdad, Iraq",
     language: "Arabic",
-    collection: "Arabic Manuscripts and Maps",
+    collection: "Arabic Resources and Maps",
     project: "Masterpieces of the Non-Western Book",
     dimensions: "32 × 24 cm",
     folios: "45 folios",

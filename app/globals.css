@@ -45,6 +45,39 @@ body {
   font-style: normal;
 }
 
+/* Brill Font Faces */
+@font-face {
+  font-family: 'Brill';
+  src: url('./assets/fonts/brill-roman.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brill';
+  src: url('./assets/fonts/brill-italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Brill';
+  src: url('./assets/fonts/brill-bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brill';
+  src: url('./assets/fonts/brill-bold-italic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+.font-brill {
+  font-family: 'Brill', serif !important;
+}
+
 .font-taha {
   font-family: 'UthmanTaha', sans-serif;
 }

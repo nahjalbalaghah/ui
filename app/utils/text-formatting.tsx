@@ -10,7 +10,7 @@ export const formatTextWithBold = (text: string, isArabic: boolean = false): Rea
       if ((part.startsWith('(') && part.endsWith(')')) || 
           (part.startsWith('﴿') && part.endsWith('﴾'))) {
         return (
-          <span key={index} className="font-bold text-[#43896B] underline bg-green-100">
+          <span key={index}>
             {part}
           </span>
         );
