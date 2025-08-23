@@ -2,6 +2,7 @@ import React from 'react';
 import { Tag as TagIcon } from 'lucide-react';
 import { type Post } from '@/api/posts';
 import { formatTextWithBold, isArabicText } from '@/app/utils/text-formatting';
+import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
 
 interface ContentDescriptionProps {
   content: Post;
@@ -9,6 +10,7 @@ interface ContentDescriptionProps {
 }
 
 const ContentDescription = ({ content, contentType }: ContentDescriptionProps) => {
+  let allReferences: string[] = [];
   const heading = content.heading;
   
   const sortedParagraphs = [...content.paragraphs].sort((a, b) => {
@@ -45,7 +47,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-8">
+  <div className="bg-white rounded-2xl border border-gray-200 p-8">
       <div className="mb-8 pb-6 border-b border-gray-200">
         <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed">
           {heading || `${getContentLabel()} Details`}
@@ -75,24 +77,28 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
           </div>
         )}
 
-      {/* Main Title and Translation as First Paragraph */}
       {(content.title || mainTranslation) && (
         <div className="space-y-8 mb-8">
           <div className="border-b border-gray-100 pb-8">
-            <div className="bg-[#F8F9FA] rounded-lg p-6 mb-4 border-r-4 border-[#43896B]">
+            <div className="p-0 mb-4 border-none">
               <div className="text-right">
-                <p className="text-xl leading-relaxed text-gray-900 font-taha">
+                <p className="text-xl leading-relaxed text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
                   {formatTextWithBold(content.title, true)}
                 </p>
               </div>
             </div>
-            
             {mainTranslation && (
-              <div className="bg-white rounded-lg p-6 border border-gray-200">
-                <p className="text-lg leading-relaxed text-gray-700 font-serif italic">
-                  {formatTextWithBold(mainTranslation.text, false)}
-                </p>
-              </div>
+              (() => {
+                const refs = extractReferences(mainTranslation.text);
+                allReferences = allReferences.concat(refs);
+                return (
+                  <div className="bg-white rounded-lg p-6 border border-gray-200">
+                    <p className="text-xl leading-relaxed text-gray-700 font-brill">
+                      {replaceReferencesWithSuperscripts(mainTranslation.text, refs)}
+                    </p>
+                  </div>
+                );
+              })()
             )}
           </div>
         </div>
@@ -102,7 +108,6 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
         <div className="space-y-8">
           {sortedParagraphs.map((paragraph) => {
             const englishTranslation = paragraph.translations?.find(t => t.type === 'en');
-            
             return (
               <div key={paragraph.id} className="border-b border-gray-100 pb-8 last:border-b-0 last:pb-0">
                 {paragraph.number && (
@@ -112,22 +117,24 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                     </span>
                   </div>
                 )}
-                
-                <div className="bg-[#F8F9FA] rounded-lg p-6 mb-4 border-r-4 border-[#43896B]">
+                <div className="p-0 mb-4 border-none">
                   <div className="text-right">
-                    <p className="text-xl leading-relaxed text-gray-900 font-taha">
+                    <p className="text-xl leading-[2] text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
                       {formatTextWithBold(paragraph.arabic, true)}
                     </p>
                   </div>
                 </div>
-                
-                {englishTranslation && (
-                  <div className="bg-white rounded-lg p-6 border border-gray-200">
-                    <p className="text-lg leading-relaxed text-gray-700 font-serif italic">
-                      {formatTextWithBold(englishTranslation.text, false)}
-                    </p>
-                  </div>
-                )}
+                {englishTranslation && (() => {
+                  const refs = extractReferences(englishTranslation.text);
+                  allReferences = allReferences.concat(refs);
+                  return (
+                    <div className="bg-white rounded-lg p-6 border border-gray-200">
+                      <p className="text-xl leading-relaxed text-gray-700 font-brill">
+                        {replaceReferencesWithSuperscripts(englishTranslation.text, refs)}
+                      </p>
+                    </div>
+                  );
+                })()}
               </div>
             );
           })}
@@ -137,6 +144,17 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
       {sortedParagraphs.length === 0 && !(content.title || mainTranslation) && (
         <div className="text-center py-12">
           <p className="text-gray-500">No content available for this {contentType.slice(0, -1)}.</p>
+        </div>
+      )}
+
+      {allReferences.length > 0 && (
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <h3 className="text-lg font-semibold mb-4 text-gray-900">Footer Notes</h3>
+          <ol className="list-decimal pl-6 space-y-2">
+            {allReferences.map((ref, idx) => (
+              <li key={idx} className="text-gray-700 text-base">{ref}</li>
+            ))}
+          </ol>
         </div>
       )}
     </div>

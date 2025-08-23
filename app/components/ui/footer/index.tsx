@@ -45,7 +45,7 @@ const Footer = () => {
     <footer className="relative bg-gradient-to-b from-[#43896B] to-[#3a7a5c] text-white overflow-hidden">
       <div className="relative py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -64,7 +64,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-white">Nahj al-Balaghah</h2>
-                  <p className="text-sm text-white/80">Path of Eloquence</p>
+                  <p className="text-sm text-white/80">Way of Eloquence</p>
                 </div>
               </div>
               <h3 className="text-xl font-bold mb-4">About Us</h3>
@@ -74,37 +74,6 @@ const Footer = () => {
               <div className="flex items-center gap-2 text-white/90">
                 <MapPin className="w-4 h-4 text-white" />
                 <span className="text-sm">Jamia Mosque, New Orleans USA</span>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="lg:col-span-1"
-            >
-              <h3 className="text-xl font-bold mb-6">Latest Blogs</h3>
-              <div className="space-y-4">
-                {latestBlogs.map((blog, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ x: 4 }}
-                    className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 cursor-pointer group"
-                  >
-                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <div className="w-8 h-8 bg-white/30 rounded-md"></div>
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-white group-hover:text-white transition-colors duration-200 mb-1">
-                        {blog.title}
-                      </h4>
-                      <div className="flex items-center gap-2 text-white/70 text-sm">
-                        <Calendar className="w-3 h-3" />
-                        <span>{blog.date}</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
               </div>
             </motion.div>
             <motion.div

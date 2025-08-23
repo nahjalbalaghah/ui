@@ -68,24 +68,21 @@ const HeroSection = () => {
   const progress = (currentTime / duration) * 100
 
   const contentTypes = [
-    { 
-      icon: MessageSquare, 
-      label: "Orations", 
-      value: isLoading ? "Loading..." : counts.orations.toString(),
+    {
+      arabic: "الخطب",
+      label: "Orations",
       href: "/orations",
       type: "Oration"
     },
-    { 
-      icon: Mail, 
-      label: "Letters", 
-      value: isLoading ? "Loading..." : counts.letters.toString(),
+    {
+      arabic: "الكتب",
+      label: "Letters",
       href: "/letters",
       type: "Letter"
     },
-    { 
-      icon: BookOpen, 
-      label: "Sayings", 
-      value: isLoading ? "Loading..." : counts.sayings.toString(),
+    {
+      arabic: "الحكم",
+      label: "Sayings",
       href: "/sayings",
       type: "Saying"
     }
@@ -93,19 +90,11 @@ const HeroSection = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="absolute inset-0">
-        <Image 
-          className="w-full h-full object-cover "
-          src={HeroMosqueImage}
-          alt='hero-mosque'
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/80 to-[#43896B]/10"></div>
-      </div>
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDVMMjUgMTVIMTVMMjAgNVoiIGZpbGw9ImN1cnJlbnRDb2xvciIvPgo8cmVjdCB4PSIxNSIgeT0iMTUiIHdpZHRoPSIxMCIgaGVpZ2h0PSIyMCIgZmlsbD0iY3VycmVudENvbG9yIi8+CjwvcGF0aD4KPC9zdmc+')] bg-repeat"></div>
       <div className="relative z-10 min-h-screen flex flex-col px-4 sm:px-6 lg:px-8">
         <div className="flex-grow flex items-center justify-center pb-32 pt-16">
           <div className="max-w-7xl mx-auto text-center w-full">
-            <div className="mb-8 space-y-3">
+            <div className="mb-8">
               <div className="flex justify-center items-center mb-4">
                 <Image 
                   src={TitleImage} 
@@ -126,23 +115,22 @@ const HeroSection = () => {
               Embark on a spiritual journey through the timeless wisdom of Nahj al-Balaghah. 
               Learn from renowned scholars and discover the profound teachings that guide millions.
             </p>
-            <div className="text-center mb-8 sm:mb-12">
+            <div className="text-center mb-8">
               <p className="text-base sm:text-lg text-gray-600 mb-2">Compiled By</p>
               <p className="text-xl sm:text-2xl font-bold">
-                AL-SHARĪF AL-RADĪ
+                AL-SHARIF AL-RADI
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto px-4">
+            <div className="mt-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto px-4">
               {contentTypes.map((content, index) => (
                 <div
                   key={content.label}
-                  className="bg-white/90 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
+                  className="bg-white/90 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 flex flex-col items-center"
                 >
-                  <div className={`w-14 h-14 sm:w-16 sm:h-16 bg-[#43896B] rounded-2xl flex items-center justify-center mx-auto mb-4`}>
-                    <content.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                  <div className="text-4xl sm:text-5xl font-extrabold text-[#43896B] mb-2 font-[uthman-taha]" style={{ fontFamily: 'uthman-taha, serif', letterSpacing: '0.02em' }}>
+                    {content.arabic}
                   </div>
-                  <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">{content.value}</div>
-                  <div className="text-base sm:text-lg text-gray-600 font-medium mb-4">{content.label}</div>
+                  <div className="mt-6 text-base sm:text-lg text-gray-600 font-medium mb-4">{content.label}</div>
                   <Link href={content.href}>
                     <Button icon={ <ArrowRightCircle size={16} />} className="w-full bg-[#43896B] hover:bg-[#5BA67C] text-white font-medium py-2 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
                       Read {content.type}

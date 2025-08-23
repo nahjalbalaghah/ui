@@ -122,23 +122,22 @@ export default function ContentListing({
     </div>
   );
 
+  const isOrationsListOnly = (contentType === 'orations');
   return (
     <div className="w-full relative">
       <div className="flex items-center justify-between mb-6">
         <p className="text-gray-600">
           {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
         </p>
-        {onViewChange && (
+        {!isOrationsListOnly && onViewChange && (
           <ViewToggle view={view} onViewChange={onViewChange} />
         )}
       </div>
-      
       {loading ? (
-        view === 'grid' ? renderLoadingGrid() : renderLoadingList()
+        isOrationsListOnly ? renderLoadingList() : (view === 'grid' ? renderLoadingGrid() : renderLoadingList())
       ) : (
         <>
-          {view === 'grid' ? renderGridView() : renderListView()}
-          
+          {isOrationsListOnly ? renderListView() : (view === 'grid' ? renderGridView() : renderListView())}
           {view === 'list' && isInfiniteLoading && (
             <div className="mt-8">
               <div className="animate-pulse">
@@ -163,8 +162,7 @@ export default function ContentListing({
               </div>
             </div>
           )}
-          
-          {view === 'grid' && totalPages > 1 && onPageChange && (
+          {view === 'grid' && totalPages > 1 && onPageChange && !isOrationsListOnly && (
             <div className="mt-12">
               <Pagination
                 currentPage={currentPage}

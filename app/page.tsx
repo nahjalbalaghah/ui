@@ -1,14 +1,14 @@
 import OrationsLettersSayingsSection from "./sections/content";
 import ExploreHero from "./sections/hero";
 import IndexesSection from "./sections/indexes";
-import ManuscriptsSection from "./sections/manuscripts";
+import ResourcesSection from "./sections/resources";
 
 export const metadata = {
   title: "Explore | Nahj al-Balaghah",
-  description: "Explore sermons, letters, sayings, and manuscripts in Nahj al-Balaghah. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
+  description: "Explore sermons, letters, sayings, and Resources in Nahj al-Balaghah. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
   openGraph: {
     title: "Explore | Nahj al-Balaghah",
-    description: "Explore sermons, letters, sayings, and manuscripts in Nahj al-Balaghah. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
+    description: "Explore sermons, letters, sayings, and Resources in Nahj al-Balaghah. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
     url: "https://nahj-al-balagha.com/explore",
     images: [
       {
@@ -22,7 +22,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Explore | Nahj al-Balaghah",
-    description: "Explore sermons, letters, sayings, and manuscripts in Nahj al-Balaghah. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
+    description: "Explore sermons, letters, sayings, and Resources in Nahj al-Balaghah. Search, read, and discover the timeless wisdom of Imam Ali (AS).",
     images: [
       {
         url: "/globe.svg",
@@ -38,7 +38,7 @@ export default function Page() {
             <ExploreHero />
             {/* <OrationsLettersSayingsSection /> */}
             <IndexesSection />
-            <ManuscriptsSection />
+            {/* <ResourcesSection /> */}
         </div>        
     )
 }
