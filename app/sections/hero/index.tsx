@@ -6,7 +6,7 @@ import TitleImage from '@/app/assets/images/title.png'
 import Image from 'next/image';
 import Link from 'next/link';
 import Button from '@/app/components/button';
-import { orationsApi, lettersApi, sayingsApi } from '@/api';
+import { orationsApi, lettersApi, sayingsApi, radisApi } from '@/api';
 
 const HeroSection = () => {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -17,7 +17,8 @@ const HeroSection = () => {
   const [counts, setCounts] = useState({
     orations: 0,
     letters: 0,
-    sayings: 0
+    sayings: 0,
+    radis: 0
   })
   const [isLoading, setIsLoading] = useState(true)
 
@@ -35,16 +36,18 @@ const HeroSection = () => {
   const fetchCounts = async () => {
     try {
       setIsLoading(true)
-      const [orationsResponse, lettersResponse, sayingsResponse] = await Promise.all([
+      const [orationsResponse, lettersResponse, sayingsResponse, radisResponse] = await Promise.all([
         orationsApi.getOrations(1, 1), // Get just one item to get total count
         lettersApi.getLetters(1, 1),
-        sayingsApi.getSayings(1, 1)
+        sayingsApi.getSayings(1, 1),
+        radisApi.getRadisIntroductions(1, 1)
       ])
 
       setCounts({
         orations: orationsResponse.meta.pagination.total,
         letters: lettersResponse.meta.pagination.total,
-        sayings: sayingsResponse.meta.pagination.total
+        sayings: sayingsResponse.meta.pagination.total,
+        radis: radisResponse.meta.pagination.total
       })
     } catch (error) {
       console.error('Error fetching counts:', error)
@@ -52,17 +55,12 @@ const HeroSection = () => {
       setCounts({
         orations: 241,
         letters: 79,
-        sayings: 479
+        sayings: 479,
+        radis: 9
       })
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const formatTime = (seconds: any) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
   const progress = (currentTime / duration) * 100
@@ -85,6 +83,12 @@ const HeroSection = () => {
       label: "Sayings",
       href: "/sayings",
       type: "Saying"
+    },
+    {
+      arabic: "المقدمة",
+      label: "Radis Introduction", 
+      href: "/radis",
+      type: "Introduction"
     }
   ]
 
@@ -121,7 +125,7 @@ const HeroSection = () => {
                 AL-SHARIF AL-RADI
               </p>
             </div>
-            <div className="mt-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto px-4">
+            <div className="mt-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 max-w-6xl mx-auto px-4">
               {contentTypes.map((content, index) => (
                 <div
                   key={content.label}
@@ -132,8 +136,8 @@ const HeroSection = () => {
                   </div>
                   <div className="mt-6 text-base sm:text-lg text-gray-600 font-medium mb-4">{content.label}</div>
                   <Link href={content.href}>
-                    <Button icon={ <ArrowRightCircle size={16} />} className="w-full bg-[#43896B] hover:bg-[#5BA67C] text-white font-medium py-2 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
-                      Read {content.type}
+                    <Button icon={ <ArrowRightCircle size={16} />} >
+                      Read
                     </Button>
                   </Link>
                 </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tag as TagIcon } from 'lucide-react';
 import { type Post } from '@/api/posts';
-import { formatTextWithBold, isArabicText } from '@/app/utils/text-formatting';
+import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 
 interface OrationsDescriptionProps {
   oration: Post;
@@ -61,7 +61,7 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
             <div className="bg-[#F8F9FA] rounded-lg p-6 mb-4 border-r-4 border-[#43896B]">
               <div className="text-right">
                 <p className="text-xl leading-relaxed text-gray-900 font-taha">
-                  {formatTextWithBold(oration.title, true)}
+                  {formatTextWithFootnotes(oration.title, oration.footnotes || [], true)}
                 </p>
               </div>
             </div>
@@ -69,7 +69,7 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
             {mainTranslation && (
               <div className="bg-white rounded-lg p-6 border border-gray-200">
                 <p className="text-lg leading-relaxed text-gray-700 font-serif italic">
-                  {formatTextWithBold(mainTranslation.text, false)}
+                  {formatTextWithFootnotes(mainTranslation.text, oration.footnotes || [], false)}
                 </p>
               </div>
             )}
@@ -92,14 +92,14 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
                 
                 <div className="mb-6">
                   <div className="text-right leading-loose text-xl text-gray-800 font-taha" dir="rtl">
-                    {formatTextWithBold(paragraph.arabic, true)}
+                    {formatTextWithFootnotes(paragraph.arabic, [...(oration.footnotes || []), ...(paragraph.footnotes || [])], true)}
                   </div>
                 </div>
                 
                 {englishTranslation && (
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="leading-relaxed text-gray-700">
-                      {formatTextWithBold(englishTranslation, false)}
+                      {formatTextWithFootnotes(englishTranslation, [...(oration.footnotes || []), ...(paragraph.footnotes || [])], false)}
                     </div>
                   </div>
                 )}
