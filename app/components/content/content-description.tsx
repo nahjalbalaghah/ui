@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tag as TagIcon } from 'lucide-react';
 import { type Post } from '@/api/posts';
-import { formatTextWithBold, isArabicText } from '@/app/utils/text-formatting';
+import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
 
 interface ContentDescriptionProps {
@@ -83,7 +83,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
             <div className="p-0 mb-4 border-none">
               <div className="text-right">
                 <p className="text-xl leading-relaxed text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
-                  {formatTextWithBold(content.title, true)}
+                  {formatTextWithFootnotes(content.title, content.footnotes || [], true)}
                 </p>
               </div>
             </div>
@@ -91,10 +91,22 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
               (() => {
                 const refs = extractReferences(mainTranslation.text);
                 allReferences = allReferences.concat(refs);
+                console.log('Main translation footnotes debug:', {
+                  contentFootnotes: content.footnotes?.length || 0,
+                  mainTranslationText: mainTranslation.text.substring(0, 100) + '...',
+                  footnoteDetails: (content.footnotes || []).map(f => ({
+                    id: f.id,
+                    number: f.number,
+                    english_word: f.english_word,
+                    arabic_word: f.arabic_word,
+                    section: f.section
+                  }))
+                });
+                
                 return (
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
                     <p className="text-xl leading-relaxed text-gray-700 font-brill">
-                      {replaceReferencesWithSuperscripts(mainTranslation.text, refs)}
+                      {formatTextWithFootnotes(mainTranslation.text, content.footnotes || [], false)}
                     </p>
                   </div>
                 );
@@ -120,17 +132,34 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 <div className="p-0 mb-4 border-none">
                   <div className="text-right">
                     <p className="text-xl leading-[2] text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
-                      {formatTextWithBold(paragraph.arabic, true)}
+                      {formatTextWithFootnotes(paragraph.arabic, [...(content.footnotes || []), ...(paragraph.footnotes || [])], true)}
                     </p>
                   </div>
                 </div>
                 {englishTranslation && (() => {
                   const refs = extractReferences(englishTranslation.text);
                   allReferences = allReferences.concat(refs);
+                  const allFootnotes = [...(content.footnotes || []), ...(paragraph.footnotes || [])];
+                  console.log('Paragraph footnotes debug:', {
+                    paragraphId: paragraph.id,
+                    paragraphNumber: paragraph.number,
+                    contentFootnotes: content.footnotes?.length || 0,
+                    paragraphFootnotes: paragraph.footnotes?.length || 0,
+                    allFootnotes: allFootnotes.length,
+                    englishTranslationText: englishTranslation.text.substring(0, 100) + '...',
+                    footnoteDetails: allFootnotes.map(f => ({
+                      id: f.id,
+                      number: f.number,
+                      english_word: f.english_word,
+                      arabic_word: f.arabic_word,
+                      section: f.section
+                    }))
+                  });
+                  
                   return (
                     <div className="bg-white rounded-lg p-6 border border-gray-200">
                       <p className="text-xl leading-relaxed text-gray-700 font-brill">
-                        {replaceReferencesWithSuperscripts(englishTranslation.text, refs)}
+                        {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false)}
                       </p>
                     </div>
                   );

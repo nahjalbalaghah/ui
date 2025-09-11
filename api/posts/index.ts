@@ -1,7 +1,7 @@
 import api from '../api';
-import { Post, ApiResponse, Translation, Tag, Paragraph } from '../orations';
+import { Post, ApiResponse, Translation, Tag, Paragraph, Footnote } from '../orations';
 
-export type { Post, ApiResponse, Translation, Tag, Paragraph };
+export type { Post, ApiResponse, Translation, Tag, Paragraph, Footnote };
 
 export interface PostFilters {
   type?: string;
@@ -25,7 +25,7 @@ export const postsApi = {
         page = 1,
         pageSize = 9,
         filters = {},
-        populate = ['tags', 'paragraphs.translations', 'translations'],
+        populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags', 'translations'],
         sort
       } = options;
 
@@ -49,8 +49,10 @@ export const postsApi = {
         });
       }
 
-      params['populate[0]'] = 'tags';
-      params['populate[1]'] = 'paragraphs.translations';
+      params['populate[footnotes]'] = true;
+      params['populate[paragraphs][populate][translations]'] = true;
+      params['populate[paragraphs][populate][footnotes]'] = true;
+      params['populate[tags]'] = true;
 
       if (sort) {
         params['sort'] = sort;
@@ -71,8 +73,10 @@ export const postsApi = {
       const filters: PostFilters = { search: undefined };
       const params: any = {
         'filters[slug][$eq]': slug,
-        'populate[0]': 'tags',
-        'populate[1]': 'paragraphs.translations',
+        'populate[footnotes]': true,
+        'populate[paragraphs][populate][translations]': true,
+        'populate[paragraphs][populate][footnotes]': true,
+        'populate[tags]': true,
       };
 
       if (type) {
@@ -219,6 +223,95 @@ export const sayingsApi = {
       return null;
     } catch (error) {
       console.error('Error fetching saying by sermon number:', error);
+      throw error;
+    }
+  }
+};
+
+// Define Radis Introduction types
+export interface RadisIntroduction {
+  id: number;
+  documentId: string;
+  arabic: string;
+  translation: string;
+  number: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface RadisApiResponse {
+  data: RadisIntroduction[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+export const radisApi = {
+  async getRadisIntroductions(page = 1, pageSize = 25): Promise<RadisApiResponse> {
+    try {
+      const params = new URLSearchParams({
+        'pagination[page]': page.toString(),
+        'pagination[pageSize]': pageSize.toString(),
+        'sort[0]': 'number:asc'
+      });
+
+      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/radis-introductions?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching radis introductions:', error);
+      throw error;
+    }
+  },
+
+  async getRadisIntroductionByNumber(number: string): Promise<RadisIntroduction | null> {
+    try {
+      const params = new URLSearchParams({
+        'filters[number][$eq]': number,
+        'pagination[pageSize]': '1'
+      });
+
+      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/radis-introductions?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      
+      if (result.data && result.data.length > 0) {
+        return result.data[0];
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching radis introduction by number:', error);
+      throw error;
+    }
+  },
+
+  async searchRadisIntroductions(query: string, page = 1, pageSize = 25): Promise<RadisApiResponse> {
+    try {
+      const params = new URLSearchParams({
+        'pagination[page]': page.toString(),
+        'pagination[pageSize]': pageSize.toString(),
+        'filters[$or][0][arabic][$containsi]': query,
+        'filters[$or][1][translation][$containsi]': query,
+        'sort[0]': 'number:asc'
+      });
+
+      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/radis-introductions?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error searching radis introductions:', error);
       throw error;
     }
   }
