@@ -44,15 +44,32 @@ export const formatTextWithBold = (text: string, isArabic: boolean = false): Rea
 export const formatTextWithFootnotes = (
   text: string, 
   footnotes: Footnote[], 
-  isArabic: boolean = false
+  isArabic: boolean = false,
+  currentSection?: string 
 ): React.ReactNode => {
   if (!text || !footnotes || footnotes.length === 0) {
     return formatTextWithBold(text, isArabic);
   }
 
+  const relevantFootnotes = currentSection 
+    ? footnotes.filter(footnote => {
+        if (currentSection === 'main') {
+          return !footnote.section || 
+                 footnote.section === 'main' || 
+                 footnote.section === '' ||
+                 !footnote.section.match(/^\d+(\.\d+)*$/);
+        }
+        return footnote.section === currentSection;
+      })
+    : footnotes;
+
+  if (relevantFootnotes.length === 0) {
+    return formatTextWithBold(text, isArabic);
+  }
+
   const matches: FootnoteMatchResult[] = [];
   
-  footnotes.forEach(footnote => {
+  relevantFootnotes.forEach(footnote => {
     const wordToMatch = isArabic ? footnote.arabic_word : footnote.english_word;
     
     if (!wordToMatch || !wordToMatch.trim()) {
@@ -140,16 +157,18 @@ export const formatTextWithFootnotes = (
           footnote={uniqueFootnotes[0]}
           matchedLanguage={isArabic ? 'arabic' : 'english'}
         >
-          {matchedText}
-          <sup className="text-[#43896B] ml-1">{uniqueFootnotes[0].number}</sup>
+          <span className="font-bold border-b-[3px] text-[#43896B] border-[#43896B]">
+            {matchedText}
+            <sup className=" ml-1 font-bold">{uniqueFootnotes[0].number}</sup>
+          </span>
         </FootnoteTooltip>
       );
     } else {
       const numbers = uniqueFootnotes.map(f => f.number).join(',');
       result.push(
-        <span key={`footnote-${index}`} className="footnote-marker cursor-help border-b border-dotted border-[#43896B]">
+        <span key={`footnote-${index}`} className="font-bold border-b-2 text-[#43896B] border-[#43896B]">
           {matchedText}
-          <sup className="text-[#43896B] ml-1">{numbers}</sup>
+          <sup className="text-[#43896B] ml-1 font-bold">{numbers}</sup>
         </span>
       );
     }
