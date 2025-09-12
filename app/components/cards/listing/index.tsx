@@ -4,7 +4,7 @@ import { Book, Tag as TagIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { type Post } from '@/api/posts';
-import { formatTextWithBold, isArabicText } from '@/app/utils/text-formatting';
+import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 
 interface ListingCardProps {
   sermon?: {
@@ -88,7 +88,7 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
           <div>
             <h3 className={`font-medium text-gray-900 text-base line-clamp-3 group-hover:text-[#43896B] transition-colors mb-3 leading-relaxed ${typeof displayTitle === 'string' && isArabicText(displayTitle) ? 'font-taha' : ''}`}>
               {typeof displayTitle === 'string' 
-                ? formatTextWithBold(truncateText(displayTitle, 120), isArabicText(displayTitle))
+                ? formatTextWithFootnotes(truncateText(displayTitle, 120), (oration?.footnotes || []), isArabicText(displayTitle))
                 : truncateText(displayTitle, 120)
               }
             </h3>

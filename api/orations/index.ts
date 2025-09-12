@@ -6,6 +6,20 @@ export interface Translation {
   text: string;
 }
 
+export interface Footnote {
+  id: number;
+  documentId: string;
+  number: string;
+  section: string;
+  arabic_word: string;
+  english_word: string;
+  arabic_interpretation: string;
+  english_translation: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
 export interface Tag {
   id: number;
   documentId: string;
@@ -27,6 +41,7 @@ export interface Paragraph {
   updatedAt: string;
   publishedAt: string;
   translations: Translation[];
+  footnotes?: Footnote[];
 }
 
 export interface Post {
@@ -44,6 +59,7 @@ export interface Post {
   heading?: string;
   paragraphs: Paragraph[];
   tags: Tag[];
+  footnotes: Footnote[];
 }
 
 export interface ApiResponse {
@@ -64,8 +80,10 @@ export const orationsApi = {
       const response = await api.get('/api/posts', {
         params: {
           'filters[type][$eq]': 'Oration',
-          'populate[0]': 'tags',
-          'populate[1]': 'paragraphs.translations',
+          'populate[footnotes]': true,
+          'populate[paragraphs][populate][translations]': true,
+          'populate[paragraphs][populate][footnotes]': true,
+          'populate[tags]': true,
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
         },
@@ -83,8 +101,10 @@ export const orationsApi = {
         params: {
           'filters[slug][$eq]': slug,
           'filters[type][$eq]': 'Oration',
-          'populate[0]': 'tags',
-          'populate[1]': 'paragraphs.translations',
+          'populate[footnotes]': true,
+          'populate[paragraphs][populate][translations]': true,
+          'populate[paragraphs][populate][footnotes]': true,
+          'populate[tags]': true,
         },
       });
       
@@ -105,8 +125,10 @@ export const orationsApi = {
           'filters[type][$eq]': 'Oration',
           'filters[$or][0][title][$containsi]': query,
           'filters[$or][1][paragraphs][arabic][$containsi]': query,
+          'populate[footnotes]': true,
           'populate[paragraphs][populate][translations]': true,
-          'populate': 'tags',
+          'populate[paragraphs][populate][footnotes]': true,
+          'populate[tags]': true,
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
         },
@@ -124,8 +146,10 @@ export const orationsApi = {
         params: {
           'filters[sermonNumber][$eq]': sermonNumber,
           'filters[type][$eq]': 'Oration',
+          'populate[footnotes]': true,
           'populate[paragraphs][populate][translations]': true,
-          'populate': 'tags',
+          'populate[paragraphs][populate][footnotes]': true,
+          'populate[tags]': true,
         },
       });
       
