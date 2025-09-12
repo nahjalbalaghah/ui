@@ -1,15 +1,15 @@
-{
+={
 "data": [
 {
-"id": 3930,
-"documentId": "mfv1j9ka1wjgfw7xqhdl3sdh",
+"id": 6558,
+"documentId": "hwe0dxny0jypy8q9fij4tolg",
 "title": "قال عليه السلام كن في الفتنة كٱبن اللَّبُون لا ظهرٌ فيُركب ولا ضَرعٌ فيُحلَب.",
 "slug": "first-aphorism-in-sayings-chapter",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:11:53.609Z",
-"updatedAt": "2025-08-11T14:11:53.609Z",
-"publishedAt": "2025-08-11T14:11:53.618Z",
+"createdAt": "2025-09-11T18:00:50.551Z",
+"updatedAt": "2025-09-11T18:00:50.551Z",
+"publishedAt": "2025-09-11T18:00:50.563Z",
 "translations": [
 {
 "text": "In times of sedition, be like a young camel buck—no back to be ridden, no udders to be milked.",
@@ -18,18 +18,33 @@
 ],
 "sermonNumber": "3.1",
 "heading": "First aphorism in Sayings chapter",
+"footnotes": [
+{
+"id": 1586,
+"documentId": "n4azhykoyzrgzw8ggmevopfi",
+"number": "793",
+"section": "3.1",
+"arabic_word": "",
+"english_word": "milked.",
+"arabic_interpretation": "",
+"english_translation": "Ar. ibn al-labūn, lit. “the son of a lactating camel mare,” referring to a buck that has just reached two years of age–his mother has had another foal and is again producing milk–he has no udders because he’s male and his back is weak because he’s young. ʿAlī advises his followers to be shrewd in times of conflict, so that despotic rulers are not able to harness their support for evil acts or bully them (Ḥ 18:82; B 935; R 3:267; F 397). From ʿAlī’s counsel to his son Ḥasan (Majlisī, Biḥār, 74:234).",
+"createdAt": "2025-09-11T18:11:36.042Z",
+"updatedAt": "2025-09-11T18:11:36.042Z",
+"publishedAt": "2025-09-11T18:11:36.069Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3932,
-"documentId": "pn9sy6liue5rpd7ykbwdyfia",
+"id": 6560,
+"documentId": "lsdpsmtd7u00hge2ocmznmo0",
 "title": "وقال عليه السلام أَزرى بنفسه من ٱستشعر الطَّمَع ورضي بالذلّ من كشف ضرّه وهانت عليه نفسه من أمّر عليها لسانه. والبخل عارٌ والجبن مَنقصة والفقر يُخرس الفَطِن عن حجّته والمُقِلّ غريب في بلدته. والعجز آفة والصبر شجاعة والزهد ثروة والورع جُنّة ونعم القرين الرضى. والعلم وراثة كريمة والآداب حُلَل مُجدّدة والفكر مِرآة صافية. وصدر العاقل صُندوق سرّه. والبَشاشة حِبالة المودّة والاحتمال قبر العيوب. وروي أنّه عليه السلام قال في العبارة عن هذا المعنى أيضًا <المُسالمَة خَبء العيوب>. ومن رضي عن نفسه كثر الساخط عليه. والصدقة دواء مُنجِح. وأعمال العباد في عاجلهم نَصْبَ أَعيُنهم في آجلهم.",
 "slug": "to-wear-the-robe-of-greed-is-to-degrade-yourself",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:08.981Z",
-"updatedAt": "2025-08-11T14:12:08.981Z",
-"publishedAt": "2025-08-11T14:12:08.995Z",
+"createdAt": "2025-09-11T18:00:51.010Z",
+"updatedAt": "2025-09-11T18:00:51.010Z",
+"publishedAt": "2025-09-11T18:00:51.044Z",
 "translations": [
 {
 "text": "To wear the robe of greed is to degrade yourself. To reveal your troubles to others is to humiliate yourself. To let your tongue control you is to demean yourself. Stinginess is a vice, cowardice is a defect, poverty strikes a clever man dumb, and a pauper is an exile in his hometown. Incapacity is a calamity, forbearance is a form of courage, renunciation is a treasure, restraint is a shield, and acceptance of God’s will is the best companion. Knowledge is a noble legacy, refined behavior is like new clothing, and thought is a polished mirror. A wise man’s heart is a vault for his secrets. Cheerfulness is a snare for friendship, forbearance is a tomb for shortcomings. Raḍī: It is also narrated that ʿAlī said similarly: Conciliation is a tomb for flaws. The smug invite detractors. Almsgiving is powerful medicine. Believers’ deeds in this world will be placed before them in the hereafter.",
@@ -38,18 +53,33 @@
 ],
 "sermonNumber": "3.2",
 "heading": "To wear the robe of greed is to degrade yourself.",
+"footnotes": [
+{
+"id": 1588,
+"documentId": "h5lez8e9fsdvamd405geflak",
+"number": "794",
+"section": "3.2",
+"arabic_word": "",
+"english_word": "yourself",
+"arabic_interpretation": "",
+"english_translation": "The sayings in §3.2 are from ʿAlī’s counsel to Ashtar. Ḥarrānī, Tuḥaf, 201-202.",
+"createdAt": "2025-09-11T18:11:36.484Z",
+"updatedAt": "2025-09-11T18:11:36.484Z",
+"publishedAt": "2025-09-11T18:11:36.510Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3934,
-"documentId": "vpnpah6m1dcd82dytxuftuci",
+"id": 6562,
+"documentId": "vunyf97hb5b316r5jx6p4eqv",
 "title": "وقال عليه السلام اِعجَبوا لهذا الإنسان ينظر بشَحم ويتكلّم بلَحم ويسمع بعَظم ويتنفّس من خُرم.",
 "slug": "behold-the-wonder-of-the-human-he-sees-with-a-bit-of-fat-speaks-with-a-piece-of-flesh-hears-with-a-s",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:12.178Z",
-"updatedAt": "2025-08-11T14:12:12.178Z",
-"publishedAt": "2025-08-11T14:12:12.189Z",
+"createdAt": "2025-09-11T18:00:51.543Z",
+"updatedAt": "2025-09-11T18:00:51.543Z",
+"publishedAt": "2025-09-11T18:00:51.561Z",
 "translations": [
 {
 "text": "Behold the wonder of the human! He sees with a bit of fat, speaks with a piece of flesh, hears with a shard of bone, and breathes through a tiny hole!",
@@ -58,18 +88,19 @@
 ],
 "sermonNumber": "3.3",
 "heading": "Behold the wonder of the human! He sees with a bit of fat, speaks with a piece of flesh, hears with a shard of bone, and breathes through a tiny hole!",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3936,
-"documentId": "tacqfcx34005ah1pzytmyu1g",
+"id": 6564,
+"documentId": "qd9nvrnjabaw05wdfz4n28ex",
 "title": "وقال عليه السلام إذا أقبلت الدنيا على أحد أعارته محاسن غيره وإذا أدبرت عنه سلبته محاسن نفسه.",
 "slug": "when-the-world-smiles-at-a-person-it-lends-him-the-good-qualities-of-others",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:12.834Z",
-"updatedAt": "2025-08-11T14:12:12.834Z",
-"publishedAt": "2025-08-11T14:12:12.844Z",
+"createdAt": "2025-09-11T18:00:52.059Z",
+"updatedAt": "2025-09-11T18:00:52.059Z",
+"publishedAt": "2025-09-11T18:00:52.070Z",
 "translations": [
 {
 "text": "When the world smiles at a person, it lends him the good qualities of others. When it turns away from him, it snatches from him his own.",
@@ -78,18 +109,33 @@
 ],
 "sermonNumber": "3.4",
 "heading": "When the world smiles at a person, it lends him the good qualities of others.",
+"footnotes": [
+{
+"id": 1590,
+"documentId": "iliu8lbp5nihn6fd347by0y3",
+"number": "795",
+"section": "3.4",
+"arabic_word": "",
+"english_word": "own",
+"arabic_interpretation": "",
+"english_translation": "I.e., when a person’s luck is in, people attribute to him qualities he doesn’t have, but when his luck is out, they don’t give him credit for the qualities he does have.",
+"createdAt": "2025-09-11T18:11:36.924Z",
+"updatedAt": "2025-09-11T18:11:36.924Z",
+"publishedAt": "2025-09-11T18:11:36.941Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3939,
-"documentId": "d6f73kqurix9s9bjzjrorcso",
+"id": 6567,
+"documentId": "kjaztocm4eaob55l4900265j",
 "title": "وقال عليه السلام إذا قدرت على عدوّك فٱجعل العفو عنه شكرًا للقدرة عليه.",
 "slug": "if-you-succeed-in-subduing-your-enemy-thank-god-by-forgiving-the-man",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:18.238Z",
-"updatedAt": "2025-08-11T14:12:18.238Z",
-"publishedAt": "2025-08-11T14:12:18.247Z",
+"createdAt": "2025-09-11T18:00:52.968Z",
+"updatedAt": "2025-09-11T18:00:52.968Z",
+"publishedAt": "2025-09-11T18:00:52.979Z",
 "translations": [
 {
 "text": "If you succeed in subduing your enemy, thank God by forgiving the man.",
@@ -98,18 +144,19 @@
 ],
 "sermonNumber": "3.6",
 "heading": "If you succeed in subduing your enemy, thank God by forgiving the man.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3941,
-"documentId": "fj8kdxfbe4moggzb5h7ndsn6",
+"id": 6569,
+"documentId": "hlzhb10y8tib9pf1eyy4374u",
 "title": "وقال عليه السلام أعجز الناس من عجز عن ٱكتساب الإخوان وأعجز منه من ضيّع من ظفر به منهم.",
 "slug": "the-most-incapable-person-in-the-world-is-the-one-who-is-incapable-of-making-friends",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:20.366Z",
-"updatedAt": "2025-08-11T14:12:20.366Z",
-"publishedAt": "2025-08-11T14:12:20.376Z",
+"createdAt": "2025-09-11T18:00:53.427Z",
+"updatedAt": "2025-09-11T18:00:53.427Z",
+"publishedAt": "2025-09-11T18:00:53.439Z",
 "translations": [
 {
 "text": "The most incapable person in the world is the one who is incapable of making friends. Even more incapable than he, though, is the person who loses the friends he has made.",
@@ -118,18 +165,19 @@
 ],
 "sermonNumber": "3.7",
 "heading": "The most incapable person in the world is the one who is incapable of making friends.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3943,
-"documentId": "w7kgrgz1ln8jsajaclwnlse4",
+"id": 6571,
+"documentId": "w3ro6iklaqigoclimy89w9q1",
 "title": "وقال عليه السلام في الذين ٱعتزلوا القتال معه خذلوا الحقّ ولم ينصروا الباطل.",
 "slug": "al-said-this-about-the-men-who-sat-out-the-battles-during-his-reign-they-abandoned-right-while-not-a",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:21.043Z",
-"updatedAt": "2025-08-11T14:12:21.043Z",
-"publishedAt": "2025-08-11T14:12:21.051Z",
+"createdAt": "2025-09-11T18:00:53.892Z",
+"updatedAt": "2025-09-11T18:00:53.892Z",
+"publishedAt": "2025-09-11T18:00:53.905Z",
 "translations": [
 {
 "text": "Alī said this about the men who sat out the battles during his reign: They abandoned right, while not aiding wrong.",
@@ -138,18 +186,33 @@
 ],
 "sermonNumber": "3.8",
 "heading": "Alī said this about the men who sat out the battles during his reign: They abandoned right, while not aiding wrong.",
+"footnotes": [
+{
+"id": 1592,
+"documentId": "yp9slydl5r4wdip7304u5u29",
+"number": "797",
+"section": "3.8",
+"arabic_word": "",
+"english_word": "reign",
+"arabic_interpretation": "",
+"english_translation": "These were the prominent Medinans ʿAbdallāh ibn ʿUmar, Saʿd ibn Abī Waqqāṣ, Saʿīd ibn Zayd, Usāmah ibn Zayd, Muḥammad ibn Maslamah, and Anas ibn Mālik (Ḥ 18:115; text and context in Ṭūsī, Amālī, 83). According to some commentators, they also include the Kufans Abū Mūsā al-Ashʿarī and Aḥnaf ibn Qays (B 939; F 402).",
+"createdAt": "2025-09-11T18:11:37.311Z",
+"updatedAt": "2025-09-11T18:11:37.311Z",
+"publishedAt": "2025-09-11T18:11:37.325Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3945,
-"documentId": "tmg03kzvwgw8s1jqdk5l53kh",
+"id": 6573,
+"documentId": "cyafwjonjqacfcjv79kz23k5",
 "title": "وقال عليه السلام إذا وصلت إليكم أطراف النعم فلا تنفّروا أقصاها بقلّة الشكر.",
 "slug": "if-the-harbingers-of-god-s-blessings-reach-you-don-t-drive-away-the-favors-yet-to-come-with-a-lack-o",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:21.720Z",
-"updatedAt": "2025-08-11T14:12:21.720Z",
-"publishedAt": "2025-08-11T14:12:21.731Z",
+"createdAt": "2025-09-11T18:00:54.374Z",
+"updatedAt": "2025-09-11T18:00:54.374Z",
+"publishedAt": "2025-09-11T18:00:54.386Z",
 "translations": [
 {
 "text": "If the harbingers of God’s blessings reach you, don’t drive away the favors yet to come with a lack of gratitude.",
@@ -158,18 +221,19 @@
 ],
 "sermonNumber": "3.9",
 "heading": "If the harbingers of God’s blessings reach you, don’t drive away the favors yet to come with a lack of gratitude.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3947,
-"documentId": "quye63q2oy8gsuvpppasjxyx",
+"id": 6575,
+"documentId": "jxgodn0sjmdsa3zz4xu94fx2",
 "title": "وقال عليه السلام من ضيّعه الأقرب أُتيح له الأبعد.",
 "slug": "a-man-who-is-shunned-by-those-close-to-him-will-find-help-from-distant-strangers",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:22.386Z",
-"updatedAt": "2025-08-11T14:12:22.386Z",
-"publishedAt": "2025-08-11T14:12:22.408Z",
+"createdAt": "2025-09-11T18:00:54.827Z",
+"updatedAt": "2025-09-11T18:00:54.827Z",
+"publishedAt": "2025-09-11T18:00:54.839Z",
 "translations": [
 {
 "text": "A man who is shunned by those close to him will find help from distant strangers.",
@@ -178,18 +242,19 @@
 ],
 "sermonNumber": "3.10",
 "heading": "A man who is shunned by those close to him will find help from distant strangers.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3949,
-"documentId": "pc09i936i36mxto1njwswzuk",
+"id": 6577,
+"documentId": "gxqc6pykxs2fbgkt838wcwps",
 "title": "وقال عليه السلام ما كُلّ مفتون يُعاتَب.",
 "slug": "not-every-deluded-person-can-be-chastised",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:23.079Z",
-"updatedAt": "2025-08-11T14:12:23.079Z",
-"publishedAt": "2025-08-11T14:12:23.086Z",
+"createdAt": "2025-09-11T18:00:55.294Z",
+"updatedAt": "2025-09-11T18:00:55.294Z",
+"publishedAt": "2025-09-11T18:00:55.306Z",
 "translations": [
 {
 "text": "Not every deluded person can be chastised.",
@@ -198,18 +263,33 @@
 ],
 "sermonNumber": "3.11",
 "heading": "Not every deluded person can be chastised.",
+"footnotes": [
+{
+"id": 1594,
+"documentId": "t4df4cirv3d5u89eag6kwol2",
+"number": "798",
+"section": "3.11",
+"arabic_word": "",
+"english_word": "chastised",
+"arabic_interpretation": "",
+"english_translation": "Interpreted as (1) a reference to the prominent Medinans who refused to support ʿAlī against the associates of the Camel (Ḥ 18:119; Mufīd, Jamal, 46; names in note to §3.8), or (2) a general observation on human nature (F 401; B 938).",
+"createdAt": "2025-09-11T18:11:37.759Z",
+"updatedAt": "2025-09-11T18:11:37.759Z",
+"publishedAt": "2025-09-11T18:11:37.777Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3951,
-"documentId": "cd4loegdo8j9vwmhd7dcqddl",
+"id": 6579,
+"documentId": "v1a7fhyjno1folx9q9mt90i6",
 "title": "وقال عليه السلام تَذلّ الأمور للمقادير حتّى يكون الحَتف في التدبير.",
 "slug": "affairs-bow-to-the-fates-sometimes-planning-leads-to-death",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:23.730Z",
-"updatedAt": "2025-08-11T14:12:23.730Z",
-"publishedAt": "2025-08-11T14:12:23.740Z",
+"createdAt": "2025-09-11T18:00:55.746Z",
+"updatedAt": "2025-09-11T18:00:55.746Z",
+"publishedAt": "2025-09-11T18:00:55.759Z",
 "translations": [
 {
 "text": "Affairs bow to the fates—sometimes planning leads to death.",
@@ -218,18 +298,33 @@
 ],
 "sermonNumber": "3.12",
 "heading": "Affairs bow to the fates—sometimes planning leads to death.",
+"footnotes": [
+{
+"id": 1596,
+"documentId": "ziw8fe6ztpqiy5b7it0dn9vt",
+"number": "799",
+"section": "3.12",
+"arabic_word": "",
+"english_word": "death",
+"arabic_interpretation": "",
+"english_translation": "In an address to the Persian emperor’s daughter Shāh Zanān (= Shahr Banū) after her capture, ca. 17/638 (Mufīd, Irshād, 1:302). Similar to §3.426.",
+"createdAt": "2025-09-11T18:11:38.176Z",
+"updatedAt": "2025-09-11T18:11:38.176Z",
+"publishedAt": "2025-09-11T18:11:38.203Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3953,
-"documentId": "qfub1ez1pgveo7p22sy4qbu6",
+"id": 6581,
+"documentId": "mq06haiecqlseg6uq1ddyfms",
 "title": "وسئل عليه السلام عن قول النبيّ صلّى الله عليه وآله <غَيِّروا الشَّيب ولا تشبّهوا باليهود>. فقال عليه السلام إنّما قال صلّى الله عليه وآله ذلك والدين قُلٌّ فأمّا الآن وقد ٱتّسع نِطاقه وضرب بِجِرانه فٱمرؤٌ وما ٱختار.",
 "slug": "al-was-asked-about-the-prophet-s-words-dye-your-white-hair-and-don-t-emulate-the-jews-to-which-he-an",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:24.399Z",
-"updatedAt": "2025-08-11T14:12:24.399Z",
-"publishedAt": "2025-08-11T14:12:24.410Z",
+"createdAt": "2025-09-11T18:00:56.321Z",
+"updatedAt": "2025-09-11T18:00:56.321Z",
+"publishedAt": "2025-09-11T18:00:56.333Z",
 "translations": [
 {
 "text": "ʿAlī was asked about the Prophet’s words, <Dye your white hair and don’t emulate the Jews>, to which he answered: The Prophet said this when Muslims were few. Now that Islam has loosened its halter and laid its withers flat on the ground, let every man decide for himself.",
@@ -238,18 +333,33 @@
 ],
 "sermonNumber": "3.13",
 "heading": "ʿAlī was asked about the Prophet’s words, <Dye your white hair and don’t emulate the Jews>, to which he answered:",
+"footnotes": [
+{
+"id": 1598,
+"documentId": "eiulhimv9z0ww9ys9kqtu5sl",
+"number": "800",
+"section": "3.13",
+"arabic_word": "",
+"english_word": "answered",
+"arabic_interpretation": "",
+"english_translation": "The hadith is cited by, e.g., Ibn Ḥanbal, Musnad, §1415. The command is for men to dye white hair black in battle and pertains to the importance of appearing young and strong in order to instill fear in the enemy (Ḥ 18:122; B 939; R 3:269; F 402). The metaphor of the camel relaxing indicates Islam’s expansion and firm establishment.",
+"createdAt": "2025-09-11T18:11:38.582Z",
+"updatedAt": "2025-09-11T18:11:38.582Z",
+"publishedAt": "2025-09-11T18:11:38.613Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3955,
-"documentId": "minfu314agzg1lui2p1xcgz6",
+"id": 6583,
+"documentId": "nc47bdc8dznipdnbtsxdvicl",
 "title": "وقال عليه السلام من جرى في عِنان أمله عَثر بأجله.",
 "slug": "whoever-gallops-forward-giving-the-rein-to-his-hopes-will-be-hurled-into-the-pit-of-death",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:25.071Z",
-"updatedAt": "2025-08-11T14:12:25.071Z",
-"publishedAt": "2025-08-11T14:12:25.079Z",
+"createdAt": "2025-09-11T18:00:56.767Z",
+"updatedAt": "2025-09-11T18:00:56.767Z",
+"publishedAt": "2025-09-11T18:00:56.778Z",
 "translations": [
 {
 "text": "Whoever gallops forward, giving the rein to his hopes, will be hurled into the pit of death.",
@@ -258,18 +368,19 @@
 ],
 "sermonNumber": "3.14",
 "heading": "Whoever gallops forward, giving the rein to his hopes, will be hurled into the pit of death.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3957,
-"documentId": "ahasl6j6lnso4xb0zoacozn9",
+"id": 6585,
+"documentId": "l2v6m6ckte2dpcp7bhg0497f",
 "title": "وقال عليه السلام أقيلوا ذوي المُروّات عثراتهم فما يعثر منهم عاثر إلّا ويده بيد الله يرفعه.",
 "slug": "forgive-good-people-their-mistakes-when-one-of-them-slips-god-takes-his-hand-and-helps-him-to-rise",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:25.733Z",
-"updatedAt": "2025-08-11T14:12:25.733Z",
-"publishedAt": "2025-08-11T14:12:25.742Z",
+"createdAt": "2025-09-11T18:00:57.229Z",
+"updatedAt": "2025-09-11T18:00:57.229Z",
+"publishedAt": "2025-09-11T18:00:57.254Z",
 "translations": [
 {
 "text": "Forgive good people their mistakes—when one of them slips, God takes his hand and helps him to rise.",
@@ -278,18 +389,19 @@
 ],
 "sermonNumber": "3.15",
 "heading": "Forgive good people their mistakes—when one of them slips, God takes his hand and helps him to rise.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3959,
-"documentId": "tunnlb5snag1t0q034f0ta8q",
+"id": 6587,
+"documentId": "jsbbyfx0gp8ngets39c4wd8f",
 "title": "وقال عليه السلام قُرنت الهيبة بالخيبة والحياء بالحرمان. والفرصة تمُرّ مَرّ السحاب فٱنتهزوا فُرَص الخير.",
 "slug": "the-timid-will-falter-the-meek-will-lose-their-share",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:26.384Z",
-"updatedAt": "2025-08-11T14:12:26.384Z",
-"publishedAt": "2025-08-11T14:12:26.392Z",
+"createdAt": "2025-09-11T18:00:57.704Z",
+"updatedAt": "2025-09-11T18:00:57.704Z",
+"publishedAt": "2025-09-11T18:00:57.714Z",
 "translations": [
 {
 "text": "The timid will falter, the meek will lose their share. Opportunity passes like a cloud, so seize every opportunity for good.",
@@ -298,18 +410,19 @@
 ],
 "sermonNumber": "3.16",
 "heading": "The timid will falter, the meek will lose their share.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3961,
-"documentId": "e5ckd25c26wskkba8htxk28n",
+"id": 6589,
+"documentId": "p97hxig6wabkizw2as3eouxo",
 "title": "وقال عليه السلام لنا حقّ فإن أُعطيناه وإلّا ركبنا أعجاز الإبل وإن طال السُّرى. وهذا من لطيف الكلام وفصيحه ومعناه أنّا إن لم نُعطَ حقّنا كنّا أذلّاء وذلك أنّ الرديف يركب عَجُز البعير كالعبد والأسير ومن يجري مجراهما.",
 "slug": "we-have-a-right-if-it-is-given-to-us-good-if-not-we-will-ride-the-camel-s-rump-through-the-long-nigh",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:27.031Z",
-"updatedAt": "2025-08-11T14:12:27.031Z",
-"publishedAt": "2025-08-11T14:12:27.041Z",
+"createdAt": "2025-09-11T18:00:58.180Z",
+"updatedAt": "2025-09-11T18:00:58.180Z",
+"publishedAt": "2025-09-11T18:00:58.208Z",
 "translations": [
 {
 "text": "We have a right. If it is given to us, good. If not, we will ride the camel’s rump through the long night. Raḍī: This statement is among the most refined and eloquent of expressions, and it means that when we are not given our due, we are being dishonored; that is because a pillion rider rides on the camel’s rump, as does a slave, or captive, or another person of lowly status.",
@@ -318,18 +431,33 @@
 ],
 "sermonNumber": "3.17",
 "heading": "We have a right. If it is given to us, good. If not, we will ride the camel’s rump through the long night.",
+"footnotes": [
+{
+"id": 1600,
+"documentId": "va50z03qpimendnyowfhxj3u",
+"number": "801",
+"section": "3.17",
+"arabic_word": "",
+"english_word": "night",
+"arabic_interpretation": "",
+"english_translation": "The sources place these words by ʿAlī in Medina, either (1) immediately after the death of the Prophet, in 11/632, when Abū Bakr was sworn in as caliph (Ḥ 18:133, citing the Twelver Shiʿa interpretation); or (2) in ʿAlī’s oration to the Shūrā Election Council, following the death of ʿUmar, in 23/644 (Ṭabarī, Tārīkh, 4:236; Māmaṭīrī, Nuzhah, 327-328; full text in both; Ḥ 18:133).",
+"createdAt": "2025-09-11T18:11:38.993Z",
+"updatedAt": "2025-09-11T18:11:38.993Z",
+"publishedAt": "2025-09-11T18:11:39.027Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3963,
-"documentId": "vmwkm0c1t6ccxk4sgscfuwk7",
+"id": 6591,
+"documentId": "ascooeptw9tbuvy5xh3e3m2k",
 "title": "وقال عليه السلام من أبطأ به عمله لم يسرع به حسبه.",
 "slug": "if-your-deeds-are-slow-your-lineage-will-not-take-you-far",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:27.690Z",
-"updatedAt": "2025-08-11T14:12:27.690Z",
-"publishedAt": "2025-08-11T14:12:27.699Z",
+"createdAt": "2025-09-11T18:00:58.665Z",
+"updatedAt": "2025-09-11T18:00:58.665Z",
+"publishedAt": "2025-09-11T18:00:58.684Z",
 "translations": [
 {
 "text": "If your deeds are slow, your lineage will not take you far.",
@@ -338,18 +466,33 @@
 ],
 "sermonNumber": "3.18",
 "heading": "If your deeds are slow, your lineage will not take you far.",
+"footnotes": [
+{
+"id": 1602,
+"documentId": "pbq74q6xybgdv0sirpjn9w3p",
+"number": "802",
+"section": "3.18",
+"arabic_word": "",
+"english_word": "far",
+"arabic_interpretation": "",
+"english_translation": "The line is attributed to the Prophet in Ibn Ḥanbal, Musnad 2:252; Ibn ʿAbd Rabbih, ʿIqd, 2:148; Rāzī, Mafātīḥ, 3:573.",
+"createdAt": "2025-09-11T18:11:39.435Z",
+"updatedAt": "2025-09-11T18:11:39.435Z",
+"publishedAt": "2025-09-11T18:11:39.465Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3965,
-"documentId": "l6lm1pfrwbyf3sbpapdm68gc",
+"id": 6593,
+"documentId": "qub50j95ksj3ogzfu33vpr8s",
 "title": "وقال عليه السلام من كفّارات الذنوب العظام إغاثة الملهوف والتنفيس عن المكروب.",
 "slug": "to-console-the-heartbroken-and-comfort-the-grieving-is-to-atone-for-the-gravest-sins",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:28.347Z",
-"updatedAt": "2025-08-11T14:12:28.347Z",
-"publishedAt": "2025-08-11T14:12:28.356Z",
+"createdAt": "2025-09-11T18:00:59.158Z",
+"updatedAt": "2025-09-11T18:00:59.158Z",
+"publishedAt": "2025-09-11T18:00:59.174Z",
 "translations": [
 {
 "text": "To console the heartbroken and comfort the grieving is to atone for the gravest sins.",
@@ -358,18 +501,19 @@
 ],
 "sermonNumber": "3.19",
 "heading": "To console the heartbroken and comfort the grieving is to atone for the gravest sins.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3967,
-"documentId": "w5rc28upocmd6dr6b0ngwm6t",
+"id": 6595,
+"documentId": "cnbrtvbvswvjmswpk2ar6pbx",
 "title": "وقال عليه السلام يا ٱبن آدم إذا رأيت ربّك سبحانه يتابع عليك نعمه فٱحذره.",
 "slug": "son-of-adam-when-your-lord-s-blessings-keep-coming-be-on-guard",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:28.998Z",
-"updatedAt": "2025-08-11T14:12:28.998Z",
-"publishedAt": "2025-08-11T14:12:29.019Z",
+"createdAt": "2025-09-11T18:00:59.655Z",
+"updatedAt": "2025-09-11T18:00:59.655Z",
+"publishedAt": "2025-09-11T18:00:59.666Z",
 "translations": [
 {
 "text": "Son of Adam! When your Lord’s blessings keep coming, be on guard!",
@@ -378,18 +522,33 @@
 ],
 "sermonNumber": "3.20",
 "heading": "Son of Adam! When your Lord’s blessings keep coming, be on guard!",
+"footnotes": [
+{
+"id": 1604,
+"documentId": "trrt0j7sym2lprwj8wfr6e4s",
+"number": "803",
+"section": ""3.20"",
+"arabic_word": "",
+"english_word": "guard",
+"arabic_interpretation": "",
+"english_translation": "I.e., if you continue to be ungrateful and disobey God while still enjoying his blessings, beware his retribution, which will surely come (F 403). Some later MSS and commentaries (Ḥ 18:136 and B 940) make this subtext explicit by adding to the text, “while you continue to disobey him” (wa-anta taʿṣīhi).",
+"createdAt": "2025-09-11T18:11:39.851Z",
+"updatedAt": "2025-09-11T18:11:39.851Z",
+"publishedAt": "2025-09-11T18:11:39.865Z"
+}
+],
 "paragraphs": []
 },
 {
-"id": 3969,
-"documentId": "o1utr1vshe6rye665w442t7y",
+"id": 6597,
+"documentId": "qt6v8131fnm9htag3obp46f3",
 "title": "وقال عليه السلام ما أضمر أحد شيئًا إلّا ظهر في فَلَتات لسانه وصفحات وجهه.",
 "slug": "when-a-person-conceals-something-in-his-heart-it-shows-in-the-slips-of-his-tongue-and-the-planes-of-",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:31.113Z",
-"updatedAt": "2025-08-11T14:12:31.113Z",
-"publishedAt": "2025-08-11T14:12:31.120Z",
+"createdAt": "2025-09-11T18:01:00.109Z",
+"updatedAt": "2025-09-11T18:01:00.109Z",
+"publishedAt": "2025-09-11T18:01:00.141Z",
 "translations": [
 {
 "text": "When a person conceals something in his heart, it shows in the slips of his tongue and the planes of his face.",
@@ -398,18 +557,19 @@
 ],
 "sermonNumber": "3.21",
 "heading": "When a person conceals something in his heart, it shows in the slips of his tongue and the planes of his face.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3971,
-"documentId": "sta908p0fyckilu40ii9hnfn",
+"id": 6599,
+"documentId": "pwmarpgcoelzgrk54r7tf8aj",
 "title": "وقال عليه السلام اِمشِ بِدائك ما مشى بك.",
 "slug": "if-you-fall-ill-get-on-with-your-life-as-best-as-you-can",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:31.768Z",
-"updatedAt": "2025-08-11T14:12:31.768Z",
-"publishedAt": "2025-08-11T14:12:31.776Z",
+"createdAt": "2025-09-11T18:01:01.750Z",
+"updatedAt": "2025-09-11T18:01:01.750Z",
+"publishedAt": "2025-09-11T18:01:01.775Z",
 "translations": [
 {
 "text": "If you fall ill, get on with your life as best as you can.",
@@ -418,18 +578,19 @@
 ],
 "sermonNumber": "3.22",
 "heading": "If you fall ill, get on with your life as best as you can.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3973,
-"documentId": "vn0tw43mbitctj1i3xkea5tz",
+"id": 6601,
+"documentId": "mz4h1jio7zoqk5s9ytl0wkad",
 "title": "وقال عليه السلام أفضل الزهد إخفاء الزهد.",
 "slug": "rejection-of-worldliness-is-best-done-in-secret",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:33.837Z",
-"updatedAt": "2025-08-11T14:12:33.837Z",
-"publishedAt": "2025-08-11T14:12:33.845Z",
+"createdAt": "2025-09-11T18:01:02.243Z",
+"updatedAt": "2025-09-11T18:01:02.243Z",
+"publishedAt": "2025-09-11T18:01:02.256Z",
 "translations": [
 {
 "text": "Rejection of worldliness is best done in secret.",
@@ -438,18 +599,19 @@
 ],
 "sermonNumber": "3.23",
 "heading": "Rejection of worldliness is best done in secret.",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3975,
-"documentId": "szh1n2f33pwp95wx8cjpb0qk",
+"id": 6603,
+"documentId": "muet6d1o8fgz31lc9tj10z6b",
 "title": "وقال عليه السلام إذا كنت في إدبار والموت في إقبال فما أسرع المُلتقى.",
 "slug": "how-soon-the-meeting-when-you-retreat-and-death-presses-forward",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:34.505Z",
-"updatedAt": "2025-08-11T14:12:34.505Z",
-"publishedAt": "2025-08-11T14:12:34.512Z",
+"createdAt": "2025-09-11T18:01:02.722Z",
+"updatedAt": "2025-09-11T18:01:02.722Z",
+"publishedAt": "2025-09-11T18:01:02.735Z",
 "translations": [
 {
 "text": "How soon the meeting when you retreat and death presses forward!",
@@ -458,18 +620,19 @@
 ],
 "sermonNumber": "3.24",
 "heading": "How soon the meeting when you retreat and death presses forward!",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3977,
-"documentId": "m5h4r5y2vrc69ievzjkwqeru",
+"id": 6605,
+"documentId": "sehm0tw3qzp2jw4u0deabnff",
 "title": "وقال عليه السلام الحذرَ الحذرَ فوالله لقد ستر حتّى كأنّه قد غفر.",
 "slug": "fear-god-and-beware-i-swear-he-has-concealed-for-so-long-you-think-he-has-forgiven",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:35.161Z",
-"updatedAt": "2025-08-11T14:12:35.161Z",
-"publishedAt": "2025-08-11T14:12:35.171Z",
+"createdAt": "2025-09-11T18:01:03.216Z",
+"updatedAt": "2025-09-11T18:01:03.216Z",
+"publishedAt": "2025-09-11T18:01:03.227Z",
 "translations": [
 {
 "text": "Fear God and beware! I swear he has concealed for so long you think he has forgiven!",
@@ -478,18 +641,19 @@
 ],
 "sermonNumber": "3.25",
 "heading": "Fear God and beware! I swear he has concealed for so long you think he has forgiven!",
+"footnotes": [],
 "paragraphs": []
 },
 {
-"id": 3979,
-"documentId": "ohj8zvw6y2e5fdv9mhgo28rj",
+"id": 6607,
+"documentId": "j071bf8n9zbiykmiicvtzcuo",
 "title": "وسئل عليه السلام عن الإيمان فقال الإيمان على أربع دعائم على الصبر واليقين والعدل والجهاد .فالصبر منها على أربع شُعَب على الشوق والشَّفَق والزهد والترقُّب فمن ٱشتاق إلى الجنّة سلا عن الشهوات ومن أشفق من النار ٱجتنب المحرّمات ومن زهد في الدنيا ٱستهان بالمصيبات ومن ٱرتقب الموت سارع إلى الخيرات. واليقين منها على أربع شعب على تبصرة الفطنة وتأوُّل الحكمة وموعظة العبرة وسنّة الأوّلين فمن تبصّر في الفطنة تبيّنت له الحكمة ومن تبيّنت له الحكمة عرف العبرة ومن عرف العبرة فكأنّما كان في الأوّلين. والعدل منها على أربع شعب على غائص الفهم وغَور العلم وزَهرة الحُكم ورساخة الحلم فمن فهم علم غور العلم ومن علم غور العلم صدر عن شرائع الحكم ومن حلم لم يفرط في أمره وعاش في الناس حميدًا. والجهاد منها على أربع شعب على الأمر بالمعروف والنهي عن المنكر والصدق في المواطن وشنآن الفاسقين فمن أمر بالمعروف شدّ ظهور المؤمنين ومن نهى عن المنكر أرغم أنوف المنافقين ومن صدق في المواطن قضى ما عليه ومن شَنئ الفاسقين وغضب لله غضب الله له وأرضاه يوم القيامة. والكفر على أربع دعائم على التعمّق والتنازع والزيغ والشقاق فمن تعمّق لم يُنِب إلى الحقّ ومن كثر نزاعه بالجهل دام عماه عن الحقّ ومن زاغ ساءت عنده الحسنة وحسنت عنده السيّئة وسَكِر سُكر الضلالة ومن شاقَّ وَعُرت عليه طرقه وأعضل عليه أمره وضاق مخرجه. والشكّ على أربع شعب على التماري والهَول والتردّد والاستسلام فمن جعل المِراء دَيْدَنًا لم يصبح ليله ومن هاله ما بين يديه نكص على عقيبه ومن تردّد في الريب وطئته سَنابِك الشياطين ومن ٱستسلم لهلكة الدنيا والآخرة هلك فيهما. وبعد هذا كلام تركنا ذكره خوف الإطالة والخروج عن الغرض المقصود في هذا الكتاب.",
 "slug": "four-pillars-of-faith-four-pillars-of-unbelief-four-branches-of-doubt",
 "type": "Saying",
 "availableTranslations": null,
-"createdAt": "2025-08-11T14:12:35.818Z",
-"updatedAt": "2025-08-11T14:12:35.818Z",
-"publishedAt": "2025-08-11T14:12:35.831Z",
+"createdAt": "2025-09-11T18:01:03.671Z",
+"updatedAt": "2025-09-11T18:01:03.671Z",
+"publishedAt": "2025-09-11T18:01:03.683Z",
 "translations": [
 {
 "text": "ʿAlī was asked about faith, and he expounded:Faith stands on four pillars: forbearance, conviction, justice, and struggle against evil. Forbearance has four branches: longing, fear, rejection of worldliness, and patient expectation. Whoever longs for paradise is diverted from indulging passions, whoever fears hellfire retreats from forbidden things, whoever rejects worldliness makes light of calamities, and whoever awaits death hastens to do good. Conviction also has four branches: sagacious perceptivity, interpreting divine wisdom, heeding the counsel offered by history’s lessons, and following the practice of those who went before. Whoever perceives with sagacity recognizes divine wisdom, whoever recognizes divine wisdom heeds history’s lessons, and whoever heeds history’s lessons has lived with those who went before. Justice, in its turn, has four branches: deep understanding, profound knowledge, blossoms of wisdom, and deep-rooted restraint. Whoever understands gains profound knowledge, whoever gains profound knowledge advances on the path of wisdom, and whoever possesses restraint shuns extremes in his affairs and lives among people loved and respected. Struggle against evil similarly has four branches: commanding good, forbidding evil, valor in battle, and abhorring the corrupt. Whoever commands good strengthens the believers’ backs, whoever forbids evil cuts off the hypocrites’ noses, whoever shows valor in battle has discharged his duty, and whoever abhors the corrupt and is roused to anger for the sake of God, so too will God be roused to anger on his behalf, and, on the day of resurrection, will make him truly happy. Unbelief stands on four pillars: overthinking, fractiousness, deviation, and rebellion. Whoever overthinks misses what is right, whoever constantly disputes remains blind to the truth, whoever deviates deems good to be evil and evil to be good until he becomes intoxicated by his errant ways, and whoever rebels finds his way rugged, his affairs straitened, and his escape blocked. Doubt also has four branches: skepticism, dread, vacillation, and surrender. Whoever makes skepticism his practice finds that his night never brightens into day, whoever dreads what is ahead turns back on his heels, whoever is suspicious and vacillates is trampled by devils’ hooves, and whoever surrenders to the perishing forces of this world and the next perishes in both. Raḍī: There is text after this that I have omitted, for fear of being prolix or going beyond the book’s goals.",
@@ -498,14 +662,2092 @@
 ],
 "sermonNumber": "3.26",
 "heading": "Four pillars of faith, four pillars of unbelief, four branches of doubt",
+"footnotes": [
+{
+"id": 1606,
+"documentId": "iid40jl7bh4vkau9y6q52jpb",
+"number": "804",
+"section": "3.26",
+"arabic_word": "",
+"english_word": "expounded",
+"arabic_interpretation": "",
+"english_translation": "Excerpt from oration delivered in his home, either in Medina or Kufa, additional parts recorded as §1.69, §1.103 (further details in note there), §3.259. Alternatively, the text is cited as an answer given during an oration in the mosque in Basra, a few days after the Battle of the Camel in 36/656 (Māmaṭīrī, Nuzhah, 225-227), where the questioner is named as ʿAbbād ibn Qays (another version, which conforms more directly to the version here, is also recorded in ibid., 198-199). Other parts of the same oration (ibid., 221-233) are listed in note to §1.23. On this text, see Qutbuddin, “Piety and Virtue in Early Islam: Two Sermons by Imam Ali.”",
+"createdAt": "2025-09-11T18:11:40.235Z",
+"updatedAt": "2025-09-11T18:11:40.235Z",
+"publishedAt": "2025-09-11T18:11:40.247Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6609,
+"documentId": "xsy5m70rh6p8smfbtf8eaj8v",
+"title": "وقال عليه السلام فاعل الخير خير منه وفاعل الشرّ شرّ منه.",
+"slug": "the-doer-of-a-good-deed-is-better-than-the-deed-itself-the-doer-of-an-evil-deed-is-worse-than-the-de",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:04.639Z",
+"updatedAt": "2025-09-11T18:01:04.639Z",
+"publishedAt": "2025-09-11T18:01:04.650Z",
+"translations": [
+{
+"text": "The doer of a good deed is better than the deed itself. The doer of an evil deed is worse than the deed itself.",
+"type": "en"
+}
+],
+"sermonNumber": "3.27",
+"heading": "The doer of a good deed is better than the deed itself. The doer of an evil deed is worse than the deed itself.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6611,
+"documentId": "nzeu2mfjdm8ao1iqvw7ioxij",
+"title": "وقال عليه السلام كن سَمْحًا ولا تكن مُبذِّرًا وكن مُقدِّرًا ولا تكن مُقتِّرًا.",
+"slug": "be-generous-without-being-extravagant-be-thrifty-without-being-stingy",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:05.225Z",
+"updatedAt": "2025-09-11T18:01:05.225Z",
+"publishedAt": "2025-09-11T18:01:05.237Z",
+"translations": [
+{
+"text": "Be generous without being extravagant. Be thrifty without being stingy.",
+"type": "en"
+}
+],
+"sermonNumber": "3.28",
+"heading": "Be generous without being extravagant. Be thrifty without being stingy.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6613,
+"documentId": "mf997q54643ak57fqihbl7il",
+"title": "وقال عليه السلام أشرف الغنى ترك المُنى.",
+"slug": "the-most-honorable-wealth-is-abandoned-desire",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:05.688Z",
+"updatedAt": "2025-09-11T18:01:05.688Z",
+"publishedAt": "2025-09-11T18:01:05.698Z",
+"translations": [
+{
+"text": "The most honorable wealth is abandoned desire.",
+"type": "en"
+}
+],
+"sermonNumber": "3.29",
+"heading": "The most honorable wealth is abandoned desire.",
+"footnotes": [
+{
+"id": 1608,
+"documentId": "x6k7i98c0b368n9ed72hsogl",
+"number": "805",
+"section": "3.29",
+"arabic_word": "",
+"english_word": "desire",
+"arabic_interpretation": "",
+"english_translation": "Identical line in §3.195.",
+"createdAt": "2025-09-11T18:11:40.614Z",
+"updatedAt": "2025-09-11T18:11:40.614Z",
+"publishedAt": "2025-09-11T18:11:40.632Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6615,
+"documentId": "wynjp4dt56rtd877nw2cmqzx",
+"title": "وقال عليه السلام من أسرع إلى الناس بما يكرهون قالوا فيه ما لا يعلمون.",
+"slug": "if-you-are-quick-to-say-bad-things-about-people-they-will-make-up-things-about-you",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:06.150Z",
+"updatedAt": "2025-09-11T18:01:06.150Z",
+"publishedAt": "2025-09-11T18:01:06.161Z",
+"translations": [
+{
+"text": "If you are quick to say bad things about people, they will make up things about you.",
+"type": "en"
+}
+],
+"sermonNumber": "3.30",
+"heading": "If you are quick to say bad things about people, they will make up things about you.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6617,
+"documentId": "zeovyf7vob47enxcj0lx1v0s",
+"title": "وقال عليه السلام من أطال الأمل أساء العمل.",
+"slug": "long-hopes-foul-deeds",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:06.629Z",
+"updatedAt": "2025-09-11T18:01:06.629Z",
+"publishedAt": "2025-09-11T18:01:06.642Z",
+"translations": [
+{
+"text": "Long hopes, foul deeds.",
+"type": "en"
+}
+],
+"sermonNumber": "3.31",
+"heading": "Long hopes, foul deeds.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6619,
+"documentId": "popoy85d34vo9htv4lqh71cm",
+"title": "وقال عليه السلام وقد لقيه عند مسيره إلى الشام دَهاقين الأنبار فترجّلوا له وٱشتدّوا بين يديه ما هذا الذي صنعتموه فقالوا خُلُق منّا نُعظِّم به أمراءنا فقال عليه السلام والله ما ينتفع بهذا أمراؤكم وإنّكم لتَشُقّون به على أنفسكم وتَشقَون به في آخرتكم وما أخسر المشقّة وراءها العقاب وأربح الدعة معها الأمان من النار.",
+"slug": "at-anbar-during-al-s-march-to-syria-its-landowners-and-merchants-came-out-to-meet-him-and-when-they-",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:07.098Z",
+"updatedAt": "2025-09-11T18:01:07.098Z",
+"publishedAt": "2025-09-11T18:01:07.108Z",
+"translations": [
+{
+"text": "At Anbar, during ʿAlī’s march to Syria, its landowners and merchants came out to meet him, and when they reached him, they dismounted and began to run ahead of his mount on foot. He asked, “What is it you are doing?” and they answered, “This is our custom—it is our way of showing respect to our rulers.” ʿAlī responded: By God, this behavior does not benefit your rulers at all! All you are doing is causing suffering to yourself while earning wretchedness for the hereafter. O how great the loss when suffering is followed by punishment! How great the profit when ease is followed by freedom from hellfire!",
+"type": "en"
+}
+],
+"sermonNumber": "3.32",
+"heading": "At Anbar, during ʿAlī’s march to Syria, its landowners and merchants came out to meet him, and when they reached him, they dismounted and began to run ahead of his mount on foot.",
+"footnotes": [
+{
+"id": 1610,
+"documentId": "a4ob09d23ukkjxch5du9d69u",
+"number": "806",
+"section": "3.32",
+"arabic_word": "",
+"english_word": "responded",
+"arabic_interpretation": "",
+"english_translation": "In 36/656, during the march toward Ṣiffīn. Anbar is in northern Iraq, and the merchant family is named as the Banū Khushnūshak (Persian name). Text and context in Minqarī, Waqʿat Ṣiffīn, 143-144.",
+"createdAt": "2025-09-11T18:11:41.028Z",
+"updatedAt": "2025-09-11T18:11:41.028Z",
+"publishedAt": "2025-09-11T18:11:41.039Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6621,
+"documentId": "bbvq0powxmy51b6c6zqlfwt2",
+"title": "وقال لٱبنه الحسن عليهما السلام يا بُنَيّ ٱحفظ عنّي أربعًا وأربعًا لا يضرّك ما عملتَ معهنّ إنّ أغنى الغنى العقل وأكبر الفقر الحُمق وأوحش الوحشة العُجب وأكرم الحسب حسن الخلق. يا بُنَيّ إيّاك ومُصادقةَ الأحمق فإنّه يريد أن ينفعك فيضرّك وإيّاك ومصادقة البخيل فإنّه يَقعُد عنك أَحْوَج ما تكون إليه وإيّاك ومصادقة الفاجر فإنّه يبيعك بالتافِه وإيّاك ومصادقة الكذّاب فإنّه كالسَّراب يقرّب عليك البعيد ويُبعد عليك القريب.",
+"slug": "warning-to-asan-about-whom-not-to-befriend",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:07.583Z",
+"updatedAt": "2025-09-11T18:01:07.583Z",
+"publishedAt": "2025-09-11T18:01:07.602Z",
+"translations": [
+{
+"text": "ʿAlī said to his son Ḥasan: My dear son, remember four things from me, and four things more—nothing will harm you as long as you follow them. The best wealth is intelligence, the greatest poverty is foolishness, the loneliest alienation comes from conceit, and the noblest lineage is good character. My dear son, beware of befriending a fool—he wants to help you but will harm you. Beware of befriending a miser—he will hold back from helping you when you need him most. Beware of befriending a wanton—he will sell you out for a trifle. Beware of befriending a liar—he is like a mirage that makes near what is distant and makes distant what is near.",
+"type": "en"
+}
+],
+"sermonNumber": "3.33",
+"heading": "Warning to Ḥasan about whom not to befriend",
+"footnotes": [
+{
+"id": 636,
+"documentId": "e3dyhnf9dzqvqlu6ao902c7k",
+"number": "328",
+"section": "3.33",
+"arabic_word": "الفاجر",
+"english_word": "Ḥasan",
+"arabic_interpretation": "م، ي، ه، ومصحّحة في ش: كذا. ن، وأصل ش: <العاجز>.",
+"english_translation": "This text is among ʿAlī’s deathbed counsels to Ḥasan. Māmaṭīrī, Nuzhah, 182-183, Hārūnī, Taysīr, 563, Quḍāʿī, Dustūr, 100-101, Ibn ʿAsākir, Tārīkh, 42:561.",
+"createdAt": "2025-09-11T18:07:50.483Z",
+"updatedAt": "2025-09-11T18:07:50.483Z",
+"publishedAt": "2025-09-11T18:07:50.496Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6623,
+"documentId": "fscxhjehwc2fq6kuxynkkgtb",
+"title": "وقال عليه السلام لا قربة بالنوافل إذا أضرّت بالفرائض.",
+"slug": "supplementary-acts-of-worship-bring-no-reward-if-they-cause-you-to-neglect-mandatory-ones",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:08.157Z",
+"updatedAt": "2025-09-11T18:01:08.157Z",
+"publishedAt": "2025-09-11T18:01:08.177Z",
+"translations": [
+{
+"text": "Supplementary acts of worship bring no reward if they cause you to neglect mandatory ones.",
+"type": "en"
+}
+],
+"sermonNumber": "3.34",
+"heading": "Supplementary acts of worship bring no reward if they cause you to neglect mandatory ones.",
+"footnotes": [
+{
+"id": 1612,
+"documentId": "ier6g31iotfak5p39oc68gvu",
+"number": "808",
+"section": "3.34",
+"arabic_word": "",
+"english_word": "ones",
+"arabic_interpretation": "",
+"english_translation": "Similar to §3.271.",
+"createdAt": "2025-09-11T18:11:41.416Z",
+"updatedAt": "2025-09-11T18:11:41.416Z",
+"publishedAt": "2025-09-11T18:11:41.448Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6625,
+"documentId": "glrbmage50o00taerpv8iv1c",
+"title": "وقال عليه السلام لسان العاقل وراء قلبه وقلب الأحمق وراء لسانه. وهذا من المعاني العجيبة الشريفة والمراد به أنّ العاقل لا يطلق لسانه إلّا بعد مُشاورة الرويّة ومؤامرة الفكرة والأحمق تسبق خَذَفات لسانه وفَلَتات كلامه مراجعة فكره ومماخضة رأيه. فكأنّ لسان العاقل تابع لقلبه وكأنّ قلب الأحمق تابع للسانه. وقد روي عنه عليه السلام هذا المعنى بلفظ آخر وهو قوله <قلب الأحمق في فيه ولسان العاقل في قلبه> ومعناهما واحد.",
+"slug": "al-said-a-sage-s-tongue-is-located-behind-his-heart-a-fool-s-heart-is-located-behind-his-tongue",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:08.801Z",
+"updatedAt": "2025-09-11T18:01:08.801Z",
+"publishedAt": "2025-09-11T18:01:08.815Z",
+"translations": [
+{
+"text": "ʿAlī said: A sage’s tongue is located behind his heart, a fool’s heart is located behind his tongue. Raḍī: This is among the most wondrous and noblest of concepts. The point is that an intelligent man doesn’t allow his tongue free rein until after consulting with his mind and conferring with his reason, while the pebbles flung by the fool’s tongue and the blunders of his speech race out of his mouth without being reviewed by his reason or assessed by his thought. The intelligent man’s tongue follows his heart, while the fool’s heart follows his tongue. The aphorism has also been narrated from ʿAlī in a variant rendering, thus: <A fool’s heart is located in his mouth, a sage’s tongue is located in his heart.> The meaning of both versions is the same.",
+"type": "en"
+}
+],
+"sermonNumber": "3.35",
+"heading": "ʿAlī said: A sage’s tongue is located behind his heart, a fool’s heart is located behind his tongue.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6627,
+"documentId": "v18paodlg1vf0nmpspn6e44s",
+"title": "وقال عليه السلام لبعض أصحابه في علّة ٱعتلّها جعل الله ما كان من شكواك حَطًّا لسيّئاتك. فإنّ المرض لا أجر فيه ولكنّه يَحُطّ السيّئات ويَحُتّها حَتّ الأوراق وإنّما الأجر في القول باللسان والعمل بالأيدي والأقدام. وإنّ الله سبحانه يُدخل بصدق النيّة والسريرة الصالحة من يشاء من عباده الجنّة. وأقول صدق عليه السلام إنّ المرض لا أجر فيه لأنّه من قَبيل ما يُستحقّ عليه العِوض لأنّ العوض يستحقّ على ما كان في مقابلة فعل الله تعالى بالعبد من الآلام والأمراض وما يجري مجرى ذلك. والأجر والثواب يُستحَقّان على ما كان في مقابلة فعل العبد. فبينهما فرق قد بيّنه عليه السلام كما يقتضيه علمه الثاقب ورأيه الصائب.",
+"slug": "al-said-to-an-associate-who-had-been-taken-ill",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:09.311Z",
+"updatedAt": "2025-09-11T18:01:09.311Z",
+"publishedAt": "2025-09-11T18:01:09.324Z",
+"translations": [
+{
+"text": "ʿAlī said to an associate who had been taken ill: May it please God to make your suffering decrease your burden of sin! Illness, while it does not earn you reward, decreases your sins, making them fall off like leaves in the Fall. Reward, on the other hand, is earned through words spoken by tongues, and actions performed by hands and feet. Nevertheless, God willingly admits into paradise all his servants who possess true intentions and pious hearts. Raḍī: ʿAlī is absolutely correct when he says that illness earns no reward, for it belongs to the category of things that are requited, and requital operates in cases of God’s actions toward his servant, such as suffering, illness, and their like. Reward and recompense, on the other hand, operate in cases of God’s servant’s actions. There is clearly a difference between the two categories, which ʿAlī explains with penetrating knowledge and precise judgment.",
+"type": "en"
+}
+],
+"sermonNumber": "3.36",
+"heading": "ʿAlī said to an associate who had been taken ill:",
+"footnotes": [
+{
+"id": 1614,
+"documentId": "x45mg4cnscxitol0040k388h",
+"number": "809",
+"section": "3.36",
+"arabic_word": "",
+"english_word": "ill",
+"arabic_interpretation": "",
+"english_translation": "In 37/657, on the return from Ṣiffīn, within view of Kufa. The addressee was an old man named Ṣāliḥ ibn Sulaym from the tribe of Salāmān ibn Ṭayy, a follower of ʿAlī, who apologized that his illness had kept him from accompanying ʿAlī to battle—note the last line comforting Ṣāliḥ, reassuring him that his good intention had earned him paradise. Text and context in Minqarī, Waqʿat Ṣiffīn, 528-529.",
+"createdAt": "2025-09-11T18:11:41.832Z",
+"updatedAt": "2025-09-11T18:11:41.832Z",
+"publishedAt": "2025-09-11T18:11:41.872Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6629,
+"documentId": "t5l2xmh368oxns13f8zyyn8z",
+"title": "وقال عليه السلام في ذكر خَبّاب بن الأَرَتّ رحمه الله يرحم الله خبّابًا فلقد أسلم راغبًا وهاجر طائعًا وعاش مجاهدًا. طوبى لمن ذكر المعاد وعمل للحساب وقَنِع بالكَفاف ورضي عن الله.",
+"slug": "al-prayed-for-khabb-b-ibn-al-aratt",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:09.794Z",
+"updatedAt": "2025-09-11T18:01:09.794Z",
+"publishedAt": "2025-09-11T18:01:09.806Z",
+"translations": [
+{
+"text": "ʿAlī prayed for Khabbāb ibn al-Aratt: May God have mercy on Khabbāb! He accepted Islam with joy, emigrated in obedience to his Lord, and lived his life fighting for the truth. Blessed is he who contemplates the return to God, does good in anticipation of judgment, contents himself with basic rations, and accepts God’s will.",
+"type": "en"
+}
+],
+"sermonNumber": "3.37",
+"heading": "ʿAlī prayed for Khabbāb ibn al-Aratt:",
+"footnotes": [
+{
+"id": 1616,
+"documentId": "lgyprbwlifhogl5cj5fg4pbb",
+"number": "810",
+"section": "3.37",
+"arabic_word": "",
+"english_word": "Khabbāb ibn al-Aratt",
+"arabic_interpretation": "",
+"english_translation": "Also in 37/657, on the return from Ṣiffīn, just outside Kufa. ʿAlī enquired about the graves he saw there and was told that one was the grave of Khabbāb, a venerable Companion of the Prophet and ʿAlī’s supporter, who had died after ʿAlī left for Ṣiffīn. Text and context in Minqarī, Waqʿat Ṣiffīn, 530-531; Ṭabarī, Tārīkh, 5:61-62. ʿAlī’s address to the people of those graves in §3.119.",
+"createdAt": "2025-09-11T18:11:42.241Z",
+"updatedAt": "2025-09-11T18:11:42.241Z",
+"publishedAt": "2025-09-11T18:11:42.253Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6631,
+"documentId": "xd60isz5r6bmn25t9nvasrw4",
+"title": "وقال عليه السلام لو ضربتُ خَيشوم المؤمن بسيفي هذا على أن يُبغضني ما أبغضني ولو صببت الدنيا بجَمّاتها على المنافق على أن يحبّني ما أحبّني وذلك أنّه قُضي فٱنقضى على لسان النبيّ الأمّيّ أنّه قال <لا يبغضك مؤمن ولا يحبّك منافق>.",
+"slug": "were-i-to-strike-a-believer-on-the-bridge-of-his-nose-with-my-sword-an-action-that-should-cause-him-",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:10.271Z",
+"updatedAt": "2025-09-11T18:01:10.271Z",
+"publishedAt": "2025-09-11T18:01:10.284Z",
+"translations": [
+{
+"text": "Were I to strike a believer on the bridge of his nose with my sword, an action that should cause him to hate me, he will not hate me. Were I to shower the riches of the world on a hypocrite, an action that should prompt him to love me, he will not love me. This is because it was proclaimed, and thus decreed, on the tongue of our Meccan Prophet, who said, <No believer will hate you, ʿAlī, and no hypocrite will love you>.",
+"type": "en"
+}
+],
+"sermonNumber": "3.38",
+"heading": "Were I to strike a believer on the bridge of his nose with my sword, an action that should cause him to hate me, he will not hate me",
+"footnotes": [
+{
+"id": 1618,
+"documentId": "apcewv2j4jxyf4wex6i7z8py",
+"number": "811",
+"section": "3.38",
+"arabic_word": "",
+"english_word": "you",
+"arabic_interpretation": "",
+"english_translation": "From an oration in Kufa, after the Battle of Nahrawān, around 39-40/659-661, attempting to mobilize the Kufans to fight Muʿāwiyah. Text and context in Ḥ 2:195-196 (within their commentary on §1.34 of present volume; see my note there). “The Meccan Prophet,” lit. “the ummī Prophet,” see note at §1.151.2.",
+"createdAt": "2025-09-11T18:11:42.631Z",
+"updatedAt": "2025-09-11T18:11:42.631Z",
+"publishedAt": "2025-09-11T18:11:42.645Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6633,
+"documentId": "yxt6zlxnyhhvv76invma79cb",
+"title": "وقال عليه السلام سيّئة تسوءك خير عند الله من حسنة تعجبك.",
+"slug": "a-shameful-act-about-which-you-are-sorry-is-better-in-god-s-eyes-than-a-virtuous-act-of-which-you-ar",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:10.859Z",
+"updatedAt": "2025-09-11T18:01:10.859Z",
+"publishedAt": "2025-09-11T18:01:10.868Z",
+"translations": [
+{
+"text": "A shameful act about which you are sorry is better in God’s eyes than a virtuous act of which you are proud.",
+"type": "en"
+}
+],
+"sermonNumber": "3.39",
+"heading": "A shameful act about which you are sorry is better in God’s eyes than a virtuous act of which you are proud.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6635,
+"documentId": "tynw4mp28e65ylw0vrgdf0i2",
+"title": "وقال عليه السلام قدر الرجل على قدر همّته وصدقه على قدر مُروّته وشجاعته على قدر أَنَفته وعِفّته على قدر غَيرته.",
+"slug": "the-measure-of-a-man-is-in-accord-with-the-measure-of-his-resolution",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:11.315Z",
+"updatedAt": "2025-09-11T18:01:11.315Z",
+"publishedAt": "2025-09-11T18:01:11.329Z",
+"translations": [
+{
+"text": "The measure of a man is in accord with the measure of his resolution, the measure of his truthfulness is in accord with the measure of his chivalry, the measure of his valor is in accord with the measure of his self-respect, and the measure of his chastity is in accord with the measure of his jealous sense of honor.",
+"type": "en"
+}
+],
+"sermonNumber": "3.40",
+"heading": "The measure of a man is in accord with the measure of his resolution,",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6637,
+"documentId": "uj3u4loz2imeayy3gb5bt3zj",
+"title": "وقال عليه السلام الظفر بالحزم والحزم بإجالة الرأي والرأي بتحصين الأسرار.",
+"slug": "victory-is-reached-through-resolution-resolution-is-reached-through-reflection",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:11.803Z",
+"updatedAt": "2025-09-11T18:01:11.803Z",
+"publishedAt": "2025-09-11T18:01:11.815Z",
+"translations": [
+{
+"text": "Victory is reached through resolution, resolution is reached through reflection, and reflection is reached through guarding your secrets.",
+"type": "en"
+}
+],
+"sermonNumber": "3.41",
+"heading": "Victory is reached through resolution, resolution is reached through reflection,",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6639,
+"documentId": "df0rm9enuu5jeorp23s81wjn",
+"title": "وقال عليه السلام احذروا صَولة الكريم إذا جاعَ واللئيم إذا شَبِع.",
+"slug": "beware-the-peer-s-attack-when-he-s-hungry-and-the-churl-s-when-he-s-sated",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:12.256Z",
+"updatedAt": "2025-09-11T18:01:12.256Z",
+"publishedAt": "2025-09-11T18:01:12.268Z",
+"translations": [
+{
+"text": "Beware the peer’s attack when he’s hungry, and the churl’s when he’s sated.",
+"type": "en"
+}
+],
+"sermonNumber": "3.42",
+"heading": "Beware the peer’s attack when he’s hungry, and the churl’s when he’s sated.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6641,
+"documentId": "z91vvvxx7luqsf90a6kjmc5n",
+"title": "وقال عليه السلام قلوب الرجال وحشيّة فمن تألّفها أقبلت عليه.",
+"slug": "men-s-hearts-are-wild-beasts-but-they-soften-toward-those-they-love",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:12.747Z",
+"updatedAt": "2025-09-11T18:01:12.747Z",
+"publishedAt": "2025-09-11T18:01:12.758Z",
+"translations": [
+{
+"text": "Men’s hearts are wild beasts, but they soften toward those they love.",
+"type": "en"
+}
+],
+"sermonNumber": "3.43",
+"heading": "Men’s hearts are wild beasts, but they soften toward those they love.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6643,
+"documentId": "anusegehyo2uyl0k7uvumhgq",
+"title": "وقال عليه السلام عيبك مستور ما أسعدك جَدُّك.",
+"slug": "your-flaws-will-remain-concealed-as-long-as-your-luck-holds",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:13.200Z",
+"updatedAt": "2025-09-11T18:01:13.200Z",
+"publishedAt": "2025-09-11T18:01:13.212Z",
+"translations": [
+{
+"text": "Your flaws will remain concealed as long as your luck holds.",
+"type": "en"
+}
+],
+"sermonNumber": "3.44",
+"heading": "Your flaws will remain concealed as long as your luck holds.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6645,
+"documentId": "w29whu93xccr5jh8ntcig5b9",
+"title": "وقال عليه السلام أَولى الناس بالعفو أقدرهم على العقوبة.",
+"slug": "those-who-hold-the-most-power-to-punish-should-be-the-foremost-in-forgiving",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:13.641Z",
+"updatedAt": "2025-09-11T18:01:13.641Z",
+"publishedAt": "2025-09-11T18:01:13.653Z",
+"translations": [
+{
+"text": "Those who hold the most power to punish should be the foremost in forgiving.",
+"type": "en"
+}
+],
+"sermonNumber": "3.45",
+"heading": "Those who hold the most power to punish should be the foremost in forgiving.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6647,
+"documentId": "a7qcuqxb8e8ogip1mafy3ce4",
+"title": "وقال عليه السلام السخاء ما كان ٱبتداءً فأمّا ما كان عن مسألة فحياء وتذمُّم.",
+"slug": "true-generosity-is-spontaneous-giving-when-solicited-is-merely-to-avoid-shame-and-blame",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:14.139Z",
+"updatedAt": "2025-09-11T18:01:14.139Z",
+"publishedAt": "2025-09-11T18:01:14.150Z",
+"translations": [
+{
+"text": "True generosity is spontaneous. Giving when solicited is merely to avoid shame and blame.",
+"type": "en"
+}
+],
+"sermonNumber": "3.46",
+"heading": "True generosity is spontaneous. Giving when solicited is merely to avoid shame and blame.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6649,
+"documentId": "m8bgdwyc7ji57x7ugdqfi8lo",
+"title": "وقال عليه السلام لا غنى كالعقل ولا فقر كالجهل ولا ميراث كالأدب ولا ظهير كالمُشاورة.",
+"slug": "there-is-no-wealth-like-intelligence-no-poverty-like-ignorance-no-bequest-like-refinement-and-no-shi",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:14.591Z",
+"updatedAt": "2025-09-11T18:01:14.591Z",
+"publishedAt": "2025-09-11T18:01:14.602Z",
+"translations": [
+{
+"text": "There is no wealth like intelligence, no poverty like ignorance, no bequest like refinement, and no shield like consultation.",
+"type": "en"
+}
+],
+"sermonNumber": "3.47",
+"heading": "There is no wealth like intelligence, no poverty like ignorance, no bequest like refinement, and no shield like consultation.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6651,
+"documentId": "yyb2svmon6rzctp6zssd5ldz",
+"title": "وقال عليه السلام الصبر صبران صبرٌ على ما تَكرَه وصبر عمّا تحبّ.",
+"slug": "patience-is-of-two-kinds-patience-in-the-face-of-adversity-and-patience-in-the-absence-of-privilege",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:15.060Z",
+"updatedAt": "2025-09-11T18:01:15.060Z",
+"publishedAt": "2025-09-11T18:01:15.071Z",
+"translations": [
+{
+"text": "Patience is of two kinds: patience in the face of adversity and patience in the absence of privilege.",
+"type": "en"
+}
+],
+"sermonNumber": "3.48",
+"heading": "Patience is of two kinds: patience in the face of adversity and patience in the absence of privilege.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6653,
+"documentId": "r8d9igj3lkyoqwk5a5l8o1lf",
+"title": "وقال عليه السلام الغنى في الغُربة وطن والفقر في الوطن غربة.",
+"slug": "the-rich-man-is-at-home-in-a-foreign-land-the-pauper-is-a-stranger-in-his-hometown",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:15.532Z",
+"updatedAt": "2025-09-11T18:01:15.532Z",
+"publishedAt": "2025-09-11T18:01:15.545Z",
+"translations": [
+{
+"text": "The rich man is at home in a foreign land, the pauper is a stranger in his hometown.",
+"type": "en"
+}
+],
+"sermonNumber": "3.49",
+"heading": "The rich man is at home in a foreign land, the pauper is a stranger in his hometown.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6655,
+"documentId": "qks9p0c39aeo9thnm99ynir9",
+"title": "وقال عليه السلام القناعة مال لا يَنفَد.",
+"slug": "contentment-is-wealth-that-never-runs-out",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:15.997Z",
+"updatedAt": "2025-09-11T18:01:15.997Z",
+"publishedAt": "2025-09-11T18:01:16.007Z",
+"translations": [
+{
+"text": "Contentment is wealth that never runs out.",
+"type": "en"
+}
+],
+"sermonNumber": "3.50",
+"heading": "Contentment is wealth that never runs out.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6657,
+"documentId": "x3hy8xo02wl73exjw81pp0l3",
+"title": "وقال عليه السلام المال مادّة الشهوات.",
+"slug": "wealth-fuels-passions",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:16.505Z",
+"updatedAt": "2025-09-11T18:01:16.505Z",
+"publishedAt": "2025-09-11T18:01:16.514Z",
+"translations": [
+{
+"text": "Wealth fuels passions.",
+"type": "en"
+}
+],
+"sermonNumber": "3.51",
+"heading": "Wealth fuels passions.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6659,
+"documentId": "lkar7mifi1xwolq31vtstn4b",
+"title": "وقال عليه السلام من حذّرك كمن بشّرك.",
+"slug": "one-who-brings-dire-warnings-is-like-one-who-gives-glad-tidings",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:17.087Z",
+"updatedAt": "2025-09-11T18:01:17.087Z",
+"publishedAt": "2025-09-11T18:01:17.099Z",
+"translations": [
+{
+"text": "One who brings dire warnings is like one who gives glad tidings.",
+"type": "en"
+}
+],
+"sermonNumber": "3.52",
+"heading": "One who brings dire warnings is like one who gives glad tidings.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6661,
+"documentId": "kcs2eyj6lfcox3ezx5q2te25",
+"title": "وقال عليه السلام اللسان سَبُعٌ إن خُلّي عنه عَقر.",
+"slug": "the-tongue-is-a-wild-beast-let-loose-it-attacks",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:17.722Z",
+"updatedAt": "2025-09-11T18:01:17.722Z",
+"publishedAt": "2025-09-11T18:01:17.732Z",
+"translations": [
+{
+"text": "The tongue is a wild beast—let loose, it attacks.",
+"type": "en"
+}
+],
+"sermonNumber": "3.53",
+"heading": "The tongue is a wild beast—let loose, it attacks.",
+"footnotes": [
+{
+"id": 1620,
+"documentId": "a2til2b2gv4i62v1zgak4irj",
+"number": "812",
+"section": "3.53",
+"arabic_word": "",
+"english_word": "attacks",
+"arabic_interpretation": "",
+"english_translation": "From ʿAlī’s counsel to Muḥammad ibn al-Ḥanafiyyah. Mufīd, Ikhtiṣāṣ, 229.",
+"createdAt": "2025-09-11T18:11:43.094Z",
+"updatedAt": "2025-09-11T18:11:43.094Z",
+"publishedAt": "2025-09-11T18:11:43.116Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6663,
+"documentId": "ngm04pva60o7oroa9ds5ag0e",
+"title": "وقال عليه السلام المرأة عقرب حُلوة اللَّسبة.",
+"slug": "a-woman-is-a-scorpion-with-a-sweet-sting",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:18.175Z",
+"updatedAt": "2025-09-11T18:01:18.175Z",
+"publishedAt": "2025-09-11T18:01:18.189Z",
+"translations": [
+{
+"text": "A woman is a scorpion with a sweet sting.",
+"type": "en"
+}
+],
+"sermonNumber": "3.54",
+"heading": "A woman is a scorpion with a sweet sting.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6665,
+"documentId": "wvzdwn18tbxyuhninu4out8d",
+"title": "وقال عليه السلام الشفيع جناح الطالب.",
+"slug": "the-intercessor-is-the-suppliant-s-wing",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:18.663Z",
+"updatedAt": "2025-09-11T18:01:18.663Z",
+"publishedAt": "2025-09-11T18:01:18.672Z",
+"translations": [
+{
+"text": "The intercessor is the suppliant’s wing.",
+"type": "en"
+}
+],
+"sermonNumber": "3.55",
+"heading": "The intercessor is the suppliant’s wing.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6667,
+"documentId": "unqwlpk66puk0u7yb43k2bs0",
+"title": "وقال عليه السلام أهل الدنيا كرَكب يُسار بهم وهم نِيام.",
+"slug": "people-in-this-world-are-a-company-of-travelers-who-are-carried-along-while-they-sleep",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:19.140Z",
+"updatedAt": "2025-09-11T18:01:19.140Z",
+"publishedAt": "2025-09-11T18:01:19.158Z",
+"translations": [
+{
+"text": "People in this world are a company of travelers who are carried along while they sleep.",
+"type": "en"
+}
+],
+"sermonNumber": "3.56",
+"heading": "People in this world are a company of travelers who are carried along while they sleep.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6669,
+"documentId": "fdm355gz4exlhcg66ghwi7lz",
+"title": "وقال عليه السلام فَقدُ الأحبّة غُربة.",
+"slug": "living-without-loved-ones-is-like-living-in-a-strange-land",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:19.620Z",
+"updatedAt": "2025-09-11T18:01:19.620Z",
+"publishedAt": "2025-09-11T18:01:19.639Z",
+"translations": [
+{
+"text": "Living without loved ones is like living in a strange land.",
+"type": "en"
+}
+],
+"sermonNumber": "3.57",
+"heading": "Living without loved ones is like living in a strange land.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6671,
+"documentId": "lgno4qlv5qczo473g8n69o5l",
+"title": "وقال عليه السلام فوت الحاجة أهون من طلبها إلى غير أهلها.",
+"slug": "not-getting-what-you-want-is-better-than-asking-those-you-shouldn-t",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:20.109Z",
+"updatedAt": "2025-09-11T18:01:20.109Z",
+"publishedAt": "2025-09-11T18:01:20.121Z",
+"translations": [
+{
+"text": "Not getting what you want is better than asking those you shouldn’t.",
+"type": "en"
+}
+],
+"sermonNumber": "3.58",
+"heading": "Not getting what you want is better than asking those you shouldn’t.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6673,
+"documentId": "ux9yzl2ujam8xhvbjhldum1q",
+"title": "وقال عليه السلام لا تستحيِ من إعطاء القليل فإنّ الحرمان أقلّ منه.",
+"slug": "don-t-be-embarrassed-to-give-a-little-not-giving-is-even-less",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:20.655Z",
+"updatedAt": "2025-09-11T18:01:20.655Z",
+"publishedAt": "2025-09-11T18:01:20.671Z",
+"translations": [
+{
+"text": "Don’t be embarrassed to give a little—not giving is even less.",
+"type": "en"
+}
+],
+"sermonNumber": "3.59",
+"heading": "Don’t be embarrassed to give a little—not giving is even less.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6675,
+"documentId": "xtrh9da3uvl0kbsvpjtn7629",
+"title": "وقال عليه السلام العَفاف زينة الفقر.",
+"slug": "temperance-adorns-poverty",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:21.145Z",
+"updatedAt": "2025-09-11T18:01:21.145Z",
+"publishedAt": "2025-09-11T18:01:21.159Z",
+"translations": [
+{
+"text": "Temperance adorns poverty.",
+"type": "en"
+}
+],
+"sermonNumber": "3.60",
+"heading": "Temperance adorns poverty.",
+"footnotes": [
+{
+"id": 1622,
+"documentId": "hmp1gzkpoem2hqazy58fwl9k",
+"number": "813",
+"section": ""3.60"",
+"arabic_word": "",
+"english_word": "poverty",
+"arabic_interpretation": "",
+"english_translation": "From ʿAlī’s oration titled Wasīlah (Ḥarrānī, Tuḥaf, 90). This saying is similar to the first half of §3.325.",
+"createdAt": "2025-09-11T18:11:43.494Z",
+"updatedAt": "2025-09-11T18:11:43.494Z",
+"publishedAt": "2025-09-11T18:11:43.516Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6677,
+"documentId": "o6eb60r2aucjwgufwy5w3e4q",
+"title": "وقال عليه السلام إذا لم يكن ما تريد فلا تُبَل كيف كنت.",
+"slug": "if-what-you-wanted-didn-t-happen-don-t-bewail-your-lot-in-fact-don-t-bewail-anything-at-all",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:21.625Z",
+"updatedAt": "2025-09-11T18:01:21.625Z",
+"publishedAt": "2025-09-11T18:01:21.636Z",
+"translations": [
+{
+"text": "If what you wanted didn’t happen, don’t bewail your lot—in fact, don’t bewail anything at all!",
+"type": "en"
+}
+],
+"sermonNumber": "3.61",
+"heading": "If what you wanted didn’t happen, don’t bewail your lot—in fact, don’t bewail anything at all!",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6679,
+"documentId": "mo002ev41srcnifjl28qq3eq",
+"title": "وقال عليه السلام لا ترى الجاهل إلّا مُفرِطًا أو مُفرِّطًا.",
+"slug": "an-ignoramus-is-either-stingy-or-extravagant",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:22.140Z",
+"updatedAt": "2025-09-11T18:01:22.140Z",
+"publishedAt": "2025-09-11T18:01:22.150Z",
+"translations": [
+{
+"text": "An ignoramus is either stingy or extravagant.",
+"type": "en"
+}
+],
+"sermonNumber": "3.62",
+"heading": "An ignoramus is either stingy or extravagant.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6681,
+"documentId": "ewtfe9ow544u9r3xhwxeldoo",
+"title": "وقال عليه السلام إذا تَمّ العقل نقص الكلام.",
+"slug": "where-intelligence-abounds-words-are-few",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:22.615Z",
+"updatedAt": "2025-09-11T18:01:22.615Z",
+"publishedAt": "2025-09-11T18:01:22.623Z",
+"translations": [
+{
+"text": "Where intelligence abounds, words are few.",
+"type": "en"
+}
+],
+"sermonNumber": "3.63",
+"heading": "Where intelligence abounds, words are few.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6683,
+"documentId": "lsoqtt9y0842pxci68v44nkq",
+"title": "وقال عليه السلام الدهر يُخلِق الأبدان ويُجدِّد الآمال ويقرّب المَنيّة ويباعد الأُمنيّة من ظفر به نَصِب ومن فاتَه تَعِب.",
+"slug": "time-wears-out-bodies-renews-hopes-draws-death-close-and-makes-goals-distant-it-wearies-those-who-wi",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:23.137Z",
+"updatedAt": "2025-09-11T18:01:23.137Z",
+"publishedAt": "2025-09-11T18:01:23.148Z",
+"translations": [
+{
+"text": "Time wears out bodies, renews hopes, draws death close, and makes goals distant. It wearies those who win a share and grieves those who don’t.",
+"type": "en"
+}
+],
+"sermonNumber": "3.64",
+"heading": "Time wears out bodies, renews hopes, draws death close, and makes goals distant. It wearies those who win a share and grieves those who don’t.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6685,
+"documentId": "io4c7dcwy6pfidsmjt5f02zb",
+"title": "وقال عليه السلام من نصب نفسه للناس إمامًا فعليه أن يبدأ بتعليم نفسه قبل تعليم غيره وليكن تأديبه بسيرته قبل تأديبه بلسانه ومُعلِّم نفسه ومؤدّبها أحقّ بالإجلال من معلّم الناس ومؤدّبهم.",
+"slug": "a-man-who-would-lead-should-teach-himself-before-teaching-others-he-should-discipline-with-his-behav",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:23.595Z",
+"updatedAt": "2025-09-11T18:01:23.595Z",
+"publishedAt": "2025-09-11T18:01:23.603Z",
+"translations": [
+{
+"text": "A man who would lead should teach himself before teaching others, he should discipline with his behavior ahead of his tongue—a man who teaches and disciplines himself is worthier of reverence than a man who teaches and disciplines others.",
+"type": "en"
+}
+],
+"sermonNumber": "3.65",
+"heading": "A man who would lead should teach himself before teaching others, he should discipline with his behavior ahead of his tongue",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6687,
+"documentId": "omslwuhxyfq2un8vizoe5ynw",
+"title": "وقال عليه السلام نفَس المرء خُطاه إلى أجله.",
+"slug": "each-breath-is-another-step-toward-death",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:24.062Z",
+"updatedAt": "2025-09-11T18:01:24.062Z",
+"publishedAt": "2025-09-11T18:01:24.073Z",
+"translations": [
+{
+"text": "Each breath is another step toward death.",
+"type": "en"
+}
+],
+"sermonNumber": "3.66",
+"heading": "Each breath is another step toward death.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6689,
+"documentId": "thf30b8e8s0492426n3rvncu",
+"title": "وقال عليه السلام كلّ معدود مُنقَضٍ وكلّ متوقَّعٍ آتٍ",
+"slug": "everything-you-can-tally-will-run-out-everything-you-can-anticipate-will-happen",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:24.561Z",
+"updatedAt": "2025-09-11T18:01:24.561Z",
+"publishedAt": "2025-09-11T18:01:24.576Z",
+"translations": [
+{
+"text": "Everything you can tally will run out. Everything you can anticipate will happen.",
+"type": "en"
+}
+],
+"sermonNumber": "3.67",
+"heading": "Everything you can tally will run out. Everything you can anticipate will happen.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6691,
+"documentId": "f49lilgmfun09tc68fzt3ozg",
+"title": "وقال عليه السلام إنّ الأمور إذا ٱشتَبهت ٱعتُبر آخِرها بأوّلها.",
+"slug": "when-affairs-grow-murky-predicate-endings-on-beginnings",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:25.024Z",
+"updatedAt": "2025-09-11T18:01:25.024Z",
+"publishedAt": "2025-09-11T18:01:25.035Z",
+"translations": [
+{
+"text": "When affairs grow murky, predicate endings on beginnings.",
+"type": "en"
+}
+],
+"sermonNumber": "3.68",
+"heading": "When affairs grow murky, predicate endings on beginnings.",
+"footnotes": [
+{
+"id": 1624,
+"documentId": "yv9m9jjikzj2fob2436dxb0g",
+"number": "814",
+"section": "3.68",
+"arabic_word": "",
+"english_word": "beginnings",
+"arabic_interpretation": "",
+"english_translation": "From ʿAlī’s oration on the last night of fighting, The Night of Clamor, at the Battle of Ṣiffīn in 37/657. Minqarī, Waqʿat Ṣiffīn, 476.",
+"createdAt": "2025-09-11T18:11:43.882Z",
+"updatedAt": "2025-09-11T18:11:43.882Z",
+"publishedAt": "2025-09-11T18:11:43.906Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6693,
+"documentId": "zrjb56b66gv1c86xqkw3uco4",
+"title": "ومن خبر ضِرار بن ضَمرة الضِّبابيّ عند دخوله على معاوية ومسألته عن أمير المؤمنين عليه السلام. قال فأشهد لقد رأيته في بعض مواقفه وقد أرخى الليل سُدوله وهو قائم في محرابه قابض على لِحيته يَتململ تملمُل السَّليم ويبكي بكاء الحزين ويقول يا دنيا يا دنيا إليك عنّي أبي تعرّضتِ أم إليّ تشوّفت لا حانَ حَينُك هَيهاتَ غُرّي غيري لا حاجة لي فيك قد طلّقتك ثلاثًا لا رجعة فيها فعيشك قصير وخطَرك يسير وأملك حقير. آهِ من قلّة الزاد وطول الطريق وبعد السفر وعظيم المَورِد.",
+"slug": "addressing-this-world-ir-r-s-report",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:25.481Z",
+"updatedAt": "2025-09-11T18:01:25.481Z",
+"publishedAt": "2025-09-11T18:01:25.497Z",
+"translations": [
+{
+"text": "From a report relating Ḍirār ibn Ḍamrah al-Ḍibābī’s visit to Muʿāwiyah, who asked him to describe the Commander of the Faithful. Ḍirār declared: I testify that I saw ʿAlī as he prayed when night had lowered its curtain. Standing in his prayer niche, hand upon his beard, writhing as though bitten by a snake and weeping grievously, he exclaimed: World, O world, get away from me! Is it me you try to tempt, is it for me you adorn yourself? May your time never arrive, go deceive another, for I have no need of you—I have divorced you thrice and there can be no reversal! Your life is short, your worth is little, all hopes placed in you are of no consequence. Alas, how scarce my provisions, how long the road, how distant the journey, and how momentous the arrival at the watering hole!",
+"type": "en"
+}
+],
+"sermonNumber": "3.69",
+"heading": "Addressing this world, Ḍirār’s report",
+"footnotes": [
+{
+"id": 638,
+"documentId": "g8z6tvlc1snoajjkebgkkaq1",
+"number": "329",
+"section": "3.69",
+"arabic_word": "تشوّفت",
+"english_word": "reversal",
+"arabic_interpretation": "م، ي، ي، ومصحّحة في ش، ن: كذا. وأصل ش، ن، ونسخة في م، ه: <تشوّقت>.",
+"english_translation": "In most schools of Islamic law, a man is permitted to remarry his divorced wife up to a total of three times.",
+"createdAt": "2025-09-11T18:07:50.969Z",
+"updatedAt": "2025-09-11T18:07:50.969Z",
+"publishedAt": "2025-09-11T18:07:50.984Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6695,
+"documentId": "vabsaduvgdzmxdnbyxqblb8k",
+"title": "ومن كلام له عليه السلام للشاميّ لمّا سأله أكان مسيره إلى الشام بقضاء من الله وقدر بعد كلام طويل هذا مختاره وَيحَك لعلّك ظننت قضاء لازمًا وقَدَرًا حاتمًا. ولو كان كذلك لبطل الثواب والعقاب وسقط الوعد والوعيد. إنّ الله سبحانه أمر عباده تخييرًا ونهاهم تحذيرًا وكلّف يسيرًا ولم يكلّف عسيرًا وأعطى على القليل كثيرًا. ولم يُعصَ مغلوبًا ولم يُطَع مكرِهًا ولم يرسل الأنبياء لَعِبًا ولم ينزل الكتب للعباد عبثًا ولا خلق السماوات ﴿وَٱلْأَرْضَ وَمَا بَيْنَهُمَا بَاطِلًا ذَٰلِكَ ظَنُّ ٱلَّذِينَ كَفَرُوْا فَوَيْلٌ لِّلَّذِينَ كَفَرُوْا مِنَ ٱلنَّارِ﴾.",
+"slug": "destiny-and-the-march-on-syria",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:25.983Z",
+"updatedAt": "2025-09-11T18:01:25.983Z",
+"publishedAt": "2025-09-11T18:01:25.995Z",
+"translations": [
+{
+"text": "From ʿAlī’s words to the Syrian who asked whether the march on Syria was decreed by God. ʿAlī gave a lengthy answer from which the following is a selection:Woe! Perhaps you think destiny is final and fate absolute! If that were the case, God’s reward and punishment would be invalid, and God’s promise and threat would have no meaning. God has commanded his servants to do certain things, while giving them free choice, and forbidden them from doing other things, while giving them fair warning. He has imposed on them easy, not harsh tasks, and has promised great rewards for small efforts. When he is disobeyed, it is not because he is overpowered. When he is obeyed, it is not because he coerced. He has not sent prophets in play, or revealed scriptures on a whim, or created the skies «and the earth in vain. That is the claim of those who do not believe—woe and hellfire to unbelievers!»",
+"type": "en"
+}
+],
+"sermonNumber": "3.70",
+"heading": "Destiny and the march on Syria",
+"footnotes": [
+{
+"id": 1626,
+"documentId": "up67gyx3nfxnzzibag8pt0u5",
+"number": "817",
+"section": ""3.70"",
+"arabic_word": "",
+"english_word": "selection",
+"arabic_interpretation": "",
+"english_translation": "According to Ṣadūq (Tawḥīd, 380), the man who asked the question was not a Syrian, but one of ʿAlī’s Iraqi followers.",
+"createdAt": "2025-09-11T18:11:44.316Z",
+"updatedAt": "2025-09-11T18:11:44.316Z",
+"publishedAt": "2025-09-11T18:11:44.329Z"
+},
+{
+"id": 1628,
+"documentId": "ts26e9y3ok6qjtgmaqqw4rkf",
+"number": "818",
+"section": ""3.70"",
+"arabic_word": "",
+"english_word": "unbelievers",
+"arabic_interpretation": "",
+"english_translation": "Qurʾan, Ṣād 38:27.",
+"createdAt": "2025-09-11T18:11:44.687Z",
+"updatedAt": "2025-09-11T18:11:44.687Z",
+"publishedAt": "2025-09-11T18:11:44.699Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6697,
+"documentId": "c1th1lhu34qg7bve4rw4pyyi",
+"title": "وقال عليه السلام خذ الحكمة أَنّٰى كانت فإنّ الحكمة تكون في صدر المنافق فتَلَجلَجُ في صدره حتّى تَخرج فتسكن إلى صواحبها في صدر المؤمن. وقال عليه السلام في مثل ذلك الحكمة ضالّة المؤمن فخذ الحكمة ولو من أهل النفاق.",
+"slug": "seize-wisdom-wherever-you-find-it-a-wise-maxim-may-reside-in-the-breast-of-a-hypocrite-and-it-quiver",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:26.452Z",
+"updatedAt": "2025-09-11T18:01:26.452Z",
+"publishedAt": "2025-09-11T18:01:26.465Z",
+"translations": [
+{
+"text": "Seize wisdom wherever you find it. A wise maxim may reside in the breast of a hypocrite, and it quivers and trembles there until it settles next to its kin, in the breast of a believer. ʿAlī also said in a similar vein: Believers, wisdom is your own lost camel—seize it, then, even from hypocrites!",
+"type": "en"
+}
+],
+"sermonNumber": "3.71",
+"heading": "Seize wisdom wherever you find it. A wise maxim may reside in the breast of a hypocrite, and it quivers and trembles there until it settles next to its kin, in the breast of a believer.",
+"footnotes": [
+{
+"id": 640,
+"documentId": "uabfuivx5agjh490u72smczl",
+"number": "330",
+"section": "3.71",
+"arabic_word": "أَنّٰى",
+"english_word": "",
+"arabic_interpretation": "ن، ش، ي، ه: كذا. م، ونسخة في ش: <أين>.",
+"english_translation": "",
+"createdAt": "2025-09-11T18:07:51.471Z",
+"updatedAt": "2025-09-11T18:07:51.471Z",
+"publishedAt": "2025-09-11T18:07:51.481Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6699,
+"documentId": "n9ahmlv9juokirrm3l9wp7sf",
+"title": "وقال عليه السلام قيمة كلّ ٱمرئ ما يحسن. وهذه الكلمة التي لا تصاب لها قيمة ولا توزن بها حكمة ولا تقرن إليها كلمة.",
+"slug": "the-measure-of-a-man-is-the-good-he-does",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:26.908Z",
+"updatedAt": "2025-09-11T18:01:26.908Z",
+"publishedAt": "2025-09-11T18:01:26.918Z",
+"translations": [
+{
+"text": "The measure of a man is the good he does. Raḍī: This maxim is priceless. No adage can be equated with it, no maxim can be compared to it.",
+"type": "en"
+}
+],
+"sermonNumber": "3.72",
+"heading": "The measure of a man is the good he does.",
+"footnotes": [
+{
+"id": 642,
+"documentId": "bwvloe0jt09chd141jw50ox2",
+"number": "331",
+"section": "3.72",
+"arabic_word": "يحسن",
+"english_word": "does",
+"arabic_interpretation": "ن، ي، ه، ش: كذا. م، ونسخة في ش: <يحسنه>.",
+"english_translation": "Listed among ʿAlī’s “signature replies” (tawqīʿāt), inscribed on the letter to his associate Ṣaʿṣaʿah ibn Ṣūḥān (Ibn ʿAbd Rabbih, ʿIqd, 4:288). The line could also be translated as, “The measure of a man is what he does well”—i.e., does well in terms of professional skill (B 954), or knowledge and worship (F 408). be translated as, “The measure of a man is what he does well”—i.e., does well in terms of professional skill (B 954), or knowledge and worship (F 408).",
+"createdAt": "2025-09-11T18:07:52.021Z",
+"updatedAt": "2025-09-11T18:07:52.021Z",
+"publishedAt": "2025-09-11T18:07:52.033Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6701,
+"documentId": "to7nbpx0ds6q9115pqlegfs7",
+"title": "وقال عليه السلام أوصيكم بخمس لو ضربتم إليها آباط الإبل لكانت لذلك أهلًا لا يَرجُوَنّ أحد منكم إلّا ربَّه ولا يَخافنّ إلّا ذنبه ولا يَستحيِيَنّ أحد إذا سُئل عمّا لا يعلم أن يقول لا أعلم ولا يستحيينّ أحد إذا لم يعلم الشيء أن يتعلّمه وبالصبر فإنّ الصبر من الإيمان كالرأس من الجسد لا خير في جسد لا رأس معه ولا في إيمان لا صبر معه.",
+"slug": "five-traits-of-character",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:27.360Z",
+"updatedAt": "2025-09-11T18:01:27.360Z",
+"publishedAt": "2025-09-11T18:01:27.371Z",
+"translations": [
+{
+"text": "I counsel you to five traits so precious it is only right that you should whip your camels to reach them: Place your hopes in no one save your Lord. Fear nothing save your sins. When asked about something you don’t know, don’t be ashamed to say, “I don’t know.” If you don’t know something, don’t be ashamed to learn. And be patient in adversity, for patience is to faith as the head is to the body—what good is a body without a head, or faith without patience?",
+"type": "en"
+}
+],
+"sermonNumber": "3.73",
+"heading": "Five traits of character",
+"footnotes": [
+{
+"id": 644,
+"documentId": "t7tdwr77j8dcef6qou8oylxd",
+"number": "332",
+"section": "3.73",
+"arabic_word": "بالصبر",
+"english_word": "patience",
+"arabic_interpretation": "ن، ش، م، ه: كذا. ي، وفي هامش ه: أضيفت قبلها <عليكم>. مصحّحة في ش: أضيفت قبلها <عليك>.",
+"english_translation": "Part of a sermon in the mosque (Māmaṭīrī, Nuzhah, 154-157), presumably in Kufa; other parts are §3.81, §3.100.",
+"createdAt": "2025-09-11T18:07:52.665Z",
+"updatedAt": "2025-09-11T18:07:52.665Z",
+"publishedAt": "2025-09-11T18:07:52.679Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6703,
+"documentId": "g1r1erxpdhtygf8jo8kxomcp",
+"title": "وقال عليه السلام لرجل أفرط في الثناء عليه وكان له مُتّهِمًا أنا دون ما تقول وفوق ما في نفسك.",
+"slug": "al-said-to-a-secret-calumniator-who-praised-him-effusively-to-his-face",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:27.854Z",
+"updatedAt": "2025-09-11T18:01:27.854Z",
+"publishedAt": "2025-09-11T18:01:27.865Z",
+"translations": [
+{
+"text": "ʿAlī said to a secret calumniator who praised him effusively to his face: I am less than you say but more than you think.",
+"type": "en"
+}
+],
+"sermonNumber": "3.74",
+"heading": "ʿAlī said to a secret calumniator who praised him effusively to his face:",
+"footnotes": [
+{
+"id": 1630,
+"documentId": "ijvmb2v9eade2lfqyxitx37c",
+"number": "821",
+"section": "3.74",
+"arabic_word": "",
+"english_word": "face",
+"arabic_interpretation": "",
+"english_translation": "The calumniator was al-Ashʿath ibn Qays, and the exchange presumably happened in Kufa during ʿAlī’s caliphate, 35-40/656-661. Abū ʿUbayd al-Bakrī, Faṣl al-Maqāl, 33.",
+"createdAt": "2025-09-11T18:11:45.070Z",
+"updatedAt": "2025-09-11T18:11:45.070Z",
+"publishedAt": "2025-09-11T18:11:45.090Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6705,
+"documentId": "h3hcnogj82l19fe9zzzyienj",
+"title": "وقال عليه السلام بقيّة السيف أبقى عددًا وأكثر ولدًا.",
+"slug": "survivors-of-the-sword-multiply-in-number-and-their-descendants-proliferate",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:28.329Z",
+"updatedAt": "2025-09-11T18:01:28.329Z",
+"publishedAt": "2025-09-11T18:01:28.340Z",
+"translations": [
+{
+"text": "Survivors of the sword multiply in number and their descendants proliferate.",
+"type": "en"
+}
+],
+"sermonNumber": "3.75",
+"heading": "Survivors of the sword multiply in number and their descendants proliferate.",
+"footnotes": [
+{
+"id": 1632,
+"documentId": "s4w1f4h8dxdfvrmnouukzqqx",
+"number": "822",
+"section": "3.75",
+"arabic_word": "",
+"english_word": "proliferate",
+"arabic_interpretation": "",
+"english_translation": "Among ʿAlī’s signature replies (tawqīʿāt), inscribed on his letter to his associate Ḥuṣayn (or Ḥuḍayn) ibn al-Mundhir. Ibn ʿAbd Rabbih, ʿIqd, 4:288.",
+"createdAt": "2025-09-11T18:11:45.465Z",
+"updatedAt": "2025-09-11T18:11:45.465Z",
+"publishedAt": "2025-09-11T18:11:45.483Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6707,
+"documentId": "pwplesbyqiryl31ipcy0olhw",
+"title": "وقال عليه السلام من ترك قول لا أدري أصيبت مَقاتله.",
+"slug": "the-moment-you-stop-saying-i-don-t-know-you-will-be-struck-the-deathblow",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:28.775Z",
+"updatedAt": "2025-09-11T18:01:28.775Z",
+"publishedAt": "2025-09-11T18:01:28.808Z",
+"translations": [
+{
+"text": "The moment you stop saying, “I don’t know,” you will be struck the deathblow.",
+"type": "en"
+}
+],
+"sermonNumber": "3.76",
+"heading": "The moment you stop saying, “I don’t know,” you will be struck the deathblow.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6709,
+"documentId": "aols1ysk8r90pejped0jdw70",
+"title": "وقال عليه السلام رأي الشيخ أحبّ إليّ من جَلَد الغلام. وروي <من مشهد الغلام>.",
+"slug": "an-elder-s-advice-is-worth-more-to-me-than-a-youth-s-muscle",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:29.319Z",
+"updatedAt": "2025-09-11T18:01:29.319Z",
+"publishedAt": "2025-09-11T18:01:29.329Z",
+"translations": [
+{
+"text": "An elder’s advice is worth more to me than a youth’s muscle. Raḍī: The saying is also narrated as “a youth’s martyrdom.”",
+"type": "en"
+}
+],
+"sermonNumber": "3.77",
+"heading": "An elder’s advice is worth more to me than a youth’s muscle.",
+"footnotes": [
+{
+"id": 1634,
+"documentId": "v8pwejhc5w3weggl1vktyuq5",
+"number": "823",
+"section": "3.77",
+"arabic_word": "",
+"english_word": "muscle",
+"arabic_interpretation": "",
+"english_translation": "Among ʿAlī’s “signature replies” (tawqīʿāt), inscribed on his letter to his son Ḥasan. Ibn ʿAbd Rabbih, ʿIqd, 4:288.",
+"createdAt": "2025-09-11T18:11:45.857Z",
+"updatedAt": "2025-09-11T18:11:45.857Z",
+"publishedAt": "2025-09-11T18:11:45.881Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6711,
+"documentId": "xkret2t2f5d5lgmvgfgltj53",
+"title": "وقال عليه السلام عجبت لمن يَقنَط ومعه الاستغفار.",
+"slug": "i-marvel-at-one-who-despairs-when-he-could-ask-forgiveness",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:29.944Z",
+"updatedAt": "2025-09-11T18:01:29.944Z",
+"publishedAt": "2025-09-11T18:01:29.953Z",
+"translations": [
+{
+"text": "I marvel at one who despairs when he could ask forgiveness!",
+"type": "en"
+}
+],
+"sermonNumber": "3.78",
+"heading": "I marvel at one who despairs when he could ask forgiveness!",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6713,
+"documentId": "rpo9vdqfeezy2g90vktc8zf5",
+"title": "وحكى عنه أبو جعفر محمّد بن عليّ الباقر عليهم السلام أنّه قال كان في الأرض أمانان من عذاب الله سبحانه فرُفع أحدهما فدُونَكم الآخَر فتمسّكوا به. أمّا الأمان الذي رفع فهو رسول الله صلّى الله عليه وآله. وأمّا الأمان الباقي فالاستغفار قال الله عزّ من قائل ﴿وَمَا كَانَ ٱللهُ لِيُعَذِّبَهُمْ وَأَنتَ فِيهِمْ وَمَا كَانَ ٱللهُ مُعَذِّبَهُمْ وَهُمْ يَسْتَغْفِرُونَ﴾. وهذا من محاسن الاستخراج ولطائف الاستنباط.",
+"slug": "ab-ja-far-mu-ammad-ibn-al-al-b-qir-reported-these-words-by-al",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:30.465Z",
+"updatedAt": "2025-09-11T18:01:30.465Z",
+"publishedAt": "2025-09-11T18:01:30.477Z",
+"translations": [
+{
+"text": "Abū Jaʿfar Muḥammad ibn ʿAlī, al-Bāqir, reported these words by ʿAlī: Of the two refuges from God’s punishment, one is taken away, but the other remains—so hold fast! The refuge that is taken away is God’s Messenger, the one that remains is repentance—the Almighty said to the Prophet, «God will not punish them while you are among them, and he will not punish them if they repent.» Raḍī: This is one of the most beautiful of interpretations and the most sublime of inferences.",
+"type": "en"
+}
+],
+"sermonNumber": "3.79",
+"heading": "Abū Jaʿfar Muḥammad ibn ʿAlī, al-Bāqir, reported these words by ʿAlī:",
+"footnotes": [
+{
+"id": 1636,
+"documentId": "onao5fbk5bayz7tr82pqklqa",
+"number": "824",
+"section": "3.79",
+"arabic_word": "",
+"english_word": "repent",
+"arabic_interpretation": "",
+"english_translation": "Qurʾan, Anfāl 8:33.",
+"createdAt": "2025-09-11T18:11:46.258Z",
+"updatedAt": "2025-09-11T18:11:46.258Z",
+"publishedAt": "2025-09-11T18:11:46.270Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6715,
+"documentId": "xinnlrwg6ak3cavtaj128dm9",
+"title": "وقال عليه السلام من أصلح ما بينه وبين الله أصلح الله ما بينه وبين الناس ومن أصلح أمر آخرته أصلح الله له أمر دنياه ومن كان له من نفسه واعظ كان عليه من الله حافظ.",
+"slug": "whoever-puts-right-what-is-between-him-and-god-god-puts-right-what-is-between-him-and-others",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:31.003Z",
+"updatedAt": "2025-09-11T18:01:31.003Z",
+"publishedAt": "2025-09-11T18:01:31.014Z",
+"translations": [
+{
+"text": "Whoever puts right what is between him and God, God puts right what is between him and others. Whoever puts right affairs of the hereafter, God puts right for him affairs of the world. Whoever has himself as counsellor has God as protector.",
+"type": "en"
+}
+],
+"sermonNumber": "3.80",
+"heading": "Whoever puts right what is between him and God, God puts right what is between him and others.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6717,
+"documentId": "gptjzj2svjlqtsmmaauz0erf",
+"title": "وقال عليه السلام الفقيه كلُّ الفقيه من لم يُقنط الناس من رحمة الله ولم يؤيسهم من رَوح الله ولم يؤمنهم من مكر الله.",
+"slug": "a-true-sage-teaches-people-never-to-despair-of-god-s-mercy-and-never-to-lose-hope-in-god-s-compassio",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:31.458Z",
+"updatedAt": "2025-09-11T18:01:31.458Z",
+"publishedAt": "2025-09-11T18:01:31.468Z",
+"translations": [
+{
+"text": "A true sage teaches people never to despair of God’s mercy, and never to lose hope in God’s compassion, yet, at the same time, never to stop fearing God’s retribution.",
+"type": "en"
+}
+],
+"sermonNumber": "3.81",
+"heading": "A true sage teaches people never to despair of God’s mercy, and never to lose hope in God’s compassion, yet, at the same time, never to stop fearing God’s retribution.",
+"footnotes": [
+{
+"id": 1638,
+"documentId": "uz5n7udqsl3spu8rdzn2oar3",
+"number": "825",
+"section": "3.81",
+"arabic_word": "",
+"english_word": "retribution",
+"arabic_interpretation": "",
+"english_translation": "Part of a sermon in the mosque (Māmaṭīrī, Nuzhah, 154-157), presumably in Kufa; other parts are §3.73, §3.100.",
+"createdAt": "2025-09-11T18:11:46.634Z",
+"updatedAt": "2025-09-11T18:11:46.634Z",
+"publishedAt": "2025-09-11T18:11:46.648Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6719,
+"documentId": "l2vp9nzvvmgkdla9c4w7c8wr",
+"title": "وقال عليه السلام أوضعُ العلم ما وقف على اللسان وأرفعه ما ظهر في الجوارح والأركان.",
+"slug": "the-lowest-form-of-knowledge-stops-at-the-tongue-the-highest-form-of-knowledge-manifests-in-limbs-an",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:31.938Z",
+"updatedAt": "2025-09-11T18:01:31.938Z",
+"publishedAt": "2025-09-11T18:01:31.947Z",
+"translations": [
+{
+"text": "The lowest form of knowledge stops at the tongue. The highest form of knowledge manifests in limbs and appendages.",
+"type": "en"
+}
+],
+"sermonNumber": "3.82",
+"heading": "The lowest form of knowledge stops at the tongue. The highest form of knowledge manifests in limbs and appendages.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6721,
+"documentId": "ykt2emy3e4ucok72ib2punud",
+"title": "وقال عليه السلام إنّ هذه القلوب تَمَلّ كما تملّ الأبدان فٱبتغوا لها طرائف الحكمة.",
+"slug": "minds-tire-just-as-bodies-tire-so-seek-for-them-wondrous-novelties-of-wisdom",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:32.450Z",
+"updatedAt": "2025-09-11T18:01:32.450Z",
+"publishedAt": "2025-09-11T18:01:32.465Z",
+"translations": [
+{
+"text": "Minds tire just as bodies tire, so seek for them wondrous novelties of wisdom!",
+"type": "en"
+}
+],
+"sermonNumber": "3.83",
+"heading": "Minds tire just as bodies tire, so seek for them wondrous novelties of wisdom!",
+"footnotes": [
+{
+"id": 1640,
+"documentId": "bwz3nql6uxm76id21yprth2t",
+"number": "826",
+"section": "3.83",
+"arabic_word": "",
+"english_word": "wisdom",
+"arabic_interpretation": "",
+"english_translation": "Nearly identical to §3.181.",
+"createdAt": "2025-09-11T18:11:46.991Z",
+"updatedAt": "2025-09-11T18:11:46.991Z",
+"publishedAt": "2025-09-11T18:11:47.009Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6723,
+"documentId": "eqqcqbusmaa4o7cu7993esjq",
+"title": "وقال عليه السلام لا يقولنّ أحدكم ٱللّٰهم إنّي أعوذ بك من الفتنة لأنّه ليس أحد إلّا وهو مشتمل على فتنة ولكن من ٱستعاذ فليستعذ من مُضِلّات الفتن فإنّ الله سبحانه يقول ﴿وَٱعْلَمُوٓاْ أَنَّمَآ أَمْوَالُكُمْ وَأَوْلَادُكُمْ فِتْنَةٌ﴾. ومعنى ذلك أنّه سبحانه يختبرهم بالأموال والأولاد ليتبيّن الساخط لرزقه والراضي بقِسمه وإن كان سبحانه أعلم بهم من أنفسهم ولكن لتظهر الأفعال التي بها يُستحَقّ الثواب والعقاب لأنّ بعضهم يحبّ الذُّكور ويكره الإناث وبعضهم يحبّ تثمير المال ويكره ٱنثلام الحال. وهذا من غريب ما سمع منه عليه السلام في التفسير.",
+"slug": "never-say-god-protect-me-from-trial-for-no-one-is-free-from-exposure-to-trial-if-you-wish-to-seek-go",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:32.959Z",
+"updatedAt": "2025-09-11T18:01:32.959Z",
+"publishedAt": "2025-09-11T18:01:32.974Z",
+"translations": [
+{
+"text": "Never say, “God, protect me from trial!” for no one is free from exposure to trial. If you wish to seek God’s protection, seek it against the inducements to stray that occur during times of trial. God has said, «Know that the riches you own and the children you beget are nothing but trials!» This means that the Almighty tests people through wealth and children to see who is unhappy with his lot and who accepts his share with equanimity. The Almighty knows what is in their hearts more than they do, but the trials prompt them to actions by which they earn either reward or punishment. Some prefer male children and dislike girls. Others are obsessed with amassing wealth and lose patience when their robes fray. Raḍī: This is among the wondrous commentaries on the Qurʾan heard from ʿAlī.",
+"type": "en"
+}
+],
+"sermonNumber": "3.84",
+"heading": "Never say, “God, protect me from trial!” for no one is free from exposure to trial. If you wish to seek God’s protection,",
+"footnotes": [
+{
+"id": 1642,
+"documentId": "tb951c3nq9f1vcp0v33t0o3b",
+"number": "827",
+"section": "3.84",
+"arabic_word": "",
+"english_word": "trials",
+"arabic_interpretation": "",
+"english_translation": "Qurʾan, Anfāl 8:28.",
+"createdAt": "2025-09-11T18:11:47.405Z",
+"updatedAt": "2025-09-11T18:11:47.405Z",
+"publishedAt": "2025-09-11T18:11:47.434Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6725,
+"documentId": "xhp7gpshj4azzznmemxqsmx7",
+"title": "وسئل عليه السلام عن الخير ما هو فقال ليس الخير أن يكثر مالك وولدك ولكنّ الخير أن يكثر علمك وأن يعظم حلمك وأن تُباهي الناس بعبادة ربّك فإن أحسنتَ حمدتَ الله وإن أسأت ٱستغفرت الله. ولا خير في الدنيا إلّا لرجلين رجل أذنب ذنوبًا فهو يتداركها بالتوبة ورجل يسارع في الخيرات. ولا يقلّ عمل مع التقوى وكيف يَقلّ ما يُتقبَّل.",
+"slug": "al-was-asked-what-constitutes-distinction-and-he-replied",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:33.453Z",
+"updatedAt": "2025-09-11T18:01:33.453Z",
+"publishedAt": "2025-09-11T18:01:33.463Z",
+"translations": [
+{
+"text": "ʿAlī was asked, “What constitutes distinction?” and he replied: Possessing great wealth and having many children are not marks of distinction—distinction is obtained through vast knowledge and abundant kindness, and by vying to worship the Lord. If you do good, praise God, if you do ill, beg his forgiveness. Distinction in this world is reserved for two kinds of men: one who commits a sin but atones for it by repenting, and one who hastens to perform good deeds. No deed is too small if performed with piety—how can something that God accepts ever be small?",
+"type": "en"
+}
+],
+"sermonNumber": "3.85",
+"heading": "ʿAlī was asked, “What constitutes distinction?” and he replied:",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6727,
+"documentId": "pirpbijbe5q6y49smvypboe2",
+"title": "وقال عليه السلام إنّ أَولى الناس بالأنبياء أعلمهم بما جاءوا به ثمّ تلى عليه السلام ﴿إِنَّ أَوْلَى النَّاسِ بِإِبْرَاهِيمَ لَلَّذِينَ اتَّبَعُوهُ وَهَٰذَا النَّبِيُّ وَالَّذِينَ آمَنُوا وَاللَّهُ وَلِيُّ الْمُؤْمِنِينَ﴾ ثم قال عليه السلام إنّ وليّ محمّد من أطاع الله وإن بعدت لُحْمَته وإنّ عدوّ محمّد من عصى الله وإن قربت قرابته.",
+"slug": "al-said-closest-to-prophets-are-those-who-discern-their-message-best",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:33.947Z",
+"updatedAt": "2025-09-11T18:01:33.947Z",
+"publishedAt": "2025-09-11T18:01:33.998Z",
+"translations": [
+{
+"text": "ʿAlī said: Closest to prophets are those who discern their message best. Then he recited, «Closest to Abraham are those who followed him, as is this Prophet, and those who profess belief—God is close to believers.» Then he continued: One who obeys God is Muḥammad’s kinsman, however distant he may be in bloodline. One who disobeys God is Muḥammad’s enemy, however close he may be in kinship.",
+"type": "en"
+}
+],
+"sermonNumber": "3.86",
+"heading": "ʿAlī said: Closest to prophets are those who discern their message best.",
+"footnotes": [
+{
+"id": 1644,
+"documentId": "kn5fsmrrp61xp7yqyoipzowo",
+"number": "828",
+"section": "3.86",
+"arabic_word": "",
+"english_word": "believers",
+"arabic_interpretation": "",
+"english_translation": "Qurʾan, Āl ʿImrān 3:68.",
+"createdAt": "2025-09-11T18:11:47.812Z",
+"updatedAt": "2025-09-11T18:11:47.812Z",
+"publishedAt": "2025-09-11T18:11:47.831Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6729,
+"documentId": "l0u2prlye4zawgybku4hm9tr",
+"title": "وقال عليه السلام وقد سمع رجلًا من الحَروريّة يتهجّد ويقرأ نوم على يقين خير من صلاة في شكّ.",
+"slug": "al-heard-a-ar-r-kharijite-praying-late-in-the-night-and-reciting-the-qur-an-and-he-said",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:34.688Z",
+"updatedAt": "2025-09-11T18:01:34.688Z",
+"publishedAt": "2025-09-11T18:01:34.698Z",
+"translations": [
+{
+"text": "ʿAlī heard a Ḥarūrī Kharijite praying late in the night and reciting the Qurʾan, and he said: Sleep accompanied by certainty is better than prayer accompanied by doubt.",
+"type": "en"
+}
+],
+"sermonNumber": "3.87",
+"heading": "ʿAlī heard a Ḥarūrī Kharijite praying late in the night and reciting the Qurʾan, and he said:",
+"footnotes": [
+{
+"id": 1646,
+"documentId": "f6nx4gd1jjj7d08422x2m7o8",
+"number": "829",
+"section": "3.87",
+"arabic_word": "",
+"english_word": "said",
+"arabic_interpretation": "",
+"english_translation": "Presumably in Kufa, soon after the Kharijites’ secession in 37/658. The Ḥarūriyyah were the first Kharijites—Ḥarūrāʾ was the place near Kufa where they initially gathered to protest against ʿAlī",
+"createdAt": "2025-09-11T18:11:48.220Z",
+"updatedAt": "2025-09-11T18:11:48.220Z",
+"publishedAt": "2025-09-11T18:11:48.235Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6731,
+"documentId": "j9fvcqjk2lc6xd0evkxawa5a",
+"title": "وقال عليه السلام اِعقِلوا الخبر إذا سمعتموه عقل رعاية لا عقل رواية فإنّ رواة العلم كثير ورعاته قليل.",
+"slug": "study-any-hadith-you-hear-with-mindful-attention-not-by-rote-learning-narrators-of-knowledge-are-man",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:35.159Z",
+"updatedAt": "2025-09-11T18:01:35.159Z",
+"publishedAt": "2025-09-11T18:01:35.169Z",
+"translations": [
+{
+"text": "Study any hadith you hear with mindful attention, not by rote learning. Narrators of knowledge are many, its true custodians few.",
+"type": "en"
+}
+],
+"sermonNumber": "3.88",
+"heading": "Study any hadith you hear with mindful attention, not by rote learning. Narrators of knowledge are many, its true custodians few.",
+"footnotes": [
+{
+"id": 1648,
+"documentId": "ri8v9aq62rsnsm65dlvi5z7h",
+"number": "830",
+"section": "3.88",
+"arabic_word": "",
+"english_word": "learning",
+"arabic_interpretation": "",
+"english_translation": "Ar. khabar, lit. “report,” translated here as “hadith.” The last lines of §1.236 are similar.",
+"createdAt": "2025-09-11T18:11:48.620Z",
+"updatedAt": "2025-09-11T18:11:48.620Z",
+"publishedAt": "2025-09-11T18:11:48.645Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6733,
+"documentId": "gjkdxtgbezp6mimtygo38118",
+"title": "وقال عليه السلام وقد سمع رجلًا يقول ﴿إِنَّا لِلّٰهِ وَإِنَّآ إِلَيْهِ رَاجِعُوْنَ﴾ إنّ قولنا ﴿إِنَّا لِلّٰهِ﴾ إقرار على أنفسنا بالمُلك. وقولنا ﴿وَإِنَّآ إِلَيْهِ رَاجِعُوْن﴾ إقرار على أنفسنا بالهُلك.",
+"slug": "al-heard-a-man-intone-to-god-we-belong-and-to-him-we-shall-return-and-he-said",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:35.836Z",
+"updatedAt": "2025-09-11T18:01:35.836Z",
+"publishedAt": "2025-09-11T18:01:35.853Z",
+"translations": [
+{
+"text": "3.89 ʿAlī heard a man intone, «To God we belong and to him we shall return!» and he said: When we say, «To God we belong,» we acknowledge our subjugation. When we say, «To him we shall return,» we acknowledge our mortality.",
+"type": "en"
+}
+],
+"sermonNumber": "3.89",
+"heading": "ʿAlī heard a man intone, «To God we belong and to him we shall return!» and he said:",
+"footnotes": [
+{
+"id": 1650,
+"documentId": "vo41n6tkvybr8p9w0qeae7bq",
+"number": "831",
+"section": "3.89",
+"arabic_word": "",
+"english_word": "said",
+"arabic_interpretation": "",
+"english_translation": "Qurʾan, Baqarah 2:156. The man is al-Ashʿath ibn Qays, to whom ʿAlī was offering condolences at the death of his brother, ʿAbd al-Raḥmān (Ḥarrānī, Tuḥaf, 209). See also ʿAlī’s condolence to Ashʿath on his son’s death in §3.277, and for an unnamed relative in §3.385.",
+"createdAt": "2025-09-11T18:11:49.065Z",
+"updatedAt": "2025-09-11T18:11:49.065Z",
+"publishedAt": "2025-09-11T18:11:49.096Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6735,
+"documentId": "wqtyx27pymt8ntyyt4iebn89",
+"title": "وقال عليه السلام وقد مدحه قوم في وجهه اللّٰهمّ إنّك أعلم بي من نفسي وأنا أعلم بنفسي منهم اللّٰهمّ ٱجعلنا خيرًا ممّا يظنّون وٱغفر لنا ما لا يعلمون.",
+"slug": "lord-you-know-me-better-than-i-know-myself-and-i-know-myself-better-than-others-know-me",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:36.330Z",
+"updatedAt": "2025-09-11T18:01:36.330Z",
+"publishedAt": "2025-09-11T18:01:36.341Z",
+"translations": [
+{
+"text": "Lord, you know me better than I know myself, and I know myself better than others know me. Lord, make me more virtuous than they think, and forgive those of my actions they don’t know.",
+"type": "en"
+}
+],
+"sermonNumber": "3.90",
+"heading": "Lord, you know me better than I know myself, and I know myself better than others know me.",
+"footnotes": [
+{
+"id": 1652,
+"documentId": "tvhjz955qge014flbq4rd84q",
+"number": "832",
+"section": ""3.90"",
+"arabic_word": "",
+"english_word": "know",
+"arabic_interpretation": "",
+"english_translation": "Presumably in Kufa during ʿAlī’s caliphate, 35-40/656-661. Response when he was praised to his face (Māmaṭīrī, Nuzhah, 243-244). Similar final line in §1.191.3 (see note on context there).",
+"createdAt": "2025-09-11T18:11:49.469Z",
+"updatedAt": "2025-09-11T18:11:49.469Z",
+"publishedAt": "2025-09-11T18:11:49.497Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6737,
+"documentId": "q11rr1qr0rid6pv9iurp7ih5",
+"title": "وقال عليه السلام لا يستقيم قضاء الحوائج إلّا بثلاث بٱستصغارها لتعظم وبٱستكتامها لتظهر وبتعجيلها لتهنأ.",
+"slug": "your-benefaction-becomes-perfect-only-when-you-add-three-more-actions",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:36.871Z",
+"updatedAt": "2025-09-11T18:01:36.871Z",
+"publishedAt": "2025-09-11T18:01:36.880Z",
+"translations": [
+{
+"text": "Your benefaction becomes perfect only when you add three more actions: when you deem your favors small, they become great, when you conceal them, they become clear, and when you expedite them, they are received with joy.",
+"type": "en"
+}
+],
+"sermonNumber": "3.91",
+"heading": "Your benefaction becomes perfect only when you add three more actions:",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6739,
+"documentId": "ym9qess4pxxs5w7dlh31yz2k",
+"title": "وقال عليه السلام يأتي على الناس زمان لا يُقرَّب فيه إلّا الماحل ولا يُظَرَّف فيه إلّا الفاجر ولا يضعّف فيه إلّا المنصف. يَعُدّون الصدقة فيه غُرمًا وصلة الرحم مَنًّا والعبادة ٱستطالة على الناس. فعند ذلك يكون السلطان بمشورة الإماء وإمارة الصبيان وتدبير الخصيان.",
+"slug": "an-age-is-coming-to-the-world-in-which-none-but-the-schemer-will-be-granted-intimacy",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:37.326Z",
+"updatedAt": "2025-09-11T18:01:37.326Z",
+"publishedAt": "2025-09-11T18:01:37.333Z",
+"translations": [
+{
+"text": "An age is coming to the world in which none but the schemer will be granted intimacy, none but the debauched will be considered witty, and none but the just will be deemed weak. People will regard charity a tax, gifts to relatives a favor, and God’s worship a means to self-glorification. At that time, power will be wielded through the counsel of concubines, the command of boys, and the governance of eunuchs.",
+"type": "en"
+}
+],
+"sermonNumber": "3.92",
+"heading": "An age is coming to the world in which none but the schemer will be granted intimacy,",
+"footnotes": [
+{
+"id": 646,
+"documentId": "jkop1zbxj8w4pgv5fo8yu01u",
+"number": "333",
+"section": "3.92",
+"arabic_word": "الخصيان",
+"english_word": "",
+"arabic_interpretation": "ن، ش، ي، ه، وأضيفت في م: كذا. أصل م: سقطت <وتدبير الخصيان>.",
+"english_translation": "",
+"createdAt": "2025-09-11T18:07:53.313Z",
+"updatedAt": "2025-09-11T18:07:53.313Z",
+"publishedAt": "2025-09-11T18:07:53.325Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6741,
+"documentId": "hvwt01oc0baddvnguqc9w352",
+"title": "ورُؤي عليه إزارٌ خَلِق مرقوع فقيل له في ذلك فقال يخشع له القلب وتذلّ به النفس ويقتدي به المؤمنون.",
+"slug": "al-was-seen-wearing-a-worn-and-patched-garment-and-when-someone-remarked-on-this-he-explained",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:37.783Z",
+"updatedAt": "2025-09-11T18:01:37.783Z",
+"publishedAt": "2025-09-11T18:01:37.793Z",
+"translations": [
+{
+"text": "ʿAlī was seen wearing a worn and patched garment, and when someone remarked on this, he explained: The heart bows to him and the soul prostrates before him—true believers will follow my practice.",
+"type": "en"
+}
+],
+"sermonNumber": "3.93",
+"heading": "ʿAlī was seen wearing a worn and patched garment, and when someone remarked on this, he explained:",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6743,
+"documentId": "kgkoidr4lv63bmwwzh0h1rzb",
+"title": "وقال عليه السلام إنّ الدنيا والآخرة عدوّان متفاوتان وسبيلان مختلفان فمن أحبّ الدنيا وتوّلاها أبغض الآخرة وعاداها وهما بمنزلة المشرق والمغرب وماشٍ بينهما كلّما قرب من واحد بعد من الآخر وهما بعدُ ضَرّتان.",
+"slug": "this-world-and-the-hereafter-are-mutual-enemies-and-divergent-paths-to-love-and-follow-this-world-is",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:38.254Z",
+"updatedAt": "2025-09-11T18:01:38.254Z",
+"publishedAt": "2025-09-11T18:01:38.269Z",
+"translations": [
+{
+"text": "This world and the hereafter are mutual enemies and divergent paths—to love and follow this world is to hate and reject the hereafter. The two are like East and West for the person who walks between them—the nearer he draws to one, the further he moves from the other. They are like two wives married to one man.",
+"type": "en"
+}
+],
+"sermonNumber": "3.94",
+"heading": "This world and the hereafter are mutual enemies and divergent paths—to love and follow this world is to hate and reject the hereafter.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6745,
+"documentId": "j2lebuxtl82dt0onm0kq3icp",
+"title": "وعن نَوف البِكاليّ قال رأيت أمير المؤمنين عليه السلام ذات ليلة وقد خرج من فراشه فنظر إلى النجوم فقال يا نوف أراقد أنت أم رامق قلت بل رامق يا أمير المؤمنين فقال يا نوف طوبى للزاهدين في الدنيا الراغبين في الآخرة أولئك قوم ٱتّخذوا الأرض بساطًا وترابها فراشًا وماءها طيبًا والقرآن شعارًا والدعاء دثارًا ثمّ قرضوا الدنيا قرضًا على منهاج المسيح. يا نوف إنّ داود عليه السلام قام في مثل هذه الساعة من الليل فقال <إنّها ساعة لا يدعو فيها عبد إلّا ٱستجيب له إلّا أن يكون عَشّارًا أو عَريفًا أو شُرطيًّا أو صاحب عَرطبة (وهي الطُّنبور) أو صاحب كوبة (وهي الطَّبل)>. وقد قيل أيضًا إنّ العرطبة الطبل والكوبة الطنبور.",
+"slug": "to-nawf-al-bik-l-pious-counsel-david-and-jesus-as-exemplars",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:38.731Z",
+"updatedAt": "2025-09-11T18:01:38.731Z",
+"publishedAt": "2025-09-11T18:01:38.740Z",
+"translations": [
+{
+"text": "Nawf al-Bikālī narrated this report, and he said: I saw the Commander of the Faithful one night as he rose from his bed, gazed at the stars, then said to me, “Nawf, are you asleep or awake?” “I’m awake, Commander of the Faithful,” I replied. ʿAlī then said to me: Nawf, blessed are those who reject worldliness and focus their desire on the hereafter! They take God’s earth for a carpet, its dust for a bed, its water for perfume, the Qurʾan as their garment, and prayer as their robe. They cut their bonds with the world as the Messiah did. Nawf, the Prophet David stepped outside at just such an hour, and said, <This is an hour when the prayer of any who prays will be answered, unless he is a tax collector, an appraiser, an enforcer, an oud player (that is, a lute player), or a percussionist (that is, a drummer).> Raḍī: Alternatively, it is said that ʿarṭabah, the first word of the last pair, means drum, and kūbah, the second word, means lute.",
+"type": "en"
+}
+],
+"sermonNumber": "3.95",
+"heading": "To Nawf al-Bikālī, pious counsel, David and Jesus as exemplars",
+"footnotes": [
+{
+"id": 1654,
+"documentId": "bc5h85zzdu3ziatu1ax6nzi9",
+"number": "833",
+"section": "3.95",
+"arabic_word": "",
+"english_word": "me",
+"arabic_interpretation": "",
+"english_translation": "Presumably in Kufa during ʿAlī’s caliphate, 35-40/656-661. The words in parentheses within ʿAlī’s text are Raḍī’s explanatory insertions.",
+"createdAt": "2025-09-11T18:11:49.914Z",
+"updatedAt": "2025-09-11T18:11:49.914Z",
+"publishedAt": "2025-09-11T18:11:49.929Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6747,
+"documentId": "et1a64ah4bp9vy878f132vez",
+"title": "وقال عليه السلام إنّ الله ٱفترض عليكم الفرائض فلا تُضيّعوها وحدّ لكم حدودًا فلا تعتدّوها ونهاكم عن أشياء فلا تنتهكوها وسكت لكم عن أشياء ولم يدعها نسيانًا فلا تتكلّفوها.",
+"slug": "god-has-mandated-certain-things-for-you-don-t-squander-them",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:39.247Z",
+"updatedAt": "2025-09-11T18:01:39.247Z",
+"publishedAt": "2025-09-11T18:01:39.258Z",
+"translations": [
+{
+"text": "God has mandated certain things for you—don’t squander them. He has laid down certain limits for you—don’t transgress them. He has forbidden you certain actions—don’t violate them. He has stayed silent about certain things deliberately and not because he had forgotten—don’t burden yourself with them.",
+"type": "en"
+}
+],
+"sermonNumber": "3.96",
+"heading": "God has mandated certain things for you—don’t squander them.",
+"footnotes": [
+{
+"id": 1656,
+"documentId": "qrjb3dk1jkmf7wdl022y4kfi",
+"number": "834",
+"section": "3.96",
+"arabic_word": "",
+"english_word": "them",
+"arabic_interpretation": "",
+"english_translation": "Hārūnī (Taysīr, 272) cites this excerpt as part of §1.50, an oration ʿAlī delivered in Medina six days after he became caliph, in 35/656.",
+"createdAt": "2025-09-11T18:11:50.345Z",
+"updatedAt": "2025-09-11T18:11:50.345Z",
+"publishedAt": "2025-09-11T18:11:50.377Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6749,
+"documentId": "dy5ndzvnvm2iff81yon5mema",
+"title": "وقال عليه السلام لا يترك الناس شيئًا من دينهم لٱستصلاح دنياهم إلّا فتح الله عليهم ما هو أضرّ منه.",
+"slug": "when-people-forego-a-religious-duty-to-rally-their-worldly-affairs-god-opens-for-them-a-door-that-le",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:39.749Z",
+"updatedAt": "2025-09-11T18:01:39.749Z",
+"publishedAt": "2025-09-11T18:01:39.765Z",
+"translations": [
+{
+"text": "When people forego a religious duty to rally their worldly affairs, God opens for them a door that leads to more harm.",
+"type": "en"
+}
+],
+"sermonNumber": "3.97",
+"heading": "When people forego a religious duty to rally their worldly affairs, God opens for them a door that leads to more harm.",
+"footnotes": [],
+"paragraphs": []
+},
+{
+"id": 6751,
+"documentId": "qowqfjo1f9ca7sgwj3bcp20u",
+"title": "وقال عليه السلام رُبَّ عالم قتله جهله وعلمه معه لا ينفعه.",
+"slug": "a-learned-man-is-sometimes-killed-by-ignorance-and-his-learning-fails-to-come-to-his-aid",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:40.229Z",
+"updatedAt": "2025-09-11T18:01:40.229Z",
+"publishedAt": "2025-09-11T18:01:40.237Z",
+"translations": [
+{
+"text": "A learned man is sometimes killed by ignorance, and his learning fails to come to his aid.",
+"type": "en"
+}
+],
+"sermonNumber": "3.98",
+"heading": "A learned man is sometimes killed by ignorance, and his learning fails to come to his aid.",
+"footnotes": [
+{
+"id": 1658,
+"documentId": "pn9bh3mvt6p1wbn9djm3n26v",
+"number": "835",
+"section": "3.98",
+"arabic_word": "",
+"english_word": "aid",
+"arabic_interpretation": "",
+"english_translation": "The line—which refers to Ṭalḥah and Zubayr—is from ʿAlī’s oration in Medina in 36/656, when news arrived that the two had set out for Basra with ʿĀʾishah to raise an army against him. Ḥ 1:233 (in commentary on §1.8), after Abū Mikhnaf, Jamal.",
+"createdAt": "2025-09-11T18:11:50.754Z",
+"updatedAt": "2025-09-11T18:11:50.754Z",
+"publishedAt": "2025-09-11T18:11:50.768Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6753,
+"documentId": "t9yeutgctuckjsycrut5sbsj",
+"title": "وقال عليه السلام لقد عُلِّق بنِياط هذا الإنسان بَضعة هي أعجب ما فيه وذلك القلب وله مَوادٌّ من الحكمة وأضداد من خلافها. فإن سَنح له الرجاء أذلّه الطمع وإن هاج به الطمع أهلكه الحرص وإن ملكه اليأس قتله الأسف وإن عَرض له الغضب ٱشتدّ به الغَيظ وإن أسعده الرضى نسي التحفّظ وإن عالَه الخوف شغله الحذر وإن ٱتّسع له الأمن ٱستلبته الغرّة وإن أصابته مصيبة فضحه الجزع وإن أفاد مالًا أطغاه الغنى وإن عضّته الفاقة شغله البلاء وإن جَهده الجوع قعد به الضعف وإن أفرط به الشِّبَع كظّته البِطنة. فكلّ تقصير به مُضِرّ وكلّ إفراط له مفسد.",
+"slug": "vagaries-of-the-heart",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:41.070Z",
+"updatedAt": "2025-09-11T18:01:41.070Z",
+"publishedAt": "2025-09-11T18:01:41.079Z",
+"translations": [
+{
+"text": "There is a piece of flesh attached to the jugular vein that is the human’s most wondrous organ—the heart. It has elements of wisdom, and others that are quite the opposite. If it is lifted by hope, ambition debases it, and if ambition boils over, greed destroys it, but if disappointment takes hold, regret kills it. If aggravated, its rage runs rampant, but if made happy, it forgets to be circumspect. If overwhelmed by fear, caution preoccupies it, but if safety is secured, heedlessness strips it away, and if calamity strikes, it panics. If it gains property, wealth makes it a tyrant, but if poverty bites, distress preoccupies it. If hunger enfeebles it, weakness prevents it from rising, but if satiety is excessive, surfeit oppresses it. Every deficiency does it harm, and every excess injures it.",
+"type": "en"
+}
+],
+"sermonNumber": "3.99",
+"heading": "Vagaries of the heart",
+"footnotes": [
+{
+"id": 648,
+"documentId": "ilh3jupou02i096gamwehuj2",
+"number": "334",
+"section": "3.99",
+"arabic_word": "عالَه",
+"english_word": "it",
+"arabic_interpretation": "م، ي، ونسخة في ش، ن: كذا. أصل ش، ن، ونسخة في م: <ناله>. ه، ونسخة في ي: <غاله>.",
+"english_translation": "From an aphoristic oration titled Wasīlah (Ḥarrānī, Tuḥaf, 92-100).",
+"createdAt": "2025-09-11T18:07:53.782Z",
+"updatedAt": "2025-09-11T18:07:53.782Z",
+"publishedAt": "2025-09-11T18:07:53.792Z"
+},
+{
+"id": 650,
+"documentId": "r875ggf8jkzu93boy9h20d3g",
+"number": "335",
+"section": "3.99",
+"arabic_word": "الغرّة",
+"english_word": "it",
+"arabic_interpretation": "م، ي: كذا. ش، ن، ه: <عزّة>.",
+"english_translation": "From an aphoristic oration titled Wasīlah (Ḥarrānī, Tuḥaf, 92-100).",
+"createdAt": "2025-09-11T18:07:54.261Z",
+"updatedAt": "2025-09-11T18:07:54.261Z",
+"publishedAt": "2025-09-11T18:07:54.283Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6755,
+"documentId": "fy9okm4928cgr5eyld2q45sm",
+"title": "وقال عليه السلام نحن النُّمرُقة الوسطى بها يلحق التالي وإليها يرجع الغالي.",
+"slug": "we-are-the-saddle-pad-in-the-middle-those-who-lag-must-catch-up-while-those-who-exceed-bounds-must-r",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:41.547Z",
+"updatedAt": "2025-09-11T18:01:41.547Z",
+"publishedAt": "2025-09-11T18:01:41.559Z",
+"translations": [
+{
+"text": "We are the saddle-pad in the middle—those who lag must catch up, while those who exceed bounds must return to it.",
+"type": "en"
+}
+],
+"sermonNumber": "3.100",
+"heading": "We are the saddle-pad in the middle—those who lag must catch up, while those who exceed bounds must return to it.",
+"footnotes": [
+{
+"id": 1660,
+"documentId": "tsmbdsgjceu08ur3qg884uzy",
+"number": "837",
+"section": ""3.100"",
+"arabic_word": "",
+"english_word": "it",
+"arabic_interpretation": "",
+"english_translation": "“We” refers to the Prophet’s family according to all the commentators, but the enigmatic image of the “saddle-pad in the middle” (al-numruqah al-wusṭā) is interpreted variously as: (1) the true and just Imams, embodiment of the middle way between two extremes, presumably those who deem ʿAlī the fourth caliph and those who believe in his divinity; this explanation focuses on “in the middle,” while “saddle-pad” is not explained (B 961; F 419); (2) the virtuous mean between the vices, because the “saddle-pad” is placed higher than everything else on the camel’s back, and, being the place where the rider sits, it is akin to a person’s theological position (Ḥ 18:273); (3) the intermediate position of authority held by the family of the Prophet, where the Prophet is the “greatest saddle-pad,” and other Muslim authorities are the “lesser saddle-pad” (R 3:302-303); (4) comfort-givers, like the saddle-pad that supports and cushions the body (ʿA 713). The text’s context is also given variously as: (1) part of ʿAlī’s address to Ḥārith al-Hamdānī (ʿImād al-Dīn al-Ṭabarī, Bishārah, 21); (2) Part of a sermon in the mosque, presumably in Kufa; other parts are §3.73, §3.81 (Māmaṭīrī, Nuzhah, 154-157, where the first line is, “Follow the middle path,” while the rest is the same as here);(3) ʿAlī’s address to a group from “the West” (presumably, Syria), in praise of the truly pious (Yaʿqūbī, Tārīkh, 2:210).",
+"createdAt": "2025-09-11T18:11:51.182Z",
+"updatedAt": "2025-09-11T18:11:51.182Z",
+"publishedAt": "2025-09-11T18:11:51.202Z"
+}
+],
+"paragraphs": []
+},
+{
+"id": 6757,
+"documentId": "abbtnjydnwzn3xt6q82qnj2d",
+"title": "وقال عليه السلام لا يقيم أمر الله سبحانه إلّا من لا يصانع ولا يضارع ولا يتبع المَطامع.",
+"slug": "god-s-faith-is-established-only-by-a-man-who-never-blandishes-or-succumbs-or-follows-the-path-of-gre",
+"type": "Saying",
+"availableTranslations": null,
+"createdAt": "2025-09-11T18:01:42.042Z",
+"updatedAt": "2025-09-11T18:01:42.042Z",
+"publishedAt": "2025-09-11T18:01:42.053Z",
+"translations": [
+{
+"text": "God’s faith is established only by a man who never blandishes, or succumbs, or follows the path of greed.",
+"type": "en"
+}
+],
+"sermonNumber": "3.101",
+"heading": "God’s faith is established only by a man who never blandishes, or succumbs, or follows the path of greed.",
+"footnotes": [],
 "paragraphs": []
 }
 ],
 "meta": {
 "pagination": {
 "page": 1,
-"pageSize": 25,
-"pageCount": 18,
+"pageSize": 100,
+"pageCount": 5,
 "total": 439
 }
 }

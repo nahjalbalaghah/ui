@@ -4,7 +4,7 @@ import { Book, Tag as TagIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { type Post } from '@/api/posts';
-import { formatTextWithBold, isArabicText } from '@/app/utils/text-formatting';
+import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 
 interface ListViewItemProps {
   item: Post;
@@ -65,12 +65,12 @@ export default function ListViewItem({ item, contentType }: ListViewItemProps) {
               <div className="flex-grow min-w-0">
                 {arabicTitle && (
                   <h3 className="font-taha text-lg font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-tight mb-1" style={{ lineHeight: '1.4' }}>
-                    {formatTextWithBold(truncateText(arabicTitle, 150), true)}
+                    {formatTextWithFootnotes(truncateText(arabicTitle, 150), item.footnotes || [], true)}
                   </h3>
                 )}
                 {englishTitle && (
                   <h3 className="mt-3 font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-normal ">
-                    {formatTextWithBold(truncateText(englishTitle, 150), false)}
+                    {formatTextWithFootnotes(truncateText(englishTitle, 150), item.footnotes || [], false)}
                   </h3>
                 )}
                 
