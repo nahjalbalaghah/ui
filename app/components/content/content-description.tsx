@@ -83,7 +83,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
             <div className="p-0 mb-4 border-none">
               <div className="text-right">
                 <p className="text-xl leading-relaxed text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
-                  {formatTextWithFootnotes(content.title, content.footnotes || [], true)}
+                  {formatTextWithFootnotes(content.title, content.footnotes || [], true, 'main')}
                 </p>
               </div>
             </div>
@@ -106,7 +106,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 return (
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
                     <p className="text-xl leading-relaxed text-gray-700 font-brill">
-                      {formatTextWithFootnotes(mainTranslation.text, content.footnotes || [], false)}
+                      {formatTextWithFootnotes(mainTranslation.text, content.footnotes || [], false, 'main')}
                     </p>
                   </div>
                 );
@@ -132,7 +132,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 <div className="p-0 mb-4 border-none">
                   <div className="text-right">
                     <p className="text-xl leading-[2] text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
-                      {formatTextWithFootnotes(paragraph.arabic, [...(content.footnotes || []), ...(paragraph.footnotes || [])], true)}
+                      {formatTextWithFootnotes(paragraph.arabic, [...(content.footnotes || []), ...(paragraph.footnotes || [])], true, paragraph.number)}
                     </p>
                   </div>
                 </div>
@@ -159,7 +159,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                   return (
                     <div className="bg-white rounded-lg p-6 border border-gray-200">
                       <p className="text-xl leading-relaxed text-gray-700 font-brill">
-                        {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false)}
+                        {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false, paragraph.number)}
                       </p>
                     </div>
                   );
@@ -175,17 +175,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
           <p className="text-gray-500">No content available for this {contentType.slice(0, -1)}.</p>
         </div>
       )}
-
-      {allReferences.length > 0 && (
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <h3 className="text-lg font-semibold mb-4 text-gray-900">Footer Notes</h3>
-          <ol className="list-decimal pl-6 space-y-2">
-            {allReferences.map((ref, idx) => (
-              <li key={idx} className="text-gray-700 text-base">{ref}</li>
-            ))}
-          </ol>
-        </div>
-      )}
+     
     </div>
   );
 };
