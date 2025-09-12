@@ -65,12 +65,12 @@ export default function ListViewItem({ item, contentType }: ListViewItemProps) {
               <div className="flex-grow min-w-0">
                 {arabicTitle && (
                   <h3 className="font-taha text-lg font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-tight mb-1" style={{ lineHeight: '1.4' }}>
-                    {formatTextWithFootnotes(truncateText(arabicTitle, 150), item.footnotes || [], true)}
+                    {formatTextWithFootnotes(truncateText(arabicTitle, 150), item.footnotes || [], true, 'main')}
                   </h3>
                 )}
                 {englishTitle && (
                   <h3 className="mt-3 font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-normal ">
-                    {formatTextWithFootnotes(truncateText(englishTitle, 150), item.footnotes || [], false)}
+                    {formatTextWithFootnotes(truncateText(englishTitle, 150), item.footnotes || [], false, 'main')}
                   </h3>
                 )}
                 
