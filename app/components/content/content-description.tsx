@@ -83,7 +83,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
             <div className="p-0 mb-4 border-none">
               <div className="text-right">
                 <p className="text-xl leading-relaxed text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
-                  {formatTextWithFootnotes(content.title, content.footnotes || [], true, 'main')}
+                  {formatTextWithFootnotes(content.title, content.footnotes || [], true, content.sermonNumber || 'main')}
                 </p>
               </div>
             </div>
@@ -106,7 +106,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 return (
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
                     <p className="text-xl leading-relaxed text-gray-700 font-brill">
-                      {formatTextWithFootnotes(mainTranslation.text, content.footnotes || [], false, 'main')}
+                      {formatTextWithFootnotes(mainTranslation.text, content.footnotes || [], false, content.sermonNumber || 'main')}
                     </p>
                   </div>
                 );

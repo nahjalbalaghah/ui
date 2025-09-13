@@ -14,14 +14,9 @@ const config = {
 };
 
 export default function OrationsPage() {
-  const configWithListView = {
-    ...config,
-    forceListView: true,
-  };
-
   return (
     <>
-      <ContentPage config={configWithListView} />
+      <ContentPage config={config} />
     </>
   );
 }
