@@ -13,6 +13,11 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
   let allReferences: string[] = [];
   const heading = content.heading;
   
+  const allFootnotes = [
+    ...(content.footnotes || []),
+    ...content.paragraphs.flatMap(p => p.footnotes || [])
+  ];
+  
   const sortedParagraphs = [...content.paragraphs].sort((a, b) => {
     const parseNumber = (num: string) => {
       return num.split('.').map(n => parseInt(n, 10));
@@ -83,7 +88,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
             <div className="p-0 mb-4 border-none">
               <div className="text-right">
                 <p className="text-xl leading-relaxed text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
-                  {formatTextWithFootnotes(content.title, content.footnotes || [], true, content.sermonNumber || 'main')}
+                  {formatTextWithFootnotes(content.title, allFootnotes, true, content.sermonNumber || 'main')}
                 </p>
               </div>
             </div>
@@ -93,8 +98,9 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 allReferences = allReferences.concat(refs);
                 console.log('Main translation footnotes debug:', {
                   contentFootnotes: content.footnotes?.length || 0,
+                  allFootnotes: allFootnotes.length,
                   mainTranslationText: mainTranslation.text.substring(0, 100) + '...',
-                  footnoteDetails: (content.footnotes || []).map(f => ({
+                  footnoteDetails: allFootnotes.map(f => ({
                     id: f.id,
                     number: f.number,
                     english_word: f.english_word,
@@ -106,7 +112,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 return (
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
                     <p className="text-xl leading-relaxed text-gray-700 font-brill">
-                      {formatTextWithFootnotes(mainTranslation.text, content.footnotes || [], false, content.sermonNumber || 'main')}
+                      {formatTextWithFootnotes(mainTranslation.text, allFootnotes, false, content.sermonNumber || 'main')}
                     </p>
                   </div>
                 );
@@ -132,14 +138,13 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 <div className="p-0 mb-4 border-none">
                   <div className="text-right">
                     <p className="text-xl leading-[2] text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
-                      {formatTextWithFootnotes(paragraph.arabic, [...(content.footnotes || []), ...(paragraph.footnotes || [])], true, paragraph.number)}
+                      {formatTextWithFootnotes(paragraph.arabic, allFootnotes, true, paragraph.number)}
                     </p>
                   </div>
                 </div>
                 {englishTranslation && (() => {
                   const refs = extractReferences(englishTranslation.text);
                   allReferences = allReferences.concat(refs);
-                  const allFootnotes = [...(content.footnotes || []), ...(paragraph.footnotes || [])];
                   console.log('Paragraph footnotes debug:', {
                     paragraphId: paragraph.id,
                     paragraphNumber: paragraph.number,
