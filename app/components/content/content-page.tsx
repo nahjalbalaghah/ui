@@ -24,7 +24,6 @@ function ContentPageContent({ config }: ContentPageProps) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
-  const [view, setView] = useState<'grid' | 'list'>(config.contentType === 'orations' ? 'grid' : 'list');
   const [content, setContent] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -141,15 +140,6 @@ function ContentPageContent({ config }: ContentPageProps) {
     }
   };
 
-  const handleViewChange = (newView: 'grid' | 'list') => {
-    if (config.contentType !== 'orations') return;
-    setView(newView);
-    if (newView === 'list') {
-      setCurrentPage(1);
-      loadContent(1, searchTerm, true, false);
-    }
-  };
-
   useEffect(() => {
     const page = searchParams.get('page');
     const initialPage = page ? parseInt(page, 10) : 1;
@@ -233,10 +223,8 @@ function ContentPageContent({ config }: ContentPageProps) {
             totalPages={totalPages}
             title={config.title}
             contentType={config.contentType}
-            view={view}
             hasNextPage={hasNextPage}
             isInfiniteLoading={isInfiniteLoading}
-            onViewChange={handleViewChange}
           />
         </div>
       </div>

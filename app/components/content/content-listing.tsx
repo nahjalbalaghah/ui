@@ -1,9 +1,7 @@
 'use client';
 import React from 'react';
-import ListingCard from '@/app/components/cards/listing';
 import ListViewItem from '@/app/components/list-view-item';
 import Pagination from '@/app/components/pagination';
-import ViewToggle from '@/app/components/view-toggle';
 import { type Post } from '@/api/posts';
 import { useInfiniteScroll } from '@/app/hooks/useInfiniteScroll';
 
@@ -18,10 +16,8 @@ interface ContentListingProps {
   title?: string;
   subtitle?: string;
   contentType: 'orations' | 'letters' | 'sayings';
-  view: 'grid' | 'list';
   hasNextPage?: boolean;
   isInfiniteLoading?: boolean;
-  onViewChange?: (view: 'grid' | 'list') => void;
 }
 
 export default function ContentListing({
@@ -35,10 +31,8 @@ export default function ContentListing({
   title = "Content",
   subtitle,
   contentType,
-  view = 'grid',
   hasNextPage = false,
-  isInfiniteLoading = false,
-  onViewChange
+  isInfiniteLoading = false
 }: ContentListingProps) {
   const { lastElementRef } = useInfiniteScroll({
     hasNextPage,
@@ -46,18 +40,6 @@ export default function ContentListing({
     loadMore: onLoadMore || (() => {}),
     threshold: 300
   });
-
-  const renderGridView = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
-      {content.map((item) => (
-        <ListingCard
-          key={item.id}
-          oration={item}
-          contentType={contentType}
-        />
-      ))}
-    </div>
-  );
 
   const renderListView = () => (
     <div className="space-y-4">
@@ -67,29 +49,6 @@ export default function ContentListing({
           ref={index === content.length - 1 ? lastElementRef : undefined}
         >
           <ListViewItem item={item} contentType={contentType} />
-        </div>
-      ))}
-    </div>
-  );
-
-  const renderLoadingGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
-      {[...Array(12)].map((_, index) => (
-        <div 
-          key={index} 
-          className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-pulse"
-          style={{ animationDelay: `${index * 50}ms` }}
-        >
-          <div className="h-40 bg-gray-200"></div>
-          <div className="p-4">
-            <div className="h-5 bg-gray-200 rounded mb-3"></div>
-            <div className="h-4 bg-gray-200 rounded mb-2 w-4/5"></div>
-            <div className="h-4 bg-gray-200 rounded mb-3 w-3/5"></div>
-            <div className="flex gap-2 mt-3">
-              <div className="h-6 bg-gray-200 rounded-full w-16"></div>
-              <div className="h-6 bg-gray-200 rounded-full w-20"></div>
-            </div>
-          </div>
         </div>
       ))}
     </div>
@@ -122,23 +81,19 @@ export default function ContentListing({
     </div>
   );
 
-  const isOrationWithViewToggle = (contentType === 'orations');
   return (
     <div className="w-full relative">
       <div className="flex items-center justify-between mb-6">
         <p className="text-gray-600">
           {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
         </p>
-        {isOrationWithViewToggle && onViewChange && (
-          <ViewToggle view={view} onViewChange={onViewChange} />
-        )}
       </div>
       {loading ? (
-        isOrationWithViewToggle ? (view === 'grid' ? renderLoadingGrid() : renderLoadingList()) : renderLoadingList()
+        renderLoadingList()
       ) : (
         <>
-          {isOrationWithViewToggle ? (view === 'grid' ? renderGridView() : renderListView()) : renderListView()}
-          {view === 'list' && isInfiniteLoading && (
+          {renderListView()}
+          {isInfiniteLoading && (
             <div className="mt-8">
               <div className="animate-pulse">
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
@@ -162,18 +117,7 @@ export default function ContentListing({
               </div>
             </div>
           )}
-          {view === 'grid' && totalPages > 1 && onPageChange && isOrationWithViewToggle && (
-            <div className="mt-12">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={onPageChange}
-                showRange={true}
-                loading={loading}
-              />
-            </div>
-          )}
-          {!isOrationWithViewToggle && totalPages > 1 && onPageChange && (
+          {totalPages > 1 && onPageChange && (
             <div className="mt-12">
               <Pagination
                 currentPage={currentPage}
