@@ -88,7 +88,7 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
           <div>
             <h3 className={`font-medium text-gray-900 text-base line-clamp-3 group-hover:text-[#43896B] transition-colors mb-3 leading-relaxed ${typeof displayTitle === 'string' && isArabicText(displayTitle) ? 'font-taha' : ''}`}>
               {typeof displayTitle === 'string' 
-                ? formatTextWithFootnotes(truncateText(displayTitle, 120), (oration?.footnotes || []), isArabicText(displayTitle))
+                ? formatTextWithFootnotes(truncateText(displayTitle, 120), (oration?.footnotes || []), isArabicText(displayTitle), oration?.sermonNumber || undefined)
                 : truncateText(displayTitle, 120)
               }
             </h3>

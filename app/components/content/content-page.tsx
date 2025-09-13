@@ -13,7 +13,6 @@ interface ContentPageConfig {
     getContent: (page?: number, pageSize?: number) => Promise<ApiResponse>;
     searchContent: (query: string, page?: number, pageSize?: number) => Promise<ApiResponse>;
   };
-  forceListView?: boolean;
 }
 
 interface ContentPageProps {
@@ -25,7 +24,7 @@ function ContentPageContent({ config }: ContentPageProps) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
-  const [view, setView] = useState<'grid' | 'list'>(config.forceListView ? 'list' : 'grid');
+  const [view, setView] = useState<'grid' | 'list'>(config.contentType === 'orations' ? 'grid' : 'list');
   const [content, setContent] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -143,7 +142,7 @@ function ContentPageContent({ config }: ContentPageProps) {
   };
 
   const handleViewChange = (newView: 'grid' | 'list') => {
-    if (config.forceListView) return;
+    if (config.contentType !== 'orations') return;
     setView(newView);
     if (newView === 'list') {
       setCurrentPage(1);
