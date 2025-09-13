@@ -122,22 +122,22 @@ export default function ContentListing({
     </div>
   );
 
-  const isOrationsListOnly = (contentType === 'orations');
+  const isOrationWithViewToggle = (contentType === 'orations');
   return (
     <div className="w-full relative">
       <div className="flex items-center justify-between mb-6">
         <p className="text-gray-600">
           {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
         </p>
-        {!isOrationsListOnly && onViewChange && (
+        {isOrationWithViewToggle && onViewChange && (
           <ViewToggle view={view} onViewChange={onViewChange} />
         )}
       </div>
       {loading ? (
-        isOrationsListOnly ? renderLoadingList() : (view === 'grid' ? renderLoadingGrid() : renderLoadingList())
+        isOrationWithViewToggle ? (view === 'grid' ? renderLoadingGrid() : renderLoadingList()) : renderLoadingList()
       ) : (
         <>
-          {isOrationsListOnly ? renderListView() : (view === 'grid' ? renderGridView() : renderListView())}
+          {isOrationWithViewToggle ? (view === 'grid' ? renderGridView() : renderListView()) : renderListView()}
           {view === 'list' && isInfiniteLoading && (
             <div className="mt-8">
               <div className="animate-pulse">
@@ -162,7 +162,18 @@ export default function ContentListing({
               </div>
             </div>
           )}
-          {view === 'grid' && totalPages > 1 && onPageChange && !isOrationsListOnly && (
+          {view === 'grid' && totalPages > 1 && onPageChange && isOrationWithViewToggle && (
+            <div className="mt-12">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+                showRange={true}
+                loading={loading}
+              />
+            </div>
+          )}
+          {!isOrationWithViewToggle && totalPages > 1 && onPageChange && (
             <div className="mt-12">
               <Pagination
                 currentPage={currentPage}
