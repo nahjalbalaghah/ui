@@ -53,13 +53,14 @@ export const formatTextWithFootnotes = (
 
   const relevantFootnotes = currentSection 
     ? footnotes.filter(footnote => {
+        const footnoteSection = footnote.section?.replace(/^"|"$/g, '') || '';
         if (currentSection === 'main') {
-          return !footnote.section || 
-                 footnote.section === 'main' || 
-                 footnote.section === '' ||
-                 !footnote.section.match(/^\d+(\.\d+)*$/);
+          return !footnoteSection || 
+                 footnoteSection === 'main' || 
+                 footnoteSection === '' ||
+                 !footnoteSection.match(/^\d+(\.\d+)*$/);
         }
-        return footnote.section === currentSection;
+        return footnoteSection === currentSection;
       })
     : footnotes;
 
