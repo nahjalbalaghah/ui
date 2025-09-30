@@ -1,6 +1,5 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, MapPin, Clock, Phone, Mail, Search, ChevronDown, Home, Calendar, Headphones, GraduationCap, FileText, MessageCircle, Facebook, Twitter, Youtube, Star, List } from 'lucide-react'
 import Link from 'next/link'
 import Input from '../../input'
@@ -32,12 +31,6 @@ const Header = () => {
       hasDropdown: false
     },
     {
-      name: 'Explore',
-      icon: Search,
-      href: '/explore',
-      hasDropdown: false
-    },
-    {
       name: 'Contact',
       icon: MessageCircle,
       href: '/contact',
@@ -60,33 +53,24 @@ const Header = () => {
 
   return (
     <header className="relative">
-      <motion.div 
-        className={`sticky top-0 z-50 transition-all duration-500 ${
+      <div className={`sticky top-0 z-50 ${
           isScrolled 
             ? 'bg-white/95 backdrop-blur-xl' 
             : 'bg-white'
-        }`}
-        initial={{ y: -60 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
+        }`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             <Link href="/">
-              <motion.div 
-                className="flex items-center gap-3 cursor-pointer group"
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.3 }}
-              >
+              <div className="flex items-center gap-3 cursor-pointer">
                 <div className="relative">
-                  <div className="w-18 h-16 bg-[#43896B] rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 border border-[#43896B]/20">
+                  <div className="w-18 h-16 bg-[#43896B] rounded-2xl flex items-center justify-center shadow-lg border border-[#43896B]/20">
                     <div className="text-center leading-none font-taha">
                       <div className="text-white font-bold text-lg mb-0.5">نهج</div>
                       <div className="text-white font-bold text-base -mt-1">البلاغة</div>
                     </div>
                   </div>
                 </div>
-                <div className="group-hover:translate-x-1 transition-transform duration-300">
+                <div>
                   <h1 className="text-xl font-bold text-[#43896B] leading-tight">
                     Nahj al-Balaghah
                   </h1>
@@ -94,121 +78,75 @@ const Header = () => {
                     Way of Eloquence
                   </p>
                 </div>
-              </motion.div>
+              </div>
             </Link>
             <nav className="hidden lg:flex items-center space-x-2">
               {menuItems.map((item, index) => (
                 <div key={item.name} className="relative">
                   {item.hasDropdown ? (
-                    <motion.button
-                      className="cursor-pointer flex items-center gap-2 text-gray-700 hover:text-[#43896B] transition-all duration-300 px-4 py-2.5 font-medium rounded-xl hover:bg-[#43896B]/5 group"
+                    <button
+                      className="cursor-pointer flex items-center gap-2 text-gray-700 px-4 py-2.5 font-medium rounded-xl"
                       onClick={() => handleDropdownToggle(item.name)}
-                      whileHover={{ y: -2 }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
                     >
-                      <item.icon className="w-4 h-4 group-hover:text-[#E8B873] transition-colors duration-200" />
+                      <item.icon className="w-4 h-4" />
                       {item.name}
-                      <motion.div
-                        animate={{ rotate: activeDropdown === item.name ? 180 : 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
+                      <div>
                         <ChevronDown className="w-4 h-4" />
-                      </motion.div>
-                    </motion.button>
+                      </div>
+                    </button>
                   ) : (
                     <Link href={item.href}>
-                      <motion.div
-                        className="cursor-pointer flex items-center gap-2 text-gray-700 hover:text-[#43896B] transition-all duration-300 px-4 py-2.5 font-medium rounded-xl hover:bg-[#43896B]/5 group"
-                        whileHover={{ y: -2 }}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                      <div
+                        className="cursor-pointer flex items-center gap-2 text-gray-700 px-4 py-2.5 font-medium rounded-xl"
                       >
-                        <item.icon className="w-4 h-4 group-hover:text-[#E8B873] transition-colors duration-200" />
+                        <item.icon className="w-4 h-4" />
                         {item.name}
-                      </motion.div>
+                      </div>
                     </Link>
                   )}
                 </div>
               ))}
             </nav>
             <div className="flex items-center gap-3">
-              <motion.div 
-                whileFocus={{ scale: 1.02, borderColor: "#43896B" }}
-                whileHover={{ scale: 1.02 }}
-                className='hidden lg:block'
-              >
+              <div className='hidden lg:block'>
                <Input placeholder='Search sermons...' icon={<Search size={16} />} />
-              </motion.div>
-              <motion.button
-                className="lg:hidden p-2.5 rounded-xl hover:bg-gray-100 transition-all duration-300 border border-gray-200 hover:border-[#43896B]/30"
+              </div>
+              <button
+                className="lg:hidden p-2.5 rounded-xl border border-gray-200"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                whileTap={{ scale: 0.95 }}
-                whileHover={{ scale: 1.05 }}
               >
-                <AnimatePresence mode="wait">
-                  {isMenuOpen ? (
-                    <motion.div
-                      key="close"
-                      initial={{ rotate: -180, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 180, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <X className="w-6 h-6 text-[#43896B]" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="menu"
-                      initial={{ rotate: 180, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -180, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Menu className="w-6 h-6 text-[#43896B]" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.button>
+                {isMenuOpen ? (
+                  <div>
+                    <X className="w-6 h-6 text-[#43896B]" />
+                  </div>
+                ) : (
+                  <div>
+                    <Menu className="w-6 h-6 text-[#43896B]" />
+                  </div>
+                )}
+              </button>
             </div>
           </div>
         </div>
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="lg:hidden bg-gradient-to-b from-white to-gray-50 border-t border-gray-100 overflow-hidden"
-            >
+        {isMenuOpen && (
+            <div className="lg:hidden bg-gradient-to-b from-white to-gray-50 border-t border-gray-100 overflow-hidden">
               <div className="max-w-7xl mx-auto px-4 py-6 space-y-3">
-                <motion.div 
-                  className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 mb-6 shadow-sm border border-gray-200"
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
+                <div className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 mb-6 shadow-sm border border-gray-200">
                   <Search className="w-5 h-5 text-gray-400" />
                   <input
                     type="text"
                     placeholder="Search sermons, scholars..."
                     className="bg-transparent outline-none text-sm flex-1 placeholder-gray-500"
                   />
-                </motion.div>
+                </div>
                 {menuItems.map((item, index) => (
-                  <motion.div
+                  <div
                     key={item.name}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
                     className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
                   >
                     {item.hasDropdown ? (
                       <button
-                        className="flex items-center justify-between w-full text-left px-5 py-4 hover:bg-gradient-to-r hover:from-[#43896B]/5 hover:to-[#E8B873]/5 transition-all duration-300"
+                        className="flex items-center justify-between w-full text-left px-5 py-4"
                         onClick={() => handleDropdownToggle(item.name)}
                       >
                         <div className="flex items-center gap-4">
@@ -217,16 +155,13 @@ const Header = () => {
                           </div>
                           <span className="font-semibold text-gray-800">{item.name}</span>
                         </div>
-                        <motion.div
-                          animate={{ rotate: activeDropdown === item.name ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
+                        <div>
                           <ChevronDown className="w-5 h-5 text-gray-500" />
-                        </motion.div>
+                        </div>
                       </button>
                     ) : (
                       <Link href={item.href} onClick={closeMenu}>
-                        <div className="flex items-center justify-between w-full text-left px-5 py-4 hover:bg-gradient-to-r hover:from-[#43896B]/5 hover:to-[#E8B873]/5 transition-all duration-300">
+                        <div className="flex items-center justify-between w-full text-left px-5 py-4">
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-gradient-to-br from-[#43896B]/10 to-[#E8B873]/10 rounded-xl flex items-center justify-center">
                               <item.icon className="w-5 h-5 text-[#43896B]" />
@@ -236,23 +171,15 @@ const Header = () => {
                         </div>
                       </Link>
                     )}
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
         {activeDropdown && (
-          <motion.div 
-            className="hidden lg:block fixed inset-0 z-40 bg-black/10 backdrop-blur-sm" 
-            onClick={closeDropdown}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          />
+          <div className="hidden lg:block fixed inset-0 z-40 bg-black/10 backdrop-blur-sm" onClick={closeDropdown} />
         )}
-      </motion.div>
+      </div>
     </header>
   )
 }

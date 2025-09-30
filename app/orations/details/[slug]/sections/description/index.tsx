@@ -68,7 +68,7 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
             
             {mainTranslation && (
               <div className="bg-white rounded-lg p-6 border border-gray-200">
-                <p className="text-lg leading-relaxed text-gray-700 font-serif italic">
+                <p className="text-lg leading-relaxed text-gray-700 font-serif italic whitespace-pre-wrap">
                   {formatTextWithFootnotes(mainTranslation.text, oration.footnotes || [], false, 'main')}
                 </p>
               </div>
@@ -98,7 +98,7 @@ const OrationsDescription = ({ oration }: OrationsDescriptionProps) => {
                 
                 {englishTranslation && (
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <div className="leading-relaxed text-gray-700">
+                    <div className="leading-relaxed text-gray-700 whitespace-pre-wrap">
                       {formatTextWithFootnotes(englishTranslation, [...(oration.footnotes || []), ...(paragraph.footnotes || [])], false, paragraph.number)}
                     </div>
                   </div>

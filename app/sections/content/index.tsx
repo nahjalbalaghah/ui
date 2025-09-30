@@ -1,30 +1,12 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { MessageSquare, Mail, Quote, Scroll, Calendar, Archive } from 'lucide-react'
 import Button from '@/app/components/button'
 import Link from 'next/link'
 
 const OrationsLettersSayingsSection = () => {
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    const section = document.getElementById('orations-letters-sayings-section')
-    if (section) {
-      observer.observe(section)
-    }
-
-    return () => observer.disconnect()
-  }, [])
+  const [isVisible, setIsVisible] = useState(true)
 
   const collections = [
     {
@@ -68,7 +50,7 @@ const OrationsLettersSayingsSection = () => {
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+            animate={{opacity: 1, y: 0}}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex justify-center items-center gap-3"
           >
@@ -77,7 +59,7 @@ const OrationsLettersSayingsSection = () => {
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+            animate={{opacity: 1, y: 0}}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight mt-4"
           >
@@ -85,14 +67,14 @@ const OrationsLettersSayingsSection = () => {
           </motion.h2>
           <motion.div
             initial={{ width: 0 }}
-            animate={isVisible ? { width: "120px" } : {}}
+            animate={{width: "120px"}}
             transition={{ duration: 0.8, delay: 0.5 }}
             className="h-1 bg-[#43896B] rounded-full mx-auto mt-6"
           ></motion.div>
         </div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          animate={{opacity: 1, y: 0}}
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mb-16 max-w-4xl mx-auto text-center"
         >
@@ -105,7 +87,7 @@ const OrationsLettersSayingsSection = () => {
             <motion.div
               key={collection.title}
               initial={{ opacity: 0, y: 30 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              animate={{opacity: 1, y: 0}}
               transition={{ duration: 0.6, delay: 0.7 + (index * 0.1) }}
               className="bg-white rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
             >
@@ -153,7 +135,7 @@ const OrationsLettersSayingsSection = () => {
         </div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          animate={{opacity: 1, y: 0}}
           transition={{ duration: 0.6, delay: 1.0 }}
           className="text-center mt-16"
         >

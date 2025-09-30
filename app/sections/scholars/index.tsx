@@ -1,29 +1,11 @@
 "use client";
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, Twitter, Facebook, Linkedin, Youtube, Heart } from 'lucide-react'
 import Button from '@/app/components/button';
 
 const IslamicScholarsSection = () => {
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    const section = document.getElementById('scholars-section')
-    if (section) {
-      observer.observe(section)
-    }
-
-    return () => observer.disconnect()
-  }, [])
+  const [isVisible, setIsVisible] = useState(true)
 
   const scholars = [
     {
@@ -73,7 +55,7 @@ const IslamicScholarsSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
@@ -89,7 +71,7 @@ const IslamicScholarsSection = () => {
           <div className="flex justify-center mb-8">
             <motion.div
               initial={{ width: 0 }}
-              animate={isVisible ? { width: "200px" } : {}}
+              animate={{ width: "200px" }}
               transition={{ duration: 1.2, delay: 0.5 }}
               className="relative"
             >
@@ -106,7 +88,7 @@ const IslamicScholarsSection = () => {
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
@@ -114,7 +96,7 @@ const IslamicScholarsSection = () => {
             <motion.div
               key={scholar.id}
               initial={{ opacity: 0, y: 50, scale: 0.95 }}
-              animate={isVisible ? { opacity: 1, y: 0, scale: 1 } : {}}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.6 + (index * 0.2) }}
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
               className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100"
@@ -137,7 +119,7 @@ const IslamicScholarsSection = () => {
                   <div className="flex justify-center mb-4">
                     <motion.div
                       initial={{ width: 0 }}
-                      animate={isVisible ? { width: "60px" } : {}}
+                      animate={{ width: "60px" }}
                       transition={{ duration: 1, delay: 1 + (index * 0.2) }}
                       className="h-0.5 bg-[#43896B] rounded-full"
                     />
@@ -186,7 +168,7 @@ const IslamicScholarsSection = () => {
         </motion.div>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
-          animate={isVisible ? { opacity: 1, scale: 1 } : {}}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 1.8 }}
           className="text-center mt-16"
         >
