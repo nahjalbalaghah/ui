@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Users, Star, Heart, Globe, Award, ChevronRight, Search, Quote, ScrollText } from 'lucide-react';
-import HeroMosqueImage from '@/app/assets/images/hero-mosque.jpg';
-import Image from 'next/image';
 import Button from '@/app/components/button';
 import { orationsApi, lettersApi, sayingsApi } from '@/api';
 
@@ -94,15 +92,6 @@ const ExploreHero = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="absolute inset-0">
-        <Image 
-          className="w-full h-full object-cover"
-          src={HeroMosqueImage}
-          alt='hero-mosque'
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/85 to-[#43896B]/20"></div>
-      </div>
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDVMMjUgMTVIMTVMMjAgNVoiIGZpbGw9ImN1cnJlbnRDb2xvciIvPgo8cmVjdCB4PSIxNSIgeT0iMTUiIHdpZHRoPSIxMCIgaGVpZ2h0PSIyMCIgZmlsbD0iY3VycmVudENvbG9yIi8+CjwvcGF0aD4KPC9zdmc+')] bg-repeat"></div>
       <div className="relative z-10 min-h-screen flex flex-col px-4 sm:px-6 lg:px-8">
         <div className="flex-grow flex items-center justify-center py-16">

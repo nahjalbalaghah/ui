@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react'
 import { BookOpen, Users, Star, Heart, Globe, Award, ChevronRight, Calendar, MapPin } from 'lucide-react'
-import HeroMosqueImage from '@/app/assets/images/hero-mosque.jpg'
-import Image from 'next/image';
 import Button from '@/app/components/button';
 
 const AboutUsHero = () => {
@@ -24,30 +22,22 @@ const AboutUsHero = () => {
     { 
       icon: BookOpen, 
       title: "Knowledge", 
-      description: "Preserving and sharing Islamic wisdom through authentic scholarship" 
+      description: "Providing authentic Islamic scholarship rooted in classical tradition and contemporary understanding" 
     },
     { 
       icon: Heart, 
       title: "Community", 
-      description: "Building bridges of understanding and fostering spiritual growth" 
+      description: "Fostering a global network of learners united in faith, scholarship, and spiritual development" 
     },
     { 
       icon: Star, 
       title: "Excellence", 
-      description: "Committed to the highest standards in Islamic education and guidance" 
+      description: "Maintaining rigorous academic standards while creating an accessible learning environment" 
     }
   ]
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="absolute inset-0">
-        <Image 
-          className="w-full h-full object-cover"
-          src={HeroMosqueImage}
-          alt='hero-mosque'
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/85 to-[#43896B]/20"></div>
-      </div>
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDVMMjUgMTVIMTVMMjAgNVoiIGZpbGw9ImN1cnJlbnRDb2xvciIvPgo8cmVjdCB4PSIxNSIgeT0iMTUiIHdpZHRoPSIxMCIgaGVpZ2h0PSIyMCIgZmlsbD0iY3VycmVudENvbG9yIi8+CjwvcGF0aD4KPC9zdmc+')] bg-repeat"></div>
       <div className="relative z-10 min-h-screen flex flex-col px-4 sm:px-6 lg:px-8">
         <div className="flex-grow flex items-center justify-center py-16">
@@ -55,27 +45,27 @@ const AboutUsHero = () => {
             <div className="text-center mb-16">
               <div className="space-y-4 sm:space-y-6 mb-8">
                 <h1 className="text-4xl lg:text-6xl font-black leading-tight text-[#43896B] break-words text-balance tracking-tight">
-                  Our Story & Mission
+                  About Our Institution
                 </h1>
                 <p className="text-xl sm:text-2xl text-gray-700 font-semibold max-w-3xl mx-auto">
-                  Dedicated to preserving Islamic heritage and fostering spiritual enlightenment
+                  A global center for Islamic scholarship and spiritual education
                 </p>
               </div>
             </div>
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-16">
               <div className="space-y-6">
                 <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-white/50">
-                  <h2 className="text-2xl font-bold text-[#43896B] mb-6">Our Journey</h2>
+                  <h2 className="text-2xl font-bold text-[#43896B] mb-6">Who We Are</h2>
                   <div className="space-y-4 text-gray-700">
                     <p className="leading-relaxed">
-                      Founded in 2005, our organization began as a humble initiative to make the profound 
-                      teachings of Nahj al-Balaghah accessible to seekers of wisdom worldwide. What started 
-                      as a small gathering of devoted scholars has grown into a global community.
+                      Established in 2005, we are an internationally recognized institution dedicated to 
+                      Islamic education and scholarship. Our focus centers on the teachings of Nahj al-Balaghah, 
+                      the profound wisdom of Imam Ali (AS), and comprehensive Quranic studies.
                     </p>
                     <p className="leading-relaxed">
-                      Today, we serve thousands of students across 45 countries, providing authentic 
-                      Islamic education and spiritual guidance rooted in the timeless wisdom of 
-                      Imam Ali (AS) and the teachings of the Holy Quran.
+                      We serve a diverse community of over 10,000 students across 45 countries, offering 
+                      structured programs in Islamic sciences, jurisprudence, and spiritual development 
+                      under the guidance of distinguished scholars.
                     </p>
                   </div>
                   <div className="mt-8 flex items-center gap-4">
@@ -90,12 +80,12 @@ const AboutUsHero = () => {
                   </div>
                 </div>
                 <Button variant='solid' icon={<ChevronRight size={24} />}>
-                  Read Our Full Story
+                  Learn More About Us
                 </Button>
               </div>
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-[#43896B] text-center lg:text-left mb-8">
-                  Our Core Values
+                  Our Values
                 </h2>
                 {values.map((value, index) => (
                   <div
@@ -136,8 +126,8 @@ const AboutUsHero = () => {
         <div className="max-w-4xl mx-auto pointer-events-auto">
           <div className="bg-[#43896B]/95 backdrop-blur-xl rounded-2xl px-6 py-4 shadow-2xl border border-white/20 text-center">
             <p className="text-white font-medium text-sm sm:text-base">
-              <span className="font-bold">"Our Mission:</span> To illuminate hearts and minds through the timeless wisdom of Islamic teachings, 
-              fostering a global community united in faith, knowledge, and spiritual growth."
+              <span className="font-bold">Our Mission:</span> To advance Islamic scholarship and foster spiritual growth through 
+              authentic teachings, creating a global community dedicated to knowledge, faith, and understanding.
             </p>
           </div>
         </div>
