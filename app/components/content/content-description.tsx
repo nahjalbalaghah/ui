@@ -111,7 +111,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 
                 return (
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
-                    <p className="text-xl leading-relaxed text-gray-700 font-brill">
+                    <p className="text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap" >
                       {formatTextWithFootnotes(mainTranslation.text, allFootnotes, false, content.sermonNumber || 'main')}
                     </p>
                   </div>
@@ -163,7 +163,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                   
                   return (
                     <div className="bg-white rounded-lg p-6 border border-gray-200">
-                      <p className="text-xl leading-relaxed text-gray-700 font-brill">
+                      <p className="text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
                         {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false, paragraph.number)}
                       </p>
                     </div>
