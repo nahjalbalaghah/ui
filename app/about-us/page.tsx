@@ -1,7 +1,6 @@
-import IslamicScholarsSection from "../sections/scholars";
-import ServicesSection from "../sections/services";
-import ImpactCommunitySection from "./sections/community";
 import AboutUsHero from "./sections/hero";
+import TeamSection from "./sections/team";
+import SponsorsSection from "./sections/sponsors";
 
 export const metadata = {
   title: "About Us | Nahj al-Balaghah",
@@ -36,9 +35,8 @@ export default function Page() {
     return (
         <div>
             <AboutUsHero />
-            <ImpactCommunitySection />
-            <ServicesSection />
-            <IslamicScholarsSection />
+            <TeamSection />
+            <SponsorsSection />
         </div>
     )
 }

@@ -1,29 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, MapPin, Bookmark, ScrollText, Quote, Languages, Scale, Club } from 'lucide-react'
 import Button from '@/app/components/button'
 
 const IndexesSection = () => {
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    const section = document.getElementById('indexes-section')
-    if (section) {
-      observer.observe(section)
-    }
-
-    return () => observer.disconnect()
-  }, [])
+  const [isVisible, setIsVisible] = useState(true)
 
   const indexes = [
     {
@@ -54,14 +36,14 @@ const IndexesSection = () => {
         <div className="grid gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: 50 }}
-            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             className="space-y-8"
           >
             <div className="space-y-4">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="flex items-center gap-3"
               >
@@ -70,36 +52,32 @@ const IndexesSection = () => {
               </motion.div>
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight"
               >
-                Indexes for <span className='text-[#43896B]'>Study & Research</span>
+                Islamic Manuscripts <span className='text-[#43896B]'>and Maps</span>
               </motion.h2>
               <motion.div
                 initial={{ width: 0 }}
-                animate={isVisible ? { width: "120px" } : {}}
+                animate={{ width: "120px" }}
                 transition={{ duration: 0.8, delay: 0.5 }}
                 className="h-1 bg-[#43896B] rounded-full"
               ></motion.div>
             </div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
               className="space-y-6"
             >
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Explore categorized indexes to navigate <span className="font-semibold text-[#43896B]">Nahj al-Balaghah</span> with greater clarity and focus. Our comprehensive indexes help scholars, students, and researchers find exactly what they're looking for.
-              </p>
-              
               <p className="text-lg text-gray-600 leading-relaxed">
                 Whether you're studying specific concepts, tracing references, or analyzing historical contexts, these tools will enhance your understanding of Imam Ali's timeless wisdom.
               </p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
               className="grid grid-cols-1 gap-6 mt-8"
             >
@@ -107,7 +85,7 @@ const IndexesSection = () => {
                 <motion.div
                   key={index.title}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.8 + (i * 0.1) }}
                   className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:bg-white/80 transition-all duration-300 group"
                 >
@@ -125,7 +103,7 @@ const IndexesSection = () => {
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.2 }}
               className="pt-4"
             >

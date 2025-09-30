@@ -1,7 +1,5 @@
-import OrationsLettersSayingsSection from "./sections/content";
 import ExploreHero from "./sections/hero";
 import IndexesSection from "./sections/indexes";
-import ResourcesSection from "./sections/resources";
 
 export const metadata = {
   title: "Explore | Nahj al-Balaghah",

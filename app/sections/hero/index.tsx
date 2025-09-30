@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react'
-import { Play, Pause, SkipForward, SkipBack, Volume2, BookOpen, Users, Star, ArrowRight, Calendar, MapPin, Clock, Disc, ChevronRight, MessageSquare, Mail, ArrowRightCircle } from 'lucide-react'
-import HeroMosqueImage from '@/app/assets/images/hero-mosque.jpg'
+import { ArrowRightCircle } from 'lucide-react'
 import TitleImage from '@/app/assets/images/title.png'
 import Image from 'next/image';
 import Link from 'next/link';
@@ -67,6 +66,12 @@ const HeroSection = () => {
 
   const contentTypes = [
     {
+      arabic: "المقدمة",
+      label: "Introduction",
+      href: "/radis",
+      type: "Introduction"
+    },
+    {
       arabic: "الخطب",
       label: "Orations",
       href: "/orations",
@@ -85,10 +90,10 @@ const HeroSection = () => {
       type: "Saying"
     },
     {
-      arabic: "المقدمة",
-      label: "Radis Introduction", 
-      href: "/radis",
-      type: "Introduction"
+      arabic: "الخاتمة",
+      label: "Conclusion",
+      href: "/about-us",
+      type: "Conclusion"
     }
   ]
 
@@ -106,9 +111,6 @@ const HeroSection = () => {
                   className="h-auto w-64 sm:w-72 lg:w-80 max-w-full"
                 />
               </div>
-              <p className="text-sm sm:text-base text-gray-600 italic font-medium">
-                A Parallel English-Arabic Text
-              </p>
             </div>
             <div className="space-y-4 sm:space-y-6 mb-8 sm:mb-12">
               <h1 className="text-4xl lg:text-6xl font-black leading-tight text-[#43896B] break-words text-balance tracking-tight" >
@@ -125,16 +127,16 @@ const HeroSection = () => {
                 AL-SHARIF AL-RADI
               </p>
             </div>
-            <div className="mt-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 max-w-6xl mx-auto px-4">
+            <div className="mt-24 grid grid-cols-5 gap-4 sm:gap-6 max-w-7xl mx-auto px-4">
               {contentTypes.map((content, index) => (
                 <div
                   key={content.label}
-                  className="bg-white/90 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 flex flex-col items-center"
+                  className="bg-white/90 backdrop-blur-xl rounded-3xl p-4 sm:p-6 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 flex flex-col items-center"
                 >
-                  <div className="text-4xl sm:text-5xl font-extrabold text-[#43896B] mb-2 font-[uthman-taha]" style={{ fontFamily: 'uthman-taha, serif', letterSpacing: '0.02em' }}>
+                  <div className="text-3xl sm:text-4xl font-extrabold text-[#43896B] mb-2 font-[uthman-taha]" style={{ fontFamily: 'uthman-taha, serif', letterSpacing: '0.02em' }}>
                     {content.arabic}
                   </div>
-                  <div className="mt-6 text-base sm:text-lg text-gray-600 font-medium mb-4">{content.label}</div>
+                  <div className="mt-4 text-sm sm:text-base text-gray-600 font-medium mb-3">{content.label}</div>
                   <Link href={content.href}>
                     <Button icon={ <ArrowRightCircle size={16} />} >
                       Read
