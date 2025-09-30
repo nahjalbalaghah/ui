@@ -18,7 +18,10 @@ export interface Footnote {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
+  english_index_number?: string;  // 👈 used for occurrence check in English
+  arabic_index_number?: string;   // 👈 used for occurrence check in Arabic
 }
+
 
 export interface Tag {
   id: number;
