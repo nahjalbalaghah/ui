@@ -127,7 +127,9 @@ export const orationsApi = {
         params: {
           'filters[type][$eq]': 'Oration',
           'filters[$or][0][title][$containsi]': query,
-          'filters[$or][1][paragraphs][arabic][$containsi]': query,
+          'filters[$or][1][heading][$containsi]': query,
+          'filters[$or][2][paragraphs][arabic][$containsi]': query,
+          'filters[$or][3][paragraphs][translations][text][$containsi]': query,
           'populate[footnotes]': true,
           'populate[paragraphs][populate][translations]': true,
           'populate[paragraphs][populate][footnotes]': true,

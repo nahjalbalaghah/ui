@@ -18,6 +18,8 @@ interface ContentListingProps {
   contentType: 'orations' | 'letters' | 'sayings';
   hasNextPage?: boolean;
   isInfiniteLoading?: boolean;
+  displayMode?: 'both' | 'english-only' | 'arabic-only';
+  showTopPagination?: boolean;
 }
 
 export default function ContentListing({
@@ -32,7 +34,9 @@ export default function ContentListing({
   subtitle,
   contentType,
   hasNextPage = false,
-  isInfiniteLoading = false
+  isInfiniteLoading = false,
+  displayMode = 'both',
+  showTopPagination = false
 }: ContentListingProps) {
   const { lastElementRef } = useInfiniteScroll({
     hasNextPage,
@@ -48,7 +52,7 @@ export default function ContentListing({
           key={index}
           ref={index === content.length - 1 ? lastElementRef : undefined}
         >
-          <ListViewItem item={item} contentType={contentType} />
+          <ListViewItem item={item} contentType={contentType} displayMode={displayMode} />
         </div>
       ))}
     </div>
@@ -83,11 +87,22 @@ export default function ContentListing({
 
   return (
     <div className="w-full relative">
-      <div className="flex items-center justify-between mb-6">
-        <p className="text-gray-600">
+      <div className="flex flex-col lg:flex-row items-center justify-between mb-6">
+        <p className="text-gray-600 mb-5 lg:mb-0">
           {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
         </p>
+        
+        {showTopPagination && totalPages > 1 && onPageChange && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+            showRange={true}
+            loading={loading}
+          />
+        )}
       </div>
+      
       {loading ? (
         renderLoadingList()
       ) : (
@@ -115,17 +130,6 @@ export default function ContentListing({
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-          {totalPages > 1 && onPageChange && (
-            <div className="mt-12">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={onPageChange}
-                showRange={true}
-                loading={loading}
-              />
             </div>
           )}
         </>

@@ -10,14 +10,14 @@ interface ContentDetailsPageProps {
   contentType: 'orations' | 'letters' | 'sayings';
   title: string;
   api: {
-    getContentBySlug: (slug: string) => Promise<Post | null>;
+    getContentById: (id: number) => Promise<Post | null>;
   };
 }
 
 export default function ContentDetailsPage({ contentType, title, api }: ContentDetailsPageProps) {
   const params = useParams();
   const searchParams = useSearchParams();
-  const slug = params.slug as string;
+  const id = parseInt(params.id as string);
   const returnPage = searchParams.get('returnPage');
   
   const [content, setContent] = useState<Post | null>(null);
@@ -33,7 +33,7 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
     const loadContent = async () => {
       try {
         setLoading(true);
-        const data = await api.getContentBySlug(slug);
+        const data = await api.getContentById(id);
         setContent(data);
         setError(null);
       } catch (err) {
@@ -44,10 +44,10 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
       }
     };
 
-    if (slug) {
+    if (!isNaN(id)) {
       loadContent();
     }
-  }, [slug, api, contentType]);
+  }, [id, api, contentType]);
 
   if (loading) {
     return (
