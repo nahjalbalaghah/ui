@@ -71,7 +71,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
   return (
   <div className="bg-white rounded-2xl border border-gray-200 p-8">
       <div className="mb-8 pb-6 border-b border-gray-200">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed whitespace-pre-wrap">
           {heading || `${getContentLabel()} Details`}
         </h1>
 
@@ -125,7 +125,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
             {(displayMode === 'both' || displayMode === 'arabic-only') && content.title && (
               <div className="p-0 mb-4 border-none">
                 <div className="text-right">
-                  <p className="text-xl leading-relaxed text-gray-900 font-taha" dir="rtl" style={{ fontSize: '1.25rem' }}>
+                  <p className="text-xl leading-relaxed text-gray-900 font-taha whitespace-pre-wrap text-[1.25rem]" dir="rtl">
                     {formatTextWithFootnotes(content.title, allFootnotes, true, content.sermonNumber || 'main')}
                   </p>
                 </div>
