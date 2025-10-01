@@ -53,7 +53,6 @@ const ContactFormSection = () => {
 
   return (
     <section id="contact-form-section" className="relative py-24 px-4 bg-gradient-to-br from-white via-[#f6faf8] to-[#eaf4ef] overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDVMMjUgMTVIMTVMMjAgNVoiIGZpbGw9IiM0Mzg5NkIiLz4KPHJlY3QgeD0iMTUiIHk9IjE1IiB3aWR0aD0iMTAiIGhlaWdodD0iMjAiIGZpbGw9IiM0Mzg5NkIiLz4KPC9zdmc+')] bg-repeat z-0"></div>
       <div className="max-w-2xl mx-auto relative z-10 flex flex-col items-center justify-center">
         <div className="w-full">
           <div className="mb-10 text-center">

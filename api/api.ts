@@ -45,8 +45,8 @@ api.interceptors.response.use(
       }
     }
     
-    console.error('API Error:', error.response?.status, error.response?.statusText);
-    console.error('API Error Details:', error.response?.data || error.message);
+    // console.error('API Error:', error.response?.status, error.response?.statusText);
+    // console.error('API Error Details:', error.response?.data || error.message);
     return Promise.reject(error);
   }
 );

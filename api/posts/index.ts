@@ -41,9 +41,8 @@ export const postsApi = {
       if (filters.search) {
         params['filters[$or][0][title][$containsi]'] = filters.search;
         params['filters[$or][1][heading][$containsi]'] = filters.search;
-        params['filters[$or][2][translations][text][$containsi]'] = filters.search;
-        params['filters[$or][3][paragraphs][arabic][$containsi]'] = filters.search;
-        params['filters[$or][4][paragraphs][translations][text][$containsi]'] = filters.search;
+        params['filters[$or][2][paragraphs][arabic][$containsi]'] = filters.search;
+        params['filters[$or][3][paragraphs][translations][text][$containsi]'] = filters.search;
       }
 
       if (filters.tags && filters.tags.length > 0) {
@@ -92,9 +91,8 @@ export const postsApi = {
       if (filters.search) {
         params['filters[$or][0][title][$containsi]'] = filters.search;
         params['filters[$or][1][heading][$containsi]'] = filters.search;
-        params['filters[$or][2][translations][text][$containsi]'] = filters.search;
-        params['filters[$or][3][paragraphs][arabic][$containsi]'] = filters.search;
-        params['filters[$or][4][paragraphs][translations][text][$containsi]'] = filters.search;
+        params['filters[$or][2][paragraphs][arabic][$containsi]'] = filters.search;
+        params['filters[$or][3][paragraphs][translations][text][$containsi]'] = filters.search;
       }
 
       if (filters.tags && filters.tags.length > 0) {
@@ -146,6 +144,32 @@ export const postsApi = {
     }
   },
 
+  async getPostById(id: number, type?: string): Promise<Post | null> {
+    try {
+      const params: any = {
+        'filters[id][$eq]': id,
+        'populate[footnotes]': true,
+        'populate[paragraphs][populate][translations]': true,
+        'populate[paragraphs][populate][footnotes]': true,
+        'populate[tags]': true,
+      };
+
+      if (type) {
+        params['filters[type][$eq]'] = type;
+      }
+
+      const response = await api.get('/api/posts', { params });
+      
+      if (response.data.data && response.data.data.length > 0) {
+        return response.data.data[0];
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching post by id:', error);
+      throw error;
+    }
+  },
+
   async searchPosts(query: string, options: Omit<PostsApiOptions, 'filters'> = {}): Promise<ApiResponse> {
     return this.getPosts({
       ...options,
@@ -182,6 +206,10 @@ export const orationsApi = {
 
   async getOrationBySlug(slug: string): Promise<Post | null> {
     return postsApi.getPostBySlug(slug, 'Oration');
+  },
+
+  async getOrationById(id: number): Promise<Post | null> {
+    return postsApi.getPostById(id, 'Oration');
   },
 
   async searchOrations(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {
@@ -221,6 +249,10 @@ export const lettersApi = {
     return postsApi.getPostBySlug(slug, 'Letter');
   },
 
+  async getLetterById(id: number): Promise<Post | null> {
+    return postsApi.getPostById(id, 'Letter');
+  },
+
   async searchLetters(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {
     return postsApi.getPostsForListing({ 
       page, 
@@ -256,6 +288,10 @@ export const sayingsApi = {
 
   async getSayingBySlug(slug: string): Promise<Post | null> {
     return postsApi.getPostBySlug(slug, 'Saying');
+  },
+
+  async getSayingById(id: number): Promise<Post | null> {
+    return postsApi.getPostById(id, 'Saying');
   },
 
   async searchSayings(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {

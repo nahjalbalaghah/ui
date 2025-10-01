@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react'
-import { BookOpen, Users, Star, Heart, Globe, Award, ChevronRight, Calendar, MapPin } from 'lucide-react'
+import { BookOpen, Star, Heart, ChevronRight, Calendar, MapPin } from 'lucide-react'
 import Button from '@/app/components/button';
 
 const AboutUsHero = () => {
@@ -10,13 +10,6 @@ const AboutUsHero = () => {
   useEffect(() => {
     setIsVisible(true)
   }, [])
-
-  const stats = [
-    { icon: Calendar, label: "Established", value: "2005" },
-    { icon: Users, label: "Community", value: "10K+" },
-    { icon: Globe, label: "Countries", value: "45+" },
-    { icon: Award, label: "Recognition", value: "15+" }
-  ]
 
   const values = [
     { 
@@ -105,30 +98,6 @@ const AboutUsHero = () => {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-              {stats.map((stat, index) => (
-                <div
-                  key={stat.label}
-                  className="bg-white/90 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 text-center"
-                >
-                  <div className="w-12 h-12 bg-[#43896B] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <stat.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="text-2xl font-bold text-gray-800 mb-2">{stat.value}</div>
-                  <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="fixed bottom-4 sm:bottom-8 left-4 right-4 z-50 pointer-events-none">
-        <div className="max-w-4xl mx-auto pointer-events-auto">
-          <div className="bg-[#43896B]/95 backdrop-blur-xl rounded-2xl px-6 py-4 shadow-2xl border border-white/20 text-center">
-            <p className="text-white font-medium text-sm sm:text-base">
-              <span className="font-bold">Our Mission:</span> To advance Islamic scholarship and foster spiritual growth through 
-              authentic teachings, creating a global community dedicated to knowledge, faith, and understanding.
-            </p>
           </div>
         </div>
       </div>

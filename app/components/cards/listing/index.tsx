@@ -32,7 +32,7 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
   const getCardLink = () => {
     if (oration) {
       const currentPage = searchParams.get('page');
-      const baseUrl = `/${contentType}/details/${oration.slug}`;
+      const baseUrl = `/${contentType}/details/${oration.id}`;
       return currentPage ? `${baseUrl}?returnPage=${currentPage}` : baseUrl;
     } else if (sermon) {
       return `/listings/details/${sermon.id}`;
