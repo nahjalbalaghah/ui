@@ -10,6 +10,8 @@ interface TopFilterBarProps {
   sortBy: string;
   setSortBy: (value: string) => void;
   sortOptions: Array<{ value: string; label: string }>;
+  displayMode: 'both' | 'english-only' | 'arabic-only';
+  setDisplayMode: (value: 'both' | 'english-only' | 'arabic-only') => void;
 }
 
 export default function TopFilterBar({
@@ -17,8 +19,15 @@ export default function TopFilterBar({
   setSearchTerm,
   sortBy,
   setSortBy,
-  sortOptions
+  sortOptions,
+  displayMode,
+  setDisplayMode
 }: TopFilterBarProps) {
+  const displayOptions = [
+    { value: 'both', label: 'Both Titles' },
+    { value: 'english-only', label: 'English Only' },
+    { value: 'arabic-only', label: 'Arabic Only' },
+  ];
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
       <div className="flex flex-col lg:flex-row gap-4">
@@ -32,6 +41,13 @@ export default function TopFilterBar({
           />
         </div>
         <div className="flex gap-3">
+          <Select
+            options={displayOptions}
+            value={displayMode}
+            onChange={(value) => setDisplayMode(value as 'both' | 'english-only' | 'arabic-only')}
+            placeholder="Display"
+            className="w-full lg:w-40"
+          />
           <Select
             options={sortOptions}
             value={sortBy}

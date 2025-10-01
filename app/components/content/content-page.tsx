@@ -24,6 +24,7 @@ function ContentPageContent({ config }: ContentPageProps) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
   const [content, setContent] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,8 +37,17 @@ function ContentPageContent({ config }: ContentPageProps) {
 
   useEffect(() => {
     const page = searchParams.get('page');
+    const search = searchParams.get('search');
+    const sort = searchParams.get('sort');
+    
     if (page) {
       setCurrentPage(parseInt(page, 10));
+    }
+    if (search) {
+      setSearchTerm(search);
+    }
+    if (sort) {
+      setSortBy(sort);
     }
   }, [searchParams]);
 
@@ -49,13 +59,27 @@ function ContentPageContent({ config }: ContentPageProps) {
     return () => clearTimeout(timer);
   }, []);
 
-  const updatePageInUrl = (page: number) => {
+  const updateUrlParams = (page?: number, search?: string, sort?: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (page === 1) {
+    
+    if (page === 1 || page === undefined) {
       params.delete('page');
     } else {
       params.set('page', page.toString());
     }
+    
+    if (search === '' || search === undefined) {
+      params.delete('search');
+    } else {
+      params.set('search', search);
+    }
+    
+    if (sort === '' || sort === undefined) {
+      params.delete('sort');
+    } else {
+      params.set('sort', sort);
+    }
+    
     router.replace(`/${config.contentType}?${params.toString()}`, { scroll: false });
   };
 
@@ -71,9 +95,9 @@ function ContentPageContent({ config }: ContentPageProps) {
       let response;
       
       if (search) {
-        response = await config.api.searchContent(search, page, 12);
+        response = await config.api.searchContent(search, page, 9);
       } else {
-        response = await config.api.getContent(page, 12);
+        response = await config.api.getContent(page, 9);
       }
 
       if (!response || !response.data) {
@@ -87,10 +111,6 @@ function ContentPageContent({ config }: ContentPageProps) {
       if (sortBy) {
         filteredData = [...filteredData].sort((a, b) => {
           switch (sortBy) {
-            case 'title-asc':
-              return a.title.localeCompare(b.title);
-            case 'title-desc':
-              return b.title.localeCompare(a.title);
             case 'sermon-asc':
               return parseInt(a.sermonNumber || '0') - parseInt(b.sermonNumber || '0');
             case 'sermon-desc':
@@ -113,13 +133,27 @@ function ContentPageContent({ config }: ContentPageProps) {
       setHasNextPage(page < (response.meta?.pagination?.pageCount || 1));
       
       if (updateUrl && !append) {
-        updatePageInUrl(page);
+        updateUrlParams(page, search, sortBy);
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      let errorMessage = 'An unexpected error occurred';
+      
+      if (err instanceof Error) {
+        if (err.message.includes('timeout')) {
+          errorMessage = 'Request timeout. The server took too long to respond. Please try again.';
+        } else if (err.message.includes('Network Error')) {
+          errorMessage = 'Network error. Please check your internet connection.';
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
       setError(`Failed to load ${config.contentType}: ${errorMessage}`);
       console.error(`Error loading ${config.contentType}:`, err);
-      setContent([]);
+      
+      if (!append) {
+        setContent([]);
+      }
     } finally {
       if (minLoadingTime) {
         setTimeout(() => {
@@ -151,10 +185,12 @@ function ContentPageContent({ config }: ContentPageProps) {
       if (searchTerm !== '') {
         setCurrentPage(1);
         loadContent(1, searchTerm, true, false);
+        updateUrlParams(1, searchTerm, sortBy);
       } else {
         const page = searchParams.get('page');
         const currentPageFromUrl = page ? parseInt(page, 10) : 1;
         loadContent(currentPageFromUrl, '', false, false);
+        updateUrlParams(currentPageFromUrl, '', sortBy);
       }
     }, 500);
 
@@ -164,11 +200,10 @@ function ContentPageContent({ config }: ContentPageProps) {
   useEffect(() => {
     setCurrentPage(1);
     loadContent(1, searchTerm, true, false);
+    updateUrlParams(1, searchTerm, sortBy);
   }, [sortBy]);
 
   const sortOptions = [
-    { value: 'title-asc', label: 'Title A-Z' },
-    { value: 'title-desc', label: 'Title Z-A' },
     { value: 'sermon-asc', label: 'Sermon Number (Low to High)' },
     { value: 'sermon-desc', label: 'Sermon Number (High to Low)' },
     { value: 'relevance', label: 'Relevance' }
@@ -211,6 +246,8 @@ function ContentPageContent({ config }: ContentPageProps) {
           sortBy={sortBy}
           setSortBy={setSortBy}
           sortOptions={sortOptions}
+          displayMode={displayMode}
+          setDisplayMode={setDisplayMode}
         />
         <div className="flex flex-col gap-8">
           <ContentListing
@@ -225,6 +262,8 @@ function ContentPageContent({ config }: ContentPageProps) {
             contentType={config.contentType}
             hasNextPage={hasNextPage}
             isInfiniteLoading={isInfiniteLoading}
+            displayMode={displayMode}
+            showTopPagination={true}
           />
         </div>
       </div>
