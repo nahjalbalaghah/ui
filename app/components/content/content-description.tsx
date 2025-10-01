@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tag as TagIcon } from 'lucide-react';
 import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
+import Select from '@/app/components/select';
 
 interface ContentDescriptionProps {
   content: Post;
@@ -10,6 +11,9 @@ interface ContentDescriptionProps {
 }
 
 const ContentDescription = ({ content, contentType }: ContentDescriptionProps) => {
+  const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
+  const [selectedTranslation, setSelectedTranslation] = useState('en');
+
   let allReferences: string[] = [];
   const heading = content.heading;
   
@@ -36,7 +40,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
     return 0;
   });
 
-  const mainTranslation = content.translations?.find(t => t.type === 'en');
+  const mainTranslation = content.translations?.find(t => t.type === selectedTranslation);
 
   const getContentLabel = () => {
     switch (contentType) {
@@ -51,10 +55,23 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
     }
   };
 
+  const displayOptions = [
+    { value: 'both', label: 'English and Arabic' },
+    { value: 'english-only', label: 'English Only' },
+    { value: 'arabic-only', label: 'Arabic Only' },
+  ];
+
+  // Get available translations
+  const availableTranslations = content.translations || [];
+  const translationOptions = availableTranslations.map(t => ({
+    value: t.type,
+    label: t.type === 'en' ? 'English' : t.type.toUpperCase()
+  }));
+
   return (
   <div className="bg-white rounded-2xl border border-gray-200 p-8">
       <div className="mb-8 pb-6 border-b border-gray-200">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed whitespace-pre-wrap">
           {heading || `${getContentLabel()} Details`}
         </h1>
 
@@ -73,6 +90,26 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
             </div>
           </div>
         )}
+
+        {/* Display Options */}
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Select
+            options={displayOptions}
+            value={displayMode}
+            onChange={(value) => setDisplayMode(value as 'both' | 'english-only' | 'arabic-only')}
+            placeholder="Display Mode"
+            className="w-full sm:w-48"
+          />
+          {availableTranslations.length > 1 && (
+            <Select
+              options={translationOptions}
+              value={selectedTranslation}
+              onChange={setSelectedTranslation}
+              placeholder="Translation"
+              className="w-full sm:w-40"
+            />
+          )}
+        </div>
       </div>
         {content.sermonNumber && (
           <div className="mb-4">
@@ -85,14 +122,16 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
       {(content.title || mainTranslation) && (
         <div className="space-y-8 mb-8">
           <div className="border-b border-gray-100 pb-8">
-            <div className="p-0 mb-4 border-none">
-              <div className="text-right">
-                <p className="text-xl leading-relaxed text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
-                  {formatTextWithFootnotes(content.title, allFootnotes, true, content.sermonNumber || 'main')}
-                </p>
+            {(displayMode === 'both' || displayMode === 'arabic-only') && content.title && (
+              <div className="p-0 mb-4 border-none">
+                <div className="text-right">
+                  <p className="text-xl leading-relaxed text-gray-900 font-taha whitespace-pre-wrap text-[1.25rem]" dir="rtl">
+                    {formatTextWithFootnotes(content.title, allFootnotes, true, content.sermonNumber || 'main')}
+                  </p>
+                </div>
               </div>
-            </div>
-            {mainTranslation && (
+            )}
+            {(displayMode === 'both' || displayMode === 'english-only') && mainTranslation && (
               (() => {
                 const refs = extractReferences(mainTranslation.text);
                 allReferences = allReferences.concat(refs);
@@ -125,7 +164,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
       {sortedParagraphs.length > 0 && (
         <div className="space-y-8">
           {sortedParagraphs.map((paragraph) => {
-            const englishTranslation = paragraph.translations?.find(t => t.type === 'en');
+            const englishTranslation = paragraph.translations?.find(t => t.type === selectedTranslation);
             return (
               <div key={paragraph.id} className="border-b border-gray-100 pb-8 last:border-b-0 last:pb-0">
                 {paragraph.number && (
@@ -135,14 +174,16 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                     </span>
                   </div>
                 )}
-                <div className="p-0 mb-4 border-none">
-                  <div className="text-right">
-                    <p className="text-xl leading-[2] text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
-                      {formatTextWithFootnotes(paragraph.arabic, allFootnotes, true, paragraph.number)}
-                    </p>
+                {(displayMode === 'both' || displayMode === 'arabic-only') && paragraph.arabic && (
+                  <div className="p-0 mb-4 border-none">
+                    <div className="text-right">
+                      <p className="text-xl leading-[2] text-gray-900 font-taha whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1.25rem' }}>
+                        {formatTextWithFootnotes(paragraph.arabic, allFootnotes, true, paragraph.number)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                {englishTranslation && (() => {
+                )}
+                {(displayMode === 'both' || displayMode === 'english-only') && englishTranslation && (() => {
                   const refs = extractReferences(englishTranslation.text);
                   allReferences = allReferences.concat(refs);
                   console.log('Paragraph footnotes debug:', {

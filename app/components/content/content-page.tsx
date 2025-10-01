@@ -24,8 +24,11 @@ function ContentPageContent({ config }: ContentPageProps) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
   const [content, setContent] = useState<Post[]>([]);
+  const [allContent, setAllContent] = useState<Post[]>([]); // Store all content for client-side sorting
   const [loading, setLoading] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false); // Smooth loading state
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -36,8 +39,17 @@ function ContentPageContent({ config }: ContentPageProps) {
 
   useEffect(() => {
     const page = searchParams.get('page');
+    const search = searchParams.get('search');
+    const sort = searchParams.get('sort');
+    
     if (page) {
       setCurrentPage(parseInt(page, 10));
+    }
+    if (search) {
+      setSearchTerm(search);
+    }
+    if (sort) {
+      setSortBy(sort);
     }
   }, [searchParams]);
 
@@ -49,87 +61,238 @@ function ContentPageContent({ config }: ContentPageProps) {
     return () => clearTimeout(timer);
   }, []);
 
-  const updatePageInUrl = (page: number) => {
+  const updateUrlParams = (page?: number, search?: string, sort?: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (page === 1) {
+    
+    if (page === 1 || page === undefined) {
       params.delete('page');
     } else {
       params.set('page', page.toString());
     }
+    
+    if (search === '' || search === undefined) {
+      params.delete('search');
+    } else {
+      params.set('search', search);
+    }
+    
+    if (sort === '' || sort === undefined) {
+      params.delete('sort');
+    } else {
+      params.set('sort', sort);
+    }
+    
     router.replace(`/${config.contentType}?${params.toString()}`, { scroll: false });
   };
 
-  const loadContent = async (page = 1, search = '', updateUrl = true, append = false) => {
+  const clientSideSearchFilter = (posts: Post[], searchQuery: string): Post[] => {
+    if (!searchQuery || searchQuery.trim() === '') {
+      return posts;
+    }
+
+    const query = searchQuery.toLowerCase().trim();
+    
+    return posts.filter(post => {
+      if (post.title?.toLowerCase().includes(query)) return true;
+      
+      if (post.heading?.toLowerCase().includes(query)) return true;
+      
+      if (post.translations && Array.isArray(post.translations)) {
+        const matchesTranslation = post.translations.some(trans => 
+          trans.text?.toLowerCase().includes(query)
+        );
+        if (matchesTranslation) return true;
+      }
+      
+      if (post.paragraphs && Array.isArray(post.paragraphs)) {
+        const matchesArabic = post.paragraphs.some(para => 
+          para.arabic?.toLowerCase().includes(query)
+        );
+        if (matchesArabic) return true;
+        
+        const matchesParaTranslations = post.paragraphs.some(para => 
+          para.translations?.some(trans => 
+            trans.text?.toLowerCase().includes(query)
+          )
+        );
+        if (matchesParaTranslations) return true;
+      }
+      
+      return false;
+    });
+  };
+
+  const loadContent = async (page = 1, search = '', updateUrl = true, append = false, forceFullLoad = false) => {
     try {
       if (!append) {
-        setLoading(true);
+        if (content.length > 0 && !forceFullLoad) {
+          setIsTransitioning(true);
+        } else {
+          setLoading(true);
+          setIsTransitioning(false);
+        }
       } else {
         setIsInfiniteLoading(true);
       }
       setError(null);
       
       let response;
+      let allData: Post[] = [];
       
-      if (search) {
-        response = await config.api.searchContent(search, page, 12);
-      } else {
-        response = await config.api.getContent(page, 12);
-      }
-
-      if (!response || !response.data) {
-        throw new Error('Invalid response format from API');
-      }
-
-      let filteredData = response.data;
-
-      filteredData = filteredData.filter(item => item.heading);
-
-      if (sortBy) {
-        filteredData = [...filteredData].sort((a, b) => {
+      if (sortBy && sortBy !== 'relevance' && !search) {
+        const firstResponse = await config.api.getContent(1, 1000); // Large page size to get all
+        if (!firstResponse || !firstResponse.data) {
+          throw new Error('Invalid response format from API');
+        }
+        allData = firstResponse.data.filter(item => item.heading);
+        
+        const getDisplayNumber = (sermonNumber: string | null) => {
+          if (!sermonNumber) return 0;
+          const parts = sermonNumber.split('.');
+          return parseInt(parts.length > 1 ? parts[1] : parts[0], 10) || 0;
+        };
+        
+        allData.sort((a, b) => {
           switch (sortBy) {
-            case 'title-asc':
-              return a.title.localeCompare(b.title);
-            case 'title-desc':
-              return b.title.localeCompare(a.title);
             case 'sermon-asc':
-              return parseInt(a.sermonNumber || '0') - parseInt(b.sermonNumber || '0');
+              return getDisplayNumber(a.sermonNumber) - getDisplayNumber(b.sermonNumber);
             case 'sermon-desc':
-              return parseInt(b.sermonNumber || '0') - parseInt(a.sermonNumber || '0');
+              return getDisplayNumber(b.sermonNumber) - getDisplayNumber(a.sermonNumber);
             default:
               return 0;
           }
         });
-      }
-      
-      if (append) {
-        setContent(prevContent => [...prevContent, ...filteredData]);
+        
+        setAllContent(allData);
+        
+        const pageSize = 9;
+        const totalItems = allData.length;
+        const totalPagesCalc = Math.ceil(totalItems / pageSize);
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedData = allData.slice(startIndex, endIndex);
+        
+        if (append) {
+          setContent(prevContent => [...prevContent, ...paginatedData]);
+        } else {
+          setContent(paginatedData);
+        }
+        
+        setCurrentPage(page);
+        setTotalPages(totalPagesCalc);
+        setTotal(totalItems);
+        setHasNextPage(page < totalPagesCalc);
+        
+      } else if (search) {
+        // Search mode: fetch all data and apply client-side filtering
+        const allDataResponse = await config.api.getContent(1, 1000);
+        
+        if (!allDataResponse || !allDataResponse.data) {
+          throw new Error('Invalid response format from API');
+        }
+
+        // Filter items with heading first
+        let filteredByHeading = allDataResponse.data.filter(item => item.heading);
+        
+        // Apply client-side search filter (includes translations.text)
+        let searchResults = clientSideSearchFilter(filteredByHeading, search);
+        
+        // Sort if sortBy is active
+        if (sortBy && sortBy !== 'relevance') {
+          const getDisplayNumber = (sermonNumber: string | null) => {
+            if (!sermonNumber) return 0;
+            const parts = sermonNumber.split('.');
+            return parseInt(parts.length > 1 ? parts[1] : parts[0], 10) || 0;
+          };
+          
+          searchResults.sort((a, b) => {
+            switch (sortBy) {
+              case 'sermon-asc':
+                return getDisplayNumber(a.sermonNumber) - getDisplayNumber(b.sermonNumber);
+              case 'sermon-desc':
+                return getDisplayNumber(b.sermonNumber) - getDisplayNumber(a.sermonNumber);
+              default:
+                return 0;
+            }
+          });
+        }
+        
+        // Store all filtered results
+        setAllContent(searchResults);
+        
+        // Paginate results
+        const pageSize = 9;
+        const totalItems = searchResults.length;
+        const totalPagesCalc = Math.ceil(totalItems / pageSize);
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedData = searchResults.slice(startIndex, endIndex);
+        
+        if (append) {
+          setContent(prevContent => [...prevContent, ...paginatedData]);
+        } else {
+          setContent(paginatedData);
+        }
+        
+        setCurrentPage(page);
+        setTotalPages(totalPagesCalc);
+        setTotal(totalItems);
+        setHasNextPage(page < totalPagesCalc);
+        
       } else {
-        setContent(filteredData);
+        // Normal mode: server-side pagination
+        response = await config.api.getContent(page, 9);
+
+        if (!response || !response.data) {
+          throw new Error('Invalid response format from API');
+        }
+
+        let filteredData = response.data.filter(item => item.heading);
+        
+        if (append) {
+          setContent(prevContent => [...prevContent, ...filteredData]);
+        } else {
+          setContent(filteredData);
+        }
+        
+        setCurrentPage(page);
+        setTotalPages(response.meta?.pagination?.pageCount || 1);
+        setTotal(response.meta?.pagination?.total || filteredData.length);
+        setHasNextPage(page < (response.meta?.pagination?.pageCount || 1));
       }
       
-      setCurrentPage(page);
-      setTotalPages(response.meta?.pagination?.pageCount || 1);
-      setTotal(response.meta?.pagination?.total || filteredData.length);
-      setHasNextPage(page < (response.meta?.pagination?.pageCount || 1));
-      
+      // Update URL after state updates - use setTimeout to ensure state is committed
       if (updateUrl && !append) {
-        updatePageInUrl(page);
+        setTimeout(() => {
+          updateUrlParams(page, search, sortBy);
+        }, 0);
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      let errorMessage = 'An unexpected error occurred';
+      
+      if (err instanceof Error) {
+        if (err.message.includes('timeout')) {
+          errorMessage = 'Request timeout. The server took too long to respond. Please try again.';
+        } else if (err.message.includes('Network Error')) {
+          errorMessage = 'Network error. Please check your internet connection.';
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
       setError(`Failed to load ${config.contentType}: ${errorMessage}`);
       console.error(`Error loading ${config.contentType}:`, err);
-      setContent([]);
-    } finally {
-      if (minLoadingTime) {
-        setTimeout(() => {
-          setLoading(false);
-          setIsInfiniteLoading(false);
-        }, 200);
-      } else {
-        setLoading(false);
-        setIsInfiniteLoading(false);
+      
+      if (!append) {
+        setContent([]);
       }
+    } finally {
+      // Smooth transition timing
+      setTimeout(() => {
+        setLoading(false);
+        setIsTransitioning(false);
+        setIsInfiniteLoading(false);
+      }, 150);
     }
   };
 
@@ -150,11 +313,13 @@ function ContentPageContent({ config }: ContentPageProps) {
     const timeoutId = setTimeout(() => {
       if (searchTerm !== '') {
         setCurrentPage(1);
+        // loadContent will handle URL update after data is loaded
         loadContent(1, searchTerm, true, false);
-      } else {
+      } else if (content.length > 0) {
+        // Only reload if we had content before (meaning search was cleared)
         const page = searchParams.get('page');
         const currentPageFromUrl = page ? parseInt(page, 10) : 1;
-        loadContent(currentPageFromUrl, '', false, false);
+        loadContent(currentPageFromUrl, '', true, false);
       }
     }, 500);
 
@@ -162,21 +327,46 @@ function ContentPageContent({ config }: ContentPageProps) {
   }, [searchTerm]);
 
   useEffect(() => {
+    // Skip initial render - let the first useEffect handle initial load
+    if (sortBy === '' && content.length === 0) {
+      return;
+    }
+    
+    // When sort changes, show loading immediately and reset to page 1
     setCurrentPage(1);
-    loadContent(1, searchTerm, true, false);
+    setLoading(true);
+    setContent([]); // Clear content immediately to show loading state
+    setAllContent([]); // Clear cached content
+    
+    // loadContent will handle URL update after data is loaded
+    loadContent(1, searchTerm, true, false, true);
   }, [sortBy]);
 
   const sortOptions = [
-    { value: 'title-asc', label: 'Title A-Z' },
-    { value: 'title-desc', label: 'Title Z-A' },
-    { value: 'sermon-asc', label: 'Sermon Number (Low to High)' },
-    { value: 'sermon-desc', label: 'Sermon Number (High to Low)' },
+    { value: 'sermon-asc', label: 'Sermon Number (Ascending)' },
+    { value: 'sermon-desc', label: 'Sermon Number (Descending)' },
     { value: 'relevance', label: 'Relevance' }
   ];
 
   const handlePageChange = (page: number) => {
-    setLoading(true);
-    loadContent(page, searchTerm, true, false);
+    // When we have cached content (from sorting or search), do client-side pagination
+    if (allContent.length > 0 && (sortBy || searchTerm)) {
+      const pageSize = 9;
+      const startIndex = (page - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      const paginatedData = allContent.slice(startIndex, endIndex);
+      
+      setContent(paginatedData);
+      setCurrentPage(page);
+      setHasNextPage(page < totalPages);
+      updateUrlParams(page, searchTerm, sortBy);
+      
+      // Smooth scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setIsTransitioning(true);
+      loadContent(page, searchTerm, true, false);
+    }
   };
 
   if (error) {
@@ -211,8 +401,16 @@ function ContentPageContent({ config }: ContentPageProps) {
           sortBy={sortBy}
           setSortBy={setSortBy}
           sortOptions={sortOptions}
+          displayMode={displayMode}
+          setDisplayMode={setDisplayMode}
         />
         <div className="flex flex-col gap-8">
+          {/* Show a subtle loading overlay when transitioning */}
+          {isTransitioning && (
+            <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-[#43896B] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium">
+              Loading...
+            </div>
+          )}
           <ContentListing
             content={content}
             onPageChange={handlePageChange}
@@ -225,6 +423,8 @@ function ContentPageContent({ config }: ContentPageProps) {
             contentType={config.contentType}
             hasNextPage={hasNextPage}
             isInfiniteLoading={isInfiniteLoading}
+            displayMode={displayMode}
+            showTopPagination={true}
           />
         </div>
       </div>

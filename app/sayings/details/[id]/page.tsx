@@ -1,17 +1,17 @@
 'use client';
 import React, { useMemo } from 'react';
 import ContentDetailsPage from '@/app/components/content/content-details-page';
-import { orationsApi } from '@/api/posts';
+import { sayingsApi } from '@/api/posts';
 
-export default function OrationsDetailsPage() {
+export default function SayingDetailsPage() {
   const api = useMemo(() => ({
-    getContentBySlug: orationsApi.getOrationBySlug,
+    getContentById: sayingsApi.getSayingById,
   }), []);
 
   return (
     <ContentDetailsPage
-      contentType="orations"
-      title="Orations"
+      contentType="sayings"
+      title="Sayings"
       api={api}
     />
   );
