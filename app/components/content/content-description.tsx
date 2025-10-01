@@ -137,7 +137,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 )}
                 <div className="p-0 mb-4 border-none">
                   <div className="text-right">
-                    <p className="text-xl leading-[2] text-gray-900 font-brill" style={{ fontSize: '1.25rem' }}>
+                    <p className="text-xl leading-[2] text-gray-900 font-brill whitespace-pre-wrap" style={{ fontSize: '1.25rem' }}>
                       {formatTextWithFootnotes(paragraph.arabic, allFootnotes, true, paragraph.number)}
                     </p>
                   </div>
