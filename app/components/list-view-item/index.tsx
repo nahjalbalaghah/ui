@@ -35,7 +35,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
 
   const getCardLink = () => {
     const currentPage = searchParams.get('page');
-    const baseUrl = `/${contentType}/details/${item.slug}`;
+    const baseUrl = `/${contentType}/details/${item.id}`;
     return currentPage ? `${baseUrl}?returnPage=${currentPage}` : baseUrl;
   };
 
