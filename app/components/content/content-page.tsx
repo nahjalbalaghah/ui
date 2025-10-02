@@ -23,8 +23,8 @@ function ContentPageContent({ config }: ContentPageProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-  const [sortBy, setSortBy] = useState(searchParams.get('sort') || '');
+  const [searchTerm, setSearchTerm] = useState(() => searchParams.get('search') || '');
+  const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || '');
   const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
   const [content, setContent] = useState<Post[]>([]);
   const [allContent, setAllContent] = useState<Post[]>([]);
@@ -41,6 +41,7 @@ function ContentPageContent({ config }: ContentPageProps) {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [minLoadingTime, setMinLoadingTime] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isRestoringState, setIsRestoringState] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -53,21 +54,28 @@ function ContentPageContent({ config }: ContentPageProps) {
   const updateUrlParams = (page?: number, search?: string, sort?: string) => {
     const params = new URLSearchParams();
     
-    if (page && page !== 1) {
-      params.set('page', page.toString());
+    // Use current state if parameters not provided
+    const currentSearch = search !== undefined ? search : searchTerm;
+    const currentSort = sort !== undefined ? sort : sortBy;
+    const currentPageNum = page !== undefined ? page : currentPage;
+    
+    if (currentPageNum && currentPageNum !== 1) {
+      params.set('page', currentPageNum.toString());
     }
     
-    if (search && search !== '') {
-      params.set('search', search);
+    if (currentSearch && currentSearch !== '') {
+      params.set('search', currentSearch);
     }
     
-    if (sort && sort !== '') {
-      params.set('sort', sort);
+    if (currentSort && currentSort !== '') {
+      params.set('sort', currentSort);
     }
     
     const queryString = params.toString();
     const newUrl = queryString ? `/${config.contentType}?${queryString}` : `/${config.contentType}`;
-    router.push(newUrl, { scroll: false });
+    
+    // Use window.history.pushState to avoid unnecessary re-renders
+    window.history.pushState(null, '', newUrl);
   };
 
   const clientSideSearchFilter = (posts: Post[], searchQuery: string): Post[] => {
@@ -286,21 +294,45 @@ function ContentPageContent({ config }: ContentPageProps) {
     }
   };
 
+  // Sync URL params to state when navigating back (e.g., browser back button)
   useEffect(() => {
     const page = searchParams.get('page');
     const search = searchParams.get('search');
     const sort = searchParams.get('sort');
     
-    const initialPage = page ? parseInt(page, 10) : 1;
-    const initialSearch = search || '';
-    const initialSort = sort || '';
+    const urlPage = page ? parseInt(page, 10) : 1;
+    const urlSearch = search || '';
+    const urlSort = sort || '';
     
-    loadContent(initialPage, initialSearch, false, false);
-    setIsInitialized(true);
-  }, []);
+    // Check if URL params differ from current state
+    const stateChanged = 
+      urlPage !== currentPage || 
+      urlSearch !== searchTerm || 
+      urlSort !== sortBy;
+    
+    if (isInitialized && stateChanged) {
+      // User navigated back/forward, restore state from URL
+      setIsRestoringState(true);
+      setSearchTerm(urlSearch);
+      setSortBy(urlSort);
+      setCurrentPage(urlPage);
+      
+      // Load content with URL parameters
+      loadContent(urlPage, urlSearch, false, false).finally(() => {
+        setIsRestoringState(false);
+      });
+    } else if (!isInitialized) {
+      // Initial load
+      loadContent(urlPage, urlSearch, false, false).finally(() => {
+        setIsInitialized(true);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
+  // Handle search term changes (with debounce)
   useEffect(() => {
-    if (!isInitialized) return;
+    if (!isInitialized || isRestoringState) return;
     
     const timeoutId = setTimeout(() => {
       setCurrentPage(1);
@@ -308,10 +340,12 @@ function ContentPageContent({ config }: ContentPageProps) {
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [searchTerm, isInitialized]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm]);
 
+  // Handle sort changes
   useEffect(() => {
-    if (!isInitialized) return;
+    if (!isInitialized || isRestoringState) return;
     
     setCurrentPage(1);
     setLoading(true);
@@ -319,7 +353,8 @@ function ContentPageContent({ config }: ContentPageProps) {
     setAllContent([]);
     
     loadContent(1, searchTerm, true, false, true);
-  }, [sortBy, isInitialized]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortBy]);
 
   const sortOptions = [
     { value: 'sermon-asc', label: 'Sermon Number (Ascending)' },
