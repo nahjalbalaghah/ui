@@ -19,14 +19,21 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
   const searchParams = useSearchParams();
   const id = parseInt(params.id as string);
   const returnPage = searchParams.get('returnPage');
+  const returnSort = searchParams.get('returnSort');
+  const returnSearch = searchParams.get('returnSearch');
   
   const [content, setContent] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Create the back URL with the correct page
   const getBackUrl = () => {
-    return returnPage ? `/${contentType}?page=${returnPage}` : `/${contentType}`;
+    const params = new URLSearchParams();
+    if (returnPage) params.set('page', returnPage);
+    if (returnSort) params.set('sort', returnSort);
+    if (returnSearch) params.set('search', returnSearch);
+    
+    const queryString = params.toString();
+    return queryString ? `/${contentType}?${queryString}` : `/${contentType}`;
   };
 
   useEffect(() => {
