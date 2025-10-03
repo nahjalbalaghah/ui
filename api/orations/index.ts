@@ -18,8 +18,8 @@ export interface Footnote {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  english_index_number?: string;  // 👈 used for occurrence check in English
-  arabic_index_number?: string;   // 👈 used for occurrence check in Arabic
+  english_word_index?: string | number;
+  arabic_word_index?: string | number;
 }
 
 
