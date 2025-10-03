@@ -22,36 +22,26 @@ interface ContentPageProps {
 function ContentPageContent({ config }: ContentPageProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('');
+  
+  const [searchTerm, setSearchTerm] = useState(() => searchParams.get('search') || '');
+  const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || '');
   const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
   const [content, setContent] = useState<Post[]>([]);
-  const [allContent, setAllContent] = useState<Post[]>([]); // Store all content for client-side sorting
+  const [allContent, setAllContent] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isTransitioning, setIsTransitioning] = useState(false); // Smooth loading state
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => {
+    const page = searchParams.get('page');
+    return page ? parseInt(page, 10) : 1;
+  });
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
   const [isInfiniteLoading, setIsInfiniteLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [minLoadingTime, setMinLoadingTime] = useState(true);
-
-  useEffect(() => {
-    const page = searchParams.get('page');
-    const search = searchParams.get('search');
-    const sort = searchParams.get('sort');
-    
-    if (page) {
-      setCurrentPage(parseInt(page, 10));
-    }
-    if (search) {
-      setSearchTerm(search);
-    }
-    if (sort) {
-      setSortBy(sort);
-    }
-  }, [searchParams]);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [isRestoringState, setIsRestoringState] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -62,27 +52,30 @@ function ContentPageContent({ config }: ContentPageProps) {
   }, []);
 
   const updateUrlParams = (page?: number, search?: string, sort?: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams();
     
-    if (page === 1 || page === undefined) {
-      params.delete('page');
-    } else {
-      params.set('page', page.toString());
+    // Use current state if parameters not provided
+    const currentSearch = search !== undefined ? search : searchTerm;
+    const currentSort = sort !== undefined ? sort : sortBy;
+    const currentPageNum = page !== undefined ? page : currentPage;
+    
+    if (currentPageNum && currentPageNum !== 1) {
+      params.set('page', currentPageNum.toString());
     }
     
-    if (search === '' || search === undefined) {
-      params.delete('search');
-    } else {
-      params.set('search', search);
+    if (currentSearch && currentSearch !== '') {
+      params.set('search', currentSearch);
     }
     
-    if (sort === '' || sort === undefined) {
-      params.delete('sort');
-    } else {
-      params.set('sort', sort);
+    if (currentSort && currentSort !== '') {
+      params.set('sort', currentSort);
     }
     
-    router.replace(`/${config.contentType}?${params.toString()}`, { scroll: false });
+    const queryString = params.toString();
+    const newUrl = queryString ? `/${config.contentType}?${queryString}` : `/${config.contentType}`;
+    
+    // Use window.history.pushState to avoid unnecessary re-renders
+    window.history.pushState(null, '', newUrl);
   };
 
   const clientSideSearchFilter = (posts: Post[], searchQuery: string): Post[] => {
@@ -261,11 +254,9 @@ function ContentPageContent({ config }: ContentPageProps) {
         setHasNextPage(page < (response.meta?.pagination?.pageCount || 1));
       }
       
-      // Update URL after state updates - use setTimeout to ensure state is committed
+      // Update URL after state updates
       if (updateUrl && !append) {
-        setTimeout(() => {
-          updateUrlParams(page, search, sortBy);
-        }, 0);
+        updateUrlParams(page, search, sortBy);
       }
     } catch (err) {
       let errorMessage = 'An unexpected error occurred';
@@ -303,43 +294,66 @@ function ContentPageContent({ config }: ContentPageProps) {
     }
   };
 
+  // Sync URL params to state when navigating back (e.g., browser back button)
   useEffect(() => {
     const page = searchParams.get('page');
-    const initialPage = page ? parseInt(page, 10) : 1;
-    loadContent(initialPage, searchTerm, false, false);
-  }, []);
+    const search = searchParams.get('search');
+    const sort = searchParams.get('sort');
+    
+    const urlPage = page ? parseInt(page, 10) : 1;
+    const urlSearch = search || '';
+    const urlSort = sort || '';
+    
+    // Check if URL params differ from current state
+    const stateChanged = 
+      urlPage !== currentPage || 
+      urlSearch !== searchTerm || 
+      urlSort !== sortBy;
+    
+    if (isInitialized && stateChanged) {
+      // User navigated back/forward, restore state from URL
+      setIsRestoringState(true);
+      setSearchTerm(urlSearch);
+      setSortBy(urlSort);
+      setCurrentPage(urlPage);
+      
+      // Load content with URL parameters
+      loadContent(urlPage, urlSearch, false, false).finally(() => {
+        setIsRestoringState(false);
+      });
+    } else if (!isInitialized) {
+      // Initial load
+      loadContent(urlPage, urlSearch, false, false).finally(() => {
+        setIsInitialized(true);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
+  // Handle search term changes (with debounce)
   useEffect(() => {
+    if (!isInitialized || isRestoringState) return;
+    
     const timeoutId = setTimeout(() => {
-      if (searchTerm !== '') {
-        setCurrentPage(1);
-        // loadContent will handle URL update after data is loaded
-        loadContent(1, searchTerm, true, false);
-      } else if (content.length > 0) {
-        // Only reload if we had content before (meaning search was cleared)
-        const page = searchParams.get('page');
-        const currentPageFromUrl = page ? parseInt(page, 10) : 1;
-        loadContent(currentPageFromUrl, '', true, false);
-      }
+      setCurrentPage(1);
+      loadContent(1, searchTerm, true, false);
     }, 500);
 
     return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
 
+  // Handle sort changes
   useEffect(() => {
-    // Skip initial render - let the first useEffect handle initial load
-    if (sortBy === '' && content.length === 0) {
-      return;
-    }
+    if (!isInitialized || isRestoringState) return;
     
-    // When sort changes, show loading immediately and reset to page 1
     setCurrentPage(1);
     setLoading(true);
-    setContent([]); // Clear content immediately to show loading state
-    setAllContent([]); // Clear cached content
+    setContent([]);
+    setAllContent([]);
     
-    // loadContent will handle URL update after data is loaded
     loadContent(1, searchTerm, true, false, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
 
   const sortOptions = [
@@ -349,7 +363,6 @@ function ContentPageContent({ config }: ContentPageProps) {
   ];
 
   const handlePageChange = (page: number) => {
-    // When we have cached content (from sorting or search), do client-side pagination
     if (allContent.length > 0 && (sortBy || searchTerm)) {
       const pageSize = 9;
       const startIndex = (page - 1) * pageSize;
@@ -361,7 +374,6 @@ function ContentPageContent({ config }: ContentPageProps) {
       setHasNextPage(page < totalPages);
       updateUrlParams(page, searchTerm, sortBy);
       
-      // Smooth scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setIsTransitioning(true);

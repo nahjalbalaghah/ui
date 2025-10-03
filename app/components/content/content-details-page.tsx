@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { type Post } from '@/api/posts';
 import ContentDescription from './content-description';
 import { ArrowLeft } from 'lucide-react';
@@ -17,16 +17,37 @@ interface ContentDetailsPageProps {
 export default function ContentDetailsPage({ contentType, title, api }: ContentDetailsPageProps) {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const id = parseInt(params.id as string);
   const returnPage = searchParams.get('returnPage');
+  const returnSort = searchParams.get('returnSort');
+  const returnSearch = searchParams.get('returnSearch');
   
   const [content, setContent] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Create the back URL with the correct page
   const getBackUrl = () => {
-    return returnPage ? `/${contentType}?page=${returnPage}` : `/${contentType}`;
+    const urlParams = new URLSearchParams();
+    if (returnPage) urlParams.set('page', returnPage);
+    if (returnSort) urlParams.set('sort', returnSort);
+    if (returnSearch) urlParams.set('search', returnSearch);
+    
+    const queryString = urlParams.toString();
+    return queryString ? `/${contentType}?${queryString}` : `/${contentType}`;
+  };
+
+  const handleBackNavigation = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    // Check if there's history to go back to
+    if (window.history.length > 1 && (returnPage || returnSort || returnSearch)) {
+      // Use browser back if we have return params
+      router.back();
+    } else {
+      // Navigate to the constructed URL
+      router.push(getBackUrl());
+    }
   };
 
   useEffect(() => {
@@ -78,13 +99,13 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             {error}
           </h2>
-          <Link 
-            href={getBackUrl()} 
-            className="bg-[#43896B] text-white px-6 py-2 rounded-lg hover:bg-[#367556] inline-flex items-center gap-2"
+          <button 
+            onClick={handleBackNavigation}
+            className="bg-[#43896B] text-white px-6 py-2 rounded-lg hover:bg-[#367556] inline-flex items-center gap-2 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to {title}
-          </Link>
+          </button>
         </div>
       </div>
     );
@@ -99,13 +120,13 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
             {title.slice(0, -1)} not found
           </h2>
           <p className="text-gray-600 mb-6">The requested {contentType.slice(0, -1)} could not be found.</p>
-          <Link 
-            href={getBackUrl()} 
-            className="bg-[#43896B] text-white px-6 py-2 rounded-lg hover:bg-[#367556] inline-flex items-center gap-2"
+          <button 
+            onClick={handleBackNavigation}
+            className="bg-[#43896B] text-white px-6 py-2 rounded-lg hover:bg-[#367556] inline-flex items-center gap-2 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to {title}
-          </Link>
+          </button>
         </div>
       </div>
     );
@@ -114,13 +135,13 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link 
-          href={getBackUrl()} 
-          className="inline-flex items-center gap-2 text-[#43896B] hover:text-[#367556] mb-6 font-medium"
+        <button 
+          onClick={handleBackNavigation}
+          className="inline-flex items-center gap-2 text-[#43896B] hover:text-[#367556] mb-6 font-medium transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to {title}
-        </Link>
+        </button>
         
         <div className="flex flex-col lg:flex-row gap-8">
           <div className='w-full'>
