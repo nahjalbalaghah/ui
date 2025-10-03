@@ -1,4 +1,6 @@
 import AboutUsHero from "./sections/hero";
+import BannerSection from "./sections/banner";
+import AboutCardSection from "./sections/about-card";
 import TeamSection from "./sections/team";
 import SponsorsSection from "./sections/sponsors";
 
@@ -35,6 +37,8 @@ export default function Page() {
     return (
         <div>
             <AboutUsHero />
+            <BannerSection />
+            <AboutCardSection />
             <TeamSection />
             <SponsorsSection />
         </div>
