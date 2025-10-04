@@ -245,7 +245,14 @@ export const formatTextWithFootnotes = (
       regex = new RegExp(escapedWord, 'g');
     } else {
       const escapedWord = wordToMatch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      regex = new RegExp(`\\b${escapedWord}\\b`, 'gi');
+      
+      const isPunctuationOnly = !/\w/.test(wordToMatch);
+      
+      if (isPunctuationOnly) {
+        regex = new RegExp(escapedWord, 'gi');
+      } else {
+        regex = new RegExp(`\\b${escapedWord}\\b`, 'gi');
+      }
     }
 
     let match;
@@ -349,9 +356,6 @@ export const formatTextWithFootnotes = (
 
   return result;
 };
-
-
-
 
 function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
