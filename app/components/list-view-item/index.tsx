@@ -35,8 +35,17 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
 
   const getCardLink = () => {
     const currentPage = searchParams.get('page');
+    const currentSort = searchParams.get('sort');
+    const currentSearch = searchParams.get('search');
     const baseUrl = `/${contentType}/details/${item.id}`;
-    return currentPage ? `${baseUrl}?returnPage=${currentPage}` : baseUrl;
+    
+    const params = new URLSearchParams();
+    if (currentPage) params.set('returnPage', currentPage);
+    if (currentSort) params.set('returnSort', currentSort);
+    if (currentSearch) params.set('returnSearch', currentSearch);
+    
+    const queryString = params.toString();
+    return queryString ? `${baseUrl}?${queryString}` : baseUrl;
   };
 
   const arabicTitle = item.title || '';

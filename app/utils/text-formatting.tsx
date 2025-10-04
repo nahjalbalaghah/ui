@@ -199,7 +199,6 @@ export const formatTextWithFootnotes = (
     return formatTextWithBold(text, isArabic);
   }
 
-  // filter by section
   const relevantFootnotes = currentSection
     ? footnotes.filter((footnote) => {
         const footnoteSection = footnote.section?.replace(/^"|"$/g, "") || "";
@@ -222,118 +221,139 @@ export const formatTextWithFootnotes = (
   const result: React.ReactNode[] = [];
   let lastIndex = 0;
 
-  // Track occurrences per word
-  const occurrenceMap: Record<string, number> = {};
+  interface WordOccurrence {
+    word: string;
+    position: number;
+    footnote: Footnote;
+    occurrenceIndex: number;
+  }
 
-  const tryMatch = (substr: string, pos: number) => {
-    let matchedFootnotes: Footnote[] = [];
+  const allOccurrences: WordOccurrence[] = [];
+  const wordOccurrenceCount: Record<string, number> = {};
 
-    for (const fn of relevantFootnotes) {
-      const wordToMatch = (isArabic ? fn.arabic_word : fn.english_word)?.trim();
-      if (!wordToMatch) continue;
+  for (const fn of relevantFootnotes) {
+    const wordToMatch = (isArabic ? fn.arabic_word : fn.english_word)?.trim();
+    if (!wordToMatch) continue;
 
-      const slice = text.substr(pos, wordToMatch.length);
-      if (slice === wordToMatch) {
-        const indexField = isArabic ? fn.arabic_index_number : fn.english_index_number;
-        const key = `${wordToMatch}-${fn.id}`;
+    const occurrenceKey = isArabic ? wordToMatch : wordToMatch.toLowerCase();
 
-        occurrenceMap[key] = (occurrenceMap[key] || 0) + 1;
-        const currentCount = occurrenceMap[key];
+    // Escape regex chars
+    const escapedWord = wordToMatch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-        // Parse indexField → 0 means first occurrence
-        let expectedIndex = 1;
-        if (indexField != null && indexField !== "") {
-          const parsed = parseInt(indexField.toString(), 10);
-          if (!isNaN(parsed) && parsed >= 0) {
-            expectedIndex = parsed === 0 ? 1 : parsed; // 0 → first, otherwise exact occurrence
-          }
-        }
-
-        // total occurrences in text
-        const totalOccurrences = (text.match(new RegExp(wordToMatch, "g")) || []).length;
-
-        // highlight if it's the expected one,
-        // OR if requested index > available → fallback to last occurrence
-        if (
-          currentCount === expectedIndex ||
-          (expectedIndex > totalOccurrences && currentCount === totalOccurrences)
-        ) {
-          matchedFootnotes.push(fn);
-        }
-      }
-    }
-    return matchedFootnotes.length > 0 ? matchedFootnotes : null;
-  };
-
-  let currentIndex = 0;
-  while (currentIndex < text.length) {
-    let matched: { fns: Footnote[]; word: string } | null = null;
-    let matchedLength = 0;
-
-    for (const fn of relevantFootnotes) {
-      const wordToMatch = (isArabic ? fn.arabic_word : fn.english_word)?.trim();
-      if (!wordToMatch) continue;
-
-      if (text.startsWith(wordToMatch, currentIndex)) {
-        const fns = tryMatch(wordToMatch, currentIndex);
-        if (fns) {
-          matched = { fns, word: wordToMatch };
-          matchedLength = wordToMatch.length;
-          break;
-        }
-      }
-    }
-
-    if (matched) {
-      // Push preceding text
-      if (currentIndex > lastIndex) {
-        const beforeText = text.substring(lastIndex, currentIndex);
-        result.push(
-          <React.Fragment key={`before-${currentIndex}`}>
-            {formatTextWithBold(beforeText, isArabic)}
-          </React.Fragment>
-        );
-      }
-
-      // Highlight matched word
-      const uniqueFootnotes = Array.from(
-        new Map(matched.fns.map((f) => [f.id, f])).values()
-      );
-      if (uniqueFootnotes.length === 1) {
-        const fn = uniqueFootnotes[0];
-        result.push(
-          <FootnoteTooltip
-            key={`footnote-${currentIndex}`}
-            footnote={fn}
-            matchedLanguage={isArabic ? "arabic" : "english"}
-          >
-            <span className="font-bold border-b-[3px] text-[#43896B] border-[#43896B]">
-              {matched.word}
-              <sup className=" ml-1 font-bold">{fn.number}</sup>
-            </span>
-          </FootnoteTooltip>
-        );
-      } else {
-        const numbers = uniqueFootnotes.map((f) => f.number).join(",");
-        result.push(
-          <span
-            key={`footnote-${currentIndex}`}
-            className="font-bold border-b-2 text-[#43896B] border-[#43896B]"
-          >
-            {matched.word}
-            <sup className="text-[#43896B] ml-1 font-bold">{numbers}</sup>
-          </span>
-        );
-      }
-
-      currentIndex += matchedLength;
-      lastIndex = currentIndex;
+    let regex: RegExp;
+    if (isArabic) {
+      // Arabic → direct exact match
+      regex = new RegExp(`(?<!\\S)${escapedWord}(?!\\S)`, "g");
     } else {
-      currentIndex++;
+      // English and symbols:
+      // If word is alphanumeric → use \b boundaries (so "attribute" ≠ "attributes")
+      // If word has special chars (like ?, >>, ,) → allow raw matching
+      if (/^[a-zA-Z0-9]+$/.test(wordToMatch)) {
+        regex = new RegExp(`\\b${escapedWord}\\b`, "gi");
+      } else {
+        regex = new RegExp(`${escapedWord}`, "gi");
+      }
+    }
+
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      if (!wordOccurrenceCount[occurrenceKey]) {
+        wordOccurrenceCount[occurrenceKey] = 0;
+      }
+      wordOccurrenceCount[occurrenceKey]++;
+
+      allOccurrences.push({
+        word: match[0],
+        position: match.index,
+        footnote: fn,
+        occurrenceIndex: wordOccurrenceCount[occurrenceKey],
+      });
     }
   }
 
-  // push remaining text
+  allOccurrences.sort((a, b) => a.position - b.position);
+
+  const highlightedOccurrences: WordOccurrence[] = [];
+
+  for (const occurrence of allOccurrences) {
+    const fn = occurrence.footnote;
+    const indexField = isArabic ? fn.arabic_word_index : fn.english_word_index;
+
+    let shouldHighlight = false;
+
+    if (indexField == null || indexField === "") {
+      shouldHighlight = occurrence.occurrenceIndex === 1;
+    } else {
+      const parsed = parseInt(indexField.toString(), 10);
+
+      if (!isNaN(parsed)) {
+        // index = 0 or 3 → treat as 1
+        if (parsed === 0 || parsed === 3) {
+          shouldHighlight = occurrence.occurrenceIndex === 1;
+        } else {
+          const targetIndex = parsed + 1;
+          shouldHighlight = occurrence.occurrenceIndex === targetIndex;
+        }
+      } else {
+        shouldHighlight = occurrence.occurrenceIndex === 1;
+      }
+    }
+
+    if (shouldHighlight) {
+      highlightedOccurrences.push(occurrence);
+    }
+  }
+
+  // Remove overlapping matches
+  const finalOccurrences: WordOccurrence[] = [];
+  for (const occurrence of highlightedOccurrences) {
+    const endPosition = occurrence.position + occurrence.word.length;
+
+    const hasOverlap = finalOccurrences.some((existing) => {
+      const existingEnd = existing.position + existing.word.length;
+      return (
+        (occurrence.position >= existing.position &&
+          occurrence.position < existingEnd) ||
+        (endPosition > existing.position && endPosition <= existingEnd) ||
+        (occurrence.position <= existing.position &&
+          endPosition >= existingEnd)
+      );
+    });
+
+    if (!hasOverlap) {
+      finalOccurrences.push(occurrence);
+    }
+  }
+
+  for (let i = 0; i < finalOccurrences.length; i++) {
+    const occurrence = finalOccurrences[i];
+
+    if (occurrence.position > lastIndex) {
+      const beforeText = text.substring(lastIndex, occurrence.position);
+      result.push(
+        <React.Fragment key={`before-${occurrence.position}`}>
+          {formatTextWithBold(beforeText, isArabic)}
+        </React.Fragment>
+      );
+    }
+
+    const fn = occurrence.footnote;
+    result.push(
+      <FootnoteTooltip
+        key={`footnote-${occurrence.position}`}
+        footnote={fn}
+        matchedLanguage={isArabic ? "arabic" : "english"}
+      >
+        <span className="font-bold border-b-[3px] text-[#43896B] border-[#43896B]">
+          {occurrence.word}
+          <sup className="ml-1 font-bold">{fn.number}</sup>
+        </span>
+      </FootnoteTooltip>
+    );
+
+    lastIndex = occurrence.position + occurrence.word.length;
+  }
+
   if (lastIndex < text.length) {
     const remainingText = text.substring(lastIndex);
     result.push(
@@ -345,6 +365,8 @@ export const formatTextWithFootnotes = (
 
   return result;
 };
+
+
 
 
 
