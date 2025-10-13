@@ -1,13 +1,18 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
-import { BookOpen, MapPin, Bookmark, ScrollText, Quote, Languages, Scale, Club } from 'lucide-react'
+import { BookOpen, MapPin, Bookmark, ScrollText, Languages, Scale } from 'lucide-react'
 import Button from '@/app/components/button'
+import Link from 'next/link'
 
 const IndexesSection = () => {
-  const [isVisible, setIsVisible] = useState(true)
-
   const indexes = [
+    {
+      icon: ScrollText,
+      title: "Historical Manuscripts",
+      description: "Explore rare and ancient manuscripts of Nahj al-Balagha from renowned libraries across the Islamic world",
+      link: "/manuscripts"
+    },
     {
       icon: MapPin,
       title: "Index of Names and Places",
@@ -56,7 +61,7 @@ const IndexesSection = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight"
               >
-                Islamic Manuscripts <span className='text-[#43896B]'>and Maps</span>
+                Research Tools <span className='text-[#43896B]'>and Resources</span>
               </motion.h2>
               <motion.div
                 initial={{ width: 0 }}
@@ -81,14 +86,8 @@ const IndexesSection = () => {
               transition={{ duration: 0.8, delay: 0.7 }}
               className="grid grid-cols-1 gap-6 mt-8"
             >
-              {indexes.map((index, i) => (
-                <motion.div
-                  key={index.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 + (i * 0.1) }}
-                  className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:bg-white/80 transition-all duration-300 group"
-                >
+              {indexes.map((index, i) => {
+                const content = (
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#43896B]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                       <index.icon className="w-6 h-6 text-[#43896B]" />
@@ -98,8 +97,29 @@ const IndexesSection = () => {
                       <p className="text-gray-600 leading-relaxed">{index.description}</p>
                     </div>
                   </div>
-                </motion.div>
-              ))}
+                );
+
+                return (
+                  <motion.div
+                    key={index.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.8 + (i * 0.1) }}
+                  >
+                    {index.link ? (
+                      <Link href={index.link}>
+                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:bg-white/80 transition-all duration-300 group cursor-pointer">
+                          {content}
+                        </div>
+                      </Link>
+                    ) : (
+                      <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:bg-white/80 transition-all duration-300 group">
+                        {content}
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
