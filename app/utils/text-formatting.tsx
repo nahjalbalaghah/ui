@@ -229,7 +229,6 @@ export const formatTextWithFootnotes = (
   }
 
   const allOccurrences: WordOccurrence[] = [];
-
   const wordOccurrenceCount: Record<string, number> = {};
 
   for (const fn of relevantFootnotes) {
@@ -238,14 +237,22 @@ export const formatTextWithFootnotes = (
 
     const occurrenceKey = isArabic ? wordToMatch : wordToMatch.toLowerCase();
 
+    // Escape regex chars
+    const escapedWord = wordToMatch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
     let regex: RegExp;
-    
     if (isArabic) {
-      const escapedWord = wordToMatch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      regex = new RegExp(escapedWord, 'g');
+      // Arabic → direct exact match
+      regex = new RegExp(`(?<!\\S)${escapedWord}(?!\\S)`, "g");
     } else {
-      const escapedWord = wordToMatch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      regex = new RegExp(`\\b${escapedWord}\\b`, 'gi');
+      // English and symbols:
+      // If word is alphanumeric → use \b boundaries (so "attribute" ≠ "attributes")
+      // If word has special chars (like ?, >>, ,) → allow raw matching
+      if (/^[a-zA-Z0-9]+$/.test(wordToMatch)) {
+        regex = new RegExp(`\\b${escapedWord}\\b`, "gi");
+      } else {
+        regex = new RegExp(`${escapedWord}`, "gi");
+      }
     }
 
     let match;
@@ -259,7 +266,7 @@ export const formatTextWithFootnotes = (
         word: match[0],
         position: match.index,
         footnote: fn,
-        occurrenceIndex: wordOccurrenceCount[occurrenceKey]
+        occurrenceIndex: wordOccurrenceCount[occurrenceKey],
       });
     }
   }
@@ -271,16 +278,22 @@ export const formatTextWithFootnotes = (
   for (const occurrence of allOccurrences) {
     const fn = occurrence.footnote;
     const indexField = isArabic ? fn.arabic_word_index : fn.english_word_index;
-    
+
     let shouldHighlight = false;
 
     if (indexField == null || indexField === "") {
       shouldHighlight = occurrence.occurrenceIndex === 1;
     } else {
       const parsed = parseInt(indexField.toString(), 10);
+
       if (!isNaN(parsed)) {
-        const targetIndex = parsed + 1;
-        shouldHighlight = occurrence.occurrenceIndex === targetIndex;
+        // index = 0 or 3 → treat as 1
+        if (parsed === 0 || parsed === 3) {
+          shouldHighlight = occurrence.occurrenceIndex === 1;
+        } else {
+          const targetIndex = parsed + 1;
+          shouldHighlight = occurrence.occurrenceIndex === targetIndex;
+        }
       } else {
         shouldHighlight = occurrence.occurrenceIndex === 1;
       }
@@ -291,16 +304,19 @@ export const formatTextWithFootnotes = (
     }
   }
 
+  // Remove overlapping matches
   const finalOccurrences: WordOccurrence[] = [];
   for (const occurrence of highlightedOccurrences) {
     const endPosition = occurrence.position + occurrence.word.length;
-    
-    const hasOverlap = finalOccurrences.some(existing => {
+
+    const hasOverlap = finalOccurrences.some((existing) => {
       const existingEnd = existing.position + existing.word.length;
       return (
-        (occurrence.position >= existing.position && occurrence.position < existingEnd) ||
+        (occurrence.position >= existing.position &&
+          occurrence.position < existingEnd) ||
         (endPosition > existing.position && endPosition <= existingEnd) ||
-        (occurrence.position <= existing.position && endPosition >= existingEnd)
+        (occurrence.position <= existing.position &&
+          endPosition >= existingEnd)
       );
     });
 
@@ -349,6 +365,8 @@ export const formatTextWithFootnotes = (
 
   return result;
 };
+
+
 
 
 
