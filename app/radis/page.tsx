@@ -84,12 +84,10 @@ export default function RadisPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#F8FAFC] to-white">
-      {/* Header Section */}
       <div className="bg-gradient-to-r from-[#43896B] to-[#5BA67C] text-white">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex justify-center items-center mb-6">
-              <BookOpen size={48} className="mr-4" />
               <h1 className="text-4xl lg:text-6xl font-bold">
                 Radis Introduction
               </h1>
@@ -104,12 +102,10 @@ export default function RadisPage() {
           </div>
         </div>
       </div>
-
-      {/* Search Section */}
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleSearch} className="flex gap-4">
-            <div className="flex-1">
+          <form onSubmit={handleSearch} className="flex flex-col lg:flex-row gap-4">
+            <div className="flex-1 ">
               <Input
                 type="text"
                 placeholder="Search in Arabic or English..."
@@ -165,7 +161,7 @@ export default function RadisPage() {
                     <div className="mb-6">
                      
                       <div 
-                        className="text-right text-lg leading-loose text-gray-800 font-[uthman-taha] rounded-lg"
+                        className="text-right lg:text-lg leading-loose text-gray-800 font-[uthman-taha] rounded-lg"
                         style={{ fontFamily: 'uthman-taha, serif' }}
                       >
                         {radis.arabic}
