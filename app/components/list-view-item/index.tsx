@@ -101,7 +101,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
               )}
               {(displayMode === 'both' || displayMode === 'english-only') && previewEnglish && (
                 <p className="text-sm text-gray-700 mt-2 leading-relaxed">
-                  {truncateText(previewEnglish.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 120, 150)}
+                  {truncateText(previewEnglish.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 80, 150)}
                 </p>
               )}
               {(displayMode === 'both' || displayMode === 'arabic-only') && arabicTitle && (
@@ -183,7 +183,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
               {englishHeading && (
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
                   <p className="text-base leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
-                    {formatTextWithFootnotes(englishHeading, item.footnotes || [], false, item.sermonNumber || 'main')}
+                    {previewEnglish}
                   </p>
                 </div>
               )}

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
-import { extractTOCData, getDisplayNumber } from '@/app/utils/toc-helpers';
 
 interface ListingCardProps {
   sermon?: {
@@ -46,8 +45,17 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
 
   if (!data) return null;
 
-  // Extract TOC data for orations using the helper
-  const tocData = isOration ? extractTOCData(oration!, contentType) : null;
+  const tocData = isOration ? (() => {
+    const post = oration!;
+    const englishText = post.translations?.find((t: any) => t.type === 'en')?.text || '';
+    const arabicText = post.translations?.find((t: any) => t.type === 'ar')?.text || '';
+    
+    return {
+      heading: post.heading || '',
+      firstEnglish: englishText,
+      firstArabic: arabicText
+    };
+  })() : null;
   
   const title = isOration ? oration!.title : sermon!.title;
   const englishTranslation = isOration 
@@ -55,7 +63,7 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
     : sermon!.description;
 
   const displayTitle = isOration ? (tocData?.heading || oration!.heading || englishTranslation || title) : title;
-  const displayNumber = isOration ? getDisplayNumber(oration!.sermonNumber) : '';
+  const displayNumber = isOration ? String(oration!.sermonNumber || '') : '';
 
   return (
     <Link href={getCardLink()} className="block h-full">
@@ -83,24 +91,18 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
         </div>
         <div className="p-4 flex-grow flex flex-col justify-between">
           <div>
-            {/* TOC 3-Line Format for Orations */}
             {isOration && tocData ? (
               <div className="space-y-2">
-                {/* Line 1: Heading/Title */}
                 {tocData.heading && (
                   <h4 className="text-xs font-semibold text-[#43896B] line-clamp-1">
                     {truncateText(tocData.heading, 80)}
                   </h4>
                 )}
-                
-                {/* Line 2: First English */}
                 {tocData.firstEnglish && (
                   <p className="text-sm text-gray-700 line-clamp-2 font-brill leading-snug">
                     {truncateText(tocData.firstEnglish, 120)}
                   </p>
                 )}
-                
-                {/* Line 3: First Arabic */}
                 {tocData.firstArabic && (
                   <p className="text-sm font-taha text-gray-800 line-clamp-2 leading-snug" dir="rtl">
                     {truncateText(tocData.firstArabic, 120)}
@@ -115,7 +117,6 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
                 }
               </h3>
             )}
-            
             {isOration && oration!.tags && oration!.tags.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
                 {oration!.tags.slice(0, 3).map((tag) => (
