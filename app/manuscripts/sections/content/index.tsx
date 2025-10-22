@@ -1,16 +1,34 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Select from '@/app/components/select';
 import ManuscriptViewer from '@/app/components/manuscript-viewer';
 import ManuscriptMetadataDisplay from '@/app/components/manuscript-metadata';
+import RelatedContentDisplay from '@/app/components/related-content-display';
 import { manuscripts, getManuscriptOptions, getManuscriptById, ManuscriptMetadata } from '@/app/data/manuscripts';
+import { getRelatedContentForManuscript } from '@/app/utils/manuscript-linking';
 
 const ManuscriptsContent = () => {
-  const [selectedManuscriptId, setSelectedManuscriptId] = useState<string>(manuscripts[0].id);
-  const [selectedManuscript, setSelectedManuscript] = useState<ManuscriptMetadata>(manuscripts[0]);
+  const searchParams = useSearchParams();
+  const manuscriptIdFromUrl = searchParams.get('id');
+  
+  const [selectedManuscriptId, setSelectedManuscriptId] = useState<string>(
+    manuscriptIdFromUrl || manuscripts[0].id
+  );
+  const [selectedManuscript, setSelectedManuscript] = useState<ManuscriptMetadata>(
+    getManuscriptById(manuscriptIdFromUrl || manuscripts[0].id) || manuscripts[0]
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const manuscriptOptions = getManuscriptOptions();
+  const relatedContent = getRelatedContentForManuscript(selectedManuscriptId);
+
+  // Update selected manuscript when URL parameter changes
+  useEffect(() => {
+    if (manuscriptIdFromUrl && manuscriptIdFromUrl !== selectedManuscriptId) {
+      setSelectedManuscriptId(manuscriptIdFromUrl);
+    }
+  }, [manuscriptIdFromUrl]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -72,6 +90,10 @@ const ManuscriptsContent = () => {
           <div className="lg:col-span-1">
             <div className="sticky top-6">
               <ManuscriptMetadataDisplay metadata={selectedManuscript} />
+              <RelatedContentDisplay 
+                relatedContent={relatedContent}
+                manuscriptTitle={selectedManuscript.bookName}
+              />
             </div>
           </div>
         </div>
