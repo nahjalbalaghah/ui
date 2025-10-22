@@ -4,6 +4,9 @@ import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
 import Select from '@/app/components/select';
+import ManuscriptReference from '@/app/components/manuscript-reference';
+import ManuscriptCountBadge from '@/app/components/manuscript-count-badge';
+import { getManuscriptReferencesForContent } from '@/app/utils/manuscript-linking';
 
 interface ContentDescriptionProps {
   content: Post;
@@ -13,6 +16,9 @@ interface ContentDescriptionProps {
 const ContentDescription = ({ content, contentType }: ContentDescriptionProps) => {
   const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
   const [selectedTranslation, setSelectedTranslation] = useState('en');
+
+  // Get manuscript references for this content
+  const manuscriptReferences = getManuscriptReferencesForContent(content.id, contentType);
 
   let allReferences: string[] = [];
   const heading = content.heading;
@@ -73,9 +79,13 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
         <h1 className="text-xl lg:text-3xl font-bold text-gray-900 mb-4 leading-relaxed whitespace-pre-wrap">
           {heading || `${getContentLabel()} Details`}
         </h1>
-        {content.tags && content.tags.length > 0 && (
-          <div className="mt-4">
-            <div className="flex flex-wrap gap-2">
+        
+        {/* Manuscript count badge and tags */}
+        <div className="flex flex-wrap items-center gap-3 mt-4">
+          <ManuscriptCountBadge count={manuscriptReferences.length} />
+          
+          {content.tags && content.tags.length > 0 && (
+            <>
               {content.tags.map((tag) => (
                 <span
                   key={tag.id}
@@ -85,9 +95,10 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                   {tag.name}
                 </span>
               ))}
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </div>
+        
         <div className="mt-6 flex flex-wrap gap-3">
           <Select
             options={displayOptions}
@@ -215,6 +226,12 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
           <p className="text-gray-500">No content available for this {contentType.slice(0, -1)}.</p>
         </div>
       )}
+
+      {/* Manuscript References Section */}
+      <ManuscriptReference 
+        manuscripts={manuscriptReferences}
+        contentType={contentType}
+      />
     </div>
   );
 };

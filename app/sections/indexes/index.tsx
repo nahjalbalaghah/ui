@@ -8,12 +8,6 @@ import Link from 'next/link'
 const IndexesSection = () => {
   const indexes = [
     {
-      icon: ScrollText,
-      title: "Historical Manuscripts",
-      description: "Explore rare and ancient manuscripts of Nahj al-Balagha from renowned libraries across the Islamic world",
-      link: "/manuscripts"
-    },
-    {
       icon: MapPin,
       title: "Index of Names and Places",
       description: "Locate people, tribes, and geographic regions mentioned in Nahj al-Balaghah"
@@ -61,7 +55,7 @@ const IndexesSection = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight"
               >
-                Research Tools <span className='text-[#43896B]'>and Resources</span>
+               Islamic <span className='text-[#43896B]'>Manuscripts and Maps.</span>
               </motion.h2>
               <motion.div
                 initial={{ width: 0 }}
@@ -70,16 +64,6 @@ const IndexesSection = () => {
                 className="h-1 bg-[#43896B] rounded-full"
               ></motion.div>
             </div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="space-y-6"
-            >
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Whether you're studying specific concepts, tracing references, or analyzing historical contexts, these tools will enhance your understanding of Imam Ali's timeless wisdom.
-              </p>
-            </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -98,25 +82,16 @@ const IndexesSection = () => {
                     </div>
                   </div>
                 );
-
                 return (
                   <motion.div
                     key={index.title}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.8 + (i * 0.1) }}
-                  >
-                    {index.link ? (
-                      <Link href={index.link}>
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:bg-white/80 transition-all duration-300 group cursor-pointer">
-                          {content}
-                        </div>
-                      </Link>
-                    ) : (
-                      <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:bg-white/80 transition-all duration-300 group">
-                        {content}
-                      </div>
-                    )}
+                  >                    
+                    <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:bg-white/80 transition-all duration-300 group">
+                      {content}
+                    </div>
                   </motion.div>
                 );
               })}
