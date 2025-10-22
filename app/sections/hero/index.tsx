@@ -127,7 +127,7 @@ const HeroSection = () => {
                 AL-SHARIF AL-RADI
               </p>
             </div>
-            <div className="mt-24 grid grid-cols-5 gap-4 sm:gap-6 max-w-7xl mx-auto px-4">
+            <div className="mt-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-4 sm:gap-6 max-w-7xl mx-auto px-4">
               {contentTypes.map((content, index) => (
                 <div
                   key={content.label}

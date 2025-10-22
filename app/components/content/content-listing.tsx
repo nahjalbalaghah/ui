@@ -87,19 +87,21 @@ export default function ContentListing({
 
   return (
     <div className="w-full relative">
-      <div className="flex flex-col lg:flex-row items-center justify-between mb-6">
-        <p className="text-gray-600 mb-5 lg:mb-0">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 gap-4">
+        <p className="text-gray-600 whitespace-nowrap flex-shrink-0">
           {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
         </p>
         
         {showTopPagination && totalPages > 1 && onPageChange && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={onPageChange}
-            showRange={true}
-            loading={loading}
-          />
+          <div className="w-full lg:w-auto lg:flex-shrink-0">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange}
+              showRange={true}
+              loading={loading}
+            />
+          </div>
         )}
       </div>
       

@@ -64,7 +64,7 @@ const ContactFormSection = () => {
               <div className="flex items-center gap-2"><MapPin size={16} className="text-[#43896B]" /> Qom, Iran</div>
             </div>
           </div>
-          <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 p-8">
+          <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 p-5 lg:p-8">
             <AnimatePresence>
               {submitted ? (
                 <Modal isOpen={submitted} onClose={() => setSubmitted(false)} title="Message Sent!">
