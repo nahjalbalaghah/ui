@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   icon,
   ...props
 }) => {
-  const baseStyles = "cursor-pointer flex items-center gap-2 justify-center px-8 py-3 rounded-full text-sm font-medium transition-all duration-200 flex-shrink-0";
+  const baseStyles = "cursor-pointer font-semibold flex items-center gap-2 justify-center px-8 py-3 rounded-full text-sm font-medium transition-all duration-200 flex-shrink-0";
   const variantStyles = {
     outlined: "border border-[#43896B] text-[#43896B] hover:bg-[#43896B] hover:text-white",
     "outlined-white": "border border-white text-white hover:bg-white hover:text-[#43896B]",

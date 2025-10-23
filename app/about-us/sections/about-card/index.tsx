@@ -2,10 +2,13 @@
 import React from 'react';
 import Button from '@/app/components/button';
 import { FileText, BookOpen, Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const AboutCardSection = () => {
-  const handleOpenNotesPDF = () => {
-    window.open('/pdfs/TQ-Notes-on-the-Edition-and-Translation.pdf', '_blank');
+  const router = useRouter();
+
+  const handleViewNotes = () => {
+    router.push('/scholarly-notes');
   };
 
   return (
@@ -57,7 +60,7 @@ const AboutCardSection = () => {
           </div>
           <div className="flex justify-center">
             <Button
-              onClick={handleOpenNotesPDF}
+              onClick={handleViewNotes}
               variant="solid"
               className="text-lg px-8 py-4 hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
