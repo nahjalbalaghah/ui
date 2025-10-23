@@ -1,5 +1,5 @@
 import ExploreHero from "./sections/hero";
-import IndexesSection from "./sections/indexes";
+import MainCardsSection from "./sections/main-cards";
 import AboutNahjSection from "./sections/about-nahj";
 
 export const metadata = {
@@ -35,8 +35,8 @@ export default function Page() {
     return (
         <div>
             <ExploreHero />
-            <AboutNahjSection />
-            <IndexesSection />
+            {/* <AboutNahjSection /> */}
+            <MainCardsSection />
         </div>        
     )
 }
