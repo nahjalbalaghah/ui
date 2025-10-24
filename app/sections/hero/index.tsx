@@ -103,7 +103,7 @@ const HeroSection = () => {
     <div className="relative min-h-screen overflow-hidden">
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDVMMjUgMTVIMTVMMjAgNVoiIGZpbGw9ImN1cnJlbnRDb2xvciIvPgo8cmVjdCB4PSIxNSIgeT0iMTUiIHdpZHRoPSIxMCIgaGVpZ2h0PSIyMCIgZmlsbD0iY3VycmVudENvbG9yIi8+CjwvcGF0aD4KPC9zdmc+')] bg-repeat"></div>
       <div className="relative z-10 min-h-screen flex flex-col px-4 sm:px-6 lg:px-8">
-        <div className="flex-grow flex items-center justify-center pb-32 pt-16">
+        <div className="flex-grow flex items-center justify-center pt-16">
           <div className="max-w-7xl mx-auto text-center w-full">
             <div className="mb-8">
               <div className="flex justify-center items-center mb-4">

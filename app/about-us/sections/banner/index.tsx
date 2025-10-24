@@ -6,7 +6,7 @@ const BannerSection = () => {
 
   return (
     <div className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#43896B] via-[#2d5a47] to-[#1a3a2e]"></div>
+      <div className="absolute inset-0 bg-[#43896B]"></div>
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white/20 rounded-full"></div>
         <div className="absolute top-20 right-20 w-24 h-24 border border-white/30 rounded-full"></div>

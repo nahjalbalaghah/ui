@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import { ZoomIn, ZoomOut, Maximize2, Minimize2, ChevronLeft, ChevronRight, Grid3x3, Image as ImageIcon } from 'lucide-react';
-import Image from 'next/image';
 
 type ViewMode = 'single' | 'gallery';
 
@@ -49,7 +48,6 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
 
   return (
     <>
-      {/* Backdrop overlay for fullscreen mode */}
       {isExpanded && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
@@ -112,7 +110,7 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
       <div className="flex flex-col lg:flex-row h-full">
         <div className="lg:w-24 bg-[#F5F6FA] border-b lg:border-b-0 lg:border-r border-[#E2E3E9] p-2 overflow-y-auto">
           <div className="flex lg:flex-col gap-2">
-            {pages.map((page, index) => (
+              {pages.map((page, index) => (
               <button
                 key={index}
                 onClick={() => handleThumbnailClick(index)}
@@ -123,12 +121,15 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
                 }`}
                 aria-label={`Page ${index + 1}`}
               >
-                <Image
-                  width={200}
-                  height={200}
+                <img
                   src={page}
                   alt={`Page ${index + 1} thumbnail`}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = '/file.svg';
+                  }}
                 />
               </button>
             ))}
@@ -159,16 +160,16 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
                   onClick={() => handleThumbnailClick(index)}
                   className="relative group rounded-lg overflow-hidden transition-all cursor-pointer bg-gray-100"
                 >
-                  <Image
-                    width={200}
-                    height={200}
+                  <img
                     src={page}
                     alt={`${bookName} - Page ${index + 1}`}
                     className="w-full h-auto block"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement;
+                      const target = e.currentTarget as HTMLImageElement;
                       console.error('Image failed to load:', page);
-                      target.style.backgroundColor = '#ef4444';
+                      // Replace failed remote image with a local fallback
+                      target.onerror = null;
+                      target.src = '/file.svg';
                     }}
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all flex items-center justify-center pointer-events-none">

@@ -23,7 +23,7 @@ const AboutCardSection = () => {
         <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-[#43896B]/10 border border-white/50 p-8 lg:p-12 text-center hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
           <div className="flex justify-center mb-6">
             <div className="relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-[#43896B] to-[#2d5a47] rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-20 h-20 bg-[#43896B] rounded-2xl flex items-center justify-center shadow-lg">
                 <FileText className="w-10 h-10 text-white" />
               </div>
               <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center">
