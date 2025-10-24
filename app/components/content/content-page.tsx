@@ -158,7 +158,7 @@ function ContentPageContent({ config }: ContentPageProps) {
         
         setAllContent(allData);
         
-        const pageSize = 9;
+        const pageSize = 15;
         const totalItems = allData.length;
         const totalPagesCalc = Math.ceil(totalItems / pageSize);
         const startIndex = (page - 1) * pageSize;
@@ -214,7 +214,7 @@ function ContentPageContent({ config }: ContentPageProps) {
         setAllContent(searchResults);
         
         // Paginate results
-        const pageSize = 9;
+        const pageSize = 15;
         const totalItems = searchResults.length;
         const totalPagesCalc = Math.ceil(totalItems / pageSize);
         const startIndex = (page - 1) * pageSize;
@@ -234,7 +234,7 @@ function ContentPageContent({ config }: ContentPageProps) {
         
       } else {
         // Normal mode: server-side pagination
-        response = await config.api.getContent(page, 9);
+        response = await config.api.getContent(page, 15);
 
         if (!response || !response.data) {
           throw new Error('Invalid response format from API');
@@ -364,7 +364,7 @@ function ContentPageContent({ config }: ContentPageProps) {
 
   const handlePageChange = (page: number) => {
     if (allContent.length > 0 && (sortBy || searchTerm)) {
-      const pageSize = 9;
+      const pageSize = 15;
       const startIndex = (page - 1) * pageSize;
       const endIndex = startIndex + pageSize;
       const paginatedData = allContent.slice(startIndex, endIndex);

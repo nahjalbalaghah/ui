@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ListViewItem from '@/app/components/list-view-item';
 import Pagination from '@/app/components/pagination';
 import { type Post } from '@/api/posts';
@@ -38,6 +38,19 @@ export default function ContentListing({
   displayMode = 'both',
   showTopPagination = false
 }: ContentListingProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const { lastElementRef } = useInfiniteScroll({
     hasNextPage,
     isLoading: isInfiniteLoading,
@@ -50,7 +63,7 @@ export default function ContentListing({
       {content.map((item, index) => (
         <div
           key={index}
-          ref={index === content.length - 1 ? lastElementRef : undefined}
+          ref={index === content.length - 1 && isMobile ? lastElementRef : undefined}
         >
           <ListViewItem item={item} contentType={contentType} displayMode={displayMode} />
         </div>
@@ -92,8 +105,9 @@ export default function ContentListing({
           {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
         </p>
         
+        {/* Show pagination only on desktop */}
         {showTopPagination && totalPages > 1 && onPageChange && (
-          <div className="w-full lg:w-auto lg:flex-shrink-0">
+          <div className="hidden lg:block w-auto lg:flex-shrink-0">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -110,8 +124,9 @@ export default function ContentListing({
       ) : (
         <>
           {renderListView()}
+          {/* Show loading indicator on mobile for infinite scroll */}
           {isInfiniteLoading && (
-            <div className="mt-8">
+            <div className="mt-8 lg:hidden">
               <div className="animate-pulse">
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                   <div className="flex items-center gap-0">
@@ -132,6 +147,18 @@ export default function ContentListing({
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+          {/* Show pagination at bottom on desktop only */}
+          {totalPages > 1 && onPageChange && (
+            <div className="hidden lg:block mt-8">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+                showRange={true}
+                loading={loading}
+              />
             </div>
           )}
         </>
