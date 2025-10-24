@@ -4,9 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import Select from '@/app/components/select';
 import ManuscriptViewer from '@/app/components/manuscript-viewer';
 import ManuscriptMetadataDisplay from '@/app/components/manuscript-metadata';
-import RelatedContentDisplay from '@/app/components/related-content-display';
 import { manuscripts, getManuscriptOptions, getManuscriptById, ManuscriptMetadata } from '@/app/data/manuscripts';
-import { getRelatedContentForManuscript } from '@/app/utils/manuscript-linking';
 
 const ManuscriptsContent = () => {
   const searchParams = useSearchParams();
@@ -21,9 +19,7 @@ const ManuscriptsContent = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const manuscriptOptions = getManuscriptOptions();
-  const relatedContent = getRelatedContentForManuscript(selectedManuscriptId);
 
-  // Update selected manuscript when URL parameter changes
   useEffect(() => {
     if (manuscriptIdFromUrl && manuscriptIdFromUrl !== selectedManuscriptId) {
       setSelectedManuscriptId(manuscriptIdFromUrl);
@@ -90,29 +86,8 @@ const ManuscriptsContent = () => {
           <div className="lg:col-span-1">
             <div className="sticky top-6">
               <ManuscriptMetadataDisplay metadata={selectedManuscript} />
-              <RelatedContentDisplay 
-                relatedContent={relatedContent}
-                manuscriptTitle={selectedManuscript.bookName}
-              />
             </div>
           </div>
-        </div>
-      </div>
-      <div className="mt-12 bg-gradient-to-br from-[#F5F6FA] to-white rounded-2xl">
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">
-          About This Collection
-        </h3>
-        <div className="prose prose-lg max-w-none text-gray-700">
-          <p className="leading-relaxed mb-4">
-            These manuscripts represent some of the most significant historical copies of Nahj al-Balagha, 
-            preserved in prestigious libraries across the Islamic world. Each manuscript offers unique insights 
-            into the transmission and preservation of Imam Ali's (AS) teachings throughout history.
-          </p>
-          <p className="leading-relaxed">
-            The manuscripts featured here date from the 5th/11th century to the 7th/13th century, 
-            showcasing various calligraphic styles, regional variations, and scholarly annotations that 
-            have enriched our understanding of this timeless text.
-          </p>
         </div>
       </div>
     </div>
