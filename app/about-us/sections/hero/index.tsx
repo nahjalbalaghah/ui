@@ -72,9 +72,6 @@ const AboutUsHero = () => {
                     </div>
                   </div>
                 </div>
-                <Button variant='solid' icon={<ChevronRight size={24} />}>
-                  Learn More About Us
-                </Button>
               </div>
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-[#43896B] text-center lg:text-left mb-8">
