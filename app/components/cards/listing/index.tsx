@@ -47,13 +47,11 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
 
   const tocData = isOration ? (() => {
     const post = oration!;
-    const englishText = post.translations?.find((t: any) => t.type === 'en')?.text || '';
-    const arabicText = post.translations?.find((t: any) => t.type === 'ar')?.text || '';
     
     return {
       heading: post.heading || '',
-      firstEnglish: englishText,
-      firstArabic: arabicText
+      TocEnglish: post.TocEnglish || '',
+      TocArabic: post.TocArabic || ''
     };
   })() : null;
   
@@ -91,21 +89,21 @@ export default function ListingCard({ sermon, oration, onClick, contentType = 'o
         </div>
         <div className="p-4 flex-grow flex flex-col justify-between">
           <div>
-            {isOration && tocData ? (
+            {isOration && tocData && (tocData.heading || tocData.TocEnglish || tocData.TocArabic) ? (
               <div className="space-y-2">
                 {tocData.heading && (
                   <h4 className="text-xs font-semibold text-[#43896B] line-clamp-1">
                     {truncateText(tocData.heading, 80)}
                   </h4>
                 )}
-                {tocData.firstEnglish && (
+                {tocData.TocEnglish && (
                   <p className="text-sm text-gray-700 line-clamp-2 font-brill leading-snug">
-                    {truncateText(tocData.firstEnglish, 120)}
+                    {truncateText(tocData.TocEnglish, 120)}
                   </p>
                 )}
-                {tocData.firstArabic && (
+                {tocData.TocArabic && (
                   <p className="text-sm font-taha text-gray-800 line-clamp-2 leading-snug" dir="rtl">
-                    {truncateText(tocData.firstArabic, 120)}
+                    {truncateText(tocData.TocArabic, 120)}
                   </p>
                 )}
               </div>

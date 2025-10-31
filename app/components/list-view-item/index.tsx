@@ -48,8 +48,12 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
     return queryString ? `${baseUrl}?${queryString}` : baseUrl;
   };
 
-  const arabicTitle = item.title || '';
-  const englishHeading = item.heading || '';
+  const tocHeading = item.heading || '';
+  const tocEnglish = item.TocEnglish || '';
+  const tocArabic = item.TocArabic || '';
+  
+  const arabicTitle = tocArabic || item.title || '';
+  const englishHeading = tocHeading || '';
   
   const headingTranslation = item.translations?.find((t: any) => t.type === 'en')?.text || '';
 
@@ -57,8 +61,8 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
   const firstParagraphArabic = firstParagraph?.arabic || '';
   const firstParagraphEnglish = firstParagraph?.translations?.find((t: any) => t.type === 'en')?.text || '';
 
-  const previewEnglish = firstParagraphEnglish || headingTranslation;
-  const previewArabic = firstParagraphArabic || arabicTitle;
+  const previewEnglish = tocEnglish || firstParagraphEnglish || headingTranslation;
+  const previewArabic = tocArabic || firstParagraphArabic || arabicTitle;
 
   const getDisplayNumber = () => {
     if (item.sermonNumber) {

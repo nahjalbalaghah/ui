@@ -60,6 +60,8 @@ export interface Post {
   translations: Translation[] | null;
   sermonNumber: string | null;
   heading?: string;
+  TocEnglish?: string;
+  TocArabic?: string;
   paragraphs: Paragraph[];
   tags: Tag[];
   footnotes: Footnote[];

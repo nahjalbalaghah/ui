@@ -140,7 +140,7 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
             Back to {title}
           </button>
           
-          <Link href="/manuscripts">
+          <Link href={content?.sermonNumber ? `/manuscripts?section=${content.sermonNumber}` : '/manuscripts'}>
             <Button variant='outlined' icon={<Book className='w-4 h-4' />} >
               View Manuscripts
             </Button>
