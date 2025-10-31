@@ -53,7 +53,6 @@ const SponsorsSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <Heart className="w-8 h-8 text-[#43896B]" />
             <h2 className="text-3xl lg:text-5xl font-black text-[#43896B]">
               Our Sponsors & Partners
             </h2>

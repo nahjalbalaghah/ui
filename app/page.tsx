@@ -1,5 +1,6 @@
 import ExploreHero from "./sections/hero";
-import IndexesSection from "./sections/indexes";
+import MainCardsSection from "./sections/main-cards";
+import AboutNahjSection from "./sections/about-nahj";
 
 export const metadata = {
   title: "Explore | Nahj al-Balaghah",
@@ -34,9 +35,8 @@ export default function Page() {
     return (
         <div>
             <ExploreHero />
-            {/* <OrationsLettersSayingsSection /> */}
-            <IndexesSection />
-            {/* <ResourcesSection /> */}
+            {/* <AboutNahjSection /> */}
+            <MainCardsSection />
         </div>        
     )
 }

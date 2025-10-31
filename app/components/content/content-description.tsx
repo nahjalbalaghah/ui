@@ -61,7 +61,6 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
     { value: 'arabic-only', label: 'Arabic Only' },
   ];
 
-  // Get available translations
   const availableTranslations = content.translations || [];
   const translationOptions = availableTranslations.map(t => ({
     value: t.type,
@@ -71,13 +70,12 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
   return (
   <div className="bg-white rounded-2xl border border-gray-200 p-8">
       <div className="mb-8 pb-6 border-b border-gray-200">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed whitespace-pre-wrap">
+        <h1 className="text-xl lg:text-3xl font-bold text-gray-900 mb-4 leading-relaxed whitespace-pre-wrap">
           {heading || `${getContentLabel()} Details`}
         </h1>
-
-        {content.tags && content.tags.length > 0 && (
-          <div className="mt-4">
-            <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-3 mt-4">
+          {content.tags && content.tags.length > 0 && (
+            <>
               {content.tags.map((tag) => (
                 <span
                   key={tag.id}
@@ -87,11 +85,9 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                   {tag.name}
                 </span>
               ))}
-            </div>
-          </div>
-        )}
-
-        {/* Display Options */}
+            </>
+          )}
+        </div>
         <div className="mt-6 flex flex-wrap gap-3">
           <Select
             options={displayOptions}
@@ -118,14 +114,13 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
             </span>
           </div>
         )}
-
       {(content.title || mainTranslation) && (
         <div className="space-y-8 mb-8">
           <div className="border-b border-gray-100 pb-8">
             {(displayMode === 'both' || displayMode === 'arabic-only') && content.title && (
               <div className="p-0 mb-4 border-none">
                 <div className="text-right">
-                  <p className="text-xl leading-relaxed text-gray-900 font-taha whitespace-pre-wrap text-[1.25rem]" dir="rtl">
+                  <p className="lg:text-xl leading-relaxed text-gray-900 font-taha whitespace-pre-wrap" dir="rtl">
                     {formatTextWithFootnotes(content.title, allFootnotes, true, content.sermonNumber || 'main')}
                   </p>
                 </div>
@@ -150,7 +145,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 
                 return (
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
-                    <p className="text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap" >
+                    <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap" >
                       {formatTextWithFootnotes(mainTranslation.text, allFootnotes, false, content.sermonNumber || 'main')}
                     </p>
                   </div>
@@ -177,7 +172,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                 {(displayMode === 'both' || displayMode === 'arabic-only') && paragraph.arabic && (
                   <div className="p-0 mb-4 border-none">
                     <div className="text-right">
-                      <p className="text-xl leading-[2] text-gray-900 font-taha whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1.25rem' }}>
+                      <p className="lg:text-xl leading-[2] text-gray-900 font-taha whitespace-pre-wrap" dir="rtl">
                         {formatTextWithFootnotes(paragraph.arabic, allFootnotes, true, paragraph.number)}
                       </p>
                     </div>
@@ -204,7 +199,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                   
                   return (
                     <div className="bg-white rounded-lg p-6 border border-gray-200">
-                      <p className="text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
+                      <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
                         {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false, paragraph.number)}
                       </p>
                     </div>
@@ -215,13 +210,12 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
           })}
         </div>
       )}
-
       {sortedParagraphs.length === 0 && !(content.title || mainTranslation) && (
         <div className="text-center py-12">
           <p className="text-gray-500">No content available for this {contentType.slice(0, -1)}.</p>
         </div>
       )}
-     
+
     </div>
   );
 };

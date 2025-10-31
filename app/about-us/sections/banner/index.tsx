@@ -1,16 +1,12 @@
 "use client";
 import React from 'react';
-import Button from '@/app/components/button';
 import { BookOpen, Star, Heart } from 'lucide-react';
 
 const BannerSection = () => {
-  const handleOpenPDF = () => {
-    window.open('/pdfs/TQ-Introduction-to-Nahj-al-Balaghah.pdf', '_blank');
-  };
 
   return (
     <div className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#43896B] via-[#2d5a47] to-[#1a3a2e]"></div>
+      <div className="absolute inset-0 bg-[#43896B]"></div>
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white/20 rounded-full"></div>
         <div className="absolute top-20 right-20 w-24 h-24 border border-white/30 rounded-full"></div>
@@ -47,15 +43,6 @@ const BannerSection = () => {
               in Islamic literature, offering profound wisdom and timeless guidance.
             </p>
           </div>
-        </div>
-        <div className="mt-12 flex justify-center">
-          <Button
-            onClick={handleOpenPDF}
-            variant='outlined-white'
-            className="text-lg px-10 py-4 hover:scale-105 transition-transform duration-200"
-          >
-            About Nahj al-Balaghah
-          </Button>
         </div>
         <div className="mt-16 flex justify-center">
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent rounded-full"></div>

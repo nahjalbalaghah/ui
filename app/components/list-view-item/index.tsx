@@ -48,12 +48,21 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
     return queryString ? `${baseUrl}?${queryString}` : baseUrl;
   };
 
-  const arabicTitle = item.title || '';
-  const englishTitle = item.translations?.find((t: any) => t.type === 'en')?.text || item.heading || item.title || '';
+  const tocHeading = item.heading || '';
+  const tocEnglish = item.TocEnglish || '';
+  const tocArabic = item.TocArabic || '';
+  
+  const arabicTitle = tocArabic || item.title || '';
+  const englishHeading = tocHeading || '';
+  
+  const headingTranslation = item.translations?.find((t: any) => t.type === 'en')?.text || '';
 
   const firstParagraph = item.paragraphs?.[0];
   const firstParagraphArabic = firstParagraph?.arabic || '';
   const firstParagraphEnglish = firstParagraph?.translations?.find((t: any) => t.type === 'en')?.text || '';
+
+  const previewEnglish = tocEnglish || firstParagraphEnglish || headingTranslation;
+  const previewArabic = tocArabic || firstParagraphArabic || arabicTitle;
 
   const getDisplayNumber = () => {
     if (item.sermonNumber) {
@@ -89,17 +98,26 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
         <div className="flex-grow min-w-0 py-6 pr-6 pl-8">
           <div className="flex flex-col lg:flex-row items-end gap-4 lg:items-start justify-between">
             <div className="flex-grow min-w-0">
+              {(displayMode === 'both' || displayMode === 'english-only') && englishHeading && (
+                <h3 className="text-sm lg:text-lg font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-normal">
+                  {truncateText(englishHeading, 150, 80)}
+                </h3>
+              )}
+              {(displayMode === 'both' || displayMode === 'english-only') && previewEnglish && (
+                <p className="text-sm text-gray-700 mt-2 leading-relaxed">
+                  {truncateText(previewEnglish.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 80, 150)}
+                </p>
+              )}
               {(displayMode === 'both' || displayMode === 'arabic-only') && arabicTitle && (
-                <h3 className="font-taha lg:text-lg font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-tight mb-1" dir="rtl" style={{ lineHeight: '1.4' }}>
+                <h3 className={`font-taha lg:text-lg font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-tight ${displayMode === 'both' && englishHeading ? 'mt-3' : ''}`} dir="rtl" style={{ lineHeight: '1.4' }}>
                   {truncateText(arabicTitle, 150, 80)}
                 </h3>
               )}
-              {(displayMode === 'both' || displayMode === 'english-only') && englishTitle && (
-                <h3 className={`text-sm lg:text-base font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-normal ${displayMode === 'both' && arabicTitle ? 'mt-3' : ''}`}>
-                  {truncateText(englishTitle, 150, 80)}
-                </h3>
+              {(displayMode === 'both' || displayMode === 'arabic-only') && previewArabic && previewArabic !== arabicTitle && (
+                <p className="text-sm font-taha text-gray-700 mt-2 leading-relaxed" dir="rtl">
+                  {truncateText(previewArabic.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 300, 150)}
+                </p>
               )}
-              
               {item.tags && item.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {item.tags.slice(0, 3).map((tag) => (
@@ -126,7 +144,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
-              {((item.paragraphs && item.paragraphs.length > 0) || arabicTitle || englishTitle) && (
+              {((item.paragraphs && item.paragraphs.length > 0) || arabicTitle || englishHeading) && (
                 <button
                   onClick={(e) => {
                     e.preventDefault();
@@ -143,7 +161,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
         </div>
       </div>
       
-      {isExpanded && ((item.paragraphs && item.paragraphs.length > 0) || arabicTitle || englishTitle) && (
+      {isExpanded && ((item.paragraphs && item.paragraphs.length > 0) || arabicTitle || englishHeading) && (
         <div className="border-t border-gray-100 px-8 py-6 bg-gray-50/50">
           {firstParagraphArabic || firstParagraphEnglish ? (
             <>
@@ -155,7 +173,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
                 </div>
               )}
               {firstParagraphArabic && (
-                <div className="mt-4">
+                <div className={firstParagraphEnglish ? "mt-4" : ""}>
                   <div className="text-right">
                     <p className="text-base font-taha leading-relaxed text-gray-900 whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1rem' }}>
                       {formatTextWithFootnotes(firstParagraphArabic, item.footnotes || [], true, item.sermonNumber || 'main')}
@@ -166,20 +184,20 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
             </>
           ) : (
             <>
+              {englishHeading && (
+                <div className="bg-white rounded-lg p-4 border border-gray-200">
+                  <p className="text-base leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
+                    {previewEnglish}
+                  </p>
+                </div>
+              )}
               {arabicTitle && (
-                <div className="mb-4">
+                <div className={englishHeading ? "mt-4" : ""}>
                   <div className="text-right">
                     <p className="text-base leading-relaxed text-gray-900 font-taha whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1rem' }}>
                       {formatTextWithFootnotes(arabicTitle, item.footnotes || [], true, item.sermonNumber || 'main')}
                     </p>
                   </div>
-                </div>
-              )}
-              {englishTitle && (
-                <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <p className="text-base leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
-                    {formatTextWithFootnotes(englishTitle, item.footnotes || [], false, item.sermonNumber || 'main')}
-                  </p>
                 </div>
               )}
             </>

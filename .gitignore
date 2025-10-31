@@ -13,6 +13,7 @@
 .gitk
 .gitold
 .gitkhurram
+.gitkazim
 # testing
 /coverage
 
@@ -46,3 +47,6 @@ next-env.d.ts
 
 .github/instructions/kluster-code-verify.instructions.md
 .kluster
+
+# Sentry Config File
+.env.sentry-build-plugin

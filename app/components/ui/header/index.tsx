@@ -25,6 +25,12 @@ const Header = () => {
       hasDropdown: false
     },
     {
+      name: 'Manuscripts',
+      icon: FileText,
+      href: '/manuscripts',
+      hasDropdown: false
+    },
+    {
       name: 'About',
       icon: List,
       href: '/about-us',

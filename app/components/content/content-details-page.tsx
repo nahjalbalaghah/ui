@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { type Post } from '@/api/posts';
 import ContentDescription from './content-description';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Book } from 'lucide-react';
 import Link from 'next/link';
+import Button from '../button';
 
 interface ContentDetailsPageProps {
   contentType: 'orations' | 'letters' | 'sayings';
@@ -40,12 +41,9 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
   const handleBackNavigation = (e: React.MouseEvent) => {
     e.preventDefault();
     
-    // Check if there's history to go back to
     if (window.history.length > 1 && (returnPage || returnSort || returnSearch)) {
-      // Use browser back if we have return params
       router.back();
     } else {
-      // Navigate to the constructed URL
       router.push(getBackUrl());
     }
   };
@@ -91,7 +89,6 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
     );
   }
 
-  // Only show error page if there's an actual error, not just null content
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -111,7 +108,6 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
     );
   }
 
-  // If no content but no error, show "not found" page instead of redirecting
   if (!content) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -135,13 +131,21 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <button 
-          onClick={handleBackNavigation}
-          className="inline-flex items-center gap-2 text-[#43896B] hover:text-[#367556] mb-6 font-medium transition-colors cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to {title}
-        </button>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <button 
+            onClick={handleBackNavigation}
+            className="inline-flex items-center gap-2 text-[#43896B] hover:text-[#367556] font-medium transition-colors cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to {title}
+          </button>
+          
+          <Link href={content?.sermonNumber ? `/manuscripts?section=${content.sermonNumber}` : '/manuscripts'}>
+            <Button variant='outlined' icon={<Book className='w-4 h-4' />} >
+              View Manuscripts
+            </Button>
+          </Link>
+        </div>
         
         <div className="flex flex-col lg:flex-row gap-8">
           <div className='w-full'>
