@@ -224,7 +224,7 @@ export const formatTextWithFootnotes = (
         footnote={fn}
         matchedLanguage={isArabic ? "arabic" : "english"}
       >
-        <span className="font-bold border-b-[3px] text-[#43896B] border-[#43896B]">
+        <span className="">
           {occurrence.word}
           <sup className="ml-1 font-bold">{fn.number}</sup>
         </span>

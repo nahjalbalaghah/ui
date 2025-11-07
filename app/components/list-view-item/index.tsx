@@ -57,10 +57,24 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
   
   const headingTranslation = item.translations?.find((t: any) => t.type === 'en')?.text || '';
 
-  const firstParagraph = item.paragraphs?.[0];
+  const sortedParagraphs = item.paragraphs?.slice().sort((a: any, b: any) => {
+    const parseNumber = (num: string) => {
+      const parts = num.split('.').map(p => parseInt(p, 10));
+      return parts[0] * 10000 + (parts[1] || 0) * 100 + (parts[2] || 0);
+    };
+    return parseNumber(a.number || '999.999.999') - parseNumber(b.number || '999.999.999');
+  });
+  
+  const firstParagraph = sortedParagraphs?.[0];
   const firstParagraphArabic = firstParagraph?.arabic || '';
   const firstParagraphEnglish = firstParagraph?.translations?.find((t: any) => t.type === 'en')?.text || '';
 
+  // For expanded view: use paragraph content if available, otherwise use main translations
+  const mainTranslationEnglish = item.translations?.find((t: any) => t.type === 'en')?.text || '';
+  const expandedEnglish = firstParagraphEnglish || mainTranslationEnglish;
+  const expandedArabic = firstParagraphArabic || item.title || '';
+
+  // For preview (collapsed state): use TOC text as short summary
   const previewEnglish = tocEnglish || firstParagraphEnglish || headingTranslation;
   const previewArabic = tocArabic || firstParagraphArabic || arabicTitle;
 
@@ -161,46 +175,31 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
         </div>
       </div>
       
-      {isExpanded && ((item.paragraphs && item.paragraphs.length > 0) || arabicTitle || englishHeading) && (
+      {isExpanded && ((item.paragraphs && item.paragraphs.length > 0) || item.translations || item.title) && (
         <div className="border-t border-gray-100 px-8 py-6 bg-gray-50/50">
-          {firstParagraphArabic || firstParagraphEnglish ? (
+          {expandedEnglish || expandedArabic ? (
             <>
-              {firstParagraphEnglish && (
+              {expandedEnglish && (
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
                   <p className="text-base leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
-                    {formatTextWithFootnotes(firstParagraphEnglish, item.footnotes || [], false, item.sermonNumber || 'main')}
+                    {formatTextWithFootnotes(expandedEnglish, item.footnotes || [], false, item.sermonNumber || 'main')}
                   </p>
                 </div>
               )}
-              {firstParagraphArabic && (
-                <div className={firstParagraphEnglish ? "mt-4" : ""}>
+              {expandedArabic && (
+                <div className={expandedEnglish ? "mt-4" : ""}>
                   <div className="text-right">
-                    <p className="text-base font-taha leading-relaxed text-gray-900 whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1rem' }}>
-                      {formatTextWithFootnotes(firstParagraphArabic, item.footnotes || [], true, item.sermonNumber || 'main')}
+                    <p className="text-base font-brill leading-[2.5] text-gray-900 whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1rem' }}>
+                      {formatTextWithFootnotes(expandedArabic, item.footnotes || [], true, item.sermonNumber || 'main')}
                     </p>
                   </div>
                 </div>
               )}
             </>
           ) : (
-            <>
-              {englishHeading && (
-                <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <p className="text-base leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
-                    {previewEnglish}
-                  </p>
-                </div>
-              )}
-              {arabicTitle && (
-                <div className={englishHeading ? "mt-4" : ""}>
-                  <div className="text-right">
-                    <p className="text-base leading-relaxed text-gray-900 font-taha whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1rem' }}>
-                      {formatTextWithFootnotes(arabicTitle, item.footnotes || [], true, item.sermonNumber || 'main')}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </>
+            <div className="text-center py-4 text-gray-500">
+              No content available
+            </div>
           )}
         </div>
       )}
