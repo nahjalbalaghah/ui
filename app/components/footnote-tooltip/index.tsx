@@ -200,7 +200,7 @@ export const FootnoteTooltip: React.FC<FootnoteTooltipProps> = ({
     <>
       <span
         ref={triggerRef}
-        className={`footnote-marker cursor-help border-b border-[#43896B] transition-colors ${className}`}
+        className={`footnote-marker cursor-help transition-colors ${className}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{ position: 'relative' }}
