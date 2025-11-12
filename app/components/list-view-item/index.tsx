@@ -67,12 +67,12 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
   
   const firstParagraph = sortedParagraphs?.[0];
   const firstParagraphArabic = firstParagraph?.arabic || '';
-  const firstParagraphEnglish = firstParagraph?.translations?.find((t: any) => t.type === 'en')?.text || '';
+  const firstParagraphEnglish = item?.translations?.find((t: any) => t.type === 'en')?.text || '';
 
   // For expanded view: use paragraph content if available, otherwise use main translations
   const mainTranslationEnglish = item.translations?.find((t: any) => t.type === 'en')?.text || '';
-  const expandedEnglish = firstParagraphEnglish || mainTranslationEnglish;
-  const expandedArabic = firstParagraphArabic || item.title || '';
+  const expandedEnglish = firstParagraphEnglish;
+  const expandedArabic = item.title || '';
 
   // For preview (collapsed state): use TOC text as short summary
   const previewEnglish = tocEnglish || firstParagraphEnglish || headingTranslation;
@@ -182,7 +182,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
               {expandedEnglish && (
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
                   <p className="text-base leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
-                    {formatTextWithFootnotes(expandedEnglish, item.footnotes || [], false, item.sermonNumber || 'main')}
+                    {formatTextWithFootnotes(expandedEnglish,  [], false, item.sermonNumber || 'main')}
                   </p>
                 </div>
               )}
@@ -190,7 +190,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
                 <div className={expandedEnglish ? "mt-4" : ""}>
                   <div className="text-right">
                     <p className="text-base font-brill leading-[2.5] text-gray-900 whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1rem' }}>
-                      {formatTextWithFootnotes(expandedArabic, item.footnotes || [], true, item.sermonNumber || 'main')}
+                      {formatTextWithFootnotes(expandedArabic,  [], true, item.sermonNumber || 'main')}
                     </p>
                   </div>
                 </div>
