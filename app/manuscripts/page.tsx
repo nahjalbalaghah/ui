@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import ManuscriptsHero from './sections/hero';
 import ManuscriptsContent from './sections/content';
 import type { Metadata } from 'next';
 
@@ -35,7 +34,6 @@ export const metadata: Metadata = {
 export default function ManuscriptsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <ManuscriptsHero />
       <Suspense fallback={<div>Loading...</div>}>
         <ManuscriptsContent />
       </Suspense>

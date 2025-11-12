@@ -16,20 +16,20 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
 
   let allReferences: string[] = [];
   const heading = content.heading;
-  
+
   const allFootnotes = [
     ...(content.footnotes || []),
     ...content.paragraphs.flatMap(p => p.footnotes || [])
   ];
-  
+
   const sortedParagraphs = [...content.paragraphs].sort((a, b) => {
     const parseNumber = (num: string) => {
       return num.split('.').map(n => parseInt(n, 10));
     };
-    
+
     const aNumbers = parseNumber(a.number);
     const bNumbers = parseNumber(b.number);
-    
+
     for (let i = 0; i < Math.max(aNumbers.length, bNumbers.length); i++) {
       const aNum = aNumbers[i] || 0;
       const bNum = bNumbers[i] || 0;
@@ -67,8 +67,19 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
     label: t.type === 'en' ? 'English' : t.type.toUpperCase()
   }));
 
+  // Utility: clean unwanted HTML tags and entities from Arabic text
+  const cleanArabicText = (text: string): string => {
+    if (!text) return '';
+    return text
+      .replace(/<center>|<\/center>/gi, '')   // remove center tags
+      .replace(/<span[^>]*>|<\/span>/gi, '') // remove span tags
+      .replace(/&nbsp;/gi, ' ')              // replace non-breaking spaces
+      .trim();
+  };
+
+
   return (
-  <div className="bg-white rounded-2xl border border-gray-200 p-8">
+    <div className="bg-white rounded-2xl border border-gray-200 p-8">
       <div className="mb-8 pb-6 border-b border-gray-200">
         <h1 className="text-xl lg:text-3xl font-bold text-gray-900 mb-4 leading-relaxed whitespace-pre-wrap">
           {heading || `${getContentLabel()} Details`}
@@ -107,13 +118,13 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
           )}
         </div>
       </div>
-        {content.sermonNumber && (
-          <div className="mb-4">
-            <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-[#43896B] bg-[#43896B]/10 rounded-full border border-[#43896B]/20">
-              {content.sermonNumber}
-            </span>
-          </div>
-        )}
+      {content.sermonNumber && (
+        <div className="mb-4">
+          <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-[#43896B] bg-[#43896B]/10 rounded-full border border-[#43896B]/20">
+            {content.sermonNumber}
+          </span>
+        </div>
+      )}
       {(content.title || mainTranslation) && (
         <div className="space-y-8 mb-8">
           <div className="border-b border-gray-100 pb-8">
@@ -121,7 +132,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
               <div className="p-0 mb-4 border-none">
                 <div className="text-right">
                   <p className="lg:text-xl leading-relaxed text-gray-900 font-taha whitespace-pre-wrap" dir="rtl">
-                    {formatTextWithFootnotes(content.title, allFootnotes, true, content.sermonNumber || 'main')}
+                    {formatTextWithFootnotes(cleanArabicText(content.title), allFootnotes, true, content.sermonNumber || 'main')}
                   </p>
                 </div>
               </div>
@@ -142,7 +153,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                     section: f.section
                   }))
                 });
-                
+
                 return (
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
                     <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap" >
@@ -169,15 +180,38 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                     </span>
                   </div>
                 )}
-                {(displayMode === 'both' || displayMode === 'arabic-only') && paragraph.arabic && (
-                  <div className="p-0 mb-4 border-none">
-                    <div className="text-right">
-                      <p className="lg:text-xl leading-[2] text-gray-900 font-taha whitespace-pre-wrap" dir="rtl">
-                        {formatTextWithFootnotes(paragraph.arabic, allFootnotes, true, paragraph.number)}
-                      </p>
+                {(displayMode === 'both' || displayMode === 'arabic-only') && paragraph.arabic && (() => {
+                  // Split the Arabic text by line breaks, detect <center> parts
+                  const lines = paragraph.arabic.split(/\n+/).filter(Boolean);
+
+                  return (
+                    <div className="p-0 mb-4 border-none">
+                      {lines.map((line, index) => {
+                        const isCentered = /<center>/i.test(line);
+                        const cleanedLine = line
+                          .replace(/<center>|<\/center>/gi, '')
+                          .replace(/<span[^>]*>|<\/span>/gi, '')
+                          .replace(/&nbsp;/gi, ' ')
+                          .trim();
+
+                        if (!cleanedLine) return null;
+
+                        return (
+                          <div key={index} className={isCentered ? 'text-center' : 'text-right'}>
+                            <p
+                              className={`lg:text-xl leading-[2] text-gray-900 font-taha whitespace-pre-wrap ${isCentered ? 'inline-block' : ''
+                                }`}
+                              dir="rtl"
+                            >
+                              {formatTextWithFootnotes(cleanedLine, allFootnotes, true, paragraph.number)}
+                            </p>
+                          </div>
+                        );
+                      })}
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
+
                 {(displayMode === 'both' || displayMode === 'english-only') && englishTranslation && (() => {
                   const refs = extractReferences(englishTranslation.text);
                   allReferences = allReferences.concat(refs);
@@ -196,7 +230,7 @@ const ContentDescription = ({ content, contentType }: ContentDescriptionProps) =
                       section: f.section
                     }))
                   });
-                  
+
                   return (
                     <div className="bg-white rounded-lg p-6 border border-gray-200">
                       <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">

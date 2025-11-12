@@ -24,7 +24,7 @@ export default function RadisPage() {
       setError(null);
     } catch (err) {
       console.error('Error fetching radis introductions:', err);
-      setError('Failed to load Radis introductions. Please try again later.');
+      setError("Failed to load Raḍī's introductions. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ export default function RadisPage() {
         <div className="container mx-auto px-4 py-16">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#43896B] mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading Radis introductions...</p>
+            <p className="mt-4 text-gray-600">Loading Raḍī's introductions...</p>
           </div>
         </div>
       </div>
@@ -89,14 +89,14 @@ export default function RadisPage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex justify-center items-center mb-6">
               <h1 className="text-4xl lg:text-6xl font-bold">
-                Radis Introduction
+                Raḍī's Introduction
               </h1>
             </div>
             <div className="text-2xl lg:text-3xl mb-6 font-[uthman-taha]" style={{ fontFamily: 'uthman-taha, serif' }}>
               مقدمة الرضي
             </div>
             <p className="text-xl lg:text-2xl opacity-90 leading-relaxed">
-              The enlightening introduction by Al-Sharif Al-Radi, compiler of Nahj al-Balaghah, 
+              The enlightening introduction by Al-Sharif Al-Raḍī, compiler of Nahj al-Balaghah,
               explaining his methodology and the profound wisdom contained within.
             </p>
           </div>
@@ -113,16 +113,16 @@ export default function RadisPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={isSearching}
               icon={<Search size={16} />}
             >
               {isSearching ? 'Searching...' : 'Search'}
             </Button>
             {searchQuery && (
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 variant="outlined"
                 onClick={clearSearch}
               >
@@ -159,8 +159,8 @@ export default function RadisPage() {
                       </div>
                     </div>
                     <div className="mb-6">
-                     
-                      <div 
+
+                      <div
                         className="text-right lg:text-lg leading-loose text-gray-800 font-[uthman-taha] rounded-lg"
                         style={{ fontFamily: 'uthman-taha, serif' }}
                       >
@@ -170,10 +170,25 @@ export default function RadisPage() {
                     {radis.translation && (
                       <div className="mb-6">
                         <div className="text-gray-700 text-base lg:text-lg leading-relaxed p-4 border border-gray-200 font-brill rounded-lg">
-                          {radis.translation}
+                          {radis.translation.split('<center>').map((part, idx) => {
+                            if (part.includes('</center>')) {
+                              const [centeredText, rest] = part.split('</center>');
+                              return (
+                                <React.Fragment key={idx}>
+                                  {/* Extra space before poetic lines */}
+                                  <div className="my-6 text-center">{centeredText.trim()}</div>
+                                  {rest && <div className="my-4">{rest.trim()}</div>}
+                                </React.Fragment>
+                              );
+                            } else {
+                              return <div key={idx} className="my-4">{part.trim()}</div>;
+                            }
+                          })}
                         </div>
                       </div>
                     )}
+
+
                   </div>
                 </div>
               ))}

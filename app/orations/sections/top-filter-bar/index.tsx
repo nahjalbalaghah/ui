@@ -40,7 +40,7 @@ export default function TopFilterBar({
             className="text-base"
           />
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col lg:flex-row gap-3">
           <Select
             options={displayOptions}
             value={displayMode}

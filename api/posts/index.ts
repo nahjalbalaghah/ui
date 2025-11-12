@@ -102,6 +102,9 @@ export const postsApi = {
       }
 
       params['populate[tags]'] = true;
+      params['populate[paragraphs][populate][translations]'] = true;
+      params['populate[paragraphs][populate][footnotes]'] = true;
+      params['populate[footnotes]'] = true;
 
       if (sort) {
         params['sort'] = sort;
