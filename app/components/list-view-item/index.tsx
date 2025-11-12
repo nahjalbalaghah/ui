@@ -124,7 +124,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
               )}
               {(displayMode === 'both' || displayMode === 'arabic-only') && arabicTitle && (
                 <h3 className={`font-taha lg:text-lg font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-tight ${displayMode === 'both' && englishHeading ? 'mt-3' : ''}`} dir="rtl" style={{ lineHeight: '1.4' }}>
-                  {truncateText(arabicTitle, 150, 80)}
+                  {truncateText(arabicTitle.replace(/[()]/g, ''), 150, 80)}
                 </h3>
               )}
               {(displayMode === 'both' || displayMode === 'arabic-only') && previewArabic && previewArabic !== arabicTitle && (
@@ -179,13 +179,6 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
         <div className="border-t border-gray-100 px-8 py-6 bg-gray-50/50">
           {expandedEnglish || expandedArabic ? (
             <>
-              {expandedEnglish && (
-                <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <p className="text-base leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
-                    {formatTextWithFootnotes(expandedEnglish,  [], false, item.sermonNumber || 'main')}
-                  </p>
-                </div>
-              )}
               {expandedArabic && (
                 <div className={expandedEnglish ? "mt-4" : ""}>
                   <div className="text-right">
@@ -193,6 +186,13 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
                       {formatTextWithFootnotes(expandedArabic,  [], true, item.sermonNumber || 'main')}
                     </p>
                   </div>
+                </div>
+              )}
+               {expandedEnglish && (
+                <div className="bg-white rounded-lg p-4 border border-gray-200">
+                  <p className="text-base leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
+                    {formatTextWithFootnotes(expandedEnglish,  [], false, item.sermonNumber || 'main')}
+                  </p>
                 </div>
               )}
             </>
