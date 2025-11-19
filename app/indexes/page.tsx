@@ -38,25 +38,25 @@ const indexes = [
     icon: MapPin,
     title: "Index of Names and Places",
     description: "This comprehensive index includes references to historical figures, prophets, companions of the Prophet Muhammad (PBUH), and various tribes and locations mentioned throughout Nahj al-Balaghah.",
-    href: "#names-places"
+    href: "/indexes/names-places"
   },
   {
     icon: Languages,
     title: "Index of Terms",
     description: "Explore the rich vocabulary and terminology used by Imam Ali (AS) in Nahj al-Balaghah. This index covers important Arabic words, Islamic concepts, and technical terms.",
-    href: "#terms"
+    href: "/indexes/terms"
   },
   {
     icon: Bookmark,
     title: "Index of Qur'an, Hadith, Poetry, and Proverbs",
     description: "Discover the extensive references to the Holy Qur'an, prophetic traditions (Hadith), Arabic poetry, and traditional proverbs that Imam Ali (AS) incorporates into his eloquent discourse.",
-    href: "#quran-hadith"
+    href: "/indexes/quran-hadith"
   },
   {
     icon: Scale,
     title: "Index of Religious and Ethical Concepts",
     description: "Delve into the fundamental Islamic principles and ethical teachings that form the backbone of Nahj al-Balaghah. This index covers concepts such as justice, piety, leadership, and spirituality.",
-    href: "#religious-concepts"
+    href: "/indexes/religious-concepts"
   }
 ]
 
