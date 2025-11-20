@@ -1,6 +1,7 @@
 import React from 'react';
 import { Footnote } from '@/api/orations';
 import { FootnoteTooltip } from '@/app/components/footnote-tooltip';
+import { wrapTextReferences } from './text-ref-wrapper';
 
 export const formatTextWithBold = (text: string, isArabic: boolean = false): React.ReactNode => {
   if (!text) return text;
@@ -32,7 +33,8 @@ const applyItalicFormatting = (text: string): React.ReactNode => {
   
   while ((match = regex.exec(text)) !== null) {
     if (match.index > lastIndex) {
-      parts.push(text.slice(lastIndex, match.index));
+      // Wrap text references before adding italic
+      parts.push(wrapTextReferences(text.slice(lastIndex, match.index)));
     }
     parts.push(
       <em key={`italic-${match.index}`} style={{ fontStyle: "italic" }}>
@@ -43,10 +45,10 @@ const applyItalicFormatting = (text: string): React.ReactNode => {
   }
   
   if (lastIndex < text.length) {
-    parts.push(text.slice(lastIndex));
+    parts.push(wrapTextReferences(text.slice(lastIndex)));
   }
   
-  return parts.length > 0 ? <>{parts}</> : text;
+  return parts.length > 0 ? <>{parts}</> : wrapTextReferences(text);
 };
 
 const applyBoldAndItalicFormatting = (text: string): React.ReactNode => {
@@ -74,7 +76,7 @@ export const formatTextWithFootnotes = (
 ): React.ReactNode => {
   if (!text || !footnotes || footnotes.length === 0) {
     if (!isArabic) {
-      return applyItalicFormatting(text);
+      return wrapTextReferences(text);
     }
     return formatTextWithBold(text, isArabic);
   }
