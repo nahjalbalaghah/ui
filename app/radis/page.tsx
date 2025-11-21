@@ -1,16 +1,24 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { radisApi, RadisIntroduction, RadisApiResponse } from '@/api/posts';
 import { Search, BookOpen } from 'lucide-react';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
+import { useTextRefHighlight } from '@/app/hooks/useTextRefHighlight';
 
-export default function RadisPage() {
+function RadisContent() {
   const [radisIntroductions, setRadisIntroductions] = useState<RadisIntroduction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+
+  const { scrollToAndHighlight } = useTextRefHighlight({
+    onHighlight: (ref) => {
+      // Optional: Log or track highlight
+      console.log('Highlighting ref:', ref);
+    }
+  });
 
   useEffect(() => {
     fetchRadisIntroductions();
@@ -22,6 +30,30 @@ export default function RadisPage() {
       const response: RadisApiResponse = await radisApi.getRadisIntroductions();
       setRadisIntroductions(response.data);
       setError(null);
+      
+      // Check for highlight after data loads
+      const urlParams = new URLSearchParams(window.location.search);
+      const highlightRef = urlParams.get('highlightRef');
+      const word = urlParams.get('word');
+
+      if (highlightRef) {
+        // Small delay to ensure rendering
+        setTimeout(() => {
+          scrollToAndHighlight(highlightRef);
+          
+          // Handle word highlighting if present
+          if (word) {
+            const element = document.querySelector(`[data-text-ref="${highlightRef}"]`);
+            if (element) {
+              // Target the translation container specifically
+              const translationContainer = element.querySelector('.font-brill');
+              if (translationContainer) {
+                highlightWordInElement(translationContainer, word);
+              }
+            }
+          }
+        }, 500);
+      }
     } catch (err) {
       console.error('Error fetching radis introductions:', err);
       setError("Failed to load Raḍī's introductions. Please try again later.");
@@ -52,6 +84,58 @@ export default function RadisPage() {
   const clearSearch = () => {
     setSearchQuery('');
     fetchRadisIntroductions();
+  };
+
+  // Function to highlight a word within a specific element
+  const highlightWordInElement = (element: Element, word: string) => {
+    // Find all text nodes in the element and wrap the matching word
+    const walker = document.createTreeWalker(
+      element,
+      NodeFilter.SHOW_TEXT,
+      null
+    );
+
+    const nodesToReplace: Array<{ node: Text; matches: Array<{ start: number; end: number }> }> = [];
+    let textNode;
+    // Use case-insensitive substring matching
+    const wordRegex = new RegExp(word, 'gi');
+
+    // Collect all text nodes with the word
+    while (textNode = walker.nextNode() as Text | null) {
+      let match;
+      const matches: Array<{ start: number; end: number }> = [];
+      wordRegex.lastIndex = 0;
+      
+      while ((match = wordRegex.exec(textNode.textContent || '')) !== null) {
+        matches.push({ start: match.index, end: wordRegex.lastIndex });
+      }
+
+      if (matches.length > 0) {
+        nodesToReplace.push({ node: textNode, matches });
+      }
+    }
+
+    // Replace nodes with highlighted spans
+    for (const { node, matches } of nodesToReplace.reverse()) {
+      for (const match of matches.reverse()) {
+        const before = node.textContent?.substring(0, match.start) || '';
+        const highlighted = node.textContent?.substring(match.start, match.end) || '';
+        const after = node.textContent?.substring(match.end) || '';
+
+        const span = document.createElement('span');
+        span.className = 'highlight-word';
+        span.textContent = highlighted;
+
+        if (after) {
+          const afterNode = document.createTextNode(after);
+          node.parentNode?.insertBefore(span, node.nextSibling);
+          node.parentNode?.insertBefore(afterNode, span.nextSibling);
+        } else {
+          node.parentNode?.insertBefore(span, node.nextSibling);
+        }
+        node.textContent = before;
+      }
+    }
   };
 
   if (loading) {
@@ -145,6 +229,8 @@ export default function RadisPage() {
               {radisIntroductions.map((radis) => (
                 <div
                   key={radis.id}
+                  id={`radis-${radis.number}`}
+                  data-text-ref={radis.number}
                   className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
                 >
                   <div className="p-6 lg:p-8">
@@ -197,5 +283,13 @@ export default function RadisPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RadisPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RadisContent />
+    </Suspense>
   );
 }

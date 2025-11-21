@@ -23,6 +23,9 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
   const returnPage = searchParams.get('returnPage');
   const returnSort = searchParams.get('returnSort');
   const returnSearch = searchParams.get('returnSearch');
+  const highlightRef = searchParams.get('highlightRef');
+  const englishWord = searchParams.get('word');
+  const arabicWord = searchParams.get('arabicWord');
   
   const [content, setContent] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
@@ -149,7 +152,13 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
         
         <div className="flex flex-col lg:flex-row gap-8">
           <div className='w-full'>
-            <ContentDescription content={content} contentType={contentType} />
+            <ContentDescription 
+              content={content} 
+              contentType={contentType} 
+              highlightRef={highlightRef}
+              englishWord={englishWord}
+              arabicWord={arabicWord}
+            />
           </div>
         </div>
       </div>

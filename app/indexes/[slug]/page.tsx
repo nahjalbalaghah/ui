@@ -5,13 +5,14 @@ import { getCategoryBySlug } from '@/app/data/indexes';
 import IndexListing from '@/app/components/index-listing';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const category = getCategoryBySlug(params.slug);
+  const { slug } = await params;
+  const category = getCategoryBySlug(slug);
 
   if (!category) {
     return {
@@ -25,8 +26,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default function IndexCategoryPage({ params }: PageProps) {
-  const category = getCategoryBySlug(params.slug);
+export default async function IndexCategoryPage({ params }: PageProps) {
+  const { slug } = await params;
+  const category = getCategoryBySlug(slug);
 
   if (!category) {
     notFound();
@@ -46,7 +48,7 @@ export default function IndexCategoryPage({ params }: PageProps) {
           </div>
         </div>
       </div>
-      <IndexListing items={category.items} categorySlug={params.slug} />
+      <IndexListing items={category.items} categorySlug={slug} />
     </div>
   );
 }
