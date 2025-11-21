@@ -59,7 +59,7 @@ const Header = () => {
 
   return (
     <header className="relative">
-      <div className={`sticky top-0 z-50 ${
+      <div className={`sticky top-0 z-50 border-b border-gray-200 ${
           isScrolled 
             ? 'bg-white/95 backdrop-blur-xl' 
             : 'bg-white'
@@ -69,7 +69,7 @@ const Header = () => {
             <Link href="/">
               <div className="flex items-center gap-3 cursor-pointer">
                 <div className="relative">
-                  <div className="w-18 h-16 bg-[#43896B] rounded-2xl flex items-center justify-center shadow-lg border border-[#43896B]/20">
+                  <div className="w-16 h-14 bg-[#43896B] rounded-2xl flex items-center justify-center shadow-lg border border-[#43896B]/20">
                     <div className="text-center leading-none font-taha">
                       <div className="text-white font-bold text-lg mb-0.5">نهج</div>
                       <div className="text-white font-bold text-base -mt-1">البلاغة</div>

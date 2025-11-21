@@ -7,6 +7,8 @@ export interface PostFilters {
   type?: string;
   search?: string;
   tags?: string[];
+  sermonNumber?: string;
+  paragraphNumber?: string;
   [key: string]: any;
 }
 
@@ -36,6 +38,14 @@ export const postsApi = {
 
       if (filters.type) {
         params['filters[type][$eq]'] = filters.type;
+      }
+
+      if (filters.sermonNumber) {
+        params['filters[sermonNumber][$eq]'] = filters.sermonNumber;
+      }
+
+      if (filters.paragraphNumber) {
+        params['filters[paragraphs][number][$startsWith]'] = filters.paragraphNumber;
       }
 
       if (filters.search) {
@@ -225,9 +235,10 @@ export const orationsApi = {
 
   async getOrationBySermonNumber(sermonNumber: string): Promise<Post | null> {
     try {
+      const formattedSermonNumber = sermonNumber.startsWith('1.') ? sermonNumber : `1.${sermonNumber}`;
       const response = await postsApi.getPosts({
         filters: {
-          sermonNumber,
+          sermonNumber: formattedSermonNumber,
           type: 'Oration'
         }
       });
@@ -238,6 +249,78 @@ export const orationsApi = {
       return null;
     } catch (error) {
       console.error('Error fetching oration by sermon number:', error);
+      throw error;
+    }
+  },
+
+  async getOrationByParagraphNumber(paragraphNumber: string): Promise<Post | null> {
+    try {
+      const formattedParagraphNumber = paragraphNumber.startsWith('1.') ? paragraphNumber : `1.${paragraphNumber}`;
+      const response = await postsApi.getPosts({
+        filters: {
+          paragraphNumber: formattedParagraphNumber,
+          type: 'Oration'
+        }
+      });
+      
+      if (response.data && response.data.length > 0) {
+        return response.data[0];
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching oration by paragraph number:', error);
+      throw error;
+    }
+  },
+
+  async getOrationByTextReference(textRef: string): Promise<Post | null> {
+    try {
+      // Extract the paragraph number from text reference (e.g., "26" or "26.1" from "1.26.1")
+      const parts = textRef.split('.');
+      if (parts.length < 2) return null;
+      
+      // Try to find by searching through all orations (client-side search)
+      // First, fetch with large pageSize to get many orations
+      const response = await postsApi.getPosts({
+        filters: { type: 'Oration' },
+        pageSize: 500  // Fetch more to increase chances
+      });
+
+      if (!response.data || response.data.length === 0) {
+        return null;
+      }
+
+      // Generate multiple possible formats to match against
+      const sectionWithoutPrefix = parts.slice(1).join('.');  // "26.1" from "1.26.1"
+      
+      // Search for an oration containing this text reference
+      for (const post of response.data) {
+        // Check if sermonNumber matches
+        if (post.sermonNumber === textRef || post.sermonNumber === sectionWithoutPrefix) {
+          return post;
+        }
+
+        if (post.paragraphs && post.paragraphs.length > 0) {
+          // Check if any paragraph number matches - try multiple formats
+          for (const paragraph of post.paragraphs) {
+            if (!paragraph.number) continue;
+            
+            const pNum = paragraph.number.trim();
+            
+            // Try strict matching strategies
+            if (
+              pNum === textRef ||  // Exact match: "1.26.1"
+              pNum === sectionWithoutPrefix // Match without prefix: "26.1"
+            ) {
+              return post;
+            }
+          }
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error fetching oration by text reference:', error);
       throw error;
     }
   }
@@ -266,9 +349,10 @@ export const lettersApi = {
 
   async getLetterBySermonNumber(sermonNumber: string): Promise<Post | null> {
     try {
+      const formattedSermonNumber = sermonNumber.startsWith('2.') ? sermonNumber : `2.${sermonNumber}`;
       const response = await postsApi.getPosts({
         filters: {
-          sermonNumber,
+          sermonNumber: formattedSermonNumber,
           type: 'Letter'
         }
       });
@@ -279,6 +363,71 @@ export const lettersApi = {
       return null;
     } catch (error) {
       console.error('Error fetching letter by sermon number:', error);
+      throw error;
+    }
+  },
+
+  async getLetterByParagraphNumber(paragraphNumber: string): Promise<Post | null> {
+    try {
+      const formattedParagraphNumber = paragraphNumber.startsWith('2.') ? paragraphNumber : `2.${paragraphNumber}`;
+      const response = await postsApi.getPosts({
+        filters: {
+          paragraphNumber: formattedParagraphNumber,
+          type: 'Letter'
+        }
+      });
+      
+      if (response.data && response.data.length > 0) {
+        return response.data[0];
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching letter by paragraph number:', error);
+      throw error;
+    }
+  },
+
+  async getLetterByTextReference(textRef: string): Promise<Post | null> {
+    try {
+      const parts = textRef.split('.');
+      if (parts.length < 2) return null;
+      
+      const response = await postsApi.getPosts({
+        filters: { type: 'Letter' },
+        pageSize: 500
+      });
+
+      if (!response.data || response.data.length === 0) {
+        return null;
+      }
+
+      const sectionWithoutPrefix = parts.slice(1).join('.');  // "26.1" from "2.26.1"
+      
+      for (const post of response.data) {
+        // Check if sermonNumber matches
+        if (post.sermonNumber === textRef || post.sermonNumber === sectionWithoutPrefix) {
+          return post;
+        }
+
+        if (post.paragraphs && post.paragraphs.length > 0) {
+          for (const paragraph of post.paragraphs) {
+            if (!paragraph.number) continue;
+            
+            const pNum = paragraph.number.trim();
+            
+            if (
+              pNum === textRef ||
+              pNum === sectionWithoutPrefix
+            ) {
+              return post;
+            }
+          }
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error fetching letter by text reference:', error);
       throw error;
     }
   }
@@ -307,9 +456,10 @@ export const sayingsApi = {
 
   async getSayingBySermonNumber(sermonNumber: string): Promise<Post | null> {
     try {
+      const formattedSermonNumber = sermonNumber.startsWith('3.') ? sermonNumber : `3.${sermonNumber}`;
       const response = await postsApi.getPosts({
         filters: {
-          sermonNumber,
+          sermonNumber: formattedSermonNumber,
           type: 'Saying'
         }
       });
@@ -320,6 +470,71 @@ export const sayingsApi = {
       return null;
     } catch (error) {
       console.error('Error fetching saying by sermon number:', error);
+      throw error;
+    }
+  },
+
+  async getSayingByParagraphNumber(paragraphNumber: string): Promise<Post | null> {
+    try {
+      const formattedParagraphNumber = paragraphNumber.startsWith('3.') ? paragraphNumber : `3.${paragraphNumber}`;
+      const response = await postsApi.getPosts({
+        filters: {
+          paragraphNumber: formattedParagraphNumber,
+          type: 'Saying'
+        }
+      });
+      
+      if (response.data && response.data.length > 0) {
+        return response.data[0];
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching saying by paragraph number:', error);
+      throw error;
+    }
+  },
+
+  async getSayingByTextReference(textRef: string): Promise<Post | null> {
+    try {
+      const parts = textRef.split('.');
+      if (parts.length < 2) return null;
+      
+      const response = await postsApi.getPosts({
+        filters: { type: 'Saying' },
+        pageSize: 500
+      });
+
+      if (!response.data || response.data.length === 0) {
+        return null;
+      }
+
+      const sectionWithoutPrefix = parts.slice(1).join('.');  // "26.1" from "3.26.1"
+      
+      for (const post of response.data) {
+        // Check if sermonNumber matches
+        if (post.sermonNumber === textRef || post.sermonNumber === sectionWithoutPrefix) {
+          return post;
+        }
+
+        if (post.paragraphs && post.paragraphs.length > 0) {
+          for (const paragraph of post.paragraphs) {
+            if (!paragraph.number) continue;
+            
+            const pNum = paragraph.number.trim();
+            
+            if (
+              pNum === textRef ||
+              pNum === sectionWithoutPrefix
+            ) {
+              return post;
+            }
+          }
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error fetching saying by text reference:', error);
       throw error;
     }
   }
