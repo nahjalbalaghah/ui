@@ -33,6 +33,7 @@ export interface IndexTermsFilters {
   section?: string;
   word_english?: string;
   word_arabic?: string;
+  language?: 'English' | 'Arabic';
 }
 
 export const indexTermsApi = {
@@ -56,6 +57,14 @@ export const indexTermsApi = {
       }
       if (filters?.word_arabic) {
         params['filters[word_arabic][$containsi]'] = filters.word_arabic;
+      }
+      
+      if (filters?.language === 'English') {
+        params['filters[word_english][$null]'] = 'false';
+        params['filters[word_english][$ne]'] = '';
+      } else if (filters?.language === 'Arabic') {
+        params['filters[word_arabic][$null]'] = 'false';
+        params['filters[word_arabic][$ne]'] = '';
       }
 
       const response = await api.get('/api/index-terms', {
