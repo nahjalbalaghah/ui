@@ -7,7 +7,7 @@ export interface PostFilters {
   type?: string;
   search?: string;
   tags?: string[];
-  sermonNumber?: string;
+  sermonNumber?: string | string[];
   paragraphNumber?: string;
   [key: string]: any;
 }
@@ -41,7 +41,13 @@ export const postsApi = {
       }
 
       if (filters.sermonNumber) {
-        params['filters[sermonNumber][$eq]'] = filters.sermonNumber;
+        if (Array.isArray(filters.sermonNumber)) {
+          filters.sermonNumber.forEach((num, index) => {
+            params[`filters[sermonNumber][$in][${index}]`] = num;
+          });
+        } else {
+          params['filters[sermonNumber][$eq]'] = filters.sermonNumber;
+        }
       }
 
       if (filters.paragraphNumber) {
@@ -740,6 +746,68 @@ export const radisApi = {
       return await response.json();
     } catch (error) {
       console.error('Error searching radis introductions:', error);
+      throw error;
+    }
+  },
+
+  async getRadisIntroductionsByNumbers(numbers: string[]): Promise<RadisApiResponse> {
+    try {
+      const params = new URLSearchParams({
+        'pagination[pageSize]': '100'
+      });
+
+      numbers.forEach((num, index) => {
+        params.append(`filters[number][$in][${index}]`, num);
+      });
+
+      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/radis-introductions?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching radis introductions by numbers:', error);
+      throw error;
+    }
+  }
+};
+
+export const paragraphsApi = {
+  async getParagraphsByNumbers(numbers: string[]): Promise<ApiResponse> {
+    try {
+      const params: any = {
+        'pagination[pageSize]': 100,
+        'populate[translations]': true,
+        'populate[footnotes]': true,
+      };
+
+      numbers.forEach((num, index) => {
+        params[`filters[number][$in][${index}]`] = num;
+      });
+
+      const response = await api.get('/api/paragraphs', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching paragraphs by numbers:', error);
+      throw error;
+    }
+  },
+
+  async searchParagraphs(query: string, page = 1, pageSize = 25): Promise<ApiResponse> {
+    try {
+      const params: any = {
+        'pagination[page]': page,
+        'pagination[pageSize]': pageSize,
+        'populate[translations]': true,
+        'populate[footnotes]': true,
+        'filters[$or][0][arabic][$containsi]': query,
+        'filters[$or][1][translations][text][$containsi]': query,
+      };
+
+      const response = await api.get('/api/paragraphs', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error searching paragraphs:', error);
       throw error;
     }
   }

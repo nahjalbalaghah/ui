@@ -5,14 +5,16 @@ import Select from '@/app/components/select';
 import ManuscriptViewer from '@/app/components/manuscript-viewer';
 import ManuscriptMetadataDisplay from '@/app/components/manuscript-metadata';
 import { manuscriptsApi, Manuscript, getManuscriptImageUrl } from '@/api/manuscripts';
+import { STATIC_MANUSCRIPTS } from '@/data/static-manuscripts';
 import { Loader2 } from 'lucide-react';
 
 const ManuscriptsContent = () => {
   const searchParams = useSearchParams();
   const sectionFromUrl = searchParams.get('section');
-  
+
   const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
   const [selectedManuscript, setSelectedManuscript] = useState<Manuscript | null>(null);
+  const [selectedLibrary, setSelectedLibrary] = useState<'marashi' | 'shahrastani'>('marashi');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +23,7 @@ const ManuscriptsContent = () => {
       try {
         setIsLoading(true);
         setError(null);
-        
+
         let response;
         if (sectionFromUrl) {
           response = await manuscriptsApi.getManuscriptsBySection(sectionFromUrl);
@@ -29,7 +31,7 @@ const ManuscriptsContent = () => {
           // Fetch all manscripts
           response = await manuscriptsApi.getAllManuscripts(1, 100);
         }
-        
+
         if (response.data && response.data.length > 0) {
           setManuscripts(response.data);
           setSelectedManuscript(response.data[0]);
@@ -113,7 +115,7 @@ const ManuscriptsContent = () => {
           </div>
         </div>
       )}
-      
+
       {manuscripts.length > 1 && (
         <div className="mb-8">
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
@@ -138,7 +140,7 @@ const ManuscriptsContent = () => {
       <div className="mb-8">
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-            {selectedManuscript.bookName || `Manuscript - Section ${selectedManuscript.section}`}
+            {`${STATIC_MANUSCRIPTS[selectedLibrary].name} - Section ${selectedManuscript.section || sectionFromUrl}`}
           </h2>
           <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-600">
             {selectedManuscript.gregorianYear && (
@@ -175,119 +177,117 @@ const ManuscriptsContent = () => {
           <div className="sticky top-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Manuscript Details</h3>
-              <div className="space-y-3 text-sm">
-                {selectedManuscript.section && (
+
+              <div className="flex p-1 bg-gray-100 rounded-lg mb-6">
+                <button
+                  onClick={() => setSelectedLibrary('marashi')}
+                  className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${selectedLibrary === 'marashi'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                >
+                  Mar&apos;ashi MS 3827
+                </button>
+                <button
+                  onClick={() => setSelectedLibrary('shahrastani')}
+                  className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${selectedLibrary === 'shahrastani'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                >
+                  Shahrastani MS
+                </button>
+              </div>
+
+              <div className="space-y-4 text-sm">
+                <div>
+                  <span className="font-semibold text-gray-800 block mb-1">Sigla</span>
+                  <div className="flex gap-4">
+                    <span>{STATIC_MANUSCRIPTS[selectedLibrary].siglaEnglish}</span>
+                    <span className="font-taha" dir="rtl">{STATIC_MANUSCRIPTS[selectedLibrary].siglaArabic}</span>
+                  </div>
+                </div>
+
+                <div>
+                  <span className="font-semibold text-gray-800 block mb-1">Library</span>
+                  <span className="text-gray-600">{STATIC_MANUSCRIPTS[selectedLibrary].library}</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <span className="font-semibold text-gray-700">Section:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.section}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">City</span>
+                    <span className="text-gray-600">{STATIC_MANUSCRIPTS[selectedLibrary].city}</span>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-gray-800 block mb-1">Country</span>
+                    <span className="text-gray-600">{STATIC_MANUSCRIPTS[selectedLibrary].country}</span>
+                  </div>
+                </div>
+
+                <div>
+                  <span className="font-semibold text-gray-800 block mb-1">Date (Hijri/Gregorian)</span>
+                  <span className="text-gray-600">{STATIC_MANUSCRIPTS[selectedLibrary].date}</span>
+                </div>
+
+                <div>
+                  <span className="font-semibold text-gray-800 block mb-1">Catalog no.</span>
+                  <span className="text-gray-600">{STATIC_MANUSCRIPTS[selectedLibrary].catalogNumber}</span>
+                </div>
+
+                {STATIC_MANUSCRIPTS[selectedLibrary].completeness && (
+                  <div>
+                    <span className="font-semibold text-gray-800 block mb-1">Completeness</span>
+                    <p className="text-gray-600 leading-relaxed text-xs">
+                      {STATIC_MANUSCRIPTS[selectedLibrary].completeness}
+                    </p>
                   </div>
                 )}
-                {selectedManuscript.bookName && (
+
+                {STATIC_MANUSCRIPTS[selectedLibrary].scribe !== 'n/a' && (
                   <div>
-                    <span className="font-semibold text-gray-700">Book Name:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.bookName}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Scribe</span>
+                    <span className="text-gray-600">{STATIC_MANUSCRIPTS[selectedLibrary].scribe}</span>
                   </div>
                 )}
-                {selectedManuscript.siglaEnglish && (
+
+                {STATIC_MANUSCRIPTS[selectedLibrary].features && (
                   <div>
-                    <span className="font-semibold text-gray-700">Sigla (English):</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.siglaEnglish}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Features</span>
+                    <span className="text-gray-600">{STATIC_MANUSCRIPTS[selectedLibrary].features}</span>
                   </div>
                 )}
-                {selectedManuscript.siglaArabic && (
+
+                {STATIC_MANUSCRIPTS[selectedLibrary].permanentLink && (
                   <div>
-                    <span className="font-semibold text-gray-700">Sigla (Arabic):</span>
-                    <span className="ml-2 text-gray-600 font-taha" dir="rtl">{selectedManuscript.siglaArabic}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Permanent Link</span>
+                    <a href="#" className="text-[#43896B] hover:underline">
+                      {STATIC_MANUSCRIPTS[selectedLibrary].permanentLink === 'create link' ? 'Link' : STATIC_MANUSCRIPTS[selectedLibrary].permanentLink}
+                    </a>
                   </div>
                 )}
-                {selectedManuscript.hijriYear && (
+
+                {STATIC_MANUSCRIPTS[selectedLibrary].orationSequence && (
                   <div>
-                    <span className="font-semibold text-gray-700">Hijri Year:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.hijriYear}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Oration Sequence</span>
+                    <span className="text-gray-600">{STATIC_MANUSCRIPTS[selectedLibrary].orationSequence}</span>
                   </div>
                 )}
-                {selectedManuscript.gregorianYear && (
+
+                {STATIC_MANUSCRIPTS[selectedLibrary].format && (
                   <div>
-                    <span className="font-semibold text-gray-700">Gregorian Year:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.gregorianYear}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Format</span>
+                    <p className="text-gray-600 text-xs">
+                      {STATIC_MANUSCRIPTS[selectedLibrary].format}
+                    </p>
                   </div>
                 )}
-                {selectedManuscript.holdingInstitution && (
+
+                {STATIC_MANUSCRIPTS[selectedLibrary].additionalInfo && (
                   <div>
-                    <span className="font-semibold text-gray-700">Institution:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.holdingInstitution}</span>
-                  </div>
-                )}
-                {selectedManuscript.country && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Country:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.country}</span>
-                  </div>
-                )}
-                {selectedManuscript.city && (
-                  <div>
-                    <span className="font-semibold text-gray-700">City:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.city}</span>
-                  </div>
-                )}
-                {selectedManuscript.catalogNumber && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Catalog Number:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.catalogNumber}</span>
-                  </div>
-                )}
-                {selectedManuscript.specialMerit && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Special Merit:</span>
-                    <p className="mt-1 text-gray-600">{selectedManuscript.specialMerit}</p>
-                  </div>
-                )}
-                {selectedManuscript.rights && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Rights:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.rights}</span>
-                  </div>
-                )}
-                {selectedManuscript.binding && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Binding:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.binding}</span>
-                  </div>
-                )}
-                {selectedManuscript.acknowledgments && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Acknowledgments:</span>
-                    <p className="mt-1 text-gray-600">{selectedManuscript.acknowledgments}</p>
-                  </div>
-                )}
-                {selectedManuscript.accessRestriction && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Access:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.accessRestriction}</span>
-                  </div>
-                )}
-                {selectedManuscript.repository && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Repository:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.repository}</span>
-                  </div>
-                )}
-                {selectedManuscript.partLocation && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Part Location:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.partLocation}</span>
-                  </div>
-                )}
-                {selectedManuscript.cityOfOrigin && (
-                  <div>
-                    <span className="font-semibold text-gray-700">City of Origin:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.cityOfOrigin}</span>
-                  </div>
-                )}
-                {selectedManuscript.countryOfOrigin && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Country of Origin:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.countryOfOrigin}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Additional Info</span>
+                    <p className="text-gray-600 text-xs italic">
+                      {STATIC_MANUSCRIPTS[selectedLibrary].additionalInfo}
+                    </p>
                   </div>
                 )}
               </div>
