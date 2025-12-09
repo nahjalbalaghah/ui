@@ -33,6 +33,8 @@ export interface IndexTermsFilters {
   section?: string;
   word_english?: string;
   word_arabic?: string;
+  startsWith_english?: string;
+  startsWith_arabic?: string;
   language?: 'English' | 'Arabic';
 }
 
@@ -58,7 +60,14 @@ export const indexTermsApi = {
       if (filters?.word_arabic) {
         params['filters[word_arabic][$containsi]'] = filters.word_arabic;
       }
-      
+
+      if (filters?.startsWith_english) {
+        params['filters[word_english][$startsWithi]'] = filters.startsWith_english;
+      }
+      if (filters?.startsWith_arabic) {
+        params['filters[word_arabic][$startsWithi]'] = filters.startsWith_arabic;
+      }
+
       if (filters?.language === 'English') {
         params['filters[word_english][$null]'] = 'false';
         params['filters[word_english][$ne]'] = '';
