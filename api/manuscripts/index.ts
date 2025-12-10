@@ -23,6 +23,7 @@ export interface Manuscript {
   id: number;
   documentId: string;
   section: string;
+  library?: string;
   title?: string;
   description?: string;
   bookName?: string;

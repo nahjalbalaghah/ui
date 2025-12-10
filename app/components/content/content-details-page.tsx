@@ -58,49 +58,45 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
     }
   };
 
-  const loadAdjacentPosts = async () => {
-    try {
-      setAdjacentLoading(true);
-      let result = { previous: null as Post | null, next: null as Post | null };
-
-      switch (contentType) {
-        case 'orations':
-          result = await orationsApi.getAdjacentOrations(id);
-          break;
-        case 'letters':
-          result = await lettersApi.getAdjacentLetters(id);
-          break;
-        case 'sayings':
-          result = await sayingsApi.getAdjacentSayings(id);
-          break;
-      }
-
-      setAdjacentPosts(result);
-    } catch (err) {
-      console.error('Error loading adjacent posts:', err);
-    } finally {
-      setAdjacentLoading(false);
-    }
-  };
-
   useEffect(() => {
-    const loadContent = async () => {
+    const loadData = async () => {
       try {
         setLoading(true);
-        const data = await api.getContentById(id);
-        setContent(data);
+        setAdjacentLoading(true);
         setError(null);
+
+        const contentPromise = api.getContentById(id);
+
+        let adjacentPromise: Promise<{ previous: Post | null; next: Post | null }>;
+        switch (contentType) {
+          case 'orations':
+            adjacentPromise = orationsApi.getAdjacentOrations(id);
+            break;
+          case 'letters':
+            adjacentPromise = lettersApi.getAdjacentLetters(id);
+            break;
+          case 'sayings':
+            adjacentPromise = sayingsApi.getAdjacentSayings(id);
+            break;
+          default:
+            adjacentPromise = Promise.resolve({ previous: null, next: null });
+        }
+
+        const [contentData, adjacentData] = await Promise.all([contentPromise, adjacentPromise]);
+
+        setContent(contentData);
+        setAdjacentPosts(adjacentData);
       } catch (err) {
         setError(`Failed to load ${contentType.slice(0, -1)} details. Please try again.`);
         console.error(`Error loading ${contentType.slice(0, -1)}:`, err);
       } finally {
         setLoading(false);
+        setAdjacentLoading(false);
       }
     };
 
     if (!isNaN(id)) {
-      loadContent();
-      loadAdjacentPosts();
+      loadData();
     }
   }, [id, api, contentType]);
 

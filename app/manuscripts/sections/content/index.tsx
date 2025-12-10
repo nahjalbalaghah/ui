@@ -14,7 +14,7 @@ const ManuscriptsContent = () => {
 
   const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
   const [selectedManuscript, setSelectedManuscript] = useState<Manuscript | null>(null);
-  const [selectedLibrary, setSelectedLibrary] = useState<'marashi' | 'shahrastani'>('marashi');
+  const [libraryFilter, setLibraryFilter] = useState<'all' | 'marashi' | 'shahrastani'>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,10 +56,33 @@ const ManuscriptsContent = () => {
     }
   };
 
-  const manuscriptOptions = manuscripts.map(m => ({
+  const filteredManuscripts = manuscripts.filter(m => {
+    if (libraryFilter === 'all') return true;
+    return m.library?.toLowerCase().includes(libraryFilter);
+  });
+
+  const manuscriptOptions = filteredManuscripts.map(m => ({
     value: m.documentId,
     label: m.bookName || `Manuscript - Section ${m.section}`
   }));
+
+  // Update selected manuscript when filter changes if current selection is not in filtered list
+  useEffect(() => {
+    if (filteredManuscripts.length > 0) {
+      const isSelectedInFilter = filteredManuscripts.find(m => m.documentId === selectedManuscript?.documentId);
+      if (!isSelectedInFilter) {
+        setSelectedManuscript(filteredManuscripts[0]);
+      }
+    }
+  }, [libraryFilter, manuscripts]);
+
+  const getLibraryKey = (manuscript: Manuscript): 'marashi' | 'shahrastani' => {
+    if (manuscript.library?.toLowerCase().includes('marashi')) return 'marashi';
+    if (manuscript.library?.toLowerCase().includes('shahrastan')) return 'shahrastani';
+    return 'marashi'; // fallback
+  };
+
+  const selectedLibrary = selectedManuscript ? getLibraryKey(selectedManuscript) : 'marashi';
 
   if (isLoading) {
     return (
@@ -120,17 +143,34 @@ const ManuscriptsContent = () => {
         <div className="mb-8">
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <label htmlFor="manuscript-select" className="text-lg font-semibold text-gray-800 flex-shrink-0">
-                Select Manuscript:
+              <label className="text-lg font-semibold text-gray-800 flex-shrink-0">
+                Filter & Select:
               </label>
-              <div className="flex-1 max-w-xl">
-                <Select
-                  options={manuscriptOptions}
-                  value={selectedManuscript.documentId}
-                  onChange={handleManuscriptChange}
-                  placeholder="Choose a manuscript..."
-                  className="w-full"
-                />
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="w-full">
+                  <label htmlFor="library-filter" className="sr-only">Filter by Library</label>
+                  <Select
+                    options={[
+                      { value: 'all', label: 'All Manuscripts' },
+                      { value: 'marashi', label: 'Marashi Manuscripts' },
+                      { value: 'shahrastani', label: 'Shahrastani Manuscripts' }
+                    ]}
+                    value={libraryFilter}
+                    onChange={(val) => setLibraryFilter(val as any)}
+                    placeholder="Filter by Library..."
+                    className="w-full"
+                  />
+                </div>
+                <div className="w-full">
+                  <label htmlFor="manuscript-select" className="sr-only">Select Manuscript</label>
+                  <Select
+                    options={manuscriptOptions}
+                    value={selectedManuscript.documentId}
+                    onChange={handleManuscriptChange}
+                    placeholder="Choose a manuscript..."
+                    className="w-full"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -178,25 +218,11 @@ const ManuscriptsContent = () => {
             <div className="bg-white rounded-2xl border border-gray-200 p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Manuscript Details</h3>
 
-              <div className="flex p-1 bg-gray-100 rounded-lg mb-6">
-                <button
-                  onClick={() => setSelectedLibrary('marashi')}
-                  className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${selectedLibrary === 'marashi'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                >
-                  Mar&apos;ashi MS 3827
-                </button>
-                <button
-                  onClick={() => setSelectedLibrary('shahrastani')}
-                  className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${selectedLibrary === 'shahrastani'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                >
-                  Shahrastani MS
-                </button>
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-sm font-medium text-gray-500">Current Library:</span>
+                <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold">
+                  {STATIC_MANUSCRIPTS[selectedLibrary].name}
+                </span>
               </div>
 
               <div className="space-y-4 text-sm">

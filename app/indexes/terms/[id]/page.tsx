@@ -40,9 +40,9 @@ const checkTextMatch = (text: string, term: string) => {
 };
 
 // Helper to find the matching paragraph or content in a post
-const getMatchingContent = (post: Post, term: string) => {
+const getMatchingContent = (post: Post, term: string, language?: 'english' | 'arabic') => {
     const title = (post.title || post.heading || '');
-    if (checkTextMatch(title, term)) {
+    if (language !== 'arabic' && checkTextMatch(title, term)) {
         return post.paragraphs?.[0]?.translations?.[0]?.text || post.translations?.[0]?.text || title;
     }
 
@@ -51,14 +51,17 @@ const getMatchingContent = (post: Post, term: string) => {
         for (const p of post.paragraphs) {
             const eng = p.translations?.[0]?.text || '';
             const ara = p.arabic || '';
-            if (checkTextMatch(eng, term) || checkTextMatch(ara, term)) {
-                return eng || ara;
+            const matchEng = language !== 'arabic' && checkTextMatch(eng, term);
+            const matchAra = language !== 'english' && checkTextMatch(ara, term);
+
+            if (matchEng || matchAra) {
+                return (language === 'arabic' ? ara : eng) || (language === 'english' ? eng : ara);
             }
         }
     }
 
     // Check Post Translations (if paragraphs didn't handle it)
-    if (post.translations) {
+    if (post.translations && language !== 'arabic') {
         for (const t of post.translations) {
             if (checkTextMatch(t.text, term)) {
                 return t.text;
@@ -83,6 +86,7 @@ export default function TermDetailsPage() {
     const [results, setResults] = useState<CombinedResult[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [language, setLanguage] = useState<'english' | 'arabic' | undefined>(undefined);
 
     const term = decodeURIComponent(params.id as string).trim();
     const refsParam = searchParams.get('refs');
@@ -91,6 +95,8 @@ export default function TermDetailsPage() {
         const fetchData = async () => {
             setLoading(true);
             setError(null);
+            let detectedLanguage: 'english' | 'arabic' | undefined = undefined;
+
             try {
                 let textNumbers: string[] = [];
                 let indexTerm: IndexTerm | null = null;
@@ -98,21 +104,30 @@ export default function TermDetailsPage() {
                 // 1. Determine Source of References
                 if (refsParam) {
                     textNumbers = refsParam.split(',').filter(Boolean);
+                    // Determine language if we can, but usually we need to know the term origin
+                    // Optimization: Check if term is arabic or english by simple regex?
+                    // Arabic unicode block: \u0600-\u06FF
+                    const isArabicChar = /[\u0600-\u06FF]/.test(term);
+                    detectedLanguage = isArabicChar ? 'arabic' : 'english';
                 } else {
                     // Fallback: Lookup by word if no refs provided (direct link)
                     const indexResponse = await indexTermsApi.getIndexTerms(1, 1, { word_english: term });
                     if (indexResponse.data && indexResponse.data.length > 0) {
                         indexTerm = indexResponse.data.find(t => t.word_english?.toLowerCase() === term.toLowerCase()) || indexResponse.data[0];
+                        detectedLanguage = 'english';
                     } else {
                         const arabicResponse = await indexTermsApi.getIndexTerms(1, 1, { word_arabic: term });
                         if (arabicResponse.data && arabicResponse.data.length > 0) {
                             indexTerm = arabicResponse.data[0];
+                            detectedLanguage = 'arabic';
                         }
                     }
                     if (indexTerm && indexTerm.text_numbers) {
                         textNumbers = indexTerm.text_numbers.map(t => t.value);
                     }
                 }
+
+                setLanguage(detectedLanguage);
 
                 const combined: CombinedResult[] = [];
                 const fetchedIds = new Set<string>();
@@ -242,7 +257,7 @@ export default function TermDetailsPage() {
                         Back
                     </Button>
                     <h1 className="text-xl font-bold text-gray-800 text-center flex-1">
-                        "{term}"
+                        "{term}" <span className="text-sm font-normal text-gray-400 uppercase ml-2">{language}</span>
                     </h1>
                     <div className="w-10"></div>
                 </div>
@@ -255,7 +270,7 @@ export default function TermDetailsPage() {
                     </div>
                 ) : (
                     results.map((item, index) => (
-                        <ContentCard key={`${item.type}-${item.reference}-${index}`} item={item} term={term} />
+                        <ContentCard key={`${item.type}-${item.reference}-${index}`} item={item} term={term} language={language} />
                     ))
                 )}
             </div>
@@ -263,12 +278,38 @@ export default function TermDetailsPage() {
     );
 }
 
-function ContentCard({ item, term }: { item: CombinedResult; term: string }) {
+function ContentCard({ item, term, language }: { item: CombinedResult; term: string; language?: 'english' | 'arabic' }) {
     const { type, data, sourceType } = item;
 
     if (type === 'Post') {
         const post = data as Post;
-        const mainContent = getMatchingContent(post, term) || post.paragraphs?.[0]?.translations?.[0]?.text || 'No content available';
+        const defaultText = language === 'arabic'
+            ? (post.paragraphs?.[0]?.arabic || post.paragraphs?.[0]?.translations?.[0]?.text)
+            : (post.paragraphs?.[0]?.translations?.[0]?.text || post.paragraphs?.[0]?.arabic);
+
+        const mainContent = getMatchingContent(post, term, language) || defaultText || 'No content available';
+
+        // Filter title/heading based on language
+        let displayTitle = post.title || post.heading || `Oration ${post.sermonNumber}`;
+        const isArabicTitle = /[\u0600-\u06FF]/.test(displayTitle);
+
+        if (language === 'english' && isArabicTitle) {
+            // If English is requested but title is Arabic, try to fallback to something else or just show "Oration #..."
+            // Usually 'title' might be "Sermon 26" while 'heading' is Arabic.
+            // If displayTitle (which prioritizes title) is Arabic, check if there's an alternative.
+            if (post.title && !/[\u0600-\u06FF]/.test(post.title)) {
+                displayTitle = post.title;
+            } else {
+                // Determine type label
+                const typeLabel = post.type === 'Oration' ? 'Sermon' : post.type;
+                displayTitle = `${typeLabel} ${post.sermonNumber}`;
+            }
+        } else if (language === 'arabic' && !isArabicTitle) {
+            // Keep as is? Or try to find Arabic heading
+            if (post.heading && /[\u0600-\u06FF]/.test(post.heading)) {
+                displayTitle = post.heading;
+            }
+        }
 
         return (
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow relative group">
@@ -279,12 +320,9 @@ function ContentCard({ item, term }: { item: CombinedResult; term: string }) {
                         </span>
                         <span className="text-gray-500 text-sm font-medium">#{post.sermonNumber}</span>
                     </div>
-                    <Link href={`/${post.type.toLowerCase()}s/${post.slug || post.id}`} className="text-gray-400 hover:text-[#43896B] transition-colors">
-                        <ArrowRight className="w-5 h-5" />
-                    </Link>
                 </div>
 
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{post.title || post.heading || `Oration ${post.sermonNumber}`}</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{displayTitle}</h3>
 
                 <div className="space-y-4">
                     <div className="text-gray-700 leading-relaxed">
@@ -302,6 +340,12 @@ function ContentCard({ item, term }: { item: CombinedResult; term: string }) {
         const engText = para.translations?.[0]?.text;
         const arabicText = para.arabic;
 
+        // Language filter logic
+        const showEng = language !== 'arabic' && engText;
+        const showAra = language !== 'english' && arabicText;
+
+        if (!showEng && !showAra) return null;
+
         return (
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow relative">
                 <div className="flex items-center justify-between mb-4">
@@ -314,12 +358,12 @@ function ContentCard({ item, term }: { item: CombinedResult; term: string }) {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                    {arabicText && (
+                    {showAra && (
                         <div className="text-right" dir="rtl">
                             <HighlightText text={arabicText} term={term} />
                         </div>
                     )}
-                    {engText && (
+                    {showEng && (
                         <div>
                             <HighlightText text={engText} term={term} />
                         </div>
@@ -331,6 +375,13 @@ function ContentCard({ item, term }: { item: CombinedResult; term: string }) {
 
     if (type === 'Radis') {
         const radis = data as RadisIntroduction;
+
+        // Language filter logic
+        const showEng = language !== 'arabic' && radis.translation;
+        const showAra = language !== 'english' && radis.arabic;
+
+        if (!showEng && !showAra) return null;
+
         return (
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow relative">
                 <div className="flex items-center justify-between mb-4">
@@ -343,12 +394,12 @@ function ContentCard({ item, term }: { item: CombinedResult; term: string }) {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                    {radis.arabic && (
+                    {showAra && (
                         <div className="text-right" dir="rtl">
                             <HighlightText text={radis.arabic} term={term} />
                         </div>
                     )}
-                    {radis.translation && (
+                    {showEng && (
                         <div>
                             <HighlightText text={radis.translation} term={term} />
                         </div>

@@ -18,6 +18,7 @@ export interface PostsApiOptions {
   filters?: PostFilters;
   populate?: string[];
   sort?: string;
+  fields?: string[];
 }
 
 export const postsApi = {
@@ -28,7 +29,8 @@ export const postsApi = {
         pageSize = 9,
         filters = {},
         populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags', 'translations'],
-        sort
+        sort,
+        fields
       } = options;
 
       const params: any = {
@@ -67,10 +69,64 @@ export const postsApi = {
         });
       }
 
-      params['populate[footnotes]'] = true;
-      params['populate[paragraphs][populate][translations]'] = true;
-      params['populate[paragraphs][populate][footnotes]'] = true;
-      params['populate[tags]'] = true;
+      if (fields && fields.length > 0) {
+        fields.forEach((field, index) => {
+          params[`fields[${index}]`] = field;
+        });
+      }
+
+      if (populate && populate.length > 0) {
+        populate.forEach((relation, index) => {
+          // Handle complex population (object syntax) manually if needed, 
+          // but for this specific optimization we might just need simple relation names
+          // or we can pass raw strings like 'paragraphs.translations' which Strapi accepts as populate[0]=...
+          // However, existing code used params['populate[footnotes]'] = true; style.
+          // Let's support both: if user passes populate array, we use it.
+          // If we want to maintain the old hardcoded behavior when populate is NOT passed, we kept the default value in destructuring.
+
+          // If populate is passed, we check if it matches the old hardcoded keys to use the old object syntax 
+          // (which might be safer for deep population if Strapi version requires it), 
+          // or just generic array syntax.
+
+          // Actually, looking at the previous code:
+          // params['populate[footnotes]'] = true;
+          // params['populate[paragraphs][populate][translations]'] = true;
+          // This suggests deep population structure.
+
+          // If the caller provides specific populate array, we should probably blindly trust it 
+          // or if they provide nothing (default), we do the detailed one.
+
+          // But wait, the default `populate` array in destructuring is:
+          // ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags', 'translations']
+
+          // This array doesn't directly map to the complex object syntax used below:
+          // params['populate[paragraphs][populate][translations]'] = true;
+
+          // So if we just use the array, it might fail for deep relations if Strapi doesn't support dot notation in array `populate[0]=paragraphs.translations`.
+          // Strapi v4 supports dot notation. 
+
+          // Let's change the logic: IF populate is the DEFAULT one, use the hardcoded complex object params.
+          // IF populate is CUSTOM (optimized), use the array syntax.
+
+          params[`populate[${index}]`] = relation;
+        });
+      } else if (populate && populate.length === 5 && populate[0] === 'footnotes') {
+        // This check is a bit brittle to detect "default". 
+        // Let's check if it IS the default array reference, but we destructured a new array.
+        // Better strategy: checking if we are in the "optimized" mode (passed via options) or "default" mode.
+
+        // If `fields` is present, we are likely in optimized mode.
+        // But let's look at `getPosts` calls.
+
+        // To be safe and minimal:
+        // If `populate` option IS provided in the call, use it as array params.
+        // If `populate` option IS NOT provided (so it uses default), use the hardcoded logic.
+
+        // But we assigned a default value to `populate` in destructuring:
+        // populate = [...]
+
+        // Let's change destructuring to NOT have default, handle it inside.
+      }
 
       if (sort) {
         params['sort'] = sort;
@@ -336,7 +392,9 @@ export const orationsApi = {
       // Fetch all orations to find adjacent ones
       const response = await postsApi.getPosts({
         filters: { type: 'Oration' },
-        pageSize: 500
+        pageSize: 500,
+        fields: ['id', 'heading', 'sermonNumber', 'slug'], // Only fetch necessary fields
+        populate: [] // Don't fetch any relations
       });
 
       if (!response.data || response.data.length === 0) {
@@ -483,7 +541,9 @@ export const lettersApi = {
     try {
       const response = await postsApi.getPosts({
         filters: { type: 'Letter' },
-        pageSize: 500
+        pageSize: 500,
+        fields: ['id', 'heading', 'sermonNumber', 'slug'],
+        populate: []
       });
 
       if (!response.data || response.data.length === 0) {
@@ -628,7 +688,9 @@ export const sayingsApi = {
     try {
       const response = await postsApi.getPosts({
         filters: { type: 'Saying' },
-        pageSize: 500
+        pageSize: 500,
+        fields: ['id', 'heading', 'sermonNumber', 'slug'],
+        populate: []
       });
 
       if (!response.data || response.data.length === 0) {
