@@ -28,7 +28,7 @@ export const postsApi = {
         page = 1,
         pageSize = 9,
         filters = {},
-        populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags', 'translations'],
+        populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags'],
         sort,
         fields
       } = options;
