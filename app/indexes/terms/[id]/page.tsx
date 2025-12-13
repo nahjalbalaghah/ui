@@ -21,6 +21,8 @@ interface CombinedResult {
     data: any;
     reference: string;
     sourceType?: 'Oration' | 'Letter' | 'Saying';
+    matchingParagraphNumber?: string;
+    matchingContent?: string;
 }
 
 // Robust text matcher (handles singular/plural)
@@ -39,11 +41,77 @@ const checkTextMatch = (text: string, term: string) => {
     return false;
 };
 
+// Extract only the sentence or portion containing the term
+const extractMatchingSentence = (text: string, term: string): string | null => {
+    if (!text || !term) return null;
+    
+    const t = term.toLowerCase().trim();
+    const txtLower = text.toLowerCase();
+    
+    // Find the position of the term in the text
+    let termIndex = txtLower.indexOf(t);
+    
+    // If not found directly, try variants
+    if (termIndex === -1) {
+        if (t.endsWith('s')) {
+            termIndex = txtLower.indexOf(t.slice(0, -1));
+        } else if (t.endsWith('ies')) {
+            termIndex = txtLower.indexOf(t.slice(0, -3) + 'y');
+        } else if (t.endsWith('es')) {
+            termIndex = txtLower.indexOf(t.slice(0, -2));
+        }
+    }
+    
+    if (termIndex === -1) return null;
+    
+    // Find sentence boundaries
+    // Look for sentence-ending punctuation before and after the term
+    const sentenceEnders = /[.!?؟]/;
+    
+    // Find start of sentence (look backwards for sentence ender or start of text)
+    let sentenceStart = 0;
+    for (let i = termIndex - 1; i >= 0; i--) {
+        if (sentenceEnders.test(text[i])) {
+            sentenceStart = i + 1;
+            break;
+        }
+    }
+    
+    // Find end of sentence (look forwards for sentence ender or end of text)
+    let sentenceEnd = text.length;
+    for (let i = termIndex; i < text.length; i++) {
+        if (sentenceEnders.test(text[i])) {
+            sentenceEnd = i + 1;
+            break;
+        }
+    }
+    
+    // Extract the sentence and trim whitespace
+    let sentence = text.slice(sentenceStart, sentenceEnd).trim();
+    
+    // If sentence is too short, expand context a bit
+    if (sentence.length < 50 && text.length > sentence.length) {
+        // Try to get a bit more context (up to 200 chars total)
+        const contextStart = Math.max(0, termIndex - 100);
+        const contextEnd = Math.min(text.length, termIndex + 100);
+        sentence = text.slice(contextStart, contextEnd).trim();
+        
+        // Add ellipsis if we cut text
+        if (contextStart > 0) sentence = '...' + sentence;
+        if (contextEnd < text.length) sentence = sentence + '...';
+    }
+    
+    return sentence;
+};
+
 // Helper to find the matching paragraph or content in a post
-const getMatchingContent = (post: Post, term: string, language?: 'english' | 'arabic') => {
+// Returns an object with the matching content and paragraph number
+const getMatchingContent = (post: Post, term: string, language?: 'english' | 'arabic'): { content: string; paragraphNumber?: string } | null => {
     const title = (post.title || post.heading || '');
     if (language !== 'arabic' && checkTextMatch(title, term)) {
-        return post.paragraphs?.[0]?.translations?.[0]?.text || post.translations?.[0]?.text || title;
+        const text = post.paragraphs?.[0]?.translations?.[0]?.text || post.translations?.[0]?.text || title;
+        const matchingSentence = extractMatchingSentence(text, term);
+        return { content: matchingSentence || text, paragraphNumber: undefined };
     }
 
     // Check Paragraphs
@@ -55,7 +123,9 @@ const getMatchingContent = (post: Post, term: string, language?: 'english' | 'ar
             const matchAra = language !== 'english' && checkTextMatch(ara, term);
 
             if (matchEng || matchAra) {
-                return (language === 'arabic' ? ara : eng) || (language === 'english' ? eng : ara);
+                const fullText = (language === 'arabic' ? ara : eng) || (language === 'english' ? eng : ara);
+                const matchingSentence = extractMatchingSentence(fullText, term);
+                return { content: matchingSentence || fullText, paragraphNumber: p.number };
             }
         }
     }
@@ -64,7 +134,8 @@ const getMatchingContent = (post: Post, term: string, language?: 'english' | 'ar
     if (post.translations && language !== 'arabic') {
         for (const t of post.translations) {
             if (checkTextMatch(t.text, term)) {
-                return t.text;
+                const matchingSentence = extractMatchingSentence(t.text, term);
+                return { content: matchingSentence || t.text, paragraphNumber: undefined };
             }
         }
     }
@@ -147,8 +218,18 @@ export default function TermDetailsPage() {
                                 if (radisRes.data && radisRes.data.length > 0) {
                                     const item = radisRes.data[0];
                                     const t = term.toLowerCase().trim();
-                                    const match = (item.translation || '').toLowerCase().includes(t) || (item.arabic || '').toLowerCase().includes(t);
-                                    if (match) return { type: 'Radis', data: item, reference: refValue };
+                                    const matchEng = (item.translation || '').toLowerCase().includes(t);
+                                    const matchAra = (item.arabic || '').toLowerCase().includes(t);
+                                    if (matchEng || matchAra) {
+                                        const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
+                                        const matchingSentence = extractMatchingSentence(textToSearch, term);
+                                        return { 
+                                            type: 'Radis', 
+                                            data: item, 
+                                            reference: refValue,
+                                            matchingContent: matchingSentence || textToSearch
+                                        };
+                                    }
                                 }
                             } else {
                                 // Posts: "1.94.2" -> Query Sermon "1.94"
@@ -179,13 +260,30 @@ export default function TermDetailsPage() {
                                                 const ara = targetPara.arabic || '';
 
                                                 if (checkTextMatch(eng, term) || checkTextMatch(ara, term)) {
-                                                    return { type: 'Post', data: matchedPost, reference: refValue, sourceType: matchedPost.type as any };
+                                                    const textToSearch = detectedLanguage === 'arabic' ? ara : eng;
+                                                    const matchingSentence = extractMatchingSentence(textToSearch, term);
+                                                    return { 
+                                                        type: 'Post', 
+                                                        data: matchedPost, 
+                                                        reference: refValue, 
+                                                        sourceType: matchedPost.type as any,
+                                                        matchingParagraphNumber: targetPara.number,
+                                                        matchingContent: matchingSentence || textToSearch
+                                                    };
                                                 }
                                             }
                                         } else {
                                             // Whole Post Ref
-                                            if (getMatchingContent(matchedPost, term)) {
-                                                return { type: 'Post', data: matchedPost, reference: refValue, sourceType: matchedPost.type as any };
+                                            const matchResult = getMatchingContent(matchedPost, term, detectedLanguage);
+                                            if (matchResult) {
+                                                return { 
+                                                    type: 'Post', 
+                                                    data: matchedPost, 
+                                                    reference: refValue, 
+                                                    sourceType: matchedPost.type as any,
+                                                    matchingParagraphNumber: matchResult.paragraphNumber,
+                                                    matchingContent: matchResult.content
+                                                };
                                             }
                                         }
                                     }
@@ -279,57 +377,114 @@ export default function TermDetailsPage() {
 }
 
 function ContentCard({ item, term, language }: { item: CombinedResult; term: string; language?: 'english' | 'arabic' }) {
-    const { type, data, sourceType } = item;
+    const router = useRouter();
+    const { type, data, sourceType, matchingContent, matchingParagraphNumber } = item;
+
+    // Helper to generate navigation URL
+    const getNavigationUrl = (): string | null => {
+        if (type === 'Post') {
+            const post = data as Post;
+            const contentTypeMap: Record<string, string> = {
+                'Oration': 'orations',
+                'Letter': 'letters',
+                'Saying': 'sayings'
+            };
+            const contentType = contentTypeMap[post.type] || 'orations';
+            
+            // Build URL with highlight parameters
+            const params = new URLSearchParams();
+            
+            // Use the matching paragraph number if available, otherwise use sermon number
+            const highlightRef = matchingParagraphNumber || post.sermonNumber;
+            if (highlightRef) {
+                params.set('highlightRef', highlightRef);
+            }
+            
+            // Always set the word parameter for highlighting
+            // Check if term is Arabic or English
+            const isArabicTerm = /[\u0600-\u06FF]/.test(term);
+            if (isArabicTerm) {
+                params.set('arabicWord', term);
+            } else {
+                params.set('word', term);
+            }
+            
+            const queryString = params.toString();
+            return `/${contentType}/details/${post.id}${queryString ? `?${queryString}` : ''}`;
+        }
+        
+        if (type === 'Radis') {
+            const radis = data as RadisIntroduction;
+            return `/radis?highlightRef=0.${radis.number}`;
+        }
+        
+        return null;
+    };
+
+    const handleCardClick = () => {
+        const url = getNavigationUrl();
+        if (url) {
+            router.push(url);
+        }
+    };
 
     if (type === 'Post') {
         const post = data as Post;
-        const defaultText = language === 'arabic'
-            ? (post.paragraphs?.[0]?.arabic || post.paragraphs?.[0]?.translations?.[0]?.text)
-            : (post.paragraphs?.[0]?.translations?.[0]?.text || post.paragraphs?.[0]?.arabic);
-
-        const mainContent = getMatchingContent(post, term, language) || defaultText || 'No content available';
+        
+        // Use the pre-extracted matching content, or fallback to default
+        const displayContent = matchingContent || 'No content available';
 
         // Filter title/heading based on language
         let displayTitle = post.title || post.heading || `Oration ${post.sermonNumber}`;
         const isArabicTitle = /[\u0600-\u06FF]/.test(displayTitle);
 
         if (language === 'english' && isArabicTitle) {
-            // If English is requested but title is Arabic, try to fallback to something else or just show "Oration #..."
-            // Usually 'title' might be "Sermon 26" while 'heading' is Arabic.
-            // If displayTitle (which prioritizes title) is Arabic, check if there's an alternative.
             if (post.title && !/[\u0600-\u06FF]/.test(post.title)) {
                 displayTitle = post.title;
             } else {
-                // Determine type label
                 const typeLabel = post.type === 'Oration' ? 'Sermon' : post.type;
                 displayTitle = `${typeLabel} ${post.sermonNumber}`;
             }
         } else if (language === 'arabic' && !isArabicTitle) {
-            // Keep as is? Or try to find Arabic heading
             if (post.heading && /[\u0600-\u06FF]/.test(post.heading)) {
                 displayTitle = post.heading;
             }
         }
 
         return (
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow relative group">
+            <div 
+                className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md hover:border-[#43896B] transition-all cursor-pointer relative group"
+                onClick={handleCardClick}
+            >
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                         <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">
                             {post.type}
                         </span>
                         <span className="text-gray-500 text-sm font-medium">#{post.sermonNumber}</span>
+                        {matchingParagraphNumber && (
+                            <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
+                                Para: {matchingParagraphNumber}
+                            </span>
+                        )}
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors">
+                        <ArrowRight className="w-4 h-4" />
                     </div>
                 </div>
 
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{displayTitle}</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#43896B] transition-colors">{displayTitle}</h3>
 
                 <div className="space-y-4">
                     <div className="text-gray-700 leading-relaxed">
-                        <div className="line-clamp-4">
-                            <HighlightText text={mainContent} term={term} />
-                        </div>
+                        <HighlightText text={displayContent} term={term} />
                     </div>
+                </div>
+                
+                <div className="mt-4 pt-3 border-t border-gray-100">
+                    <span className="text-sm text-[#43896B] font-medium group-hover:underline">
+                        View full {post.type.toLowerCase()} →
+                    </span>
                 </div>
             </div>
         );
@@ -375,6 +530,9 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
 
     if (type === 'Radis') {
         const radis = data as RadisIntroduction;
+        
+        // Use the pre-extracted matching content
+        const displayContent = matchingContent || (language === 'arabic' ? radis.arabic : radis.translation) || '';
 
         // Language filter logic
         const showEng = language !== 'arabic' && radis.translation;
@@ -383,7 +541,10 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
         if (!showEng && !showAra) return null;
 
         return (
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow relative">
+            <div 
+                className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md hover:border-[#43896B] transition-all cursor-pointer relative group"
+                onClick={handleCardClick}
+            >
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                         <span className="bg-purple-50 text-purple-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">
@@ -391,19 +552,19 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
                         </span>
                         <span className="text-gray-500 text-sm font-medium">#{radis.number}</span>
                     </div>
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors">
+                        <ArrowRight className="w-4 h-4" />
+                    </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                    {showAra && (
-                        <div className="text-right" dir="rtl">
-                            <HighlightText text={radis.arabic} term={term} />
-                        </div>
-                    )}
-                    {showEng && (
-                        <div>
-                            <HighlightText text={radis.translation} term={term} />
-                        </div>
-                    )}
+                <div className="text-gray-700 leading-relaxed">
+                    <HighlightText text={displayContent} term={term} />
+                </div>
+                
+                <div className="mt-4 pt-3 border-t border-gray-100">
+                    <span className="text-sm text-[#43896B] font-medium group-hover:underline">
+                        View full introduction →
+                    </span>
                 </div>
             </div>
         );
