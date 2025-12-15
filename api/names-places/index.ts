@@ -1,6 +1,6 @@
 import api from '../api';
 
-export interface TextNumber {
+export interface NamePlaceTextNumber  {
   id: number;
   value: string;
 }
@@ -14,7 +14,7 @@ export interface NamePlace {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  text_numbers: TextNumber[];
+  text_numbers: NamePlaceTextNumber [];
 }
 
 export interface NamePlacesApiResponse {

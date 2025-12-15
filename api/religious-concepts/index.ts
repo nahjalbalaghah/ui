@@ -1,6 +1,6 @@
 import api from '../api';
 
-export interface TextNumber {
+export interface ReligiousConceptTextNumber {
   id: number;
   value: string;
 }
@@ -14,7 +14,7 @@ export interface ReligiousConcept {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  text_numbers: TextNumber[];
+  text_numbers: ReligiousConceptTextNumber[];
 }
 
 export interface ReligiousConceptsApiResponse {

@@ -1,6 +1,6 @@
 import api from '../api';
 
-export interface TextNumber {
+export interface QuranHadithTextNumber {
   id: number;
   value: string;
 }
@@ -16,7 +16,7 @@ export interface QuranHadith {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  text_numbers: TextNumber[];
+  text_numbers: QuranHadithTextNumber[];
 }
 
 export interface QuranHadithApiResponse {
