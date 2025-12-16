@@ -18,7 +18,6 @@ export default function IndexTermsContent() {
 
   const page = parseInt(searchParams.get('page') || '1');
   const appliedFilters: IndexTermsFilters = {
-    section: searchParams.get('section') || '',
     word_english: searchParams.get('word_english') || '',
     word_arabic: searchParams.get('word_arabic') || '',
     startsWith_english: searchParams.get('startsWith_english') || '',
@@ -31,14 +30,12 @@ export default function IndexTermsContent() {
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  const [sections, setSections] = useState<string[]>([]);
 
   const [filters, setFilters] = useState<IndexTermsFilters>(appliedFilters);
 
   // Sync filters with URL params when they change (e.g. back button)
   useEffect(() => {
     setFilters({
-      section: searchParams.get('section') || '',
       word_english: searchParams.get('word_english') || '',
       word_arabic: searchParams.get('word_arabic') || '',
       startsWith_english: searchParams.get('startsWith_english') || '',
@@ -50,25 +47,12 @@ export default function IndexTermsContent() {
   const pageSize = 20;
 
   useEffect(() => {
-    const fetchSections = async () => {
-      try {
-        const sectionsData = await indexTermsApi.getSections();
-        setSections(sectionsData);
-      } catch (err) {
-        console.error('Error fetching sections:', err);
-      }
-    };
-    fetchSections();
-  }, []);
-
-  useEffect(() => {
     const fetchTerms = async () => {
       setLoading(true);
       setError(null);
 
       try {
         const filterParams: IndexTermsFilters = {};
-        if (appliedFilters.section) filterParams.section = appliedFilters.section;
         if (appliedFilters.word_english) filterParams.word_english = appliedFilters.word_english;
         if (appliedFilters.word_arabic) filterParams.word_arabic = appliedFilters.word_arabic;
         if (appliedFilters.startsWith_english) filterParams.startsWith_english = appliedFilters.startsWith_english;
@@ -88,12 +72,11 @@ export default function IndexTermsContent() {
     };
 
     fetchTerms();
-  }, [page, appliedFilters.section, appliedFilters.word_english, appliedFilters.word_arabic, appliedFilters.startsWith_english, appliedFilters.startsWith_arabic, appliedFilters.language]);
+  }, [page, appliedFilters.word_english, appliedFilters.word_arabic, appliedFilters.startsWith_english, appliedFilters.startsWith_arabic, appliedFilters.language]);
 
   const handleApplyFilters = (newFilters?: IndexTermsFilters) => {
     const filtersToUse = newFilters || filters;
     const params = new URLSearchParams();
-    if (filtersToUse.section) params.set('section', filtersToUse.section);
     if (filtersToUse.word_english) params.set('word_english', filtersToUse.word_english);
     if (filtersToUse.word_arabic) params.set('word_arabic', filtersToUse.word_arabic);
     if (filtersToUse.startsWith_english) params.set('startsWith_english', filtersToUse.startsWith_english);
@@ -106,7 +89,6 @@ export default function IndexTermsContent() {
 
   const handleClearFilters = () => {
     setFilters({
-      section: '',
       word_english: '',
       word_arabic: '',
       startsWith_english: '',
@@ -123,7 +105,7 @@ export default function IndexTermsContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const hasActiveFilters = appliedFilters.section || appliedFilters.word_english || appliedFilters.word_arabic || appliedFilters.startsWith_english || appliedFilters.startsWith_arabic || appliedFilters.language !== 'English';
+  const hasActiveFilters = appliedFilters.word_english || appliedFilters.word_arabic || appliedFilters.startsWith_english || appliedFilters.startsWith_arabic || appliedFilters.language !== 'English';
 
   const handleLetterSelect = (letter: string) => {
     const updatedFilters = { ...filters };
@@ -163,7 +145,7 @@ export default function IndexTermsContent() {
           </div>
 
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-medium text-sm text-gray-700 mb-1">Language</label>
               <Select
@@ -176,32 +158,23 @@ export default function IndexTermsContent() {
                 placeholder="Select Language"
               />
             </div>
-            <div>
-              <label className="block font-medium text-sm text-gray-700 mb-1">Section</label>
-              <Select
-                value={filters.section}
-                onChange={(value) => setFilters({ ...filters, section: value })}
-                options={[
-                  { value: '', label: 'All Sections' },
-                  ...sections.map(section => ({ value: section, label: section }))
-                ]}
-                placeholder="Select a section"
+            {filters.language === 'English' ? (
+              <Input
+                label="English Word"
+                placeholder="Search English word..."
+                value={filters.word_english}
+                onChange={(e) => setFilters({ ...filters, word_english: e.target.value })}
               />
-            </div>
-            <Input
-              label="English Word"
-              placeholder="Search English word..."
-              value={filters.word_english}
-              onChange={(e) => setFilters({ ...filters, word_english: e.target.value })}
-            />
-            <Input
-              label="Arabic Word"
-              placeholder="Search Arabic word..."
-              value={filters.word_arabic}
-              onChange={(e) => setFilters({ ...filters, word_arabic: e.target.value })}
-              className="text-right"
-              dir="rtl"
-            />
+            ) : (
+              <Input
+                label="Arabic Word"
+                placeholder="Search Arabic word..."
+                value={filters.word_arabic}
+                onChange={(e) => setFilters({ ...filters, word_arabic: e.target.value })}
+                className="text-right"
+                dir="rtl"
+              />
+            )}
           </div>
           <div className="mt-4 flex justify-end">
             <Button
