@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useMemo } from 'react';
 import ContentDetailsPage from '@/app/components/content/content-details-page';
 import { orationsApi } from '@/api/posts';
