@@ -1,8 +1,18 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getCategoryBySlug } from '@/app/data/indexes';
+import { getCategoryBySlug, indexCategories } from '@/app/data/indexes';
 import IndexListing from '@/app/components/index-listing';
+
+// Generate static params for all index categories at build time
+export async function generateStaticParams() {
+  return indexCategories.map((category) => ({
+    slug: category.slug,
+  }));
+}
+
+// Disable dynamic params - only pre-rendered pages will be served
+export const dynamicParams = false;
 
 interface PageProps {
   params: Promise<{

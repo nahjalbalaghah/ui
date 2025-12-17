@@ -19,10 +19,60 @@ export interface ManuscriptFile {
   updatedAt: string;
 }
 
+// Library Item interface (individual manuscript details)
+export interface LibraryItem {
+  id: number;
+  documentId: string;
+  Sigla: string;
+  libraryRef: string;
+  City: string;
+  Country: string;
+  Date: string;
+  catalogNumber: string;
+  Completeness: string;
+  Scribe: string;
+  dimensions: string | null;
+  originCity: string | null;
+  Features: string;
+  PermanentLink: string | null;
+  Sequence: string;
+  Format: string;
+  AdditionalInfo: string | null;
+  MoreInformation: string | null;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+// Library interface (collection/group of manuscripts)
+export interface Library {
+  id: number;
+  documentId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  library_items: LibraryItem[];
+  manuscript: any | null;
+}
+
+export interface LibrariesApiResponse {
+  data: Library[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
 export interface Manuscript {
   id: number;
   documentId: string;
   section: string;
+  library?: string;
   title?: string;
   description?: string;
   bookName?: string;
@@ -178,4 +228,139 @@ export function getManuscriptImageUrl(url: string, baseUrl = 'https://test-admin
     return url;
   }
   return `${baseUrl}${url}`;
+}
+
+/**
+ * Libraries API - for fetching manuscript collection names and details
+ */
+export const librariesApi = {
+  /**
+   * Get all libraries (manuscript names) with populated items
+   */
+  async getAllLibraries(page = 1, pageSize = 25): Promise<LibrariesApiResponse> {
+    try {
+      const response = await api.get('/api/libraries', {
+        params: {
+          'populate': '*',
+          'pagination[page]': page,
+          'pagination[pageSize]': pageSize,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching libraries:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get a specific library by name
+   * @param name - The library name (e.g., "Mar'ashi MS 3827")
+   */
+  async getLibraryByName(name: string): Promise<LibrariesApiResponse> {
+    try {
+      const response = await api.get('/api/libraries', {
+        params: {
+          'filters[name][$eq]': name,
+          'populate': '*',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching library by name ${name}:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get a specific library by ID
+   */
+  async getLibraryById(id: string): Promise<Library | null> {
+    try {
+      const response = await api.get(`/api/libraries/${id}`, {
+        params: {
+          'populate': '*',
+        },
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error(`Error fetching library ${id}:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Search libraries by partial name match
+   * @param searchTerm - Search term to match against library names
+   */
+  async searchLibraries(searchTerm: string, page = 1, pageSize = 25): Promise<LibrariesApiResponse> {
+    try {
+      const response = await api.get('/api/libraries', {
+        params: {
+          'filters[name][$containsi]': searchTerm,
+          'populate': '*',
+          'pagination[page]': page,
+          'pagination[pageSize]': pageSize,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error searching libraries for "${searchTerm}":`, error);
+      throw error;
+    }
+  },
+};
+
+/**
+ * Helper function to convert LibraryItem to a format compatible with existing components
+ */
+export function convertLibraryItemToManuscriptDetails(library: Library, item?: LibraryItem) {
+  const libraryItem = item || library.library_items[0];
+  
+  if (!libraryItem) {
+    return {
+      id: library.documentId,
+      name: library.name,
+      siglaEnglish: '',
+      siglaArabic: '',
+      library: '',
+      city: '',
+      country: '',
+      date: '',
+      catalogNumber: '',
+      completeness: '',
+      scribe: '',
+      dimensions: '',
+      originCity: '',
+      features: '',
+      permanentLink: '',
+      orationSequence: '',
+      format: '',
+      additionalInfo: '',
+    };
+  }
+
+  // Extract sigla - format is "M/م" -> siglaEnglish: "M", siglaArabic: "م"
+  const siglaParts = libraryItem.Sigla?.split('/') || ['', ''];
+  
+  return {
+    id: library.documentId,
+    name: library.name,
+    siglaEnglish: siglaParts[0]?.trim() || '',
+    siglaArabic: siglaParts[1]?.trim() || '',
+    library: libraryItem.libraryRef || '',
+    city: libraryItem.City || '',
+    country: libraryItem.Country || '',
+    date: libraryItem.Date || '',
+    catalogNumber: libraryItem.catalogNumber || '',
+    completeness: libraryItem.Completeness || '',
+    scribe: libraryItem.Scribe || '',
+    dimensions: libraryItem.dimensions || '',
+    originCity: libraryItem.originCity || '',
+    features: libraryItem.Features || '',
+    permanentLink: libraryItem.PermanentLink || '',
+    orationSequence: libraryItem.Sequence || '',
+    format: libraryItem.Format || '',
+    additionalInfo: libraryItem.AdditionalInfo || '',
+  };
 }

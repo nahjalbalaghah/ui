@@ -1,12 +1,18 @@
-import {withSentryConfig} from "@sentry/nextjs";
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["images.unsplash.com", "images.stockcake.com"],
-  },
-   eslint: {
-    ignoreDuringBuilds: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.stockcake.com",
+      },
+    ],
   },
 };
 

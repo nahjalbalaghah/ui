@@ -39,9 +39,10 @@ const Select = ({
       const buttonRect = buttonRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const spaceBelow = windowHeight - buttonRect.bottom;
-      const dropdownHeight = options.length * 36;
+      // Use the actual max height of dropdown (240px) instead of calculated height
+      const dropdownMaxHeight = 240;
       
-      setOpenUpwards(spaceBelow < dropdownHeight + 8);
+      setOpenUpwards(spaceBelow < dropdownMaxHeight + 8);
     }
   }, [isOpen, options.length]);
 

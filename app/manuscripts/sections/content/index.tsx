@@ -1,63 +1,186 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Select from '@/app/components/select';
 import ManuscriptViewer from '@/app/components/manuscript-viewer';
 import ManuscriptMetadataDisplay from '@/app/components/manuscript-metadata';
-import { manuscriptsApi, Manuscript, getManuscriptImageUrl } from '@/api/manuscripts';
+import { 
+  manuscriptsApi, 
+  Manuscript, 
+  getManuscriptImageUrl,
+  librariesApi,
+  Library,
+  convertLibraryItemToManuscriptDetails
+} from '@/api/manuscripts';
+import { STATIC_MANUSCRIPTS } from '@/data/static-manuscripts';
 import { Loader2 } from 'lucide-react';
 
 const ManuscriptsContent = () => {
   const searchParams = useSearchParams();
   const sectionFromUrl = searchParams.get('section');
-  
-  const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
+
+  const [allManuscripts, setAllManuscripts] = useState<Manuscript[]>([]);
   const [selectedManuscript, setSelectedManuscript] = useState<Manuscript | null>(null);
+  const [libraries, setLibraries] = useState<Library[]>([]);
+  const [selectedLibrary, setSelectedLibrary] = useState<Library | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Filter manuscripts based on selected library
+  const filteredManuscripts = useMemo(() => {
+    if (!selectedLibrary || !allManuscripts.length) return [];
+    
+    // Check if the library name matches "marashi" (case-insensitive) or similar patterns
+    const libraryNameLower = selectedLibrary.name?.toLowerCase() || '';
+    const isMarashiLibrary = libraryNameLower.includes("mar'ashi") || 
+                            libraryNameLower.includes("marashi") ||
+                            libraryNameLower.includes("mar'ashi");
+    
+    // Filter manuscripts that belong to this library
+    // Manuscripts may have a library field, or we filter by known library names
+    return allManuscripts.filter(m => {
+      const manuscriptLibrary = m.library?.toLowerCase() || '';
+      
+      // If manuscript has a library field, match it
+      if (manuscriptLibrary) {
+        return libraryNameLower.includes(manuscriptLibrary) || 
+               manuscriptLibrary.includes(libraryNameLower.split(' ')[0]);
+      }
+      
+      // For marashi library, include all manuscripts (since that's the only one with data currently)
+      if (isMarashiLibrary) {
+        return true;
+      }
+      
+      return false;
+    });
+  }, [selectedLibrary, allManuscripts]);
+
   useEffect(() => {
-    const fetchManuscripts = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
         setError(null);
+
+        // Fetch libraries (manuscript collections) from API
+        const librariesResponse = await librariesApi.getAllLibraries(1, 100);
+        let defaultLibrary: Library | null = null;
         
+        if (librariesResponse.data && librariesResponse.data.length > 0) {
+          setLibraries(librariesResponse.data);
+          // Select first library with items, or first library
+          const libraryWithItems = librariesResponse.data.find(l => l.library_items.length > 0);
+          defaultLibrary = libraryWithItems || librariesResponse.data[0];
+          setSelectedLibrary(defaultLibrary);
+        }
+
+        // Fetch manuscripts (section-based images)
         let response;
         if (sectionFromUrl) {
           response = await manuscriptsApi.getManuscriptsBySection(sectionFromUrl);
         } else {
-          // Fetch all manscripts
           response = await manuscriptsApi.getAllManuscripts(1, 100);
         }
-        
+
         if (response.data && response.data.length > 0) {
-          setManuscripts(response.data);
-          setSelectedManuscript(response.data[0]);
-        } else {
-          setError('No manuscripts found.');
+          setAllManuscripts(response.data);
         }
       } catch (err) {
-        console.error('Error fetching manuscripts:', err);
+        console.error('Error fetching data:', err);
         setError('Failed to load manuscripts. Please try again later.');
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchManuscripts();
+    fetchData();
   }, [sectionFromUrl]);
 
+  // Update selected manuscript when filtered manuscripts change
+  useEffect(() => {
+    if (filteredManuscripts.length > 0) {
+      // Check if current selection is still valid
+      const isCurrentSelectionValid = selectedManuscript && 
+        filteredManuscripts.some(m => m.documentId === selectedManuscript.documentId);
+      
+      if (!isCurrentSelectionValid) {
+        setSelectedManuscript(filteredManuscripts[0]);
+      }
+    } else {
+      setSelectedManuscript(null);
+    }
+  }, [filteredManuscripts]);
+
+  // Handle library selection change
+  const handleLibraryChange = (value: string) => {
+    const library = libraries.find(l => l.documentId === value);
+    if (library) {
+      setSelectedLibrary(library);
+      // Reset selected manuscript - will be updated by useEffect
+      setSelectedManuscript(null);
+    }
+  };
+
+  // Handle manuscript/section selection change
   const handleManuscriptChange = (value: string) => {
-    const manuscript = manuscripts.find(m => m.documentId === value);
+    const manuscript = filteredManuscripts.find(m => m.documentId === value);
     if (manuscript) {
       setSelectedManuscript(manuscript);
     }
   };
 
-  const manuscriptOptions = manuscripts.map(m => ({
-    value: m.documentId,
-    label: m.bookName || `Manuscript - Section ${m.section}`
+  // Create library options from API data
+  const libraryOptions = libraries.map(lib => ({
+    value: lib.documentId,
+    label: lib.name
   }));
+
+  // Create manuscript options (sections) - use filtered manuscripts
+  const manuscriptOptions = filteredManuscripts.map(m => ({
+    value: m.documentId,
+    label: `Section ${m.section}`
+  }));
+
+  // Check if the selected library has manuscripts
+  const libraryHasManuscripts = filteredManuscripts.length > 0;
+
+  // Get current library details (either from API or fallback to static)
+  const getCurrentLibraryDetails = () => {
+    if (selectedLibrary && selectedLibrary.library_items.length > 0) {
+      return convertLibraryItemToManuscriptDetails(selectedLibrary);
+    }
+    // Fallback to static data based on selected library name
+    if (selectedLibrary?.name?.toLowerCase().includes("mar'ashi") || 
+        selectedLibrary?.name?.toLowerCase().includes("marashi")) {
+      return STATIC_MANUSCRIPTS.marashi;
+    }
+    if (selectedLibrary?.name?.toLowerCase().includes('shahrastan')) {
+      return STATIC_MANUSCRIPTS.shahrastani;
+    }
+    // Default fallback for libraries without items
+    return selectedLibrary ? {
+      id: selectedLibrary.documentId,
+      name: selectedLibrary.name,
+      siglaEnglish: '',
+      siglaArabic: '',
+      library: '',
+      city: '',
+      country: '',
+      date: '',
+      catalogNumber: '',
+      completeness: '',
+      scribe: '',
+      dimensions: '',
+      originCity: '',
+      features: '',
+      permanentLink: '',
+      orationSequence: '',
+      format: '',
+      additionalInfo: '',
+    } : STATIC_MANUSCRIPTS.marashi;
+  };
+
+  const currentLibraryDetails = getCurrentLibraryDetails();
 
   if (isLoading) {
     return (
@@ -89,18 +212,8 @@ const ManuscriptsContent = () => {
     );
   }
 
-  if (!selectedManuscript) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <p className="text-gray-600">No manuscript selected</p>
-        </div>
-      </div>
-    );
-  }
-
   // Convert manuscript files to pages format
-  const manuscriptPages = selectedManuscript.files?.map(file => getManuscriptImageUrl(file.url)) || [];
+  const manuscriptPages = selectedManuscript?.files?.map(file => getManuscriptImageUrl(file.url)) || [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -113,22 +226,39 @@ const ManuscriptsContent = () => {
           </div>
         </div>
       )}
-      
-      {manuscripts.length > 1 && (
+
+      {(allManuscripts.length > 0 || libraries.length > 0) && (
         <div className="mb-8">
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <label htmlFor="manuscript-select" className="text-lg font-semibold text-gray-800 flex-shrink-0">
-                Select Manuscript:
+              <label className="text-lg font-semibold text-gray-800 shrink-0">
+                Select:
               </label>
-              <div className="flex-1 max-w-xl">
-                <Select
-                  options={manuscriptOptions}
-                  value={selectedManuscript.documentId}
-                  onChange={handleManuscriptChange}
-                  placeholder="Choose a manuscript..."
-                  className="w-full"
-                />
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                {libraries.length > 0 && (
+                  <div className="w-full">
+                    <label htmlFor="library-select" className="sr-only">Select Library</label>
+                    <Select
+                      options={libraryOptions}
+                      value={selectedLibrary?.documentId || ''}
+                      onChange={handleLibraryChange}
+                      placeholder="Select a Library..."
+                      className="w-full"
+                    />
+                  </div>
+                )}
+                {libraryHasManuscripts && (
+                  <div className="w-full">
+                    <label htmlFor="manuscript-select" className="sr-only">Select Section</label>
+                    <Select
+                      options={manuscriptOptions}
+                      value={selectedManuscript?.documentId || ''}
+                    onChange={handleManuscriptChange}
+                    placeholder="Select a Section..."
+                    className="w-full"
+                  />
+                </div>
+                )}
               </div>
             </div>
           </div>
@@ -138,20 +268,20 @@ const ManuscriptsContent = () => {
       <div className="mb-8">
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-            {selectedManuscript.bookName || `Manuscript - Section ${selectedManuscript.section}`}
+            {`${currentLibraryDetails.name}${selectedManuscript?.section ? ` - Section ${selectedManuscript.section}` : sectionFromUrl ? ` - Section ${sectionFromUrl}` : ''}`}
           </h2>
           <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-600">
-            {selectedManuscript.gregorianYear && (
+            {(selectedManuscript?.gregorianYear || currentLibraryDetails.date) && (
               <>
                 <span className="flex items-center gap-1">
-                  <span className="font-semibold">Date:</span> {selectedManuscript.gregorianYear} CE
+                  <span className="font-semibold">Date:</span> {selectedManuscript?.gregorianYear || currentLibraryDetails.date}
                 </span>
                 <span>•</span>
               </>
             )}
-            {selectedManuscript.city && selectedManuscript.country && (
+            {(selectedManuscript?.city || currentLibraryDetails.city) && (selectedManuscript?.country || currentLibraryDetails.country) && (
               <span className="flex items-center gap-1">
-                <span className="font-semibold">Location:</span> {selectedManuscript.city}, {selectedManuscript.country}
+                <span className="font-semibold">Location:</span> {selectedManuscript?.city || currentLibraryDetails.city}, {selectedManuscript?.country || currentLibraryDetails.country}
               </span>
             )}
           </div>
@@ -160,7 +290,19 @@ const ManuscriptsContent = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          {manuscriptPages.length > 0 ? (
+          {!libraryHasManuscripts ? (
+            <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
+              <div className="mb-4">
+                <svg className="w-16 h-16 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">Manuscript Images Coming Soon</h3>
+              <p className="text-gray-500 max-w-md">
+                Manuscript images for <span className="font-medium">{selectedLibrary?.name || 'this library'}</span> are currently being digitized and will be available soon.
+              </p>
+            </div>
+          ) : selectedManuscript && manuscriptPages.length > 0 ? (
             <ManuscriptViewer
               pages={manuscriptPages}
               bookName={selectedManuscript.bookName || ''}
@@ -175,119 +317,115 @@ const ManuscriptsContent = () => {
           <div className="sticky top-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Manuscript Details</h3>
-              <div className="space-y-3 text-sm">
-                {selectedManuscript.section && (
+
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-sm font-medium text-gray-500">Current Library:</span>
+                <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold">
+                  {currentLibraryDetails.name}
+                </span>
+              </div>
+
+              <div className="space-y-4 text-sm">
+                {(currentLibraryDetails.siglaEnglish || currentLibraryDetails.siglaArabic) && (
                   <div>
-                    <span className="font-semibold text-gray-700">Section:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.section}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Sigla</span>
+                    <div className="flex gap-4">
+                      {currentLibraryDetails.siglaEnglish && <span>{currentLibraryDetails.siglaEnglish}</span>}
+                      {currentLibraryDetails.siglaArabic && <span className="font-taha" dir="rtl">{currentLibraryDetails.siglaArabic}</span>}
+                    </div>
                   </div>
                 )}
-                {selectedManuscript.bookName && (
+
+                {currentLibraryDetails.library && (
                   <div>
-                    <span className="font-semibold text-gray-700">Book Name:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.bookName}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Library</span>
+                    <span className="text-gray-600">{currentLibraryDetails.library}</span>
                   </div>
                 )}
-                {selectedManuscript.siglaEnglish && (
+
+                <div className="grid grid-cols-2 gap-4">
+                  {currentLibraryDetails.city && (
+                    <div>
+                      <span className="font-semibold text-gray-800 block mb-1">City</span>
+                      <span className="text-gray-600">{currentLibraryDetails.city}</span>
+                    </div>
+                  )}
+                  {currentLibraryDetails.country && (
+                    <div>
+                      <span className="font-semibold text-gray-800 block mb-1">Country</span>
+                      <span className="text-gray-600">{currentLibraryDetails.country}</span>
+                    </div>
+                  )}
+                </div>
+
+                {currentLibraryDetails.date && (
                   <div>
-                    <span className="font-semibold text-gray-700">Sigla (English):</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.siglaEnglish}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Date (Hijri/Gregorian)</span>
+                    <span className="text-gray-600">{currentLibraryDetails.date}</span>
                   </div>
                 )}
-                {selectedManuscript.siglaArabic && (
+
+                {currentLibraryDetails.catalogNumber && (
                   <div>
-                    <span className="font-semibold text-gray-700">Sigla (Arabic):</span>
-                    <span className="ml-2 text-gray-600 font-taha" dir="rtl">{selectedManuscript.siglaArabic}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Catalog no.</span>
+                    <span className="text-gray-600">{currentLibraryDetails.catalogNumber}</span>
                   </div>
                 )}
-                {selectedManuscript.hijriYear && (
+
+                {currentLibraryDetails.completeness && (
                   <div>
-                    <span className="font-semibold text-gray-700">Hijri Year:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.hijriYear}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Completeness</span>
+                    <p className="text-gray-600 leading-relaxed text-xs">
+                      {currentLibraryDetails.completeness}
+                    </p>
                   </div>
                 )}
-                {selectedManuscript.gregorianYear && (
+
+                {currentLibraryDetails.scribe && currentLibraryDetails.scribe !== 'n/a' && (
                   <div>
-                    <span className="font-semibold text-gray-700">Gregorian Year:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.gregorianYear}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Scribe</span>
+                    <span className="text-gray-600">{currentLibraryDetails.scribe}</span>
                   </div>
                 )}
-                {selectedManuscript.holdingInstitution && (
+
+                {currentLibraryDetails.features && (
                   <div>
-                    <span className="font-semibold text-gray-700">Institution:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.holdingInstitution}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Features</span>
+                    <span className="text-gray-600">{currentLibraryDetails.features}</span>
                   </div>
                 )}
-                {selectedManuscript.country && (
+
+                {currentLibraryDetails.permanentLink && (
                   <div>
-                    <span className="font-semibold text-gray-700">Country:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.country}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Permanent Link</span>
+                    <a href="#" className="text-[#43896B] hover:underline">
+                      {currentLibraryDetails.permanentLink === 'create link' ? 'Link' : currentLibraryDetails.permanentLink}
+                    </a>
                   </div>
                 )}
-                {selectedManuscript.city && (
+
+                {currentLibraryDetails.orationSequence && (
                   <div>
-                    <span className="font-semibold text-gray-700">City:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.city}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Oration Sequence</span>
+                    <span className="text-gray-600">{currentLibraryDetails.orationSequence}</span>
                   </div>
                 )}
-                {selectedManuscript.catalogNumber && (
+
+                {currentLibraryDetails.format && (
                   <div>
-                    <span className="font-semibold text-gray-700">Catalog Number:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.catalogNumber}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Format</span>
+                    <p className="text-gray-600 text-xs">
+                      {currentLibraryDetails.format}
+                    </p>
                   </div>
                 )}
-                {selectedManuscript.specialMerit && (
+
+                {currentLibraryDetails.additionalInfo && (
                   <div>
-                    <span className="font-semibold text-gray-700">Special Merit:</span>
-                    <p className="mt-1 text-gray-600">{selectedManuscript.specialMerit}</p>
-                  </div>
-                )}
-                {selectedManuscript.rights && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Rights:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.rights}</span>
-                  </div>
-                )}
-                {selectedManuscript.binding && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Binding:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.binding}</span>
-                  </div>
-                )}
-                {selectedManuscript.acknowledgments && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Acknowledgments:</span>
-                    <p className="mt-1 text-gray-600">{selectedManuscript.acknowledgments}</p>
-                  </div>
-                )}
-                {selectedManuscript.accessRestriction && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Access:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.accessRestriction}</span>
-                  </div>
-                )}
-                {selectedManuscript.repository && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Repository:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.repository}</span>
-                  </div>
-                )}
-                {selectedManuscript.partLocation && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Part Location:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.partLocation}</span>
-                  </div>
-                )}
-                {selectedManuscript.cityOfOrigin && (
-                  <div>
-                    <span className="font-semibold text-gray-700">City of Origin:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.cityOfOrigin}</span>
-                  </div>
-                )}
-                {selectedManuscript.countryOfOrigin && (
-                  <div>
-                    <span className="font-semibold text-gray-700">Country of Origin:</span>
-                    <span className="ml-2 text-gray-600">{selectedManuscript.countryOfOrigin}</span>
+                    <span className="font-semibold text-gray-800 block mb-1">Additional Info</span>
+                    <p className="text-gray-600 text-xs italic">
+                      {currentLibraryDetails.additionalInfo}
+                    </p>
                   </div>
                 )}
               </div>

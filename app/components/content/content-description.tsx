@@ -30,18 +30,44 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
       
       // Give DOM time to render and then scroll to it
       const timer = setTimeout(() => {
-        const element = document.querySelector(`[data-text-ref="${highlightRef}"]`);
+        // Try exact match first
+        let element = document.querySelector(`[data-text-ref="${highlightRef}"]`);
+        
+        // If no exact match, try to find a partial match (paragraph that contains this ref)
+        if (!element) {
+          // Try matching with sermon number prefix
+          const allTextRefElements = document.querySelectorAll('[data-text-ref]');
+          for (const el of allTextRefElements) {
+            const refValue = el.getAttribute('data-text-ref');
+            if (refValue && (refValue === highlightRef || refValue.startsWith(highlightRef + '.') || highlightRef.startsWith(refValue + '.'))) {
+              element = el;
+              break;
+            }
+          }
+        }
         
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
           
+          // Add highlight class
+          element.classList.add('highlight-text-ref');
+          
           // If we have a word to highlight, do that too
-          if (englishWord) {
-            // Find the English text container within this element
-            // Look for the paragraph with font-brill class which contains the English text
-            const englishTextElement = element.querySelector('.font-brill');
-            if (englishTextElement) {
-              highlightWordInParagraph(englishTextElement, englishWord);
+          const wordToHighlight = englishWord || arabicWord;
+          if (wordToHighlight) {
+            // Find the text container within this element
+            // Look for the paragraph with font-brill class (English) or font-taha class (Arabic)
+            const textElement = englishWord 
+              ? element.querySelector('.font-brill') 
+              : element.querySelector('.font-taha');
+            if (textElement) {
+              highlightWordInParagraph(textElement, wordToHighlight);
+            } else {
+              // Try to find any text container
+              const anyTextElement = element.querySelector('p');
+              if (anyTextElement) {
+                highlightWordInParagraph(anyTextElement, wordToHighlight);
+              }
             }
           }
         }
@@ -49,7 +75,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
 
       return () => clearTimeout(timer);
     }
-  }, [highlightRef, englishWord]);
+  }, [highlightRef, englishWord, arabicWord]);
 
   // Function to highlight a word within a specific paragraph
   const highlightWordInParagraph = (paragraphDiv: Element, word: string) => {

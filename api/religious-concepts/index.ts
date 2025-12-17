@@ -1,11 +1,11 @@
 import api from '../api';
 
-export interface TextNumber {
+export interface ReligiousConceptTextNumber {
   id: number;
   value: string;
 }
 
-export interface IndexTerm {
+export interface ReligiousConcept {
   id: number;
   documentId: string;
   section: string;
@@ -14,11 +14,11 @@ export interface IndexTerm {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  text_numbers: TextNumber[];
+  text_numbers: ReligiousConceptTextNumber[];
 }
 
-export interface IndexTermsApiResponse {
-  data: IndexTerm[];
+export interface ReligiousConceptsApiResponse {
+  data: ReligiousConcept[];
   meta: {
     pagination: {
       page: number;
@@ -29,7 +29,7 @@ export interface IndexTermsApiResponse {
   };
 }
 
-export interface IndexTermsFilters {
+export interface ReligiousConceptsFilters {
   section?: string;
   word_english?: string;
   word_arabic?: string;
@@ -38,12 +38,12 @@ export interface IndexTermsFilters {
   language?: 'English' | 'Arabic';
 }
 
-export const indexTermsApi = {
-  async getIndexTerms(
+export const religiousConceptsApi = {
+  async getReligiousConcepts(
     page = 1,
     pageSize = 20,
-    filters?: IndexTermsFilters
-  ): Promise<IndexTermsApiResponse> {
+    filters?: ReligiousConceptsFilters
+  ): Promise<ReligiousConceptsApiResponse> {
     try {
       const params: Record<string, any> = {
         'populate': '*',
@@ -76,38 +76,38 @@ export const indexTermsApi = {
         params['filters[word_arabic][$ne]'] = '';
       }
 
-      const response = await api.get('/api/index-terms', {
+      const response = await api.get('/api/religious-and-ethical-concepts', {
         params,
       });
 
       return response.data;
     } catch (error) {
-      console.error('Error fetching index terms:', error);
+      console.error('Error fetching religious concepts:', error);
       throw error;
     }
   },
 
-  async getIndexTermById(id: string): Promise<{ data: IndexTerm }> {
+  async getReligiousConceptById(id: string): Promise<{ data: ReligiousConcept }> {
     try {
-      const response = await api.get(`/api/index-terms/${id}`, {
+      const response = await api.get(`/api/religious-and-ethical-concepts/${id}`, {
         params: {
           'populate': '*',
         },
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching index term:', error);
+      console.error('Error fetching religious concept:', error);
       throw error;
     }
   },
 
   async getSections(): Promise<string[]> {
     try {
-      const response = await this.getIndexTerms(1, 100);
+      const response = await this.getReligiousConcepts(1, 100);
       const sections = new Set<string>();
-      response.data.forEach((term) => {
-        if (term.section) {
-          sections.add(term.section);
+      response.data.forEach((item) => {
+        if (item.section) {
+          sections.add(item.section);
         }
       });
       return Array.from(sections).sort();

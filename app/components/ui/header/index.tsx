@@ -59,10 +59,9 @@ const Header = () => {
 
   return (
     <header className="relative">
-      <div className={`sticky top-0 z-50 border-b border-gray-200 ${
-          isScrolled 
-            ? 'bg-white/95 backdrop-blur-xl' 
-            : 'bg-white'
+      <div className={`sticky top-0 z-50 border-b border-gray-200 ${isScrolled
+          ? 'bg-white/95 backdrop-blur-xl'
+          : 'bg-white'
         }`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-20">
@@ -115,7 +114,7 @@ const Header = () => {
             </nav>
             <div className="flex items-center gap-3">
               <div className='hidden lg:block'>
-               <Input placeholder='Search sermons...' icon={<Search size={16} />} />
+                <Input placeholder='Search sermons...' icon={<Search size={16} />} />
               </div>
               <button
                 className="lg:hidden p-2.5 rounded-xl border border-gray-200"
@@ -135,53 +134,53 @@ const Header = () => {
           </div>
         </div>
         {isMenuOpen && (
-            <div className="lg:hidden bg-gradient-to-b from-white to-gray-50 border-t border-gray-100 overflow-hidden">
-              <div className="max-w-7xl mx-auto px-4 py-6 space-y-3">
-                <div className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 mb-6 shadow-sm border border-gray-200">
-                  <Search className="w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search sermons, scholars..."
-                    className="bg-transparent outline-none text-sm flex-1 placeholder-gray-500"
-                  />
-                </div>
-                {menuItems.map((item, index) => (
-                  <div
-                    key={item.name}
-                    className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
-                  >
-                    {item.hasDropdown ? (
-                      <button
-                        className="flex items-center justify-between w-full text-left px-5 py-4"
-                        onClick={() => handleDropdownToggle(item.name)}
-                      >
+          <div className="lg:hidden bg-gradient-to-b from-white to-gray-50 border-t border-gray-100 overflow-hidden">
+            <div className="max-w-7xl mx-auto px-4 py-6 space-y-3">
+              <div className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 mb-6 shadow-sm border border-gray-200">
+                <Search className="w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search sermons, scholars..."
+                  className="bg-transparent outline-none text-sm flex-1 placeholder-gray-500"
+                />
+              </div>
+              {menuItems.map((item, index) => (
+                <div
+                  key={item.name}
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+                >
+                  {item.hasDropdown ? (
+                    <button
+                      className="flex items-center justify-between w-full text-left px-5 py-4"
+                      onClick={() => handleDropdownToggle(item.name)}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-gradient-to-br from-[#43896B]/10 to-[#E8B873]/10 rounded-xl flex items-center justify-center">
+                          <item.icon className="w-5 h-5 text-[#43896B]" />
+                        </div>
+                        <span className="font-semibold text-gray-800">{item.name}</span>
+                      </div>
+                      <div>
+                        <ChevronDown className="w-5 h-5 text-gray-500" />
+                      </div>
+                    </button>
+                  ) : (
+                    <Link href={item.href} onClick={closeMenu}>
+                      <div className="flex items-center justify-between w-full text-left px-5 py-4">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 bg-gradient-to-br from-[#43896B]/10 to-[#E8B873]/10 rounded-xl flex items-center justify-center">
                             <item.icon className="w-5 h-5 text-[#43896B]" />
                           </div>
                           <span className="font-semibold text-gray-800">{item.name}</span>
                         </div>
-                        <div>
-                          <ChevronDown className="w-5 h-5 text-gray-500" />
-                        </div>
-                      </button>
-                    ) : (
-                      <Link href={item.href} onClick={closeMenu}>
-                        <div className="flex items-center justify-between w-full text-left px-5 py-4">
-                          <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-gradient-to-br from-[#43896B]/10 to-[#E8B873]/10 rounded-xl flex items-center justify-center">
-                              <item.icon className="w-5 h-5 text-[#43896B]" />
-                            </div>
-                            <span className="font-semibold text-gray-800">{item.name}</span>
-                          </div>
-                        </div>
-                      </Link>
-                    )}
-                  </div>
-                ))}
-              </div>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+              ))}
             </div>
-          )}
+          </div>
+        )}
         {activeDropdown && (
           <div className="hidden lg:block fixed inset-0 z-40 bg-black/10 backdrop-blur-sm" onClick={closeDropdown} />
         )}

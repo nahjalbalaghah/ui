@@ -22,7 +22,7 @@ interface ContentPageProps {
 function ContentPageContent({ config }: ContentPageProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  
+
   const [searchTerm, setSearchTerm] = useState(() => searchParams.get('search') || '');
   const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || '');
   const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
@@ -53,27 +53,27 @@ function ContentPageContent({ config }: ContentPageProps) {
 
   const updateUrlParams = (page?: number, search?: string, sort?: string) => {
     const params = new URLSearchParams();
-    
+
     // Use current state if parameters not provided
     const currentSearch = search !== undefined ? search : searchTerm;
     const currentSort = sort !== undefined ? sort : sortBy;
     const currentPageNum = page !== undefined ? page : currentPage;
-    
+
     if (currentPageNum && currentPageNum !== 1) {
       params.set('page', currentPageNum.toString());
     }
-    
+
     if (currentSearch && currentSearch !== '') {
       params.set('search', currentSearch);
     }
-    
+
     if (currentSort && currentSort !== '') {
       params.set('sort', currentSort);
     }
-    
+
     const queryString = params.toString();
     const newUrl = queryString ? `/${config.contentType}?${queryString}` : `/${config.contentType}`;
-    
+
     // Use window.history.pushState to avoid unnecessary re-renders
     window.history.pushState(null, '', newUrl);
   };
@@ -84,33 +84,33 @@ function ContentPageContent({ config }: ContentPageProps) {
     }
 
     const query = searchQuery.toLowerCase().trim();
-    
+
     return posts.filter(post => {
       if (post.title?.toLowerCase().includes(query)) return true;
-      
+
       if (post.heading?.toLowerCase().includes(query)) return true;
-      
+
       if (post.translations && Array.isArray(post.translations)) {
-        const matchesTranslation = post.translations.some(trans => 
+        const matchesTranslation = post.translations.some(trans =>
           trans.text?.toLowerCase().includes(query)
         );
         if (matchesTranslation) return true;
       }
-      
+
       if (post.paragraphs && Array.isArray(post.paragraphs)) {
-        const matchesArabic = post.paragraphs.some(para => 
+        const matchesArabic = post.paragraphs.some(para =>
           para.arabic?.toLowerCase().includes(query)
         );
         if (matchesArabic) return true;
-        
-        const matchesParaTranslations = post.paragraphs.some(para => 
-          para.translations?.some(trans => 
+
+        const matchesParaTranslations = post.paragraphs.some(para =>
+          para.translations?.some(trans =>
             trans.text?.toLowerCase().includes(query)
           )
         );
         if (matchesParaTranslations) return true;
       }
-      
+
       return false;
     });
   };
@@ -128,23 +128,23 @@ function ContentPageContent({ config }: ContentPageProps) {
         setIsInfiniteLoading(true);
       }
       setError(null);
-      
+
       let response;
       let allData: Post[] = [];
-      
+
       if (sortBy && sortBy !== 'relevance' && !search) {
         const firstResponse = await config.api.getContent(1, 1000); // Large page size to get all
         if (!firstResponse || !firstResponse.data) {
           throw new Error('Invalid response format from API');
         }
         allData = firstResponse.data.filter(item => item.heading);
-        
+
         const getDisplayNumber = (sermonNumber: string | null) => {
           if (!sermonNumber) return 0;
           const parts = sermonNumber.split('.');
           return parseInt(parts.length > 1 ? parts[1] : parts[0], 10) || 0;
         };
-        
+
         allData.sort((a, b) => {
           switch (sortBy) {
             case 'sermon-asc':
@@ -155,41 +155,41 @@ function ContentPageContent({ config }: ContentPageProps) {
               return 0;
           }
         });
-        
+
         setAllContent(allData);
-        
+
         const pageSize = 15;
         const totalItems = allData.length;
         const totalPagesCalc = Math.ceil(totalItems / pageSize);
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         const paginatedData = allData.slice(startIndex, endIndex);
-        
+
         if (append) {
           setContent(prevContent => [...prevContent, ...paginatedData]);
         } else {
           setContent(paginatedData);
         }
-        
+
         setCurrentPage(page);
         setTotalPages(totalPagesCalc);
         setTotal(totalItems);
         setHasNextPage(page < totalPagesCalc);
-        
+
       } else if (search) {
         // Search mode: fetch all data and apply client-side filtering
         const allDataResponse = await config.api.getContent(1, 1000);
-        
+
         if (!allDataResponse || !allDataResponse.data) {
           throw new Error('Invalid response format from API');
         }
 
         // Filter items with heading first
         let filteredByHeading = allDataResponse.data.filter(item => item.heading);
-        
+
         // Apply client-side search filter (includes translations.text)
         let searchResults = clientSideSearchFilter(filteredByHeading, search);
-        
+
         // Sort if sortBy is active
         if (sortBy && sortBy !== 'relevance') {
           const getDisplayNumber = (sermonNumber: string | null) => {
@@ -197,7 +197,7 @@ function ContentPageContent({ config }: ContentPageProps) {
             const parts = sermonNumber.split('.');
             return parseInt(parts.length > 1 ? parts[1] : parts[0], 10) || 0;
           };
-          
+
           searchResults.sort((a, b) => {
             switch (sortBy) {
               case 'sermon-asc':
@@ -209,10 +209,10 @@ function ContentPageContent({ config }: ContentPageProps) {
             }
           });
         }
-        
+
         // Store all filtered results
         setAllContent(searchResults);
-        
+
         // Paginate results
         const pageSize = 15;
         const totalItems = searchResults.length;
@@ -220,18 +220,18 @@ function ContentPageContent({ config }: ContentPageProps) {
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         const paginatedData = searchResults.slice(startIndex, endIndex);
-        
+
         if (append) {
           setContent(prevContent => [...prevContent, ...paginatedData]);
         } else {
           setContent(paginatedData);
         }
-        
+
         setCurrentPage(page);
         setTotalPages(totalPagesCalc);
         setTotal(totalItems);
         setHasNextPage(page < totalPagesCalc);
-        
+
       } else {
         // Normal mode: server-side pagination
         response = await config.api.getContent(page, 15);
@@ -241,26 +241,26 @@ function ContentPageContent({ config }: ContentPageProps) {
         }
 
         let filteredData = response.data.filter(item => item.heading);
-        
+
         if (append) {
           setContent(prevContent => [...prevContent, ...filteredData]);
         } else {
           setContent(filteredData);
         }
-        
+
         setCurrentPage(page);
         setTotalPages(response.meta?.pagination?.pageCount || 1);
         setTotal(response.meta?.pagination?.total || filteredData.length);
         setHasNextPage(page < (response.meta?.pagination?.pageCount || 1));
       }
-      
+
       // Update URL after state updates
       if (updateUrl && !append) {
         updateUrlParams(page, search, sortBy);
       }
     } catch (err) {
       let errorMessage = 'An unexpected error occurred';
-      
+
       if (err instanceof Error) {
         if (err.message.includes('timeout')) {
           errorMessage = 'Request timeout. The server took too long to respond. Please try again.';
@@ -270,10 +270,10 @@ function ContentPageContent({ config }: ContentPageProps) {
           errorMessage = err.message;
         }
       }
-      
+
       setError(`Failed to load ${config.contentType}: ${errorMessage}`);
       console.error(`Error loading ${config.contentType}:`, err);
-      
+
       if (!append) {
         setContent([]);
       }
@@ -299,24 +299,24 @@ function ContentPageContent({ config }: ContentPageProps) {
     const page = searchParams.get('page');
     const search = searchParams.get('search');
     const sort = searchParams.get('sort');
-    
+
     const urlPage = page ? parseInt(page, 10) : 1;
     const urlSearch = search || '';
     const urlSort = sort || '';
-    
+
     // Check if URL params differ from current state
-    const stateChanged = 
-      urlPage !== currentPage || 
-      urlSearch !== searchTerm || 
+    const stateChanged =
+      urlPage !== currentPage ||
+      urlSearch !== searchTerm ||
       urlSort !== sortBy;
-    
+
     if (isInitialized && stateChanged) {
       // User navigated back/forward, restore state from URL
       setIsRestoringState(true);
       setSearchTerm(urlSearch);
       setSortBy(urlSort);
       setCurrentPage(urlPage);
-      
+
       // Load content with URL parameters
       loadContent(urlPage, urlSearch, false, false).finally(() => {
         setIsRestoringState(false);
@@ -330,28 +330,22 @@ function ContentPageContent({ config }: ContentPageProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  // Handle search term changes (with debounce)
-  useEffect(() => {
-    if (!isInitialized || isRestoringState) return;
-    
-    const timeoutId = setTimeout(() => {
-      setCurrentPage(1);
-      loadContent(1, searchTerm, true, false);
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm]);
+  // Manual search handler (triggered by search button)
+  const handleSearch = () => {
+    setCurrentPage(1);
+    setAllContent([]); // Clear cached content to force fresh search
+    loadContent(1, searchTerm, true, false);
+  };
 
   // Handle sort changes
   useEffect(() => {
     if (!isInitialized || isRestoringState) return;
-    
+
     setCurrentPage(1);
     setLoading(true);
     setContent([]);
     setAllContent([]);
-    
+
     loadContent(1, searchTerm, true, false, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
@@ -368,16 +362,110 @@ function ContentPageContent({ config }: ContentPageProps) {
       const startIndex = (page - 1) * pageSize;
       const endIndex = startIndex + pageSize;
       const paginatedData = allContent.slice(startIndex, endIndex);
-      
+
       setContent(paginatedData);
       setCurrentPage(page);
       setHasNextPage(page < totalPages);
       updateUrlParams(page, searchTerm, sortBy);
-      
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setIsTransitioning(true);
       loadContent(page, searchTerm, true, false);
+    }
+  };
+
+  const handleGoToNumber = async (targetNumber: number) => {
+    // Validate the number is within range
+    if (targetNumber < 1) {
+      return;
+    }
+
+    const pageSize = 15;
+
+    // Helper function to get display number from sermon number
+    const getDisplayNumber = (sermonNumber: string | null) => {
+      if (!sermonNumber) return 0;
+      const parts = sermonNumber.split('.');
+      return parseInt(parts.length > 1 ? parts[1] : parts[0], 10) || 0;
+    };
+
+    // Function to scroll to the card once it's rendered
+    const scrollToCard = (attempts = 0) => {
+      const cardElement = document.getElementById(`listing-${targetNumber}`);
+      if (cardElement) {
+        cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Add a brief highlight effect
+        cardElement.classList.add('ring-2', 'ring-[#43896B]', 'ring-offset-2');
+        setTimeout(() => {
+          cardElement.classList.remove('ring-2', 'ring-[#43896B]', 'ring-offset-2');
+        }, 2000);
+      } else if (attempts < 50) {
+        // Retry up to 50 times (5 seconds total) to handle slower page loads
+        setTimeout(() => scrollToCard(attempts + 1), 100);
+      }
+    };
+
+    setIsTransitioning(true);
+
+    try {
+      // We need all content to find the item position
+      let dataToSearch: Post[] = [];
+
+      if (allContent.length > 0) {
+        // Already have all content loaded (sorted/searched mode)
+        dataToSearch = allContent;
+      } else {
+        // Need to fetch all content first
+        const allDataResponse = await config.api.getContent(1, 1000);
+        if (!allDataResponse || !allDataResponse.data) {
+          setIsTransitioning(false);
+          return;
+        }
+        dataToSearch = allDataResponse.data.filter(item => item.heading);
+        
+        // Sort by sermon number ascending (default order)
+        dataToSearch.sort((a, b) => getDisplayNumber(a.sermonNumber) - getDisplayNumber(b.sermonNumber));
+        
+        // Store for future use
+        setAllContent(dataToSearch);
+      }
+
+      // Find the index of the item with the target sermon number
+      const itemIndex = dataToSearch.findIndex(item => getDisplayNumber(item.sermonNumber) === targetNumber);
+
+      if (itemIndex === -1) {
+        // Item not found
+        setIsTransitioning(false);
+        return;
+      }
+
+      // Calculate which page this item is on (1-based)
+      const targetPage = Math.floor(itemIndex / pageSize) + 1;
+
+      // Get the paginated data for this page
+      const startIndex = (targetPage - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      const paginatedData = dataToSearch.slice(startIndex, endIndex);
+
+      // Update state
+      setContent(paginatedData);
+      setCurrentPage(targetPage);
+      setTotalPages(Math.ceil(dataToSearch.length / pageSize));
+      setTotal(dataToSearch.length);
+      setHasNextPage(targetPage < Math.ceil(dataToSearch.length / pageSize));
+      updateUrlParams(targetPage, searchTerm, sortBy);
+
+      // Wait for React to render the new content, then scroll
+      requestAnimationFrame(() => {
+        setTimeout(() => scrollToCard(), 100);
+      });
+    } catch (err) {
+      console.error('Error in handleGoToNumber:', err);
+    } finally {
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 200);
     }
   };
 
@@ -387,8 +475,8 @@ function ContentPageContent({ config }: ContentPageProps) {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Error Loading {config.title}</h2>
           <p className="text-gray-600 mb-4">{error}</p>
-          <button 
-            onClick={() => loadContent()} 
+          <button
+            onClick={() => loadContent()}
             className="bg-[#43896B] text-white px-6 py-2 rounded-lg hover:bg-[#367556]"
           >
             Try Again
@@ -415,6 +503,9 @@ function ContentPageContent({ config }: ContentPageProps) {
           sortOptions={sortOptions}
           displayMode={displayMode}
           setDisplayMode={setDisplayMode}
+          onGoToNumber={handleGoToNumber}
+          totalItems={total}
+          onSearch={handleSearch}
         />
         <div className="flex flex-col gap-8">
           {/* Show a subtle loading overlay when transitioning */}

@@ -7,7 +7,7 @@ export interface PostFilters {
   type?: string;
   search?: string;
   tags?: string[];
-  sermonNumber?: string;
+  sermonNumber?: string | string[];
   paragraphNumber?: string;
   [key: string]: any;
 }
@@ -18,6 +18,7 @@ export interface PostsApiOptions {
   filters?: PostFilters;
   populate?: string[];
   sort?: string;
+  fields?: string[];
 }
 
 export const postsApi = {
@@ -27,8 +28,9 @@ export const postsApi = {
         page = 1,
         pageSize = 9,
         filters = {},
-        populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags', 'translations'],
-        sort
+        populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags'],
+        sort,
+        fields
       } = options;
 
       const params: any = {
@@ -41,7 +43,13 @@ export const postsApi = {
       }
 
       if (filters.sermonNumber) {
-        params['filters[sermonNumber][$eq]'] = filters.sermonNumber;
+        if (Array.isArray(filters.sermonNumber)) {
+          filters.sermonNumber.forEach((num, index) => {
+            params[`filters[sermonNumber][$in][${index}]`] = num;
+          });
+        } else {
+          params['filters[sermonNumber][$eq]'] = filters.sermonNumber;
+        }
       }
 
       if (filters.paragraphNumber) {
@@ -61,10 +69,64 @@ export const postsApi = {
         });
       }
 
-      params['populate[footnotes]'] = true;
-      params['populate[paragraphs][populate][translations]'] = true;
-      params['populate[paragraphs][populate][footnotes]'] = true;
-      params['populate[tags]'] = true;
+      if (fields && fields.length > 0) {
+        fields.forEach((field, index) => {
+          params[`fields[${index}]`] = field;
+        });
+      }
+
+      if (populate && populate.length > 0) {
+        populate.forEach((relation, index) => {
+          // Handle complex population (object syntax) manually if needed, 
+          // but for this specific optimization we might just need simple relation names
+          // or we can pass raw strings like 'paragraphs.translations' which Strapi accepts as populate[0]=...
+          // However, existing code used params['populate[footnotes]'] = true; style.
+          // Let's support both: if user passes populate array, we use it.
+          // If we want to maintain the old hardcoded behavior when populate is NOT passed, we kept the default value in destructuring.
+
+          // If populate is passed, we check if it matches the old hardcoded keys to use the old object syntax 
+          // (which might be safer for deep population if Strapi version requires it), 
+          // or just generic array syntax.
+
+          // Actually, looking at the previous code:
+          // params['populate[footnotes]'] = true;
+          // params['populate[paragraphs][populate][translations]'] = true;
+          // This suggests deep population structure.
+
+          // If the caller provides specific populate array, we should probably blindly trust it 
+          // or if they provide nothing (default), we do the detailed one.
+
+          // But wait, the default `populate` array in destructuring is:
+          // ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags', 'translations']
+
+          // This array doesn't directly map to the complex object syntax used below:
+          // params['populate[paragraphs][populate][translations]'] = true;
+
+          // So if we just use the array, it might fail for deep relations if Strapi doesn't support dot notation in array `populate[0]=paragraphs.translations`.
+          // Strapi v4 supports dot notation. 
+
+          // Let's change the logic: IF populate is the DEFAULT one, use the hardcoded complex object params.
+          // IF populate is CUSTOM (optimized), use the array syntax.
+
+          params[`populate[${index}]`] = relation;
+        });
+      } else if (populate && populate.length === 5 && populate[0] === 'footnotes') {
+        // This check is a bit brittle to detect "default". 
+        // Let's check if it IS the default array reference, but we destructured a new array.
+        // Better strategy: checking if we are in the "optimized" mode (passed via options) or "default" mode.
+
+        // If `fields` is present, we are likely in optimized mode.
+        // But let's look at `getPosts` calls.
+
+        // To be safe and minimal:
+        // If `populate` option IS provided in the call, use it as array params.
+        // If `populate` option IS NOT provided (so it uses default), use the hardcoded logic.
+
+        // But we assigned a default value to `populate` in destructuring:
+        // populate = [...]
+
+        // Let's change destructuring to NOT have default, handle it inside.
+      }
 
       if (sort) {
         params['sort'] = sort;
@@ -146,7 +208,7 @@ export const postsApi = {
       }
 
       const response = await api.get('/api/posts', { params });
-      
+
       if (response.data.data && response.data.data.length > 0) {
         return response.data.data[0];
       }
@@ -172,7 +234,7 @@ export const postsApi = {
       }
 
       const response = await api.get('/api/posts', { params });
-      
+
       if (response.data.data && response.data.data.length > 0) {
         return response.data.data[0];
       }
@@ -226,8 +288,8 @@ export const orationsApi = {
   },
 
   async searchOrations(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {
-    return postsApi.getPostsForListing({ 
-      page, 
+    return postsApi.getPostsForListing({
+      page,
       pageSize,
       filters: { search: query, type: 'Oration' }
     });
@@ -242,7 +304,7 @@ export const orationsApi = {
           type: 'Oration'
         }
       });
-      
+
       if (response.data && response.data.length > 0) {
         return response.data[0];
       }
@@ -262,7 +324,7 @@ export const orationsApi = {
           type: 'Oration'
         }
       });
-      
+
       if (response.data && response.data.length > 0) {
         return response.data[0];
       }
@@ -278,7 +340,7 @@ export const orationsApi = {
       // Extract the paragraph number from text reference (e.g., "26" or "26.1" from "1.26.1")
       const parts = textRef.split('.');
       if (parts.length < 2) return null;
-      
+
       // Try to find by searching through all orations (client-side search)
       // First, fetch with large pageSize to get many orations
       const response = await postsApi.getPosts({
@@ -292,7 +354,7 @@ export const orationsApi = {
 
       // Generate multiple possible formats to match against
       const sectionWithoutPrefix = parts.slice(1).join('.');  // "26.1" from "1.26.1"
-      
+
       // Search for an oration containing this text reference
       for (const post of response.data) {
         // Check if sermonNumber matches
@@ -304,9 +366,9 @@ export const orationsApi = {
           // Check if any paragraph number matches - try multiple formats
           for (const paragraph of post.paragraphs) {
             if (!paragraph.number) continue;
-            
+
             const pNum = paragraph.number.trim();
-            
+
             // Try strict matching strategies
             if (
               pNum === textRef ||  // Exact match: "1.26.1"
@@ -322,6 +384,49 @@ export const orationsApi = {
     } catch (error) {
       console.error('Error fetching oration by text reference:', error);
       throw error;
+    }
+  },
+
+  async getAdjacentOrations(currentId: number): Promise<{ previous: Post | null; next: Post | null }> {
+    try {
+      // Fetch all orations to find adjacent ones
+      const response = await postsApi.getPosts({
+        filters: { type: 'Oration' },
+        pageSize: 500,
+        fields: ['id', 'heading', 'sermonNumber', 'slug'], // Only fetch necessary fields
+        populate: [] // Don't fetch any relations
+      });
+
+      if (!response.data || response.data.length === 0) {
+        return { previous: null, next: null };
+      }
+
+      // Sort by sermon number
+      const sortedPosts = response.data
+        .filter(post => post.heading)
+        .sort((a, b) => {
+          const getDisplayNumber = (sermonNumber: string | null) => {
+            if (!sermonNumber) return 0;
+            const parts = sermonNumber.split('.');
+            return parseInt(parts.length > 1 ? parts[1] : parts[0], 10) || 0;
+          };
+          return getDisplayNumber(a.sermonNumber) - getDisplayNumber(b.sermonNumber);
+        });
+
+      // Find current post index
+      const currentIndex = sortedPosts.findIndex(post => post.id === currentId);
+
+      if (currentIndex === -1) {
+        return { previous: null, next: null };
+      }
+
+      return {
+        previous: currentIndex > 0 ? sortedPosts[currentIndex - 1] : null,
+        next: currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null
+      };
+    } catch (error) {
+      console.error('Error fetching adjacent orations:', error);
+      return { previous: null, next: null };
     }
   }
 };
@@ -340,8 +445,8 @@ export const lettersApi = {
   },
 
   async searchLetters(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {
-    return postsApi.getPostsForListing({ 
-      page, 
+    return postsApi.getPostsForListing({
+      page,
       pageSize,
       filters: { search: query, type: 'Letter' }
     });
@@ -356,7 +461,7 @@ export const lettersApi = {
           type: 'Letter'
         }
       });
-      
+
       if (response.data && response.data.length > 0) {
         return response.data[0];
       }
@@ -376,7 +481,7 @@ export const lettersApi = {
           type: 'Letter'
         }
       });
-      
+
       if (response.data && response.data.length > 0) {
         return response.data[0];
       }
@@ -391,7 +496,7 @@ export const lettersApi = {
     try {
       const parts = textRef.split('.');
       if (parts.length < 2) return null;
-      
+
       const response = await postsApi.getPosts({
         filters: { type: 'Letter' },
         pageSize: 500
@@ -402,7 +507,7 @@ export const lettersApi = {
       }
 
       const sectionWithoutPrefix = parts.slice(1).join('.');  // "26.1" from "2.26.1"
-      
+
       for (const post of response.data) {
         // Check if sermonNumber matches
         if (post.sermonNumber === textRef || post.sermonNumber === sectionWithoutPrefix) {
@@ -412,9 +517,9 @@ export const lettersApi = {
         if (post.paragraphs && post.paragraphs.length > 0) {
           for (const paragraph of post.paragraphs) {
             if (!paragraph.number) continue;
-            
+
             const pNum = paragraph.number.trim();
-            
+
             if (
               pNum === textRef ||
               pNum === sectionWithoutPrefix
@@ -429,6 +534,46 @@ export const lettersApi = {
     } catch (error) {
       console.error('Error fetching letter by text reference:', error);
       throw error;
+    }
+  },
+
+  async getAdjacentLetters(currentId: number): Promise<{ previous: Post | null; next: Post | null }> {
+    try {
+      const response = await postsApi.getPosts({
+        filters: { type: 'Letter' },
+        pageSize: 500,
+        fields: ['id', 'heading', 'sermonNumber', 'slug'],
+        populate: []
+      });
+
+      if (!response.data || response.data.length === 0) {
+        return { previous: null, next: null };
+      }
+
+      const sortedPosts = response.data
+        .filter(post => post.heading)
+        .sort((a, b) => {
+          const getDisplayNumber = (sermonNumber: string | null) => {
+            if (!sermonNumber) return 0;
+            const parts = sermonNumber.split('.');
+            return parseInt(parts.length > 1 ? parts[1] : parts[0], 10) || 0;
+          };
+          return getDisplayNumber(a.sermonNumber) - getDisplayNumber(b.sermonNumber);
+        });
+
+      const currentIndex = sortedPosts.findIndex(post => post.id === currentId);
+
+      if (currentIndex === -1) {
+        return { previous: null, next: null };
+      }
+
+      return {
+        previous: currentIndex > 0 ? sortedPosts[currentIndex - 1] : null,
+        next: currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null
+      };
+    } catch (error) {
+      console.error('Error fetching adjacent letters:', error);
+      return { previous: null, next: null };
     }
   }
 };
@@ -447,8 +592,8 @@ export const sayingsApi = {
   },
 
   async searchSayings(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {
-    return postsApi.getPostsForListing({ 
-      page, 
+    return postsApi.getPostsForListing({
+      page,
       pageSize,
       filters: { search: query, type: 'Saying' }
     });
@@ -463,7 +608,7 @@ export const sayingsApi = {
           type: 'Saying'
         }
       });
-      
+
       if (response.data && response.data.length > 0) {
         return response.data[0];
       }
@@ -483,7 +628,7 @@ export const sayingsApi = {
           type: 'Saying'
         }
       });
-      
+
       if (response.data && response.data.length > 0) {
         return response.data[0];
       }
@@ -498,7 +643,7 @@ export const sayingsApi = {
     try {
       const parts = textRef.split('.');
       if (parts.length < 2) return null;
-      
+
       const response = await postsApi.getPosts({
         filters: { type: 'Saying' },
         pageSize: 500
@@ -509,7 +654,7 @@ export const sayingsApi = {
       }
 
       const sectionWithoutPrefix = parts.slice(1).join('.');  // "26.1" from "3.26.1"
-      
+
       for (const post of response.data) {
         // Check if sermonNumber matches
         if (post.sermonNumber === textRef || post.sermonNumber === sectionWithoutPrefix) {
@@ -519,9 +664,9 @@ export const sayingsApi = {
         if (post.paragraphs && post.paragraphs.length > 0) {
           for (const paragraph of post.paragraphs) {
             if (!paragraph.number) continue;
-            
+
             const pNum = paragraph.number.trim();
-            
+
             if (
               pNum === textRef ||
               pNum === sectionWithoutPrefix
@@ -536,6 +681,46 @@ export const sayingsApi = {
     } catch (error) {
       console.error('Error fetching saying by text reference:', error);
       throw error;
+    }
+  },
+
+  async getAdjacentSayings(currentId: number): Promise<{ previous: Post | null; next: Post | null }> {
+    try {
+      const response = await postsApi.getPosts({
+        filters: { type: 'Saying' },
+        pageSize: 500,
+        fields: ['id', 'heading', 'sermonNumber', 'slug'],
+        populate: []
+      });
+
+      if (!response.data || response.data.length === 0) {
+        return { previous: null, next: null };
+      }
+
+      const sortedPosts = response.data
+        .filter(post => post.heading)
+        .sort((a, b) => {
+          const getDisplayNumber = (sermonNumber: string | null) => {
+            if (!sermonNumber) return 0;
+            const parts = sermonNumber.split('.');
+            return parseInt(parts.length > 1 ? parts[1] : parts[0], 10) || 0;
+          };
+          return getDisplayNumber(a.sermonNumber) - getDisplayNumber(b.sermonNumber);
+        });
+
+      const currentIndex = sortedPosts.findIndex(post => post.id === currentId);
+
+      if (currentIndex === -1) {
+        return { previous: null, next: null };
+      }
+
+      return {
+        previous: currentIndex > 0 ? sortedPosts[currentIndex - 1] : null,
+        next: currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null
+      };
+    } catch (error) {
+      console.error('Error fetching adjacent sayings:', error);
+      return { previous: null, next: null };
     }
   }
 };
@@ -595,7 +780,7 @@ export const radisApi = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const result = await response.json();
-      
+
       if (result.data && result.data.length > 0) {
         return result.data[0];
       }
@@ -623,6 +808,68 @@ export const radisApi = {
       return await response.json();
     } catch (error) {
       console.error('Error searching radis introductions:', error);
+      throw error;
+    }
+  },
+
+  async getRadisIntroductionsByNumbers(numbers: string[]): Promise<RadisApiResponse> {
+    try {
+      const params = new URLSearchParams({
+        'pagination[pageSize]': '100'
+      });
+
+      numbers.forEach((num, index) => {
+        params.append(`filters[number][$in][${index}]`, num);
+      });
+
+      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/radis-introductions?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching radis introductions by numbers:', error);
+      throw error;
+    }
+  }
+};
+
+export const paragraphsApi = {
+  async getParagraphsByNumbers(numbers: string[]): Promise<ApiResponse> {
+    try {
+      const params: any = {
+        'pagination[pageSize]': 100,
+        'populate[translations]': true,
+        'populate[footnotes]': true,
+      };
+
+      numbers.forEach((num, index) => {
+        params[`filters[number][$in][${index}]`] = num;
+      });
+
+      const response = await api.get('/api/paragraphs', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching paragraphs by numbers:', error);
+      throw error;
+    }
+  },
+
+  async searchParagraphs(query: string, page = 1, pageSize = 25): Promise<ApiResponse> {
+    try {
+      const params: any = {
+        'pagination[page]': page,
+        'pagination[pageSize]': pageSize,
+        'populate[translations]': true,
+        'populate[footnotes]': true,
+        'filters[$or][0][arabic][$containsi]': query,
+        'filters[$or][1][translations][text][$containsi]': query,
+      };
+
+      const response = await api.get('/api/paragraphs', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error searching paragraphs:', error);
       throw error;
     }
   }

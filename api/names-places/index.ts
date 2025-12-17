@@ -1,11 +1,11 @@
 import api from '../api';
 
-export interface TextNumber {
+export interface NamePlaceTextNumber  {
   id: number;
   value: string;
 }
 
-export interface IndexTerm {
+export interface NamePlace {
   id: number;
   documentId: string;
   section: string;
@@ -14,11 +14,11 @@ export interface IndexTerm {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  text_numbers: TextNumber[];
+  text_numbers: NamePlaceTextNumber [];
 }
 
-export interface IndexTermsApiResponse {
-  data: IndexTerm[];
+export interface NamePlacesApiResponse {
+  data: NamePlace[];
   meta: {
     pagination: {
       page: number;
@@ -29,7 +29,7 @@ export interface IndexTermsApiResponse {
   };
 }
 
-export interface IndexTermsFilters {
+export interface NamePlacesFilters {
   section?: string;
   word_english?: string;
   word_arabic?: string;
@@ -38,12 +38,12 @@ export interface IndexTermsFilters {
   language?: 'English' | 'Arabic';
 }
 
-export const indexTermsApi = {
-  async getIndexTerms(
+export const namePlacesApi = {
+  async getNamePlaces(
     page = 1,
     pageSize = 20,
-    filters?: IndexTermsFilters
-  ): Promise<IndexTermsApiResponse> {
+    filters?: NamePlacesFilters
+  ): Promise<NamePlacesApiResponse> {
     try {
       const params: Record<string, any> = {
         'populate': '*',
@@ -76,38 +76,38 @@ export const indexTermsApi = {
         params['filters[word_arabic][$ne]'] = '';
       }
 
-      const response = await api.get('/api/index-terms', {
+      const response = await api.get('/api/name-and-places', {
         params,
       });
 
       return response.data;
     } catch (error) {
-      console.error('Error fetching index terms:', error);
+      console.error('Error fetching names and places:', error);
       throw error;
     }
   },
 
-  async getIndexTermById(id: string): Promise<{ data: IndexTerm }> {
+  async getNamePlaceById(id: string): Promise<{ data: NamePlace }> {
     try {
-      const response = await api.get(`/api/index-terms/${id}`, {
+      const response = await api.get(`/api/name-and-places/${id}`, {
         params: {
           'populate': '*',
         },
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching index term:', error);
+      console.error('Error fetching name/place:', error);
       throw error;
     }
   },
 
   async getSections(): Promise<string[]> {
     try {
-      const response = await this.getIndexTerms(1, 100);
+      const response = await this.getNamePlaces(1, 100);
       const sections = new Set<string>();
-      response.data.forEach((term) => {
-        if (term.section) {
-          sections.add(term.section);
+      response.data.forEach((item) => {
+        if (item.section) {
+          sections.add(item.section);
         }
       });
       return Array.from(sections).sort();
