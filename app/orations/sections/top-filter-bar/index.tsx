@@ -14,6 +14,7 @@ interface TopFilterBarProps {
   setDisplayMode: (value: 'both' | 'english-only' | 'arabic-only') => void;
   onGoToNumber?: (number: number) => void;
   totalItems?: number;
+  onSearch?: () => void;
 }
 
 export default function TopFilterBar({
@@ -25,7 +26,8 @@ export default function TopFilterBar({
   displayMode,
   setDisplayMode,
   onGoToNumber,
-  totalItems
+  totalItems,
+  onSearch
 }: TopFilterBarProps) {
   const [goToValue, setGoToValue] = useState('');
 
@@ -49,17 +51,39 @@ export default function TopFilterBar({
     }
   };
 
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && onSearch) {
+      onSearch();
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (onSearch) {
+      onSearch();
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="flex-1">
-          <Input
-            placeholder="Search orations, topics, or keywords..."
-            value={searchTerm}
-            onChange={(e: any) => setSearchTerm(e.target.value)}
-            icon={<Search className="w-5 h-5 text-gray-400" />}
-            className="text-base"
-          />
+        <div className="flex-1 flex gap-2">
+          <div className="flex-1">
+            <Input
+              placeholder="Search orations, topics, or keywords..."
+              value={searchTerm}
+              onChange={(e: any) => setSearchTerm(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
+              icon={<Search className="w-5 h-5 text-gray-400" />}
+              className="text-base"
+            />
+          </div>
+          <button
+            onClick={handleSearchClick}
+            className="px-4 py-2.5 bg-[#43896B] text-white text-sm font-medium rounded-lg hover:bg-[#367556] transition-all duration-200 flex items-center gap-2"
+          >
+            <Search className="w-4 h-4" />
+            <span className="hidden sm:inline">Search</span>
+          </button>
         </div>
         <div className="flex flex-col lg:flex-row gap-3">
           {/* Go to # input */}

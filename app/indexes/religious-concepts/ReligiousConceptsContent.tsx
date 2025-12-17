@@ -17,12 +17,11 @@ export default function ReligiousConceptsContent() {
 
   const page = parseInt(searchParams.get('page') || '1');
   const appliedFilters: ReligiousConceptsFilters = {
-    section: searchParams.get('section') || '',
     word_english: searchParams.get('word_english') || '',
     word_arabic: searchParams.get('word_arabic') || '',
     startsWith_english: searchParams.get('startsWith_english') || '',
     startsWith_arabic: searchParams.get('startsWith_arabic') || '',
-    language: (searchParams.get('language') as 'English' | 'Arabic') || 'English',
+    language: (searchParams.get('language') as 'English' | 'Arabic') || 'Arabic',
   };
 
   const [items, setItems] = useState<ReligiousConcept[]>([]);
@@ -30,35 +29,21 @@ export default function ReligiousConceptsContent() {
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  const [sections, setSections] = useState<string[]>([]);
 
   const [filters, setFilters] = useState<ReligiousConceptsFilters>(appliedFilters);
 
   // Sync filters with URL params when they change (e.g. back button)
   useEffect(() => {
     setFilters({
-      section: searchParams.get('section') || '',
       word_english: searchParams.get('word_english') || '',
       word_arabic: searchParams.get('word_arabic') || '',
       startsWith_english: searchParams.get('startsWith_english') || '',
       startsWith_arabic: searchParams.get('startsWith_arabic') || '',
-      language: (searchParams.get('language') as 'English' | 'Arabic') || 'English',
+      language: (searchParams.get('language') as 'English' | 'Arabic') || 'Arabic',
     });
   }, [searchParams]);
 
   const pageSize = 20;
-
-  useEffect(() => {
-    const fetchSections = async () => {
-      try {
-        const sectionsData = await religiousConceptsApi.getSections();
-        setSections(sectionsData);
-      } catch (err) {
-        console.error('Error fetching sections:', err);
-      }
-    };
-    fetchSections();
-  }, []);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -67,7 +52,6 @@ export default function ReligiousConceptsContent() {
 
       try {
         const filterParams: ReligiousConceptsFilters = {};
-        if (appliedFilters.section) filterParams.section = appliedFilters.section;
         if (appliedFilters.word_english) filterParams.word_english = appliedFilters.word_english;
         if (appliedFilters.word_arabic) filterParams.word_arabic = appliedFilters.word_arabic;
         if (appliedFilters.startsWith_english) filterParams.startsWith_english = appliedFilters.startsWith_english;
@@ -87,17 +71,16 @@ export default function ReligiousConceptsContent() {
     };
 
     fetchItems();
-  }, [page, appliedFilters.section, appliedFilters.word_english, appliedFilters.word_arabic, appliedFilters.startsWith_english, appliedFilters.startsWith_arabic, appliedFilters.language]);
+  }, [page, appliedFilters.word_english, appliedFilters.word_arabic, appliedFilters.startsWith_english, appliedFilters.startsWith_arabic, appliedFilters.language]);
 
   const handleApplyFilters = (newFilters?: ReligiousConceptsFilters) => {
     const filtersToUse = newFilters || filters;
     const params = new URLSearchParams();
-    if (filtersToUse.section) params.set('section', filtersToUse.section);
     if (filtersToUse.word_english) params.set('word_english', filtersToUse.word_english);
     if (filtersToUse.word_arabic) params.set('word_arabic', filtersToUse.word_arabic);
     if (filtersToUse.startsWith_english) params.set('startsWith_english', filtersToUse.startsWith_english);
     if (filtersToUse.startsWith_arabic) params.set('startsWith_arabic', filtersToUse.startsWith_arabic);
-    if (filtersToUse.language && filtersToUse.language !== 'English') params.set('language', filtersToUse.language);
+    if (filtersToUse.language && filtersToUse.language !== 'Arabic') params.set('language', filtersToUse.language);
 
     params.set('page', '1');
     router.push(`${pathname}?${params.toString()}`);
@@ -105,12 +88,11 @@ export default function ReligiousConceptsContent() {
 
   const handleClearFilters = () => {
     setFilters({
-      section: '',
       word_english: '',
       word_arabic: '',
       startsWith_english: '',
       startsWith_arabic: '',
-      language: 'English',
+      language: 'Arabic',
     });
     router.push(pathname);
   };
@@ -122,7 +104,7 @@ export default function ReligiousConceptsContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const hasActiveFilters = appliedFilters.section || appliedFilters.word_english || appliedFilters.word_arabic || appliedFilters.startsWith_english || appliedFilters.startsWith_arabic || appliedFilters.language !== 'English';
+  const hasActiveFilters = appliedFilters.word_english || appliedFilters.word_arabic || appliedFilters.startsWith_english || appliedFilters.startsWith_arabic || appliedFilters.language !== 'Arabic';
 
   const handleLetterSelect = (letter: string) => {
     const updatedFilters = { ...filters };
@@ -161,45 +143,35 @@ export default function ReligiousConceptsContent() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-medium text-sm text-gray-700 mb-1">Language</label>
               <Select
-                value={filters.language || 'English'}
+                value={filters.language || 'Arabic'}
                 onChange={(value) => setFilters({ ...filters, language: value as 'English' | 'Arabic' })}
                 options={[
-                  { value: 'English', label: 'English' },
                   { value: 'Arabic', label: 'Arabic' }
                 ]}
                 placeholder="Select Language"
               />
             </div>
-            <div>
-              <label className="block font-medium text-sm text-gray-700 mb-1">Section</label>
-              <Select
-                value={filters.section}
-                onChange={(value) => setFilters({ ...filters, section: value })}
-                options={[
-                  { value: '', label: 'All Sections' },
-                  ...sections.map(section => ({ value: section, label: section }))
-                ]}
-                placeholder="Select a section"
+            {filters.language === 'English' ? (
+              <Input
+                label="English Word"
+                placeholder="Search English..."
+                value={filters.word_english}
+                onChange={(e) => setFilters({ ...filters, word_english: e.target.value })}
               />
-            </div>
-            <Input
-              label="English Word"
-              placeholder="Search English..."
-              value={filters.word_english}
-              onChange={(e) => setFilters({ ...filters, word_english: e.target.value })}
-            />
-            <Input
-              label="Arabic Word"
-              placeholder="Search Arabic..."
-              value={filters.word_arabic}
-              onChange={(e) => setFilters({ ...filters, word_arabic: e.target.value })}
-              className="text-right"
-              dir="rtl"
-            />
+            ) : (
+              <Input
+                label="Arabic Word"
+                placeholder="Search Arabic..."
+                value={filters.word_arabic}
+                onChange={(e) => setFilters({ ...filters, word_arabic: e.target.value })}
+                className="text-right"
+                dir="rtl"
+              />
+            )}
           </div>
           <div className="mt-4 flex justify-end">
             <Button

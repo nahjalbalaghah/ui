@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Select from '@/app/components/select';
 import ManuscriptViewer from '@/app/components/manuscript-viewer';
@@ -19,12 +19,42 @@ const ManuscriptsContent = () => {
   const searchParams = useSearchParams();
   const sectionFromUrl = searchParams.get('section');
 
-  const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
+  const [allManuscripts, setAllManuscripts] = useState<Manuscript[]>([]);
   const [selectedManuscript, setSelectedManuscript] = useState<Manuscript | null>(null);
   const [libraries, setLibraries] = useState<Library[]>([]);
   const [selectedLibrary, setSelectedLibrary] = useState<Library | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Filter manuscripts based on selected library
+  const filteredManuscripts = useMemo(() => {
+    if (!selectedLibrary || !allManuscripts.length) return [];
+    
+    // Check if the library name matches "marashi" (case-insensitive) or similar patterns
+    const libraryNameLower = selectedLibrary.name?.toLowerCase() || '';
+    const isMarashiLibrary = libraryNameLower.includes("mar'ashi") || 
+                            libraryNameLower.includes("marashi") ||
+                            libraryNameLower.includes("mar'ashi");
+    
+    // Filter manuscripts that belong to this library
+    // Manuscripts may have a library field, or we filter by known library names
+    return allManuscripts.filter(m => {
+      const manuscriptLibrary = m.library?.toLowerCase() || '';
+      
+      // If manuscript has a library field, match it
+      if (manuscriptLibrary) {
+        return libraryNameLower.includes(manuscriptLibrary) || 
+               manuscriptLibrary.includes(libraryNameLower.split(' ')[0]);
+      }
+      
+      // For marashi library, include all manuscripts (since that's the only one with data currently)
+      if (isMarashiLibrary) {
+        return true;
+      }
+      
+      return false;
+    });
+  }, [selectedLibrary, allManuscripts]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,11 +64,14 @@ const ManuscriptsContent = () => {
 
         // Fetch libraries (manuscript collections) from API
         const librariesResponse = await librariesApi.getAllLibraries(1, 100);
+        let defaultLibrary: Library | null = null;
+        
         if (librariesResponse.data && librariesResponse.data.length > 0) {
           setLibraries(librariesResponse.data);
           // Select first library with items, or first library
           const libraryWithItems = librariesResponse.data.find(l => l.library_items.length > 0);
-          setSelectedLibrary(libraryWithItems || librariesResponse.data[0]);
+          defaultLibrary = libraryWithItems || librariesResponse.data[0];
+          setSelectedLibrary(defaultLibrary);
         }
 
         // Fetch manuscripts (section-based images)
@@ -50,8 +83,7 @@ const ManuscriptsContent = () => {
         }
 
         if (response.data && response.data.length > 0) {
-          setManuscripts(response.data);
-          setSelectedManuscript(response.data[0]);
+          setAllManuscripts(response.data);
         }
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -64,17 +96,34 @@ const ManuscriptsContent = () => {
     fetchData();
   }, [sectionFromUrl]);
 
+  // Update selected manuscript when filtered manuscripts change
+  useEffect(() => {
+    if (filteredManuscripts.length > 0) {
+      // Check if current selection is still valid
+      const isCurrentSelectionValid = selectedManuscript && 
+        filteredManuscripts.some(m => m.documentId === selectedManuscript.documentId);
+      
+      if (!isCurrentSelectionValid) {
+        setSelectedManuscript(filteredManuscripts[0]);
+      }
+    } else {
+      setSelectedManuscript(null);
+    }
+  }, [filteredManuscripts]);
+
   // Handle library selection change
   const handleLibraryChange = (value: string) => {
     const library = libraries.find(l => l.documentId === value);
     if (library) {
       setSelectedLibrary(library);
+      // Reset selected manuscript - will be updated by useEffect
+      setSelectedManuscript(null);
     }
   };
 
   // Handle manuscript/section selection change
   const handleManuscriptChange = (value: string) => {
-    const manuscript = manuscripts.find(m => m.documentId === value);
+    const manuscript = filteredManuscripts.find(m => m.documentId === value);
     if (manuscript) {
       setSelectedManuscript(manuscript);
     }
@@ -86,11 +135,14 @@ const ManuscriptsContent = () => {
     label: lib.name
   }));
 
-  // Create manuscript options (sections)
-  const manuscriptOptions = manuscripts.map(m => ({
+  // Create manuscript options (sections) - use filtered manuscripts
+  const manuscriptOptions = filteredManuscripts.map(m => ({
     value: m.documentId,
     label: `Section ${m.section}`
   }));
+
+  // Check if the selected library has manuscripts
+  const libraryHasManuscripts = filteredManuscripts.length > 0;
 
   // Get current library details (either from API or fallback to static)
   const getCurrentLibraryDetails = () => {
@@ -160,18 +212,8 @@ const ManuscriptsContent = () => {
     );
   }
 
-  if (!selectedManuscript) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <p className="text-gray-600">No manuscript selected</p>
-        </div>
-      </div>
-    );
-  }
-
   // Convert manuscript files to pages format
-  const manuscriptPages = selectedManuscript.files?.map(file => getManuscriptImageUrl(file.url)) || [];
+  const manuscriptPages = selectedManuscript?.files?.map(file => getManuscriptImageUrl(file.url)) || [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -185,7 +227,7 @@ const ManuscriptsContent = () => {
         </div>
       )}
 
-      {(manuscripts.length > 0 || libraries.length > 0) && (
+      {(allManuscripts.length > 0 || libraries.length > 0) && (
         <div className="mb-8">
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -205,7 +247,7 @@ const ManuscriptsContent = () => {
                     />
                   </div>
                 )}
-                {manuscripts.length > 0 && (
+                {libraryHasManuscripts && (
                   <div className="w-full">
                     <label htmlFor="manuscript-select" className="sr-only">Select Section</label>
                     <Select
@@ -248,7 +290,19 @@ const ManuscriptsContent = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          {selectedManuscript && manuscriptPages.length > 0 ? (
+          {!libraryHasManuscripts ? (
+            <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
+              <div className="mb-4">
+                <svg className="w-16 h-16 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">Manuscript Images Coming Soon</h3>
+              <p className="text-gray-500 max-w-md">
+                Manuscript images for <span className="font-medium">{selectedLibrary?.name || 'this library'}</span> are currently being digitized and will be available soon.
+              </p>
+            </div>
+          ) : selectedManuscript && manuscriptPages.length > 0 ? (
             <ManuscriptViewer
               pages={manuscriptPages}
               bookName={selectedManuscript.bookName || ''}

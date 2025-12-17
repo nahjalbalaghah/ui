@@ -166,7 +166,7 @@ export default function QuranHadithContent() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block font-medium text-sm text-gray-700 mb-1">Language</label>
               <Select
@@ -191,20 +191,23 @@ export default function QuranHadithContent() {
                 placeholder="Select a Surah"
               />
             </div>
-            <Input
-              label="Search Translation"
-              placeholder="Search translation..."
-              value={filters.verse_translation}
-              onChange={(e) => setFilters({ ...filters, verse_translation: e.target.value })}
-            />
-            <Input
-              label="Search Arabic Text"
-              placeholder="Search Arabic..."
-              value={filters.verse_text}
-              onChange={(e) => setFilters({ ...filters, verse_text: e.target.value })}
-              className="text-right"
-              dir="rtl"
-            />
+            {filters.language === 'English' ? (
+              <Input
+                label="Search Translation"
+                placeholder="Search translation..."
+                value={filters.verse_translation}
+                onChange={(e) => setFilters({ ...filters, verse_translation: e.target.value })}
+              />
+            ) : (
+              <Input
+                label="Search Arabic Text"
+                placeholder="Search Arabic..."
+                value={filters.verse_text}
+                onChange={(e) => setFilters({ ...filters, verse_text: e.target.value })}
+                className="text-right"
+                dir="rtl"
+              />
+            )}
           </div>
           <div className="mt-4 flex justify-end">
             <Button
