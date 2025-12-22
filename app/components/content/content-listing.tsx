@@ -105,14 +105,14 @@ export default function ContentListing({
           {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
         </p>
         
-        {/* Show pagination only on desktop */}
+        {/* Show pagination only on desktop at top */}
         {showTopPagination && totalPages > 1 && onPageChange && (
-          <div className="hidden lg:block w-auto lg:flex-shrink-0">
+          <div className="hidden lg:block w-full lg:w-auto">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={onPageChange}
-              showRange={true}
+              showRange={false}
               loading={loading}
             />
           </div>
@@ -156,7 +156,7 @@ export default function ContentListing({
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={onPageChange}
-                showRange={true}
+                showRange={false}
                 loading={loading}
               />
             </div>
