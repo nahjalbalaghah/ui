@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { X, ZoomIn, ZoomOut, Loader2, FileText, Book } from 'lucide-react';
+import { X, ZoomIn, ZoomOut, Loader2, FileText, Book, Maximize2, Minimize2 } from 'lucide-react';
 import { manuscriptsApi, Manuscript, getManuscriptImageUrl } from '@/api/manuscripts';
 import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes } from '@/app/utils/text-formatting';
@@ -25,6 +25,7 @@ export default function ManuscriptComparisonModal({
     const [zoom, setZoom] = useState(100);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isImageFullscreen, setIsImageFullscreen] = useState(false);
 
     useEffect(() => {
         if (isOpen && content.sermonNumber) {
@@ -60,6 +61,10 @@ export default function ManuscriptComparisonModal({
 
     const handleZoomOut = () => {
         setZoom(prev => Math.max(50, prev - 25));
+    };
+
+    const toggleImageFullscreen = () => {
+        setIsImageFullscreen(!isImageFullscreen);
     };
 
     const handleManuscriptChange = (manuscript: Manuscript) => {
@@ -193,6 +198,76 @@ export default function ManuscriptComparisonModal({
                                 </div>
                             ) : (
                                 <>
+                                    {/* Fullscreen Image Overlay */}
+                                    {isImageFullscreen && (
+                                        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col">
+                                            {/* Fullscreen Controls */}
+                                            <div className="px-4 py-3 bg-white/10 backdrop-blur-sm border-b border-white/20 flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <button
+                                                        onClick={handleZoomOut}
+                                                        disabled={zoom <= 50}
+                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50"
+                                                    >
+                                                        <ZoomOut className="w-4 h-4 text-white" />
+                                                    </button>
+                                                    <span className="text-sm font-medium text-white min-w-[50px] text-center">{zoom}%</span>
+                                                    <button
+                                                        onClick={handleZoomIn}
+                                                        disabled={zoom >= 200}
+                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50"
+                                                    >
+                                                        <ZoomIn className="w-4 h-4 text-white" />
+                                                    </button>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="text-sm text-white">
+                                                        Page {currentPage + 1} of {pages.length}
+                                                    </div>
+                                                    <button
+                                                        onClick={toggleImageFullscreen}
+                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                                                        aria-label="Exit fullscreen"
+                                                    >
+                                                        <Minimize2 className="w-4 h-4 text-white" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Fullscreen Image */}
+                                            <div className="flex-1 overflow-auto p-4">
+                                                {pages.length > 0 ? (
+                                                    <div className="flex items-center justify-center min-h-full">
+                                                        <img
+                                                            src={pages[currentPage]}
+                                                            alt={`Manuscript page ${currentPage + 1}`}
+                                                            className="max-w-full h-auto shadow-2xl rounded-lg transition-transform duration-300"
+                                                            style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center justify-center h-full text-white">
+                                                        <p>No images available</p>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Fullscreen Page Navigation */}
+                                            <div className="px-4 py-3 bg-white/10 backdrop-blur-sm border-t border-white/20 flex items-center justify-center">
+                                                <div className="flex gap-1 flex-wrap justify-center">
+                                                    {pages.map((_, idx) => (
+                                                        <button
+                                                            key={idx}
+                                                            onClick={() => setCurrentPage(idx)}
+                                                            className={`w-2 h-2 rounded-full transition-colors ${currentPage === idx ? 'bg-white' : 'bg-white/40 hover:bg-white/60'
+                                                                }`}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
                                     {/* Left Column - Manuscript Viewer */}
                                     <div className="w-1/2 border-r border-gray-200 flex flex-col bg-gray-50">
                                         {/* Manuscript Selector */}
@@ -235,8 +310,21 @@ export default function ManuscriptComparisonModal({
                                                     <ZoomIn className="w-4 h-4" />
                                                 </button>
                                             </div>
-                                            <div className="text-sm text-gray-500">
-                                                Page {currentPage + 1} of {pages.length}
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm text-gray-500">
+                                                    Page {currentPage + 1} of {pages.length}
+                                                </div>
+                                                <button
+                                                    onClick={toggleImageFullscreen}
+                                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                                    aria-label={isImageFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
+                                                >
+                                                    {isImageFullscreen ? (
+                                                        <Minimize2 className="w-4 h-4 text-gray-700" />
+                                                    ) : (
+                                                        <Maximize2 className="w-4 h-4 text-gray-700" />
+                                                    )}
+                                                </button>
                                             </div>
                                         </div>
 
