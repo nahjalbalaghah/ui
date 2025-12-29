@@ -27,34 +27,15 @@ const ManuscriptsContent = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Filter manuscripts based on selected library
+  // Since the new API returns manuscripts without library association,
+  // we show all manuscripts when any library is selected, or all if no libraries exist
   const filteredManuscripts = useMemo(() => {
-    if (!selectedLibrary || !allManuscripts.length) return [];
+    if (!allManuscripts.length) return [];
     
-    // Check if the library name matches "marashi" (case-insensitive) or similar patterns
-    const libraryNameLower = selectedLibrary.name?.toLowerCase() || '';
-    const isMarashiLibrary = libraryNameLower.includes("mar'ashi") || 
-                            libraryNameLower.includes("marashi") ||
-                            libraryNameLower.includes("mar'ashi");
-    
-    // Filter manuscripts that belong to this library
-    // Manuscripts may have a library field, or we filter by known library names
-    return allManuscripts.filter(m => {
-      const manuscriptLibrary = m.library?.toLowerCase() || '';
-      
-      // If manuscript has a library field, match it
-      if (manuscriptLibrary) {
-        return libraryNameLower.includes(manuscriptLibrary) || 
-               manuscriptLibrary.includes(libraryNameLower.split(' ')[0]);
-      }
-      
-      // For marashi library, include all manuscripts (since that's the only one with data currently)
-      if (isMarashiLibrary) {
-        return true;
-      }
-      
-      return false;
-    });
-  }, [selectedLibrary, allManuscripts]);
+    // If no libraries exist or a library is selected, return all manuscripts
+    // The manuscripts are now section-based and not library-specific in the API
+    return allManuscripts;
+  }, [allManuscripts]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,20 +77,36 @@ const ManuscriptsContent = () => {
     fetchData();
   }, [sectionFromUrl]);
 
+  // Helper function to extract section number for display
+  // "1.1" -> "1", "1.2" -> "2", "1.24" -> "24", etc.
+  const getSectionDisplayNumber = (section: string): string => {
+    const parts = section.split('.');
+    return parts.length > 1 ? parts[1] : section;
+  };
+
+  // Sort manuscripts by section number for consistent ordering
+  const sortedManuscripts = useMemo(() => {
+    return [...filteredManuscripts].sort((a, b) => {
+      const numA = parseInt(getSectionDisplayNumber(a.section), 10);
+      const numB = parseInt(getSectionDisplayNumber(b.section), 10);
+      return numA - numB;
+    });
+  }, [filteredManuscripts]);
+
   // Update selected manuscript when filtered manuscripts change
   useEffect(() => {
-    if (filteredManuscripts.length > 0) {
+    if (sortedManuscripts.length > 0) {
       // Check if current selection is still valid
       const isCurrentSelectionValid = selectedManuscript && 
-        filteredManuscripts.some(m => m.documentId === selectedManuscript.documentId);
+        sortedManuscripts.some(m => m.documentId === selectedManuscript.documentId);
       
       if (!isCurrentSelectionValid) {
-        setSelectedManuscript(filteredManuscripts[0]);
+        setSelectedManuscript(sortedManuscripts[0]);
       }
     } else {
       setSelectedManuscript(null);
     }
-  }, [filteredManuscripts]);
+  }, [sortedManuscripts]);
 
   // Handle library selection change
   const handleLibraryChange = (value: string) => {
@@ -123,7 +120,7 @@ const ManuscriptsContent = () => {
 
   // Handle manuscript/section selection change
   const handleManuscriptChange = (value: string) => {
-    const manuscript = filteredManuscripts.find(m => m.documentId === value);
+    const manuscript = sortedManuscripts.find(m => m.documentId === value);
     if (manuscript) {
       setSelectedManuscript(manuscript);
     }
@@ -135,14 +132,14 @@ const ManuscriptsContent = () => {
     label: lib.name
   }));
 
-  // Create manuscript options (sections) - use filtered manuscripts
-  const manuscriptOptions = filteredManuscripts.map(m => ({
+  // Create manuscript options (sections) - use sorted manuscripts
+  const manuscriptOptions = sortedManuscripts.map(m => ({
     value: m.documentId,
-    label: `Section ${m.section}`
+    label: `Section ${getSectionDisplayNumber(m.section)}`
   }));
 
-  // Check if the selected library has manuscripts
-  const libraryHasManuscripts = filteredManuscripts.length > 0;
+  // Check if there are manuscripts to show
+  const hasManuscripts = sortedManuscripts.length > 0;
 
   // Get current library details (either from API or fallback to static)
   const getCurrentLibraryDetails = () => {
@@ -203,7 +200,7 @@ const ManuscriptsContent = () => {
             <p className="text-red-600 mb-4">{error}</p>
             {sectionFromUrl && (
               <p className="text-gray-500 text-sm">
-                No manuscripts found for section {sectionFromUrl}.
+                No manuscripts found for section {getSectionDisplayNumber(sectionFromUrl)}.
               </p>
             )}
           </div>
@@ -221,7 +218,7 @@ const ManuscriptsContent = () => {
         <div className="mb-6">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-blue-800">
-              <span className="font-semibold">Viewing manuscripts for section:</span> {sectionFromUrl}
+              <span className="font-semibold">Viewing manuscripts for section:</span> {getSectionDisplayNumber(sectionFromUrl)}
             </p>
           </div>
         </div>
@@ -247,17 +244,17 @@ const ManuscriptsContent = () => {
                     />
                   </div>
                 )}
-                {libraryHasManuscripts && (
+                {hasManuscripts && (
                   <div className="w-full">
                     <label htmlFor="manuscript-select" className="sr-only">Select Section</label>
                     <Select
                       options={manuscriptOptions}
                       value={selectedManuscript?.documentId || ''}
-                    onChange={handleManuscriptChange}
-                    placeholder="Select a Section..."
-                    className="w-full"
-                  />
-                </div>
+                      onChange={handleManuscriptChange}
+                      placeholder="Select a Section..."
+                      className="w-full"
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -268,7 +265,7 @@ const ManuscriptsContent = () => {
       <div className="mb-8">
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-            {`${currentLibraryDetails.name}${selectedManuscript?.section ? ` - Section ${selectedManuscript.section}` : sectionFromUrl ? ` - Section ${sectionFromUrl}` : ''}`}
+            {`${currentLibraryDetails.name}${selectedManuscript?.section ? ` - Section ${getSectionDisplayNumber(selectedManuscript.section)}` : sectionFromUrl ? ` - Section ${getSectionDisplayNumber(sectionFromUrl)}` : ''}`}
           </h2>
           <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-600">
             {(selectedManuscript?.gregorianYear || currentLibraryDetails.date) && (
@@ -290,7 +287,7 @@ const ManuscriptsContent = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          {!libraryHasManuscripts ? (
+          {!hasManuscripts ? (
             <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
               <div className="mb-4">
                 <svg className="w-16 h-16 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
