@@ -115,6 +115,31 @@ function ContentPageContent({ config }: ContentPageProps) {
     });
   };
 
+  // Helper function to fetch all content with pagination handling
+  const fetchAllContent = async (): Promise<Post[]> => {
+    const batchSize = 100; // Strapi typically limits to 100 per request
+    let currentPage = 1;
+    let hasMore = true;
+    const allData: Post[] = [];
+
+    while (hasMore) {
+      const response = await config.api.getContent(currentPage, batchSize);
+      if (!response || !response.data) {
+        break;
+      }
+      
+      const filteredData = response.data.filter(item => item.heading);
+      allData.push(...filteredData);
+      
+      // Check if there are more pages
+      const totalPages = response.meta?.pagination?.pageCount || 1;
+      hasMore = currentPage < totalPages;
+      currentPage++;
+    }
+
+    return allData;
+  };
+
   const loadContent = async (page = 1, search = '', updateUrl = true, append = false, forceFullLoad = false) => {
     try {
       if (!append) {
@@ -133,11 +158,10 @@ function ContentPageContent({ config }: ContentPageProps) {
       let allData: Post[] = [];
 
       if (sortBy && sortBy !== 'relevance' && !search) {
-        const firstResponse = await config.api.getContent(1, 1000); // Large page size to get all
-        if (!firstResponse || !firstResponse.data) {
+        allData = await fetchAllContent();
+        if (allData.length === 0) {
           throw new Error('Invalid response format from API');
         }
-        allData = firstResponse.data.filter(item => item.heading);
 
         const getDisplayNumber = (sermonNumber: string | null) => {
           if (!sermonNumber) return 0;
@@ -178,17 +202,14 @@ function ContentPageContent({ config }: ContentPageProps) {
 
       } else if (search) {
         // Search mode: fetch all data and apply client-side filtering
-        const allDataResponse = await config.api.getContent(1, 1000);
+        const fetchedData = await fetchAllContent();
 
-        if (!allDataResponse || !allDataResponse.data) {
+        if (fetchedData.length === 0) {
           throw new Error('Invalid response format from API');
         }
 
-        // Filter items with heading first
-        let filteredByHeading = allDataResponse.data.filter(item => item.heading);
-
         // Apply client-side search filter (includes translations.text)
-        let searchResults = clientSideSearchFilter(filteredByHeading, search);
+        let searchResults = clientSideSearchFilter(fetchedData, search);
 
         // Sort if sortBy is active
         if (sortBy && sortBy !== 'relevance') {
@@ -416,13 +437,15 @@ function ContentPageContent({ config }: ContentPageProps) {
         // Already have all content loaded (sorted/searched mode)
         dataToSearch = allContent;
       } else {
-        // Need to fetch all content first
-        const allDataResponse = await config.api.getContent(1, 1000);
-        if (!allDataResponse || !allDataResponse.data) {
+        // Need to fetch all content - fetch in batches to handle API pagination limits
+        const fetchedData = await fetchAllContent();
+
+        if (fetchedData.length === 0) {
           setIsTransitioning(false);
           return;
         }
-        dataToSearch = allDataResponse.data.filter(item => item.heading);
+
+        dataToSearch = fetchedData;
         
         // Sort by sermon number ascending (default order)
         dataToSearch.sort((a, b) => getDisplayNumber(a.sermonNumber) - getDisplayNumber(b.sermonNumber));

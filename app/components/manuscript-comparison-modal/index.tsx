@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { X, ZoomIn, ZoomOut, Loader2, FileText, Book } from 'lucide-react';
+import { X, ZoomIn, ZoomOut, Loader2, FileText, Book, Maximize2, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { manuscriptsApi, Manuscript, getManuscriptImageUrl } from '@/api/manuscripts';
 import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes } from '@/app/utils/text-formatting';
@@ -9,8 +9,22 @@ import { formatTextWithFootnotes } from '@/app/utils/text-formatting';
 interface ManuscriptComparisonModalProps {
     isOpen: boolean;
     onClose: () => void;
-    content: Post;
-    contentType: 'orations' | 'letters' | 'sayings';
+    content: Post | RadisContent;
+    contentType: 'orations' | 'letters' | 'sayings' | 'radis';
+}
+
+// Simplified content type for Radis introductions
+interface RadisContent {
+    id: number;
+    number: string;
+    arabic: string;
+    translation: string;
+    heading?: string;
+    sermonNumber?: string;
+    paragraphs?: any[];
+    title?: string;
+    translations?: any[];
+    footnotes?: any[];
 }
 
 export default function ManuscriptComparisonModal({
@@ -25,18 +39,29 @@ export default function ManuscriptComparisonModal({
     const [zoom, setZoom] = useState(100);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isImageFullscreen, setIsImageFullscreen] = useState(false);
+
+    // Get the section number, handling both Post (sermonNumber) and RadisContent (number)
+    const getSectionNumber = () => {
+        if (contentType === 'radis' && 'number' in content) {
+            return `0.${content.number}`; // Radis uses prefix 0 for section
+        }
+        return (content as Post).sermonNumber || null;
+    };
+
+    const sectionNumber = getSectionNumber();
 
     useEffect(() => {
-        if (isOpen && content.sermonNumber) {
+        if (isOpen && sectionNumber) {
             fetchManuscripts();
         }
-    }, [isOpen, content.sermonNumber]);
+    }, [isOpen, sectionNumber]);
 
     const fetchManuscripts = async () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await manuscriptsApi.getManuscriptsBySection(content.sermonNumber!);
+            const response = await manuscriptsApi.getManuscriptsBySection(sectionNumber!);
             if (response.data && response.data.length > 0) {
                 setManuscripts(response.data);
                 setSelectedManuscript(response.data[0]);
@@ -62,15 +87,49 @@ export default function ManuscriptComparisonModal({
         setZoom(prev => Math.max(50, prev - 25));
     };
 
-    const handleManuscriptChange = (manuscript: Manuscript) => {
-        setSelectedManuscript(manuscript);
-        setCurrentPage(0);
+    const toggleImageFullscreen = () => {
+        setIsImageFullscreen(!isImageFullscreen);
     };
 
-    // Get all pages from the selected manuscript
-    const pages = selectedManuscript?.files?.map(file => getManuscriptImageUrl(file.url)) || [];
+    const allPages = useMemo(() => {
+        return manuscripts.flatMap(manuscript =>
+            (manuscript.files || []).map(file => ({
+                url: getManuscriptImageUrl(file.url),
+                manuscript: manuscript,
+                file: file
+            }))
+        );
+    }, [manuscripts]);
 
-    // Clean Arabic text
+    const currentPageData = useMemo(() => {
+        if (currentPage < 0 || currentPage >= allPages.length) return null;
+        return allPages[currentPage];
+    }, [allPages, currentPage]);
+
+    const currentPageUrl = currentPageData?.url || '';
+
+    const displayedManuscript = currentPageData?.manuscript || selectedManuscript;
+
+    const handleManuscriptChange = useCallback((manuscript: Manuscript) => {
+        const firstPageIndex = allPages.findIndex(p => p.manuscript.id === manuscript.id);
+        setSelectedManuscript(manuscript);
+        if (firstPageIndex >= 0) {
+            setCurrentPage(firstPageIndex);
+        }
+    }, [allPages]);
+
+    const handlePrevPage = useCallback(() => {
+        setCurrentPage(prev => Math.max(0, prev - 1));
+    }, []);
+
+    const handleNextPage = useCallback(() => {
+        setCurrentPage(prev => Math.min(allPages.length - 1, prev + 1));
+    }, [allPages.length]);
+
+    const handlePageClick = useCallback((index: number) => {
+        setCurrentPage(index);
+    }, []);
+
     const cleanArabicText = (text: string): string => {
         if (!text) return '';
         return text
@@ -99,7 +158,7 @@ export default function ManuscriptComparisonModal({
 
     const allFootnotes = [
         ...(content.footnotes || []),
-        ...content.paragraphs.flatMap(p => p.footnotes || [])
+        ...((content.paragraphs || []).flatMap((p: any) => p.footnotes || []))
     ];
 
     const backdropVariants: Variants = {
@@ -193,6 +252,97 @@ export default function ManuscriptComparisonModal({
                                 </div>
                             ) : (
                                 <>
+                                    {/* Fullscreen Image Overlay */}
+                                    {isImageFullscreen && (
+                                        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col">
+                                            {/* Fullscreen Controls */}
+                                            <div className="px-4 py-3 bg-white/10 backdrop-blur-sm border-b border-white/20 flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <button
+                                                        onClick={handleZoomOut}
+                                                        disabled={zoom <= 50}
+                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50"
+                                                    >
+                                                        <ZoomOut className="w-4 h-4 text-white" />
+                                                    </button>
+                                                    <span className="text-sm font-medium text-white min-w-[50px] text-center">{zoom}%</span>
+                                                    <button
+                                                        onClick={handleZoomIn}
+                                                        disabled={zoom >= 200}
+                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50"
+                                                    >
+                                                        <ZoomIn className="w-4 h-4 text-white" />
+                                                    </button>
+                                                </div>
+                                                <div className="flex items-center gap-3">
+                                                    <button
+                                                        onClick={handlePrevPage}
+                                                        disabled={currentPage === 0}
+                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-white text-sm font-medium"
+                                                        aria-label="Previous page"
+                                                    >
+                                                        <ChevronLeft className="w-5 h-5" />
+                                                        <span>Previous</span>
+                                                    </button>
+                                                    <button
+                                                        onClick={handleNextPage}
+                                                        disabled={currentPage === allPages.length - 1}
+                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-white text-sm font-medium"
+                                                        aria-label="Next page"
+                                                    >
+                                                        <span>Next</span>
+                                                        <ChevronRight className="w-5 h-5" />
+                                                    </button>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="text-sm text-white">
+                                                        Page {currentPage + 1} of {allPages.length}
+                                                    </div>
+                                                    <button
+                                                        onClick={toggleImageFullscreen}
+                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                                                        aria-label="Exit fullscreen"
+                                                    >
+                                                        <Minimize2 className="w-4 h-4 text-white" />
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* Fullscreen Image */}
+                                            <div className="flex-1 overflow-auto p-4">
+                                                {allPages.length > 0 ? (
+                                                    <div className="flex items-center justify-center min-h-full">
+                                                        <img
+                                                            key={`fullscreen-${currentPage}-${currentPageUrl}`}
+                                                            src={currentPageUrl}
+                                                            alt={`Manuscript page ${currentPage + 1}`}
+                                                            className="max-w-full h-auto shadow-2xl rounded-lg transition-transform duration-300"
+                                                            style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center justify-center h-full text-white">
+                                                        <p>No images available</p>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Fullscreen Page Navigation */}
+                                            <div className="px-4 py-3 bg-white/10 backdrop-blur-sm border-t border-white/20 flex items-center justify-center">
+                                                <div className="flex gap-1 flex-wrap justify-center">
+                                                    {allPages.map((_, idx) => (
+                                                        <button
+                                                            key={idx}
+                                                            onClick={() => handlePageClick(idx)}
+                                                            className={`w-2 h-2 rounded-full transition-colors ${currentPage === idx ? 'bg-white' : 'bg-white/40 hover:bg-white/60'
+                                                                }`}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     {/* Left Column - Manuscript Viewer */}
                                     <div className="w-1/2 border-r border-gray-200 flex flex-col bg-gray-50">
                                         {/* Manuscript Selector */}
@@ -200,7 +350,7 @@ export default function ManuscriptComparisonModal({
                                             <div className="px-4 py-3 border-b border-gray-200 bg-white">
                                                 <label className="text-sm font-medium text-gray-700 mb-2 block">Select Manuscript:</label>
                                                 <select
-                                                    value={selectedManuscript?.id || ''}
+                                                    value={displayedManuscript?.id || ''}
                                                     onChange={(e) => {
                                                         const ms = manuscripts.find(m => m.id === parseInt(e.target.value));
                                                         if (ms) handleManuscriptChange(ms);
@@ -235,17 +385,51 @@ export default function ManuscriptComparisonModal({
                                                     <ZoomIn className="w-4 h-4" />
                                                 </button>
                                             </div>
-                                            <div className="text-sm text-gray-500">
-                                                Page {currentPage + 1} of {pages.length}
+                                            <div className="flex items-center gap-3">
+                                                <button
+                                                    onClick={handlePrevPage}
+                                                    disabled={currentPage === 0}
+                                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-gray-700 text-sm font-medium"
+                                                    aria-label="Previous page"
+                                                >
+                                                    <ChevronLeft className="w-5 h-5" />
+                                                    <span>Previous</span>
+                                                </button>
+                                                <button
+                                                    onClick={handleNextPage}
+                                                    disabled={currentPage === allPages.length - 1}
+                                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-gray-700 text-sm font-medium"
+                                                    aria-label="Next page"
+                                                >
+                                                    <span>Next</span>
+                                                    <ChevronRight className="w-5 h-5" />
+                                                </button>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm text-gray-500">
+                                                    Page {currentPage + 1} of {allPages.length}
+                                                </div>
+                                                <button
+                                                    onClick={toggleImageFullscreen}
+                                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                                    aria-label={isImageFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
+                                                >
+                                                    {isImageFullscreen ? (
+                                                        <Minimize2 className="w-4 h-4 text-gray-700" />
+                                                    ) : (
+                                                        <Maximize2 className="w-4 h-4 text-gray-700" />
+                                                    )}
+                                                </button>
                                             </div>
                                         </div>
 
                                         {/* Manuscript Image */}
                                         <div className="flex-1 overflow-auto p-4">
-                                            {pages.length > 0 ? (
+                                            {allPages.length > 0 ? (
                                                 <div className="flex items-center justify-center min-h-full">
                                                     <img
-                                                        src={pages[currentPage]}
+                                                        key={`page-${currentPage}-${currentPageUrl}`}
+                                                        src={currentPageUrl}
                                                         alt={`Manuscript page ${currentPage + 1}`}
                                                         className="max-w-full h-auto shadow-lg rounded-lg transition-transform duration-300"
                                                         style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
@@ -261,10 +445,10 @@ export default function ManuscriptComparisonModal({
                                         {/* Page Navigation */}
                                         <div className="px-4 py-3 border-t border-gray-200 bg-white flex items-center justify-center">
                                             <div className="flex gap-1 flex-wrap justify-center">
-                                                {pages.map((_, idx) => (
+                                                {allPages.map((_, idx) => (
                                                     <button
                                                         key={idx}
-                                                        onClick={() => setCurrentPage(idx)}
+                                                        onClick={() => handlePageClick(idx)}
                                                         className={`w-2 h-2 rounded-full transition-colors ${currentPage === idx ? 'bg-[#43896B]' : 'bg-gray-300 hover:bg-gray-400'
                                                             }`}
                                                     />
@@ -288,14 +472,14 @@ export default function ManuscriptComparisonModal({
                                                             {formatTextWithFootnotes(cleanArabicText(content.title), allFootnotes, true, content.sermonNumber || 'main')}
                                                         </p>
                                                     </div>
-                                                    {content.translations?.find(t => t.type === 'en') && (
+                                                    {content.translations?.find((t: { type: string; text: string }) => t.type === 'en') && (
                                                         <div className="bg-gray-50 rounded-lg p-4 mt-4">
                                                             <p className="text-gray-700 font-brill leading-relaxed">
                                                                 {formatTextWithFootnotes(
-                                                                    content.translations.find(t => t.type === 'en')!.text,
+                                                                    content.translations!.find((t: { type: string; text: string }) => t.type === 'en')!.text,
                                                                     allFootnotes,
                                                                     false,
-                                                                    content.sermonNumber || 'main'
+                                                                    sectionNumber || 'main'
                                                                 )}
                                                             </p>
                                                         </div>
@@ -305,7 +489,7 @@ export default function ManuscriptComparisonModal({
 
                                             {/* Paragraphs */}
                                             {sortedParagraphs.map((paragraph) => {
-                                                const englishTranslation = paragraph.translations?.find(t => t.type === 'en');
+                                                const englishTranslation = paragraph.translations?.find((t: { type: string; text: string }) => t.type === 'en');
                                                 return (
                                                     <div key={paragraph.id} className="mb-6 pb-6 border-b border-gray-100 last:border-b-0">
                                                         {paragraph.number && (

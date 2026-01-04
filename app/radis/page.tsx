@@ -1,10 +1,12 @@
 'use client';
 import React, { useState, useEffect, Suspense } from 'react';
 import { radisApi, RadisIntroduction, RadisApiResponse } from '@/api/posts';
-import { Search, BookOpen } from 'lucide-react';
+import { Search, BookOpen, GitCompare, Book } from 'lucide-react';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
 import { useTextRefHighlight } from '@/app/hooks/useTextRefHighlight';
+import ManuscriptComparisonModal from '@/app/components/manuscript-comparison-modal';
+import Link from 'next/link';
 
 function RadisContent() {
   const [radisIntroductions, setRadisIntroductions] = useState<RadisIntroduction[]>([]);
@@ -12,6 +14,8 @@ function RadisContent() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
+  const [selectedRadisForComparison, setSelectedRadisForComparison] = useState<RadisIntroduction | null>(null);
 
   const { scrollToAndHighlight } = useTextRefHighlight({
     onHighlight: (ref) => {
@@ -30,7 +34,7 @@ function RadisContent() {
       const response: RadisApiResponse = await radisApi.getRadisIntroductions();
       setRadisIntroductions(response.data);
       setError(null);
-      
+
       // Check for highlight after data loads
       const urlParams = new URLSearchParams(window.location.search);
       const highlightRef = urlParams.get('highlightRef');
@@ -40,7 +44,7 @@ function RadisContent() {
         // Small delay to ensure rendering
         setTimeout(() => {
           scrollToAndHighlight(highlightRef);
-          
+
           // Handle word highlighting if present
           if (word) {
             const element = document.querySelector(`[data-text-ref="${highlightRef}"]`);
@@ -105,7 +109,7 @@ function RadisContent() {
       let match;
       const matches: Array<{ start: number; end: number }> = [];
       wordRegex.lastIndex = 0;
-      
+
       while ((match = wordRegex.exec(textNode.textContent || '')) !== null) {
         matches.push({ start: match.index, end: wordRegex.lastIndex });
       }
@@ -243,6 +247,23 @@ function RadisContent() {
                           Introduction {radis.number}
                         </h3>
                       </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          variant='outlined'
+                          icon={<GitCompare className='w-4 h-4' />}
+                          onClick={() => {
+                            setSelectedRadisForComparison(radis);
+                            setIsComparisonModalOpen(true);
+                          }}
+                        >
+                          Compare Manuscripts
+                        </Button>
+                        <Link href={`/manuscripts?section=${radis.number.startsWith('0.') ? radis.number : `0.${radis.number}`}`}>
+                          <Button variant='outlined' icon={<Book className='w-4 h-4' />}>
+                            View Manuscripts
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                     <div className="mb-6">
 
@@ -282,6 +303,30 @@ function RadisContent() {
           )}
         </div>
       </div>
+
+      {/* Manuscript Comparison Modal */}
+      {selectedRadisForComparison && (
+        <ManuscriptComparisonModal
+          isOpen={isComparisonModalOpen}
+          onClose={() => {
+            setIsComparisonModalOpen(false);
+            setSelectedRadisForComparison(null);
+          }}
+          content={{
+            id: selectedRadisForComparison.id,
+            number: selectedRadisForComparison.number,
+            arabic: selectedRadisForComparison.arabic,
+            translation: selectedRadisForComparison.translation,
+            heading: `Introduction ${selectedRadisForComparison.number}`,
+            sermonNumber: `0.${selectedRadisForComparison.number}`,
+            paragraphs: [],
+            title: undefined,
+            translations: undefined,
+            footnotes: []
+          }}
+          contentType="radis"
+        />
+      )}
     </div>
   );
 }

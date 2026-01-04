@@ -389,7 +389,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
         
         if (type === 'Radis') {
             const radis = data as RadisIntroduction;
-            return `/radis?highlightRef=0.${radis.number}`;
+            return `/radis?highlightRef=${radis.number.startsWith('0.') ? radis.number : `0.${radis.number}`}`;
         }
         
         return null;

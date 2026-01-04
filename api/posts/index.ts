@@ -389,20 +389,38 @@ export const orationsApi = {
 
   async getAdjacentOrations(currentId: number): Promise<{ previous: Post | null; next: Post | null }> {
     try {
-      // Fetch all orations to find adjacent ones
-      const response = await postsApi.getPosts({
-        filters: { type: 'Oration' },
-        pageSize: 500,
-        fields: ['id', 'heading', 'sermonNumber', 'slug'], // Only fetch necessary fields
-        populate: [] // Don't fetch any relations
-      });
+      // Fetch all orations using pagination to handle API limits
+      const batchSize = 100;
+      let currentPage = 1;
+      let hasMore = true;
+      const allPosts: Post[] = [];
 
-      if (!response.data || response.data.length === 0) {
+      while (hasMore) {
+        const response = await postsApi.getPosts({
+          filters: { type: 'Oration' },
+          page: currentPage,
+          pageSize: batchSize,
+          fields: ['id', 'heading', 'sermonNumber', 'slug'],
+          populate: []
+        });
+
+        if (!response.data || response.data.length === 0) {
+          break;
+        }
+
+        allPosts.push(...response.data);
+
+        const totalPages = response.meta?.pagination?.pageCount || 1;
+        hasMore = currentPage < totalPages;
+        currentPage++;
+      }
+
+      if (allPosts.length === 0) {
         return { previous: null, next: null };
       }
 
       // Sort by sermon number
-      const sortedPosts = response.data
+      const sortedPosts = allPosts
         .filter(post => post.heading)
         .sort((a, b) => {
           const getDisplayNumber = (sermonNumber: string | null) => {
@@ -539,18 +557,37 @@ export const lettersApi = {
 
   async getAdjacentLetters(currentId: number): Promise<{ previous: Post | null; next: Post | null }> {
     try {
-      const response = await postsApi.getPosts({
-        filters: { type: 'Letter' },
-        pageSize: 500,
-        fields: ['id', 'heading', 'sermonNumber', 'slug'],
-        populate: []
-      });
+      // Fetch all letters using pagination to handle API limits
+      const batchSize = 100;
+      let currentPage = 1;
+      let hasMore = true;
+      const allPosts: Post[] = [];
 
-      if (!response.data || response.data.length === 0) {
+      while (hasMore) {
+        const response = await postsApi.getPosts({
+          filters: { type: 'Letter' },
+          page: currentPage,
+          pageSize: batchSize,
+          fields: ['id', 'heading', 'sermonNumber', 'slug'],
+          populate: []
+        });
+
+        if (!response.data || response.data.length === 0) {
+          break;
+        }
+
+        allPosts.push(...response.data);
+
+        const totalPages = response.meta?.pagination?.pageCount || 1;
+        hasMore = currentPage < totalPages;
+        currentPage++;
+      }
+
+      if (allPosts.length === 0) {
         return { previous: null, next: null };
       }
 
-      const sortedPosts = response.data
+      const sortedPosts = allPosts
         .filter(post => post.heading)
         .sort((a, b) => {
           const getDisplayNumber = (sermonNumber: string | null) => {
@@ -686,18 +723,37 @@ export const sayingsApi = {
 
   async getAdjacentSayings(currentId: number): Promise<{ previous: Post | null; next: Post | null }> {
     try {
-      const response = await postsApi.getPosts({
-        filters: { type: 'Saying' },
-        pageSize: 500,
-        fields: ['id', 'heading', 'sermonNumber', 'slug'],
-        populate: []
-      });
+      // Fetch all sayings using pagination to handle API limits
+      const batchSize = 100;
+      let currentPage = 1;
+      let hasMore = true;
+      const allPosts: Post[] = [];
 
-      if (!response.data || response.data.length === 0) {
+      while (hasMore) {
+        const response = await postsApi.getPosts({
+          filters: { type: 'Saying' },
+          page: currentPage,
+          pageSize: batchSize,
+          fields: ['id', 'heading', 'sermonNumber', 'slug'],
+          populate: []
+        });
+
+        if (!response.data || response.data.length === 0) {
+          break;
+        }
+
+        allPosts.push(...response.data);
+
+        const totalPages = response.meta?.pagination?.pageCount || 1;
+        hasMore = currentPage < totalPages;
+        currentPage++;
+      }
+
+      if (allPosts.length === 0) {
         return { previous: null, next: null };
       }
 
-      const sortedPosts = response.data
+      const sortedPosts = allPosts
         .filter(post => post.heading)
         .sort((a, b) => {
           const getDisplayNumber = (sermonNumber: string | null) => {
