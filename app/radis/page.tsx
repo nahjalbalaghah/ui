@@ -258,7 +258,7 @@ function RadisContent() {
                         >
                           Compare Manuscripts
                         </Button>
-                        <Link href={`/manuscripts?section=0.${radis.number}`}>
+                        <Link href={`/manuscripts?section=${radis.number.startsWith('0.') ? radis.number : `0.${radis.number}`}`}>
                           <Button variant='outlined' icon={<Book className='w-4 h-4' />}>
                             View Manuscripts
                           </Button>
