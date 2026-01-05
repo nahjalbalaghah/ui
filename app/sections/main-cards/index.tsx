@@ -10,7 +10,7 @@ const MainCardsSection = () => {
     {
       icon: FileText,
       title: "Manuscripts",
-      description: "Explore rare and ancient manuscripts of Nahj al-Balaghah from renowned libraries across the Islamic world",
+      description: "Explore rare manuscripts of Nahj al-Balaghah from renowned libraries across the world",
       href: "/manuscripts",
       buttonText: "Explore Manuscripts"
     },
@@ -22,9 +22,23 @@ const MainCardsSection = () => {
       buttonText: "Browse Indexes"
     },
     {
+      icon: ScrollText,
+      title: "Raḍī's Introduction",
+      description: "Read the enlightening introduction by Al-Sharif Al-Raḍī, compiler of Nahj al-Balaghah",
+      href: "/radis",
+      buttonText: "Read Introduction"
+    },
+    {
+      icon: Bookmark,
+      title: "Conclusion",
+      description: "Explore the concluding remarks by Al-Sharif Al-Raḍī on the completion of Nahj al-Balaghah",
+      href: "/conclusions",
+      buttonText: "Read Conclusion"
+    },
+    {
       icon: Info,
-      title: "About Nahj-al-Balaghah",
-      description: "Learn about the history, significance, and compilation of Nahj al-Balaghah, the Peak of Eloquence",
+      title: "About Nahj al-Balaghah",
+      description: "Learn about the history, significance, and compilation of Nahj al-Balaghah, The Way of Eloquence",
       href: "/about-nahj-al-balaghah",
       buttonText: "Learn More"
     }
@@ -56,7 +70,7 @@ const MainCardsSection = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight"
               >
-                Discover the <span className='text-[#43896B]'>Timeless Wisdom</span>
+                <span className='text-[#43896B]'>Resources</span>
               </motion.h2>
               <motion.div
                 initial={{ width: 0 }}
@@ -69,7 +83,7 @@ const MainCardsSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"
             >
               {cards.map((card, i) => (
                 <motion.div

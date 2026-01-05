@@ -11,7 +11,7 @@ interface ManuscriptComparisonModalProps {
     isOpen: boolean;
     onClose: () => void;
     content: Post | RadisContent;
-    contentType: 'orations' | 'letters' | 'sayings' | 'radis';
+    contentType: 'orations' | 'letters' | 'sayings' | 'radis' | 'conclusion';
 }
 
 // Simplified content type for Radis introductions
