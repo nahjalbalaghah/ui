@@ -5,9 +5,22 @@ import { ZoomIn, ZoomOut, Maximize2, Minimize2, ChevronLeft, ChevronRight, Grid3
 type ViewMode = 'single' | 'gallery';
 
 interface ManuscriptViewerProps {
-  pages: string[];
+  pages: (string | null)[];
   bookName: string;
 }
+
+const MissingPagePlaceholder: React.FC<{ pageNumber: number }> = ({ pageNumber }) => (
+  <div className="flex items-center justify-center bg-gray-100 min-h-[400px] lg:min-h-[600px] rounded-lg">
+    <div className="text-center p-8">
+      <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <h3 className="text-lg font-semibold text-gray-700 mb-2">Page Missing</h3>
+      <p className="text-gray-500">This page is missing from this manuscript.</p>
+      <p className="text-sm text-gray-400 mt-2">Page {pageNumber}</p>
+    </div>
+  </div>
+);
 
 const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -121,37 +134,49 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
                 }`}
                 aria-label={`Page ${index + 1}`}
               >
-                <img
-                  src={page}
-                  alt={`Page ${index + 1} thumbnail`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.currentTarget as HTMLImageElement;
-                    target.onerror = null;
-                    target.src = '/file.svg';
-                  }}
-                />
+                {page ? (
+                  <img
+                    src={page}
+                    alt={`Page ${index + 1} thumbnail`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = '/file.svg';
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                )}
               </button>
             ))}
           </div>
         </div>
         <div className="flex-1 overflow-auto bg-white">
           {viewMode === 'single' ? (
-            <div className="flex items-center justify-center min-h-[400px] lg:min-h-[600px] p-4">
-              <div
-                className="relative bg-white shadow-2xl rounded-lg overflow-hidden transition-transform duration-300"
-                style={{
-                  transform: `scale(${zoom / 100})`,
-                  transformOrigin: 'center'
-                }}
-              >
-                <img
-                  src={pages[currentPage]}
-                  alt={`${bookName} - Page ${currentPage + 1}`}
-                  className="max-w-full h-auto"
-                />
+            pages[currentPage] ? (
+              <div className="flex items-center justify-center min-h-[400px] lg:min-h-[600px] p-4">
+                <div
+                  className="relative bg-white shadow-2xl rounded-lg overflow-hidden transition-transform duration-300"
+                  style={{
+                    transform: `scale(${zoom / 100})`,
+                    transformOrigin: 'center'
+                  }}
+                >
+                  <img
+                    src={pages[currentPage]}
+                    alt={`${bookName} - Page ${currentPage + 1}`}
+                    className="max-w-full h-auto"
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              <MissingPagePlaceholder pageNumber={currentPage + 1} />
+            )
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
               {pages.map((page, index) => (
@@ -160,23 +185,37 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
                   onClick={() => handleThumbnailClick(index)}
                   className="relative group rounded-lg overflow-hidden transition-all cursor-pointer bg-gray-100"
                 >
-                  <img
-                    src={page}
-                    alt={`${bookName} - Page ${index + 1}`}
-                    className="w-full h-auto block"
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      console.error('Image failed to load:', page);
-                      // Replace failed remote image with a local fallback
-                      target.onerror = null;
-                      target.src = '/file.svg';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all flex items-center justify-center pointer-events-none">
-                    <span className="text-white font-medium opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg">
-                      Page {index + 1}
-                    </span>
-                  </div>
+                  {page ? (
+                    <>
+                      <img
+                        src={page}
+                        alt={`${bookName} - Page ${index + 1}`}
+                        className="w-full h-auto block"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          console.error('Image failed to load:', page);
+                          // Replace failed remote image with a local fallback
+                          target.onerror = null;
+                          target.src = '/file.svg';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all flex items-center justify-center pointer-events-none">
+                        <span className="text-white font-medium opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg">
+                          Page {index + 1}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="aspect-[3/4] flex items-center justify-center bg-gray-200">
+                      <div className="text-center p-4">
+                        <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p className="text-xs text-gray-500 font-medium">Page {index + 1}</p>
+                        <p className="text-xs text-gray-400">Missing</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

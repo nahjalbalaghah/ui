@@ -74,7 +74,7 @@ const HeroSection = () => {
   const conclusionCard = {
     arabic: "الخاتمة",
     label: "Conclusion",
-    href: "/about-us",
+    href: "/conclusions",
     type: "Conclusion"
   }
 
@@ -116,13 +116,16 @@ const HeroSection = () => {
             </div>
             <div className="space-y-4 sm:space-y-6 mb-8 sm:mb-12">
               <h1 className="text-4xl lg:text-6xl font-black leading-tight text-[#43896B] break-words text-balance tracking-tight" >
-               The Wisdom and Eloquence of Ali
+               The Way of Eloquence:
               </h1>
+              <p className="text-lg sm:text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
+                Selections from the Words of the Commander of the Faithful ʿAlī ibn Abī Ṭālib, God's blessings on him
+              </p>
             </div>
             <div className="text-center mb-8">
-              <p className="text-base sm:text-lg text-gray-600 mb-2">Compiled By</p>
+              <p className="text-base sm:text-lg text-gray-600 mb-2">Compiled by</p>
               <p className="text-xl sm:text-2xl font-bold">
-                AL-SHARIF AL-RADI
+                al-Sharīf al-Raḍī
               </p>
             </div>
             <div className="mt-16 max-w-4xl mx-auto px-4">

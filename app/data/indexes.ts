@@ -14,7 +14,7 @@ export const indexCategories: IndexCategory[] = [
   {
     slug: "names-places",
     title: "Index of Names and Places",
-    description: "This comprehensive index includes references to historical figures, prophets, companions of the Prophet Muhammad (PBUH), and various tribes and locations mentioned throughout Nahj al-Balaghah.",
+    description: "",
     items: [
       { word: "Aaron", references: ["1.2", "234.1"] },
       { word: "Abraham", references: ["1.2", "3.5", "7.1"] },

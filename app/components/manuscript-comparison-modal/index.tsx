@@ -5,12 +5,13 @@ import { X, ZoomIn, ZoomOut, Loader2, FileText, Book, Maximize2, Minimize2, Chev
 import { manuscriptsApi, Manuscript, getManuscriptImageUrl } from '@/api/manuscripts';
 import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes } from '@/app/utils/text-formatting';
+import Select from '../select';
 
 interface ManuscriptComparisonModalProps {
     isOpen: boolean;
     onClose: () => void;
     content: Post | RadisContent;
-    contentType: 'orations' | 'letters' | 'sayings' | 'radis';
+    contentType: 'orations' | 'letters' | 'sayings' | 'radis' | 'conclusion';
 }
 
 // Simplified content type for Radis introductions
@@ -26,6 +27,19 @@ interface RadisContent {
     translations?: any[];
     footnotes?: any[];
 }
+
+const MissingPagePlaceholder: React.FC<{ pageNumber: number; className?: string }> = ({ pageNumber, className = '' }) => (
+    <div className={`flex items-center justify-center bg-gray-100 min-h-[400px] rounded-lg ${className}`}>
+        <div className="text-center p-8">
+            <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Page Missing</h3>
+            <p className="text-gray-500">This page is missing from this manuscript.</p>
+            <p className="text-sm text-gray-400 mt-2">Page {pageNumber}</p>
+        </div>
+    </div>
+);
 
 export default function ManuscriptComparisonModal({
     isOpen,
@@ -139,6 +153,18 @@ export default function ManuscriptComparisonModal({
             .trim();
     };
 
+    // Helper function to get library/manuscript name
+    const getManuscriptDisplayName = useCallback((ms: Manuscript): string => {
+        if (ms.bookName) return ms.bookName;
+        if (ms.library) return ms.library;
+        // Try to infer from file names
+        const firstFileName = ms.files?.[0]?.name?.toLowerCase() || '';
+        if (firstFileName.includes("mar'ashi") || firstFileName.includes("marashi") || firstFileName.includes("qum_mar")) return "Mar'ashi MS";
+        if (firstFileName.includes("shahrastan")) return "Shahrastani MS";
+        if (firstFileName.includes("rampur")) return "Rampur Raza MS";
+        return `Manuscript ${ms.id}`;
+    }, []);
+
     // Sort paragraphs by number
     const sortedParagraphs = [...(content.paragraphs || [])].sort((a, b) => {
         const parseNumber = (num: string) => {
@@ -217,7 +243,14 @@ export default function ManuscriptComparisonModal({
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold text-gray-900">Compare Manuscripts</h3>
-                                    <p className="text-sm text-gray-500">{content.heading}</p>
+                                    <p className="text-sm text-gray-500">
+                                        {content.heading}
+                                        {!loading && manuscripts.length > 0 && (
+                                            <span className="ml-2 text-[#43896B]">
+                                                • {manuscripts.length} manuscript{manuscripts.length > 1 ? 's' : ''} available
+                                            </span>
+                                        )}
+                                    </p>
                                 </div>
                             </div>
                             <button
@@ -311,15 +344,19 @@ export default function ManuscriptComparisonModal({
                                             {/* Fullscreen Image */}
                                             <div className="flex-1 overflow-auto p-4">
                                                 {allPages.length > 0 ? (
-                                                    <div className="flex items-center justify-center min-h-full">
-                                                        <img
-                                                            key={`fullscreen-${currentPage}-${currentPageUrl}`}
-                                                            src={currentPageUrl}
-                                                            alt={`Manuscript page ${currentPage + 1}`}
-                                                            className="max-w-full h-auto shadow-2xl rounded-lg transition-transform duration-300"
-                                                            style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
-                                                        />
-                                                    </div>
+                                                    currentPageUrl ? (
+                                                        <div className="flex items-center justify-center min-h-full">
+                                                            <img
+                                                                key={`fullscreen-${currentPage}-${currentPageUrl}`}
+                                                                src={currentPageUrl}
+                                                                alt={`Manuscript page ${currentPage + 1}`}
+                                                                className="max-w-full h-auto shadow-2xl rounded-lg transition-transform duration-300"
+                                                                style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <MissingPagePlaceholder pageNumber={currentPage + 1} className="text-white" />
+                                                    )
                                                 ) : (
                                                     <div className="flex items-center justify-center h-full text-white">
                                                         <p>No images available</p>
@@ -346,23 +383,20 @@ export default function ManuscriptComparisonModal({
                                     {/* Left Column - Manuscript Viewer */}
                                     <div className="w-1/2 border-r border-gray-200 flex flex-col bg-gray-50">
                                         {/* Manuscript Selector */}
-                                        {manuscripts.length > 1 && (
+                                        {manuscripts.length > 0 && (
                                             <div className="px-4 py-3 border-b border-gray-200 bg-white">
                                                 <label className="text-sm font-medium text-gray-700 mb-2 block">Select Manuscript:</label>
-                                                <select
-                                                    value={displayedManuscript?.id || ''}
-                                                    onChange={(e) => {
-                                                        const ms = manuscripts.find(m => m.id === parseInt(e.target.value));
+                                                <Select
+                                                    value={String(displayedManuscript?.id || '')}
+                                                    onChange={(value) => {
+                                                        const ms = manuscripts.find(m => m.id === parseInt(value));
                                                         if (ms) handleManuscriptChange(ms);
                                                     }}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#43896B] focus:border-[#43896B]"
-                                                >
-                                                    {manuscripts.map(ms => (
-                                                        <option key={ms.id} value={ms.id}>
-                                                            {ms.bookName || `Manuscript ${ms.id}`} - {ms.gregorianYear || 'Unknown date'}
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                    options={manuscripts.map(ms => ({
+                                                        value: String(ms.id),
+                                                        label: `${getManuscriptDisplayName(ms)} ${ms.gregorianYear ? `- ${ms.gregorianYear}` : ''}`
+                                                    }))}
+                                                />
                                             </div>
                                         )}
 
@@ -426,15 +460,19 @@ export default function ManuscriptComparisonModal({
                                         {/* Manuscript Image */}
                                         <div className="flex-1 overflow-auto p-4">
                                             {allPages.length > 0 ? (
-                                                <div className="flex items-center justify-center min-h-full">
-                                                    <img
-                                                        key={`page-${currentPage}-${currentPageUrl}`}
-                                                        src={currentPageUrl}
-                                                        alt={`Manuscript page ${currentPage + 1}`}
-                                                        className="max-w-full h-auto shadow-lg rounded-lg transition-transform duration-300"
-                                                        style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
-                                                    />
-                                                </div>
+                                                currentPageUrl ? (
+                                                    <div className="flex items-center justify-center min-h-full">
+                                                        <img
+                                                            key={`page-${currentPage}-${currentPageUrl}`}
+                                                            src={currentPageUrl}
+                                                            alt={`Manuscript page ${currentPage + 1}`}
+                                                            className="max-w-full h-auto shadow-lg rounded-lg transition-transform duration-300"
+                                                            style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <MissingPagePlaceholder pageNumber={currentPage + 1} />
+                                                )
                                             ) : (
                                                 <div className="flex items-center justify-center h-full text-gray-400">
                                                     <p>No images available</p>

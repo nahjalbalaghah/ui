@@ -37,7 +37,7 @@ const indexes = [
   {
     icon: MapPin,
     title: "Index of Names and Places",
-    description: "This comprehensive index includes references to historical figures, prophets, companions of the Prophet Muhammad (PBUH), and various tribes and locations mentioned throughout Nahj al-Balaghah.",
+    description: "",
     href: "/indexes/names-places"
   },
   {
@@ -68,14 +68,14 @@ export default function IndexesPage() {
           <div className="text-center">
             <div className="flex items-center justify-center gap-3 mb-6">
               <ScrollText className="w-8 h-8 text-[#43896B]" />
-              <span className="text-[#43896B] font-bold text-xl tracking-wide">Comprehensive Indexes</span>
+              <span className="text-[#43896B] font-bold text-xl tracking-wide">Indexes</span>
             </div>
             <h1 className="text-4xl lg:text-6xl font-black text-black tracking-tight leading-tight mb-6">
-              Explore Nahj al-Balaghah <span className='text-[#43896B]'>Indexes</span>
+              <span className='text-[#43896B]'>Indexes</span>
             </h1>
             <div className="h-1 bg-[#43896B] rounded-full w-24 mx-auto mb-8"></div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Navigate through detailed indexes of names, places, terms, and concepts to deepen your understanding of Nahj al-Balaghah's profound wisdom.
+              The following indexes draw from the indexes in Tahera Qutbuddin's <em>Nahj al-Balāghah: The Wisdom and Eloquence of ʿAlī</em> (Boston: Brill, 2024).
             </p>
           </div>
         </div>
