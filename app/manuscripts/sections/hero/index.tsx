@@ -19,8 +19,7 @@ const ManuscriptsHero = () => {
             Historical Manuscripts
           </h1>
           <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Explore rare and ancient manuscripts of Nahj al-Balagha from renowned libraries across the Islamic world. 
-            Discover the rich history and preservation of this timeless text.
+            Explore rare manuscripts of Nahj al-Balaghah from renowned libraries across the world.
           </p>
           <div className="flex flex-wrap justify-center gap-8 md:gap-12 mt-12">
             <div className="text-center">

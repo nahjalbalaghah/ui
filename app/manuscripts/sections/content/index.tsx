@@ -28,6 +28,7 @@ const ManuscriptsContent = () => {
   const [selectedNumber, setSelectedNumber] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [urlSection, setUrlSection] = useState<string | null>(null);
 
   // Helper function to extract section number for display
   const getSectionDisplayNumber = useCallback((section: string): string => {
@@ -40,6 +41,7 @@ const ManuscriptsContent = () => {
     if (sectionFromUrl) {
       const type = getContentTypeFromSection(sectionFromUrl);
       if (type) setSelectedType(type);
+      setUrlSection(sectionFromUrl);
       setSelectedNumber(getSectionDisplayNumber(sectionFromUrl));
     }
   }, [sectionFromUrl, getSectionDisplayNumber]);
@@ -173,30 +175,35 @@ const ManuscriptsContent = () => {
         );
       }
 
-      // If we still don't have a selection, default to the first one
-      if (!manuscriptToSelect) {
+      // If we have a selection from selectedNumber, use it
+      if (manuscriptToSelect) {
+        setSelectedManuscript(manuscriptToSelect);
+      } else if (!urlSection) {
+        // Only default to the first one if not from URL
         manuscriptToSelect = availableSections[0];
         const newNumber = getSectionDisplayNumber(manuscriptToSelect.section);
-        if (newNumber !== selectedNumber) {
-          setSelectedNumber(newNumber);
-        }
+        setSelectedNumber(newNumber);
+        setSelectedManuscript(manuscriptToSelect);
+      } else {
+        // URL section not valid, don't select anything
+        setSelectedManuscript(null);
       }
-
-      setSelectedManuscript(manuscriptToSelect);
     } else {
       setSelectedManuscript(null);
     }
     // We use dependencies that clearly change when the selection should update
-  }, [availableSections, selectedNumber, selectedLibrary, getSectionDisplayNumber]);
+  }, [availableSections, selectedNumber, selectedLibrary, getSectionDisplayNumber, urlSection]);
 
   const handleLibraryChange = (value: string) => {
     const library = libraries.find(l => l.documentId === value);
     if (library) setSelectedLibrary(library);
+    setUrlSection(null);
   };
 
   const handleTypeChange = (value: string) => {
     setSelectedType(value as 'oration' | 'letter' | 'saying');
     setSelectedNumber('');
+    setUrlSection(null);
   };
 
   const handleNumberChange = (value: string) => {
@@ -293,7 +300,7 @@ const ManuscriptsContent = () => {
 
       <div className="mb-8">
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{`${currentLibraryDetails.name} - ${contentTypeLabel} ${selectedNumber}`}</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{selectedManuscript ? `${currentLibraryDetails.name} - ${contentTypeLabel} ${selectedNumber}` : `${currentLibraryDetails.name} - ${contentTypeLabel}`}</h2>
           <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-600">
             {(selectedManuscript?.gregorianYear || currentLibraryDetails.date) && (
               <span className="flex items-center gap-1"><span className="font-semibold">Date:</span> {selectedManuscript?.gregorianYear || currentLibraryDetails.date}</span>
@@ -305,8 +312,8 @@ const ManuscriptsContent = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+      <div className={`grid grid-cols-1 ${selectedManuscript ? 'lg:grid-cols-3' : 'lg:grid-cols-1'} gap-6`}>
+        <div className={`${selectedManuscript ? 'lg:col-span-2' : 'lg:col-span-1'}`}>
           {availableSections.length === 0 ? (
             <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
               <div className="mb-4"><svg className="w-16 h-16 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg></div>
@@ -316,45 +323,47 @@ const ManuscriptsContent = () => {
           ) : selectedManuscript && manuscriptPages.length > 0 ? (
             <ManuscriptViewer pages={manuscriptPages} bookName={selectedManuscript.bookName || ''} />
           ) : (
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center min-h-[400px] flex flex-col items-center justify-center"><p className="text-gray-600">No images available for this selection.</p></div>
+            <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center min-h-[400px] flex flex-col items-center justify-center"><p className="text-gray-600">No manuscript available for this selection.</p></div>
           )}
         </div>
-        <div className="lg:col-span-1">
-          <div className="sticky top-6">
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Manuscript Details</h3>
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-sm font-medium text-gray-500">Current Library:</span>
-                <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold">{currentLibraryDetails.name}</span>
-              </div>
-              <div className="space-y-4 text-sm">
-                {(currentLibraryDetails.siglaEnglish || currentLibraryDetails.siglaArabic) && (
-                  <div>
-                    <span className="font-semibold text-gray-800 block mb-1">Sigla</span>
-                    <div className="flex gap-4">
-                      {currentLibraryDetails.siglaEnglish && <span>{currentLibraryDetails.siglaEnglish}</span>}
-                      {currentLibraryDetails.siglaArabic && <span className="font-taha" dir="rtl">{currentLibraryDetails.siglaArabic}</span>}
-                    </div>
-                  </div>
-                )}
-                {currentLibraryDetails.library && (<div><span className="font-semibold text-gray-800 block mb-1">Library</span><span className="text-gray-600">{currentLibraryDetails.library}</span></div>)}
-                <div className="grid grid-cols-2 gap-4">
-                  {currentLibraryDetails.city && (<div><span className="font-semibold text-gray-800 block mb-1">City</span><span className="text-gray-600">{currentLibraryDetails.city}</span></div>)}
-                  {currentLibraryDetails.country && (<div><span className="font-semibold text-gray-800 block mb-1">Country</span><span className="text-gray-600">{currentLibraryDetails.country}</span></div>)}
+        {selectedManuscript && (
+          <div className="lg:col-span-1">
+            <div className="sticky top-6">
+              <div className="bg-white rounded-2xl border border-gray-200 p-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Manuscript Details</h3>
+                <div className="flex items-center justify-between mb-6">
+                  <span className="text-sm font-medium text-gray-500">Current Library:</span>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold">{currentLibraryDetails.name}</span>
                 </div>
-                {currentLibraryDetails.date && (<div><span className="font-semibold text-gray-800 block mb-1">Date (Hijri/Gregorian)</span><span className="text-gray-600">{currentLibraryDetails.date}</span></div>)}
-                {currentLibraryDetails.catalogNumber && (<div><span className="font-semibold text-gray-800 block mb-1">Catalog no.</span><span className="text-gray-600">{currentLibraryDetails.catalogNumber}</span></div>)}
-                {currentLibraryDetails.completeness && (<div><span className="font-semibold text-gray-800 block mb-1">Completeness</span><p className="text-gray-600 leading-relaxed text-xs">{currentLibraryDetails.completeness}</p></div>)}
-                {currentLibraryDetails.scribe && currentLibraryDetails.scribe !== 'n/a' && (<div><span className="font-semibold text-gray-800 block mb-1">Scribe</span><span className="text-gray-600">{currentLibraryDetails.scribe}</span></div>)}
-                {currentLibraryDetails.features && (<div><span className="font-semibold text-gray-800 block mb-1">Features</span><span className="text-gray-600">{currentLibraryDetails.features}</span></div>)}
-                {currentLibraryDetails.permanentLink && (<div><span className="font-semibold text-gray-800 block mb-1">Permanent Link</span><a href="#" className="text-[#43896B] hover:underline">{currentLibraryDetails.permanentLink === 'create link' ? 'Link' : currentLibraryDetails.permanentLink}</a></div>)}
-                {currentLibraryDetails.orationSequence && (<div><span className="font-semibold text-gray-800 block mb-1">Oration Sequence</span><span className="text-gray-600">{currentLibraryDetails.orationSequence}</span></div>)}
-                {currentLibraryDetails.format && (<div><span className="font-semibold text-gray-800 block mb-1">Format</span><p className="text-gray-600 text-xs">{currentLibraryDetails.format}</p></div>)}
-                {currentLibraryDetails.additionalInfo && (<div><span className="font-semibold text-gray-800 block mb-1">Additional Info</span><p className="text-gray-600 text-xs italic">{currentLibraryDetails.additionalInfo}</p></div>)}
+                <div className="space-y-4 text-sm">
+                  {(currentLibraryDetails.siglaEnglish || currentLibraryDetails.siglaArabic) && (
+                    <div>
+                      <span className="font-semibold text-gray-800 block mb-1">Sigla</span>
+                      <div className="flex gap-4">
+                        {currentLibraryDetails.siglaEnglish && <span>{currentLibraryDetails.siglaEnglish}</span>}
+                        {currentLibraryDetails.siglaArabic && <span className="font-taha" dir="rtl">{currentLibraryDetails.siglaArabic}</span>}
+                      </div>
+                    </div>
+                  )}
+                  {currentLibraryDetails.library && (<div><span className="font-semibold text-gray-800 block mb-1">Library</span><span className="text-gray-600">{currentLibraryDetails.library}</span></div>)}
+                  <div className="grid grid-cols-2 gap-4">
+                    {currentLibraryDetails.city && (<div><span className="font-semibold text-gray-800 block mb-1">City</span><span className="text-gray-600">{currentLibraryDetails.city}</span></div>)}
+                    {currentLibraryDetails.country && (<div><span className="font-semibold text-gray-800 block mb-1">Country</span><span className="text-gray-600">{currentLibraryDetails.country}</span></div>)}
+                  </div>
+                  {currentLibraryDetails.date && (<div><span className="font-semibold text-gray-800 block mb-1">Date (Hijri/Gregorian)</span><span className="text-gray-600">{currentLibraryDetails.date}</span></div>)}
+                  {currentLibraryDetails.catalogNumber && (<div><span className="font-semibold text-gray-800 block mb-1">Catalog no.</span><span className="text-gray-600">{currentLibraryDetails.catalogNumber}</span></div>)}
+                  {currentLibraryDetails.completeness && (<div><span className="font-semibold text-gray-800 block mb-1">Completeness</span><p className="text-gray-600 leading-relaxed text-xs">{currentLibraryDetails.completeness}</p></div>)}
+                  {currentLibraryDetails.scribe && currentLibraryDetails.scribe !== 'n/a' && (<div><span className="font-semibold text-gray-800 block mb-1">Scribe</span><span className="text-gray-600">{currentLibraryDetails.scribe}</span></div>)}
+                  {currentLibraryDetails.features && (<div><span className="font-semibold text-gray-800 block mb-1">Features</span><span className="text-gray-600">{currentLibraryDetails.features}</span></div>)}
+                  {currentLibraryDetails.permanentLink && (<div><span className="font-semibold text-gray-800 block mb-1">Permanent Link</span><a href="#" className="text-[#43896B] hover:underline">{currentLibraryDetails.permanentLink === 'create link' ? 'Link' : currentLibraryDetails.permanentLink}</a></div>)}
+                  {currentLibraryDetails.orationSequence && (<div><span className="font-semibold text-gray-800 block mb-1">Oration Sequence</span><span className="text-gray-600">{currentLibraryDetails.orationSequence}</span></div>)}
+                  {currentLibraryDetails.format && (<div><span className="font-semibold text-gray-800 block mb-1">Format</span><p className="text-gray-600 text-xs">{currentLibraryDetails.format}</p></div>)}
+                  {currentLibraryDetails.additionalInfo && (<div><span className="font-semibold text-gray-800 block mb-1">Additional Info</span><p className="text-gray-600 text-xs italic">{currentLibraryDetails.additionalInfo}</p></div>)}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

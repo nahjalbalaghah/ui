@@ -890,6 +890,115 @@ export const radisApi = {
   }
 };
 
+export interface Conclusion {
+  id: number;
+  documentId: string;
+  arabic: string;
+  translation: string;
+  number: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface ConclusionApiResponse {
+  data: Conclusion[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+export const conclusionsApi = {
+  async getConclusions(page = 1, pageSize = 25): Promise<ConclusionApiResponse> {
+    try {
+      const params = new URLSearchParams({
+        'pagination[page]': page.toString(),
+        'pagination[pageSize]': pageSize.toString(),
+        'sort[0]': 'number:asc'
+      });
+
+      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/conclusions?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching conclusions:', error);
+      throw error;
+    }
+  },
+
+  async getConclusionByNumber(number: string): Promise<Conclusion | null> {
+    try {
+      const params = new URLSearchParams({
+        'filters[number][$eq]': number,
+        'pagination[pageSize]': '1'
+      });
+
+      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/conclusions?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+
+      if (result.data && result.data.length > 0) {
+        return result.data[0];
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching conclusion by number:', error);
+      throw error;
+    }
+  },
+
+  async searchConclusions(query: string, page = 1, pageSize = 25): Promise<ConclusionApiResponse> {
+    try {
+      const params = new URLSearchParams({
+        'pagination[page]': page.toString(),
+        'pagination[pageSize]': pageSize.toString(),
+        'filters[$or][0][arabic][$containsi]': query,
+        'filters[$or][1][translation][$containsi]': query,
+        'sort[0]': 'number:asc'
+      });
+
+      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/conclusions?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error searching conclusions:', error);
+      throw error;
+    }
+  },
+
+  async getConclusionsByNumbers(numbers: string[]): Promise<ConclusionApiResponse> {
+    try {
+      const params = new URLSearchParams({
+        'pagination[pageSize]': '100'
+      });
+
+      numbers.forEach((num, index) => {
+        params.append(`filters[number][$in][${index}]`, num);
+      });
+
+      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/conclusions?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching conclusions by numbers:', error);
+      throw error;
+    }
+  }
+};
+
 export const paragraphsApi = {
   async getParagraphsByNumbers(numbers: string[]): Promise<ApiResponse> {
     try {
