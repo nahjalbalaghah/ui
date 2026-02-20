@@ -37,7 +37,7 @@ const indexes = [
   {
     icon: MapPin,
     title: "Index of Names and Places",
-    description: "",
+    description: "Locate people, tribes, and geographic regions mentioned in Nahj al-Balaghah",
     href: "/indexes/names-places"
   },
   {
@@ -63,7 +63,7 @@ const indexes = [
 export default function IndexesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-to-br from-[#43896B]/10 to-white py-24">
+      <section className="bg-linear-to-br from-[#43896B]/10 to-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center gap-3 mb-6">
@@ -84,8 +84,8 @@ export default function IndexesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {indexes.map((index, i) => (
-              <Link 
-                key={index.title} 
+              <Link
+                key={index.title}
                 href={index.href}
                 className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:bg-white/80 transition-all duration-300 group block"
               >
