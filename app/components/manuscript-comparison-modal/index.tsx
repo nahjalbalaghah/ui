@@ -54,6 +54,9 @@ export default function ManuscriptComparisonModal({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isImageFullscreen, setIsImageFullscreen] = useState(false);
+    const [viewMode, setViewMode] = useState<'content' | 'comparison'>('content');
+    const [secondManuscript, setSecondManuscript] = useState<Manuscript | null>(null);
+    const [secondPage, setSecondPage] = useState(0);
 
     // Get the section number, handling both Post (sermonNumber) and RadisContent (number)
     const getSectionNumber = () => {
@@ -79,7 +82,13 @@ export default function ManuscriptComparisonModal({
             if (response.data && response.data.length > 0) {
                 setManuscripts(response.data);
                 setSelectedManuscript(response.data[0]);
+                if (response.data.length > 1) {
+                    setSecondManuscript(response.data[1]);
+                } else {
+                    setSecondManuscript(response.data[0]);
+                }
                 setCurrentPage(0);
+                setSecondPage(0);
             } else {
                 setError('No manuscripts found for this section.');
             }
@@ -106,14 +115,22 @@ export default function ManuscriptComparisonModal({
     };
 
     const allPages = useMemo(() => {
-        return manuscripts.flatMap(manuscript =>
-            (manuscript.files || []).map(file => ({
-                url: getManuscriptImageUrl(file.url),
-                manuscript: manuscript,
-                file: file
-            }))
-        );
-    }, [manuscripts]);
+        if (!selectedManuscript) return [];
+        return (selectedManuscript.files || []).map(file => ({
+            url: getManuscriptImageUrl(file.url),
+            manuscript: selectedManuscript,
+            file: file
+        }));
+    }, [selectedManuscript]);
+
+    const secondManuscriptPages = useMemo(() => {
+        if (!secondManuscript) return [];
+        return (secondManuscript.files || []).map(file => ({
+            url: getManuscriptImageUrl(file.url),
+            manuscript: secondManuscript,
+            file: file
+        }));
+    }, [secondManuscript]);
 
     const currentPageData = useMemo(() => {
         if (currentPage < 0 || currentPage >= allPages.length) return null;
@@ -121,16 +138,14 @@ export default function ManuscriptComparisonModal({
     }, [allPages, currentPage]);
 
     const currentPageUrl = currentPageData?.url || '';
+    const secondPageUrl = secondManuscriptPages[secondPage]?.url || '';
 
-    const displayedManuscript = currentPageData?.manuscript || selectedManuscript;
+    const displayedManuscript = selectedManuscript;
 
     const handleManuscriptChange = useCallback((manuscript: Manuscript) => {
-        const firstPageIndex = allPages.findIndex(p => p.manuscript.id === manuscript.id);
         setSelectedManuscript(manuscript);
-        if (firstPageIndex >= 0) {
-            setCurrentPage(firstPageIndex);
-        }
-    }, [allPages]);
+        setCurrentPage(0);
+    }, []);
 
     const handlePrevPage = useCallback(() => {
         setCurrentPage(prev => Math.max(0, prev - 1));
@@ -236,21 +251,33 @@ export default function ManuscriptComparisonModal({
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 bg-[#43896B]/10 rounded-lg">
-                                    <Book className="w-5 h-5 text-[#43896B]" />
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50 shrink-0">
+                            <div className="flex items-center gap-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-[#43896B]/10 rounded-lg">
+                                        <Book className="w-5 h-5 text-[#43896B]" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-gray-900">Manuscript Study</h3>
+                                        <p className="text-sm text-gray-500">Section {content.sermonNumber}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 className="text-lg font-bold text-gray-900">Compare Manuscripts</h3>
-                                    <p className="text-sm text-gray-500">
-                                        {content.heading}
-                                        {!loading && manuscripts.length > 0 && (
-                                            <span className="ml-2 text-[#43896B]">
-                                                • {manuscripts.length} manuscript{manuscripts.length > 1 ? 's' : ''} available
-                                            </span>
-                                        )}
-                                    </p>
+                                <div className="h-8 w-px bg-gray-300" />
+                                <div className="flex bg-gray-200 p-1 rounded-xl">
+                                    <button
+                                        onClick={() => setViewMode('content')}
+                                        className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${viewMode === 'content' ? 'bg-white text-[#43896B] shadow-sm' : 'text-gray-600 hover:text-gray-900'
+                                            }`}
+                                    >
+                                        Manuscript & Content
+                                    </button>
+                                    <button
+                                        onClick={() => setViewMode('comparison')}
+                                        className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${viewMode === 'comparison' ? 'bg-white text-[#43896B] shadow-sm' : 'text-gray-600 hover:text-gray-900'
+                                            }`}
+                                    >
+                                        Compare Two Manuscripts
+                                    </button>
                                 </div>
                             </div>
                             <button
@@ -261,7 +288,7 @@ export default function ManuscriptComparisonModal({
                             </button>
                         </div>
 
-                        {/* Content */}
+                        {/* Content Area */}
                         <div className="flex-1 flex overflow-hidden">
                             {loading ? (
                                 <div className="flex-1 flex items-center justify-center">
@@ -285,284 +312,141 @@ export default function ManuscriptComparisonModal({
                                 </div>
                             ) : (
                                 <>
-                                    {/* Fullscreen Image Overlay */}
-                                    {isImageFullscreen && (
-                                        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col">
-                                            {/* Fullscreen Controls */}
-                                            <div className="px-4 py-3 bg-white/10 backdrop-blur-sm border-b border-white/20 flex items-center justify-between">
-                                                <div className="flex items-center gap-2">
-                                                    <button
-                                                        onClick={handleZoomOut}
-                                                        disabled={zoom <= 50}
-                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50"
-                                                    >
-                                                        <ZoomOut className="w-4 h-4 text-white" />
-                                                    </button>
-                                                    <span className="text-sm font-medium text-white min-w-[50px] text-center">{zoom}%</span>
-                                                    <button
-                                                        onClick={handleZoomIn}
-                                                        disabled={zoom >= 200}
-                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50"
-                                                    >
-                                                        <ZoomIn className="w-4 h-4 text-white" />
-                                                    </button>
-                                                </div>
-                                                <div className="flex items-center gap-3">
-                                                    <button
-                                                        onClick={handlePrevPage}
-                                                        disabled={currentPage === 0}
-                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-white text-sm font-medium"
-                                                        aria-label="Previous page"
-                                                    >
-                                                        <ChevronLeft className="w-5 h-5" />
-                                                        <span>Previous</span>
-                                                    </button>
-                                                    <button
-                                                        onClick={handleNextPage}
-                                                        disabled={currentPage === allPages.length - 1}
-                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-white text-sm font-medium"
-                                                        aria-label="Next page"
-                                                    >
-                                                        <span>Next</span>
-                                                        <ChevronRight className="w-5 h-5" />
-                                                    </button>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <div className="text-sm text-white">
-                                                        Page {currentPage + 1} of {allPages.length}
-                                                    </div>
-                                                    <button
-                                                        onClick={toggleImageFullscreen}
-                                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-                                                        aria-label="Exit fullscreen"
-                                                    >
-                                                        <Minimize2 className="w-4 h-4 text-white" />
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            {/* Fullscreen Image */}
-                                            <div className="flex-1 overflow-auto p-4">
-                                                {allPages.length > 0 ? (
-                                                    currentPageUrl ? (
-                                                        <div className="flex items-center justify-center min-h-full">
-                                                            <img
-                                                                key={`fullscreen-${currentPage}-${currentPageUrl}`}
-                                                                src={currentPageUrl}
-                                                                alt={`Manuscript page ${currentPage + 1}`}
-                                                                className="max-w-full h-auto shadow-2xl rounded-lg transition-transform duration-300"
-                                                                style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
-                                                            />
-                                                        </div>
-                                                    ) : (
-                                                        <MissingPagePlaceholder pageNumber={currentPage + 1} className="text-white" />
-                                                    )
-                                                ) : (
-                                                    <div className="flex items-center justify-center h-full text-white">
-                                                        <p>No images available</p>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Fullscreen Page Navigation */}
-                                            <div className="px-4 py-3 bg-white/10 backdrop-blur-sm border-t border-white/20 flex items-center justify-center">
-                                                <div className="flex gap-1 flex-wrap justify-center">
-                                                    {allPages.map((_, idx) => (
-                                                        <button
-                                                            key={idx}
-                                                            onClick={() => handlePageClick(idx)}
-                                                            className={`w-2 h-2 rounded-full transition-colors ${currentPage === idx ? 'bg-white' : 'bg-white/40 hover:bg-white/60'
-                                                                }`}
-                                                        />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* Left Column - Manuscript Viewer */}
-                                    <div className="w-1/2 border-r border-gray-200 flex flex-col bg-gray-50">
-                                        {/* Manuscript Selector */}
-                                        {manuscripts.length > 0 && (
-                                            <div className="px-4 py-3 border-b border-gray-200 bg-white">
-                                                <label className="text-sm font-medium text-gray-700 mb-2 block">Select Manuscript:</label>
+                                    {/* Left Column - Manuscript 1 Viewer */}
+                                    <div className={`${viewMode === 'content' ? 'w-1/2' : 'flex-1'} border-r border-gray-200 flex flex-col bg-gray-50`}>
+                                        <div className="px-4 py-3 border-b border-gray-200 bg-white flex justify-between items-center bg-linear-to-r from-[#43896B]/5 to-transparent shrink-0">
+                                            <div className="flex-1 max-w-[250px]">
                                                 <Select
-                                                    value={String(displayedManuscript?.id || '')}
+                                                    value={String(selectedManuscript?.id || '')}
                                                     onChange={(value) => {
                                                         const ms = manuscripts.find(m => m.id === parseInt(value));
                                                         if (ms) handleManuscriptChange(ms);
                                                     }}
                                                     options={manuscripts.map(ms => ({
                                                         value: String(ms.id),
-                                                        label: `${getManuscriptDisplayName(ms)} ${ms.gregorianYear ? `- ${ms.gregorianYear}` : ''}`
+                                                        label: getManuscriptDisplayName(ms)
                                                     }))}
+                                                    className="w-full"
                                                 />
                                             </div>
-                                        )}
-
-                                        {/* Zoom Controls */}
-                                        <div className="px-4 py-2 border-b border-gray-200 bg-white flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    onClick={handleZoomOut}
-                                                    disabled={zoom <= 50}
-                                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
-                                                >
-                                                    <ZoomOut className="w-4 h-4" />
-                                                </button>
-                                                <span className="text-sm font-medium text-gray-600 min-w-[50px] text-center">{zoom}%</span>
-                                                <button
-                                                    onClick={handleZoomIn}
-                                                    disabled={zoom >= 200}
-                                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
-                                                >
-                                                    <ZoomIn className="w-4 h-4" />
-                                                </button>
+                                            <div className="flex items-center gap-2 ml-4">
+                                                <button onClick={handleZoomOut} disabled={zoom <= 50} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ZoomOut className="w-4 h-4" /></button>
+                                                <span className="text-xs font-bold text-gray-500 w-10 text-center">{zoom}%</span>
+                                                <button onClick={handleZoomIn} disabled={zoom >= 200} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ZoomIn className="w-4 h-4" /></button>
                                             </div>
-                                            <div className="flex items-center gap-3">
-                                                <button
-                                                    onClick={handlePrevPage}
-                                                    disabled={currentPage === 0}
-                                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-gray-700 text-sm font-medium"
-                                                    aria-label="Previous page"
-                                                >
-                                                    <ChevronLeft className="w-5 h-5" />
-                                                    <span>Previous</span>
-                                                </button>
-                                                <button
-                                                    onClick={handleNextPage}
-                                                    disabled={currentPage === allPages.length - 1}
-                                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-gray-700 text-sm font-medium"
-                                                    aria-label="Next page"
-                                                >
-                                                    <span>Next</span>
-                                                    <ChevronRight className="w-5 h-5" />
-                                                </button>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <div className="text-sm text-gray-500">
-                                                    Page {currentPage + 1} of {allPages.length}
-                                                </div>
-                                                <button
-                                                    onClick={toggleImageFullscreen}
-                                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                                                    aria-label={isImageFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
-                                                >
-                                                    {isImageFullscreen ? (
-                                                        <Minimize2 className="w-4 h-4 text-gray-700" />
-                                                    ) : (
-                                                        <Maximize2 className="w-4 h-4 text-gray-700" />
-                                                    )}
-                                                </button>
+                                            <div className="flex items-center gap-2 ml-4">
+                                                <button onClick={handlePrevPage} disabled={currentPage === 0} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ChevronLeft className="w-5 h-5" /></button>
+                                                <span className="text-xs font-bold text-gray-500">P{currentPage + 1}</span>
+                                                <button onClick={handleNextPage} disabled={currentPage === allPages.length - 1} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ChevronRight className="w-5 h-5" /></button>
                                             </div>
                                         </div>
 
-                                        {/* Manuscript Image */}
-                                        <div className="flex-1 overflow-auto p-4">
-                                            {allPages.length > 0 ? (
-                                                currentPageUrl ? (
-                                                    <div className="flex items-center justify-center min-h-full">
-                                                        <img
-                                                            key={`page-${currentPage}-${currentPageUrl}`}
-                                                            src={currentPageUrl}
-                                                            alt={`Manuscript page ${currentPage + 1}`}
-                                                            className="max-w-full h-auto shadow-lg rounded-lg transition-transform duration-300"
-                                                            style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <MissingPagePlaceholder pageNumber={currentPage + 1} />
-                                                )
-                                            ) : (
-                                                <div className="flex items-center justify-center h-full text-gray-400">
-                                                    <p>No images available</p>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Page Navigation */}
-                                        <div className="px-4 py-3 border-t border-gray-200 bg-white flex items-center justify-center">
-                                            <div className="flex gap-1 flex-wrap justify-center">
-                                                {allPages.map((_, idx) => (
-                                                    <button
-                                                        key={idx}
-                                                        onClick={() => handlePageClick(idx)}
-                                                        className={`w-2 h-2 rounded-full transition-colors ${currentPage === idx ? 'bg-[#43896B]' : 'bg-gray-300 hover:bg-gray-400'
-                                                            }`}
+                                        <div className="flex-1 overflow-auto p-4 bg-gray-900/5 custom-scrollbar">
+                                            {currentPageUrl ? (
+                                                <div className="flex items-center justify-center min-h-full">
+                                                    <img
+                                                        src={currentPageUrl}
+                                                        alt="Manuscript 1"
+                                                        className="max-w-full h-auto shadow-2xl rounded-lg transition-transform cursor-zoom-in"
+                                                        onDoubleClick={() => setZoom(prev => prev > 100 ? 100 : 175)}
+                                                        style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'top center' }}
                                                     />
-                                                ))}
-                                            </div>
+                                                </div>
+                                            ) : <MissingPagePlaceholder pageNumber={currentPage + 1} />}
                                         </div>
                                     </div>
 
-                                    {/* Right Column - Content */}
-                                    <div className="w-1/2 flex flex-col bg-white">
-                                        <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                                            <h4 className="font-semibold text-gray-900">Content</h4>
-                                            <p className="text-sm text-gray-500">Section {content.sermonNumber}</p>
-                                        </div>
-                                        <div className="flex-1 overflow-auto p-6">
-                                            {/* Main title */}
-                                            {content.title && (
-                                                <div className="mb-6 pb-6 border-b border-gray-100">
-                                                    <div className="text-right mb-4">
-                                                        <p className="text-lg leading-relaxed text-gray-900 font-taha" dir="rtl">
-                                                            {formatTextWithFootnotes(cleanArabicText(content.title), allFootnotes, true, content.sermonNumber || 'main')}
-                                                        </p>
-                                                    </div>
-                                                    {content.translations?.find((t: { type: string; text: string }) => t.type === 'en') && (
-                                                        <div className="bg-gray-50 rounded-lg p-4 mt-4">
-                                                            <p className="text-gray-700 font-brill leading-relaxed">
-                                                                {formatTextWithFootnotes(
-                                                                    content.translations!.find((t: { type: string; text: string }) => t.type === 'en')!.text,
-                                                                    allFootnotes,
-                                                                    false,
-                                                                    sectionNumber || 'main'
-                                                                )}
-                                                            </p>
+                                    {/* Right Column - Content or Manuscript 2 */}
+                                    <div className={`${viewMode === 'content' ? 'w-1/2' : 'flex-1'} flex flex-col bg-white overflow-hidden`}>
+                                        {viewMode === 'content' ? (
+                                            <div className="flex flex-col h-full">
+                                                <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50 shrink-0">
+                                                    <h4 className="font-bold text-gray-900 flex items-center gap-2">
+                                                        <FileText className="w-4 h-4 text-[#43896B]" />
+                                                        Normalized Content
+                                                    </h4>
+                                                </div>
+                                                <div className="flex-1 overflow-auto p-8 space-y-10 custom-scrollbar">
+                                                    {content.title && (
+                                                        <div className="mb-8 pb-8 border-b border-gray-100">
+                                                            <div className="text-right">
+                                                                <p className="text-2xl leading-loose text-gray-900 font-taha italic" dir="rtl">
+                                                                    {formatTextWithFootnotes(cleanArabicText(content.title), allFootnotes, true, content.sermonNumber || 'main')}
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     )}
+                                                    {sortedParagraphs.map((paragraph) => (
+                                                        <div key={paragraph.id} className="space-y-6">
+                                                            <div className="flex items-center gap-3">
+                                                                <span className="px-2 py-0.5 bg-[#43896B]/10 text-[#43896B] rounded-md text-xs font-bold ring-1 ring-[#43896B]/20">
+                                                                    {paragraph.number}
+                                                                </span>
+                                                                <div className="h-px flex-1 bg-gray-100" />
+                                                            </div>
+                                                            {paragraph.arabic && (
+                                                                <div className="text-right">
+                                                                    <p className="text-xl leading-loose text-gray-900 font-taha" dir="rtl">
+                                                                        {formatTextWithFootnotes(cleanArabicText(paragraph.arabic), allFootnotes, true, paragraph.number)}
+                                                                    </p>
+                                                                </div>
+                                                            )}
+                                                            {paragraph.translations?.find((t: any) => t.type === 'en') && (
+                                                                <div className="border-l-4 border-gray-100 pl-6 py-2">
+                                                                    <p className="text-lg text-gray-700 font-brill leading-relaxed">
+                                                                        {formatTextWithFootnotes(paragraph.translations.find((t: any) => t.type === 'en').text, allFootnotes, false, paragraph.number)}
+                                                                    </p>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ))}
                                                 </div>
-                                            )}
-
-                                            {/* Paragraphs */}
-                                            {sortedParagraphs.map((paragraph) => {
-                                                const englishTranslation = paragraph.translations?.find((t: { type: string; text: string }) => t.type === 'en');
-                                                return (
-                                                    <div key={paragraph.id} className="mb-6 pb-6 border-b border-gray-100 last:border-b-0">
-                                                        {paragraph.number && (
-                                                            <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold text-[#43896B] bg-[#43896B]/10 rounded-full mb-2">
-                                                                {paragraph.number}
-                                                            </span>
-                                                        )}
-                                                        {paragraph.arabic && (
-                                                            <div className="text-right mb-3">
-                                                                <p className="text-lg leading-loose text-gray-900 font-taha" dir="rtl">
-                                                                    {formatTextWithFootnotes(cleanArabicText(paragraph.arabic), allFootnotes, true, paragraph.number)}
-                                                                </p>
-                                                            </div>
-                                                        )}
-                                                        {englishTranslation && (
-                                                            <div className="bg-gray-50 rounded-lg p-4">
-                                                                <p className="text-gray-700 font-brill leading-relaxed">
-                                                                    {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false, paragraph.number)}
-                                                                </p>
-                                                            </div>
-                                                        )}
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-col h-full bg-gray-50 border-l border-gray-200">
+                                                <div className="px-4 py-3 border-b border-gray-200 bg-white flex justify-between items-center bg-linear-to-l from-[#43896B]/5 to-transparent shrink-0">
+                                                    <div className="flex-1 max-w-[250px]">
+                                                        <Select
+                                                            value={String(secondManuscript?.id || '')}
+                                                            onChange={(value) => {
+                                                                const ms = manuscripts.find(m => m.id === parseInt(value));
+                                                                if (ms) {
+                                                                    setSecondManuscript(ms);
+                                                                    setSecondPage(0);
+                                                                }
+                                                            }}
+                                                            options={manuscripts.map(ms => ({
+                                                                value: String(ms.id),
+                                                                label: getManuscriptDisplayName(ms)
+                                                            }))}
+                                                            className="w-full"
+                                                        />
                                                     </div>
-                                                );
-                                            })}
-
-                                            {sortedParagraphs.length === 0 && !content.title && (
-                                                <div className="text-center py-12 text-gray-400">
-                                                    <p>No content available</p>
+                                                    <div className="flex items-center gap-2 ml-4">
+                                                        <button onClick={() => setSecondPage(p => Math.max(0, p - 1))} disabled={secondPage === 0} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ChevronLeft className="w-5 h-5" /></button>
+                                                        <span className="text-xs font-bold text-gray-500">P{secondPage + 1}</span>
+                                                        <button onClick={() => setSecondPage(p => Math.min(secondManuscriptPages.length - 1, p + 1))} disabled={secondPage === secondManuscriptPages.length - 1} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ChevronRight className="w-5 h-5" /></button>
+                                                    </div>
                                                 </div>
-                                            )}
-                                        </div>
+                                                <div className="flex-1 overflow-auto p-4 bg-gray-900/5 custom-scrollbar">
+                                                    {secondPageUrl ? (
+                                                        <div className="flex items-center justify-center min-h-full">
+                                                            <img
+                                                                src={secondPageUrl}
+                                                                alt="Manuscript 2"
+                                                                className="max-w-full h-auto shadow-2xl rounded-lg transition-transform cursor-zoom-in"
+                                                                onDoubleClick={() => setZoom(prev => prev > 100 ? 100 : 175)}
+                                                                style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'top center' }}
+                                                            />
+                                                        </div>
+                                                    ) : <MissingPagePlaceholder pageNumber={secondPage + 1} />}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </>
-                            )}
-                        </div>
+                            )
+                            }</div>
                     </motion.div>
                 </div>
             )}

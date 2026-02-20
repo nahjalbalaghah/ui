@@ -6,6 +6,7 @@ import ContentDescription from './content-description';
 import { ArrowLeft, Book, GitCompare, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Button from '../button';
+import Select from '../select';
 import ManuscriptComparisonModal from '../manuscript-comparison-modal';
 
 interface ContentDetailsPageProps {
@@ -37,6 +38,39 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
     next: null
   });
   const [adjacentLoading, setAdjacentLoading] = useState(false);
+  const [allItemNumbers, setAllItemNumbers] = useState<{ id: number; number: string }[]>([]);
+
+  useEffect(() => {
+    const fetchAllNumbers = async () => {
+      try {
+        let response;
+        const opts = { pageSize: 500, fields: ['id', 'sermonNumber'] };
+        switch (contentType) {
+          case 'orations':
+            response = await orationsApi.getOrations(1, 500);
+            break;
+          case 'letters':
+            response = await lettersApi.getLetters(1, 500);
+            break;
+          case 'sayings':
+            response = await sayingsApi.getSayings(1, 500);
+            break;
+        }
+        if (response?.data) {
+          const numbers = response.data
+            .map(p => ({
+              id: p.id,
+              number: p.sermonNumber?.split('.').pop() || p.id.toString()
+            }))
+            .sort((a, b) => parseInt(a.number) - parseInt(b.number));
+          setAllItemNumbers(numbers);
+        }
+      } catch (error) {
+        console.error('Failed to fetch item numbers:', error);
+      }
+    };
+    fetchAllNumbers();
+  }, [contentType]);
 
   const getBackUrl = () => {
     const urlParams = new URLSearchParams();
@@ -187,46 +221,76 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header with back button and action buttons */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-          <button
-            onClick={handleBackNavigation}
-            className="inline-flex items-center gap-2 text-[#43896B] hover:text-[#367556] font-medium transition-colors cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to {title}
-          </button>
+        <div className="flex flex-col gap-6 mb-8">
+          {/* Top Row: Back button and Navigation */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <button
+              onClick={handleBackNavigation}
+              className="inline-flex items-center gap-2 text-[#43896B] hover:text-[#367556] font-semibold transition-colors cursor-pointer text-lg whitespace-nowrap"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              Back to {title}
+            </button>
 
-          <div className="flex flex-wrap gap-3">
-            <Button
-              variant='outlined'
-              disabled={!adjacentPosts.previous}
-              onClick={() => adjacentPosts.previous && navigateToPost(adjacentPosts.previous)}
-              icon={<ChevronLeft className='w-4 h-4' />}
-            >
-              Prev
-            </Button>
-            <Button
-              variant='outlined'
-              disabled={!adjacentPosts.next}
-              onClick={() => adjacentPosts.next && navigateToPost(adjacentPosts.next)}
-            >
-              <div className='flex items-center gap-2'>
-                Next
-                <ChevronRight className='w-4 h-4' />
-              </div>
-            </Button>
-            <Button
-              variant='outlined'
-              icon={<GitCompare className='w-4 h-4' />}
-              onClick={() => setIsComparisonModalOpen(true)}
-            >
-              Compare Manuscripts
-            </Button>
-            <Link href={content?.sermonNumber ? `/manuscripts?section=${content.sermonNumber}` : '/manuscripts'}>
-              <Button variant='outlined' icon={<Book className='w-4 h-4' />} >
-                View Manuscripts
+            <div className="flex items-center gap-3">
+              <Button
+                variant='outlined'
+                disabled={!adjacentPosts.previous}
+                onClick={() => adjacentPosts.previous && navigateToPost(adjacentPosts.previous)}
+                icon={<ChevronLeft className='w-4 h-4' />}
+                className="h-11"
+              >
+                Prev
               </Button>
-            </Link>
+
+              <Select
+                value={id.toString()}
+                onChange={(value: string) => router.push(`/${contentType}/details/${value}`)}
+                options={allItemNumbers.map(item => ({ value: item.id.toString(), label: `${getContentTypeLabel()} ${item.number}` }))}
+                placeholder={`Go to #`}
+                className="w-36 h-11 shrink-0"
+              />
+
+              <Button
+                variant='outlined'
+                disabled={!adjacentPosts.next}
+                onClick={() => adjacentPosts.next && navigateToPost(adjacentPosts.next)}
+                className="h-11"
+              >
+                <div className='flex items-center gap-2'>
+                  Next
+                  <ChevronRight className='w-4 h-4' />
+                </div>
+              </Button>
+            </div>
+          </div>
+
+          {/* Bottom Row: Audio and Action Buttons */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-4 border-t border-gray-100">
+            {/* Audio Player Placeholder */}
+            <div className="inline-flex items-center gap-3 bg-white border border-gray-200 rounded-full px-5 py-2.5 text-gray-500 shadow-sm">
+              <div className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#43896B] opacity-20"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#43896B]/40"></span>
+              </div>
+              <span className="text-sm font-medium italic">Audio playback coming soon...</span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <Button
+                variant='outlined'
+                icon={<GitCompare className='w-4 h-4' />}
+                onClick={() => setIsComparisonModalOpen(true)}
+                className="h-11"
+              >
+                Compare Manuscripts
+              </Button>
+              <Link href={content?.sermonNumber ? `/manuscripts?section=${content.sermonNumber}` : '/manuscripts'}>
+                <Button variant='outlined' icon={<Book className='w-4 h-4' />} className="h-11">
+                  View Manuscripts
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
 

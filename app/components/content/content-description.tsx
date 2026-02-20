@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Tag as TagIcon } from 'lucide-react';
-import { type Post } from '@/api/posts';
+import { Tag as TagIcon, Book, BookOpen } from 'lucide-react';
+import { type Post, type Footnote } from '@/api/orations';
 import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
 import Select from '@/app/components/select';
@@ -18,6 +18,25 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
   const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
   const [selectedTranslation, setSelectedTranslation] = useState('en');
   const [highlightedParagraphNumber, setHighlightedParagraphNumber] = useState<string | null>(null);
+  const [radisIntroduction, setRadisIntroduction] = useState<{ arabic: string; translation: string } | null>(null);
+
+  useEffect(() => {
+    const fetchRadisBlurb = async () => {
+      if (content.sermonNumber) {
+        try {
+          // Import radisApi dynamically or use it if available in context
+          const { radisApi } = await import('@/api/posts');
+          const radis = await radisApi.getRadisIntroductionByNumber(content.sermonNumber);
+          if (radis) {
+            setRadisIntroduction({ arabic: radis.arabic, translation: radis.translation });
+          }
+        } catch (error) {
+          console.error('Failed to fetch Radi introduction:', error);
+        }
+      }
+    };
+    fetchRadisBlurb();
+  }, [content.sermonNumber]);
 
   let allReferences: string[] = [];
   const heading = content.heading;
@@ -27,12 +46,12 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
     if (highlightRef) {
       // The highlightRef is already the full paragraph number (e.g., "1.26.1")
       setHighlightedParagraphNumber(highlightRef);
-      
+
       // Give DOM time to render and then scroll to it
       const timer = setTimeout(() => {
         // Try exact match first
         let element = document.querySelector(`[data-text-ref="${highlightRef}"]`);
-        
+
         // If no exact match, try to find a partial match (paragraph that contains this ref)
         if (!element) {
           // Try matching with sermon number prefix
@@ -45,20 +64,20 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
             }
           }
         }
-        
+
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          
+
           // Add highlight class
           element.classList.add('highlight-text-ref');
-          
+
           // If we have a word to highlight, do that too
           const wordToHighlight = englishWord || arabicWord;
           if (wordToHighlight) {
             // Find the text container within this element
             // Look for the paragraph with font-brill class (English) or font-taha class (Arabic)
-            const textElement = englishWord 
-              ? element.querySelector('.font-brill') 
+            const textElement = englishWord
+              ? element.querySelector('.font-brill')
               : element.querySelector('.font-taha');
             if (textElement) {
               highlightWordInParagraph(textElement, wordToHighlight);
@@ -97,7 +116,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
       let match;
       const matches: Array<{ start: number; end: number }> = [];
       wordRegex.lastIndex = 0;
-      
+
       while ((match = wordRegex.exec(textNode.textContent || '')) !== null) {
         matches.push({ start: match.index, end: wordRegex.lastIndex });
       }
@@ -231,6 +250,23 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
             />
           )}
         </div>
+
+        {radisIntroduction && (
+          <div className="mt-8 bg-[#43896B]/5 border-l-4 border-[#43896B] p-6 rounded-r-xl">
+            <div className="space-y-4">
+              <div className="text-right">
+                <p className="text-lg leading-relaxed text-gray-900 font-taha italic" dir="rtl">
+                  {radisIntroduction.arabic}
+                </p>
+              </div>
+              <div className="text-left">
+                <p className="text-lg leading-relaxed text-gray-700 font-brill italic">
+                  {radisIntroduction.translation}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       {content.sermonNumber && (
         <div className="mb-4">
@@ -240,7 +276,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
         </div>
       )}
       {(content.title || mainTranslation) && (
-        <div 
+        <div
           className={`space-y-8 mb-8 ${highlightedParagraphNumber === content.sermonNumber ? 'highlight-text-ref' : ''}`}
           data-text-ref={content.sermonNumber}
         >
@@ -289,8 +325,8 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
           {sortedParagraphs.map((paragraph) => {
             const englishTranslation = paragraph.translations?.find(t => t.type === selectedTranslation);
             return (
-              <div 
-                key={paragraph.id} 
+              <div
+                key={paragraph.id}
                 data-text-ref={paragraph.number}
                 className={`border-b border-gray-100 pb-8 last:border-b-0 last:pb-0 ${highlightedParagraphNumber === paragraph.number ? 'highlight-text-ref' : ''}`}
               >
@@ -371,6 +407,71 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
         </div>
       )}
 
+      {allFootnotes.length > 0 && (
+        <div className="mt-16 pt-10 border-t border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+            <div className="bg-[#43896B]/10 p-2 rounded-lg">
+              <Book className="w-6 h-6 text-[#43896B]" />
+            </div>
+            Footnotes
+          </h2>
+          <div className="space-y-6">
+            {allFootnotes
+              .sort((a: Footnote, b: Footnote) => {
+                const parse = (s: string) => s.split('.').map(n => parseInt(n) || 0);
+                const ap = parse(a.number);
+                const bp = parse(b.number);
+                for (let i = 0; i < Math.max(ap.length, bp.length); i++) {
+                  if ((ap[i] || 0) !== (bp[i] || 0)) return (ap[i] || 0) - (bp[i] || 0);
+                }
+                return 0;
+              })
+              .map((footnote: Footnote) => (
+                <div
+                  key={footnote.id}
+                  className="group relative flex flex-col sm:flex-row gap-4 p-5 rounded-2xl hover:bg-[#43896B]/5 transition-all duration-300 border border-transparent hover:border-[#43896B]/10 cursor-pointer"
+                  onClick={() => {
+                    // Try to scroll to specific reference first (English preferred, then Arabic)
+                    const englishRef = document.getElementById(`footnote-ref-${footnote.id}-english`);
+                    const arabicRef = document.getElementById(`footnote-ref-${footnote.id}-arabic`);
+
+                    const target = englishRef || arabicRef || document.querySelector(`[data-text-ref="${footnote.number}"]`);
+
+                    if (target) {
+                      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      // Add a brief highlight effect if it's a specific ref
+                      if (englishRef || arabicRef) {
+                        const pulseEl = (englishRef || arabicRef) as HTMLElement;
+                        pulseEl.classList.add('bg-yellow-200/50', 'transition-colors', 'duration-500');
+                        setTimeout(() => {
+                          pulseEl.classList.remove('bg-yellow-200/50');
+                        }, 2000);
+                      }
+                    }
+                  }}
+                >
+                  <div className="flex items-start shrink-0">
+                    <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#43896B]/10 text-[#43896B] font-bold text-lg group-hover:bg-[#43896B] group-hover:text-white transition-colors duration-300">
+                      {footnote.number.split('.').pop()}
+                    </span>
+                  </div>
+                  <div className="flex-1 space-y-3">
+                    <p className="text-lg text-gray-800 leading-relaxed font-brill">
+                      {footnote.english_translation}
+                    </p>
+                    {footnote.arabic_interpretation && (
+                      <div className="pt-2 border-t border-gray-100 mt-2">
+                        <p className="text-xl text-gray-900 leading-relaxed font-taha text-right" dir="rtl">
+                          {footnote.arabic_interpretation}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
