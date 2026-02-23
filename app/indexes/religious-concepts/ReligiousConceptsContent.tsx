@@ -24,11 +24,9 @@ export default function ReligiousConceptsContent() {
     language: (searchParams.get('language') as 'English' | 'Arabic') || 'Arabic',
   };
 
-  const [items, setItems] = useState<ReligiousConcept[]>([]);
+  const [allItems, setAllItems] = useState<ReligiousConcept[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
 
   const [filters, setFilters] = useState<ReligiousConceptsFilters>(appliedFilters);
 
@@ -45,23 +43,14 @@ export default function ReligiousConceptsContent() {
 
   const pageSize = 20;
 
+  // Initialize: Fetch ALL items once
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchAllData = async () => {
       setLoading(true);
       setError(null);
-
       try {
-        const filterParams: ReligiousConceptsFilters = {};
-        if (appliedFilters.word_english) filterParams.word_english = appliedFilters.word_english;
-        if (appliedFilters.word_arabic) filterParams.word_arabic = appliedFilters.word_arabic;
-        if (appliedFilters.startsWith_english) filterParams.startsWith_english = appliedFilters.startsWith_english;
-        if (appliedFilters.startsWith_arabic) filterParams.startsWith_arabic = appliedFilters.startsWith_arabic;
-        if (appliedFilters.language) filterParams.language = appliedFilters.language;
-
-        const response = await religiousConceptsApi.getReligiousConcepts(page, pageSize, filterParams);
-        setItems(response.data);
-        setTotalPages(response.meta.pagination.pageCount);
-        setTotal(response.meta.pagination.total);
+        const data = await religiousConceptsApi.getAllReligiousConcepts();
+        setAllItems(data);
       } catch (err) {
         setError('Failed to load religious concepts. Please try again later.');
         console.error('Error fetching religious concepts:', err);
@@ -69,9 +58,55 @@ export default function ReligiousConceptsContent() {
         setLoading(false);
       }
     };
+    fetchAllData();
+  }, []);
 
-    fetchItems();
-  }, [page, appliedFilters.word_english, appliedFilters.word_arabic, appliedFilters.startsWith_english, appliedFilters.startsWith_arabic, appliedFilters.language]);
+  // Local Filter Logic
+  const filteredItems = React.useMemo(() => {
+    let result = [...allItems];
+
+    const { word_english, word_arabic, startsWith_english, startsWith_arabic, language } = appliedFilters;
+
+    // Language Filter
+    if (language === 'English') {
+      result = result.filter(item => item.word_english && item.word_english.trim() !== '');
+    } else {
+      result = result.filter(item => item.word_arabic && item.word_arabic.trim() !== '');
+    }
+
+    // Search Filter
+    if (language === 'English' && word_english) {
+      const q = word_english.toLowerCase();
+      result = result.filter(item => item.word_english.toLowerCase().includes(q));
+    } else if (language === 'Arabic' && word_arabic) {
+      result = result.filter(item => item.word_arabic.includes(word_arabic));
+    }
+
+    // Alphabet Filter
+    if (language === 'English' && startsWith_english) {
+      const letter = startsWith_english.toLowerCase();
+      result = result.filter(item => {
+        const normalized = item.word_english.toLowerCase().replace(/^[''""‘“’ʿʾ]/, '').trim();
+        return normalized.startsWith(letter);
+      });
+    } else if (language === 'Arabic' && startsWith_arabic) {
+      result = result.filter(item => item.word_arabic.startsWith(startsWith_arabic));
+    }
+
+    // Sort Alphabetically
+    result.sort((a, b) => {
+      const wordA = (language === 'English' ? a.word_english : a.word_arabic) || '';
+      const wordB = (language === 'English' ? b.word_english : b.word_arabic) || '';
+      return wordA.localeCompare(wordB, language === 'Arabic' ? 'ar' : 'en');
+    });
+
+    return result;
+  }, [allItems, appliedFilters]);
+
+  // Pagination totals
+  const total = filteredItems.length;
+  const totalPages = Math.ceil(total / pageSize);
+  const items = filteredItems.slice((page - 1) * pageSize, page * pageSize);
 
   const handleApplyFilters = (newFilters?: ReligiousConceptsFilters) => {
     const filtersToUse = newFilters || filters;

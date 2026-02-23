@@ -55,7 +55,7 @@ const IndexesSection = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-3xl lg:text-5xl font-black text-black tracking-tight leading-tight"
               >
-               Islamic <span className='text-[#43896B]'>Manuscripts and Maps.</span>
+                Islamic <span className='text-[#43896B]'>Manuscripts and Maps.</span>
               </motion.h2>
               <motion.div
                 initial={{ width: 0 }}
@@ -88,7 +88,7 @@ const IndexesSection = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.8 + (i * 0.1) }}
-                  >                    
+                  >
                     <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50 hover:shadow-xl hover:bg-white/80 transition-all duration-300 group">
                       {content}
                     </div>

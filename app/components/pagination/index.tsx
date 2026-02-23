@@ -23,53 +23,25 @@ export default function Pagination({
   const getVisiblePageNumbers = () => {
     const pages: (number | string)[] = [];
     const maxVisiblePages = 10;
-    
+
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if total is small
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Always show first page
-      pages.push(1);
-      
-      // Calculate the range around current page
-      let startPage = Math.max(2, currentPage - 3);
-      let endPage = Math.min(totalPages - 1, currentPage + 3);
-      
-      // Adjust if we're near the beginning
-      if (currentPage <= 4) {
-        startPage = 2;
-        endPage = Math.min(8, totalPages - 1);
+      // Sliding window of 10 pages
+      let start = Math.max(1, currentPage - 5);
+      let end = Math.min(totalPages, start + 9);
+
+      if (end - start < 9) {
+        start = Math.max(1, end - 9);
       }
-      
-      // Adjust if we're near the end
-      if (currentPage >= totalPages - 3) {
-        startPage = Math.max(2, totalPages - 7);
-        endPage = totalPages - 1;
-      }
-      
-      // Add ellipsis after first page if needed
-      if (startPage > 2) {
-        pages.push('...');
-      }
-      
-      // Add middle pages
-      for (let i = startPage; i <= endPage; i++) {
+
+      for (let i = start; i <= end; i++) {
         pages.push(i);
       }
-      
-      // Add ellipsis before last page if needed
-      if (endPage < totalPages - 1) {
-        pages.push('...');
-      }
-      
-      // Always show last page
-      if (totalPages > 1) {
-        pages.push(totalPages);
-      }
     }
-    
+
     return pages;
   };
 
@@ -93,11 +65,10 @@ export default function Pagination({
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1 || loading}
-          className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-200 ${
-            currentPage === 1 || loading
-              ? 'text-gray-300 cursor-not-allowed'
-              : 'text-[#43896B] hover:text-[#367556] cursor-pointer'
-          }`}
+          className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-200 ${currentPage === 1 || loading
+            ? 'text-gray-300 cursor-not-allowed'
+            : 'text-[#43896B] hover:text-[#367556] cursor-pointer'
+            }`}
           aria-label="Previous page"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -116,15 +87,13 @@ export default function Pagination({
                 <button
                   onClick={() => handlePageChange(page as number)}
                   disabled={loading}
-                  className={`min-w-[40px] px-3 py-2 text-sm font-medium transition-colors duration-200 ${
-                    loading 
-                      ? 'cursor-not-allowed opacity-50'
-                      : 'cursor-pointer'
-                  } ${
-                    currentPage === page
+                  className={`min-w-[40px] px-3 py-2 text-sm font-medium transition-colors duration-200 ${loading
+                    ? 'cursor-not-allowed opacity-50'
+                    : 'cursor-pointer'
+                    } ${currentPage === page
                       ? 'text-[#43896B] border-b-2 border-[#43896B] font-semibold'
                       : 'text-gray-600 hover:text-[#43896B] border-b-2 border-transparent'
-                  }`}
+                    }`}
                   aria-label={`Page ${page}`}
                   aria-current={currentPage === page ? 'page' : undefined}
                 >
@@ -139,11 +108,10 @@ export default function Pagination({
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages || loading}
-          className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-200 ${
-            currentPage === totalPages || loading
-              ? 'text-gray-300 cursor-not-allowed'
-              : 'text-[#43896B] hover:text-[#367556] cursor-pointer'
-          }`}
+          className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-200 ${currentPage === totalPages || loading
+            ? 'text-gray-300 cursor-not-allowed'
+            : 'text-[#43896B] hover:text-[#367556] cursor-pointer'
+            }`}
           aria-label="Next page"
         >
           <span className="hidden sm:inline">Next</span>

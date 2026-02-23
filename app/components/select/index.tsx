@@ -11,7 +11,7 @@ type SelectProps = {
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
-  value?: string; 
+  value?: string;
 };
 
 const Select = ({
@@ -41,7 +41,7 @@ const Select = ({
       const spaceBelow = windowHeight - buttonRect.bottom;
       // Use the actual max height of dropdown (240px) instead of calculated height
       const dropdownMaxHeight = 240;
-      
+
       setOpenUpwards(spaceBelow < dropdownMaxHeight + 8);
     }
   }, [isOpen, options.length]);
@@ -75,7 +75,7 @@ const Select = ({
         ref={buttonRef}
         type="button"
         onClick={toggleDropdown}
-        className="min-w-36 lg:min-w-40 w-full flex justify-between items-center px-4 py-3 bg-white border border-[#D7DEE9] rounded-xl text-sm focus:ring-2 focus:ring-blue-200 focus:outline-none"
+        className="w-full h-full flex justify-between items-center px-4 py-2 bg-white border border-[#D7DEE9] rounded-xl text-sm focus:ring-2 focus:ring-blue-200 focus:outline-none"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
@@ -86,9 +86,8 @@ const Select = ({
       </button>
       {isOpen && (
         <ul
-          className={`absolute z-10 w-full bg-white border border-[#D7DEE9] rounded-lg shadow-lg overflow-hidden ${
-            openUpwards ? "bottom-full mb-2" : "top-full mt-2"
-          }`}
+          className={`absolute z-10 w-full bg-white border border-[#D7DEE9] rounded-lg shadow-lg overflow-hidden ${openUpwards ? "bottom-full mb-2" : "top-full mt-2"
+            }`}
           role="listbox"
           style={{
             maxHeight: "240px",

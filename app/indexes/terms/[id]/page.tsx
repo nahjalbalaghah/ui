@@ -44,13 +44,13 @@ const checkTextMatch = (text: string, term: string) => {
 // Extract only the sentence or portion containing the term
 const extractMatchingSentence = (text: string, term: string): string | null => {
     if (!text || !term) return null;
-    
+
     const t = term.toLowerCase().trim();
     const txtLower = text.toLowerCase();
-    
+
     // Find the position of the term in the text
     let termIndex = txtLower.indexOf(t);
-    
+
     // If not found directly, try variants
     if (termIndex === -1) {
         if (t.endsWith('s')) {
@@ -61,13 +61,13 @@ const extractMatchingSentence = (text: string, term: string): string | null => {
             termIndex = txtLower.indexOf(t.slice(0, -2));
         }
     }
-    
+
     if (termIndex === -1) return null;
-    
+
     // Find sentence boundaries
     // Look for sentence-ending punctuation before and after the term
     const sentenceEnders = /[.!?؟]/;
-    
+
     // Find start of sentence (look backwards for sentence ender or start of text)
     let sentenceStart = 0;
     for (let i = termIndex - 1; i >= 0; i--) {
@@ -76,7 +76,7 @@ const extractMatchingSentence = (text: string, term: string): string | null => {
             break;
         }
     }
-    
+
     // Find end of sentence (look forwards for sentence ender or end of text)
     let sentenceEnd = text.length;
     for (let i = termIndex; i < text.length; i++) {
@@ -85,22 +85,22 @@ const extractMatchingSentence = (text: string, term: string): string | null => {
             break;
         }
     }
-    
+
     // Extract the sentence and trim whitespace
     let sentence = text.slice(sentenceStart, sentenceEnd).trim();
-    
+
     // If sentence is too short, expand context a bit
     if (sentence.length < 50 && text.length > sentence.length) {
         // Try to get a bit more context (up to 200 chars total)
         const contextStart = Math.max(0, termIndex - 100);
         const contextEnd = Math.min(text.length, termIndex + 100);
         sentence = text.slice(contextStart, contextEnd).trim();
-        
+
         // Add ellipsis if we cut text
         if (contextStart > 0) sentence = '...' + sentence;
         if (contextEnd < text.length) sentence = sentence + '...';
     }
-    
+
     return sentence;
 };
 
@@ -223,9 +223,9 @@ export default function TermDetailsPage() {
                                     if (matchEng || matchAra) {
                                         const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
                                         const matchingSentence = extractMatchingSentence(textToSearch, term);
-                                        return { 
-                                            type: 'Radis', 
-                                            data: item, 
+                                        return {
+                                            type: 'Radis',
+                                            data: item,
                                             reference: refValue,
                                             matchingContent: matchingSentence || textToSearch
                                         };
@@ -262,10 +262,10 @@ export default function TermDetailsPage() {
                                                 if (checkTextMatch(eng, term) || checkTextMatch(ara, term)) {
                                                     const textToSearch = detectedLanguage === 'arabic' ? ara : eng;
                                                     const matchingSentence = extractMatchingSentence(textToSearch, term);
-                                                    return { 
-                                                        type: 'Post', 
-                                                        data: matchedPost, 
-                                                        reference: refValue, 
+                                                    return {
+                                                        type: 'Post',
+                                                        data: matchedPost,
+                                                        reference: refValue,
                                                         sourceType: matchedPost.type as any,
                                                         matchingParagraphNumber: targetPara.number,
                                                         matchingContent: matchingSentence || textToSearch
@@ -276,10 +276,10 @@ export default function TermDetailsPage() {
                                             // Whole Post Ref
                                             const matchResult = getMatchingContent(matchedPost, term, detectedLanguage);
                                             if (matchResult) {
-                                                return { 
-                                                    type: 'Post', 
-                                                    data: matchedPost, 
-                                                    reference: refValue, 
+                                                return {
+                                                    type: 'Post',
+                                                    data: matchedPost,
+                                                    reference: refValue,
                                                     sourceType: matchedPost.type as any,
                                                     matchingParagraphNumber: matchResult.paragraphNumber,
                                                     matchingContent: matchResult.content
@@ -361,6 +361,15 @@ export default function TermDetailsPage() {
                 </div>
             </div>
 
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-8">
+                {/* Description Box Placeholder - Will be linked to Strapi 'description' field */}
+                <div className="bg-[#43896B]/5 border-l-4 border-[#43896B] p-6 rounded-r-xl mb-8">
+                    <p className="text-gray-700 italic">
+                        {language === 'arabic' ? 'وصف لهذا المصطلح سيتم إضافته من خلال لوحة التحكم...' : 'Description for this term will be added via the admin panel...'}
+                    </p>
+                </div>
+            </div>
+
             <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-8 space-y-6">
                 {results.length === 0 ? (
                     <div className="text-center py-12 text-gray-500">
@@ -390,16 +399,16 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
                 'Saying': 'sayings'
             };
             const contentType = contentTypeMap[post.type] || 'orations';
-            
+
             // Build URL with highlight parameters
             const params = new URLSearchParams();
-            
+
             // Use the matching paragraph number if available, otherwise use sermon number
             const highlightRef = matchingParagraphNumber || post.sermonNumber;
             if (highlightRef) {
                 params.set('highlightRef', highlightRef);
             }
-            
+
             // Always set the word parameter for highlighting
             // Check if term is Arabic or English
             const isArabicTerm = /[\u0600-\u06FF]/.test(term);
@@ -408,16 +417,16 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
             } else {
                 params.set('word', term);
             }
-            
+
             const queryString = params.toString();
             return `/${contentType}/details/${post.id}${queryString ? `?${queryString}` : ''}`;
         }
-        
+
         if (type === 'Radis') {
             const radis = data as RadisIntroduction;
             return `/radis?highlightRef=${radis.number.startsWith('0.') ? radis.number : `0.${radis.number}`}`;
         }
-        
+
         return null;
     };
 
@@ -430,7 +439,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
 
     if (type === 'Post') {
         const post = data as Post;
-        
+
         // Use the pre-extracted matching content, or fallback to default
         const displayContent = matchingContent || 'No content available';
 
@@ -452,7 +461,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
         }
 
         return (
-            <div 
+            <div
                 className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md hover:border-[#43896B] transition-all cursor-pointer relative group"
                 onClick={handleCardClick}
             >
@@ -480,7 +489,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
                         <HighlightText text={displayContent} term={term} />
                     </div>
                 </div>
-                
+
                 <div className="mt-4 pt-3 border-t border-gray-100">
                     <span className="text-sm text-[#43896B] font-medium group-hover:underline">
                         View full {post.type.toLowerCase()} →
@@ -530,7 +539,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
 
     if (type === 'Radis') {
         const radis = data as RadisIntroduction;
-        
+
         // Use the pre-extracted matching content
         const displayContent = matchingContent || (language === 'arabic' ? radis.arabic : radis.translation) || '';
 
@@ -541,7 +550,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
         if (!showEng && !showAra) return null;
 
         return (
-            <div 
+            <div
                 className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md hover:border-[#43896B] transition-all cursor-pointer relative group"
                 onClick={handleCardClick}
             >
@@ -560,7 +569,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
                 <div className="text-gray-700 leading-relaxed">
                     <HighlightText text={displayContent} term={term} />
                 </div>
-                
+
                 <div className="mt-4 pt-3 border-t border-gray-100">
                     <span className="text-sm text-[#43896B] font-medium group-hover:underline">
                         View full introduction →

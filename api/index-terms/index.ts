@@ -87,6 +87,33 @@ export const indexTermsApi = {
     }
   },
 
+  /**
+   * Fetch all results by following pagination
+   */
+  async getAllIndexTerms(): Promise<IndexTerm[]> {
+    try {
+      const firstPage = await this.getIndexTerms(1, 100);
+      let allData = firstPage.data || [];
+      const pageCount = firstPage.meta.pagination.pageCount;
+
+      if (pageCount > 1) {
+        const promises = [];
+        for (let i = 2; i <= pageCount; i++) {
+          promises.push(this.getIndexTerms(i, 100));
+        }
+        const responses = await Promise.all(promises);
+        responses.forEach(res => {
+          if (res.data) allData = [...allData, ...res.data];
+        });
+      }
+
+      return allData;
+    } catch (error) {
+      console.error('Error fetching all index terms:', error);
+      throw error;
+    }
+  },
+
   async getIndexTermById(id: string): Promise<{ data: IndexTerm }> {
     try {
       const response = await api.get(`/api/index-terms/${id}`, {

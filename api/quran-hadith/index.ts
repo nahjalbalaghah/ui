@@ -39,6 +39,7 @@ export interface QuranHadithFilters {
   startsWith_surah?: string;
   startsWith_verse?: string;
   language?: 'English' | 'Arabic';
+  reference_type?: 'Quran' | 'Hadith' | 'Poetry' | 'Proverbs' | '';
 }
 
 export const quranHadithApi = {
@@ -54,6 +55,9 @@ export const quranHadithApi = {
         'pagination[pageSize]': pageSize,
       };
 
+      if (filters?.reference_type) {
+        params['filters[reference_type][$eq]'] = filters.reference_type;
+      }
       if (filters?.surah_name) {
         params['filters[surah_name][$containsi]'] = filters.surah_name;
       }
@@ -89,6 +93,33 @@ export const quranHadithApi = {
       return response.data;
     } catch (error) {
       console.error('Error fetching quran and hadiths:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Fetch all results by following pagination
+   */
+  async getAllQuranHadiths(): Promise<QuranHadith[]> {
+    try {
+      const firstPage = await this.getQuranHadiths(1, 100);
+      let allData = firstPage.data || [];
+      const pageCount = firstPage.meta.pagination.pageCount;
+
+      if (pageCount > 1) {
+        const promises = [];
+        for (let i = 2; i <= pageCount; i++) {
+          promises.push(this.getQuranHadiths(i, 100));
+        }
+        const responses = await Promise.all(promises);
+        responses.forEach(res => {
+          if (res.data) allData = [...allData, ...res.data];
+        });
+      }
+
+      return allData;
+    } catch (error) {
+      console.error('Error fetching all quran and hadiths:', error);
       throw error;
     }
   },

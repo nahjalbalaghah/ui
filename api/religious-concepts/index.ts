@@ -87,6 +87,33 @@ export const religiousConceptsApi = {
     }
   },
 
+  /**
+   * Fetch all results by following pagination
+   */
+  async getAllReligiousConcepts(): Promise<ReligiousConcept[]> {
+    try {
+      const firstPage = await this.getReligiousConcepts(1, 100);
+      let allData = firstPage.data || [];
+      const pageCount = firstPage.meta.pagination.pageCount;
+
+      if (pageCount > 1) {
+        const promises = [];
+        for (let i = 2; i <= pageCount; i++) {
+          promises.push(this.getReligiousConcepts(i, 100));
+        }
+        const responses = await Promise.all(promises);
+        responses.forEach(res => {
+          if (res.data) allData = [...allData, ...res.data];
+        });
+      }
+
+      return allData;
+    } catch (error) {
+      console.error('Error fetching all religious concepts:', error);
+      throw error;
+    }
+  },
+
   async getReligiousConceptById(id: string): Promise<{ data: ReligiousConcept }> {
     try {
       const response = await api.get(`/api/religious-and-ethical-concepts/${id}`, {

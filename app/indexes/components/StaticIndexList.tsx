@@ -36,9 +36,11 @@ export default function StaticIndexList({ category }: StaticIndexListProps) {
 
         // Alphabet Filter
         if (startLetter) {
-            items = items.filter(item =>
-                item.word.toLowerCase().startsWith(startLetter.toLowerCase())
-            );
+            items = items.filter(item => {
+                // Remove leading quotes, modifier letters (ʿ, ʾ), and common prefixes
+                const normalizedWord = item.word.replace(/^[''""‘“’ʿʾ]/, '').trim();
+                return normalizedWord.toLowerCase().startsWith(startLetter.toLowerCase());
+            });
         }
 
         // Search Filter

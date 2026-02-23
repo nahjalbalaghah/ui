@@ -25,11 +25,9 @@ export default function IndexTermsContent() {
     language: (searchParams.get('language') as 'English' | 'Arabic') || 'English',
   };
 
-  const [terms, setTerms] = useState<IndexTerm[]>([]);
+  const [allTerms, setAllTerms] = useState<IndexTerm[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
 
   const [filters, setFilters] = useState<IndexTermsFilters>(appliedFilters);
 
@@ -46,23 +44,14 @@ export default function IndexTermsContent() {
 
   const pageSize = 20;
 
+  // Initialize: Fetch ALL items once
   useEffect(() => {
-    const fetchTerms = async () => {
+    const fetchAllData = async () => {
       setLoading(true);
       setError(null);
-
       try {
-        const filterParams: IndexTermsFilters = {};
-        if (appliedFilters.word_english) filterParams.word_english = appliedFilters.word_english;
-        if (appliedFilters.word_arabic) filterParams.word_arabic = appliedFilters.word_arabic;
-        if (appliedFilters.startsWith_english) filterParams.startsWith_english = appliedFilters.startsWith_english;
-        if (appliedFilters.startsWith_arabic) filterParams.startsWith_arabic = appliedFilters.startsWith_arabic;
-        if (appliedFilters.language) filterParams.language = appliedFilters.language;
-
-        const response = await indexTermsApi.getIndexTerms(page, pageSize, filterParams);
-        setTerms(response.data);
-        setTotalPages(response.meta.pagination.pageCount);
-        setTotal(response.meta.pagination.total);
+        const data = await indexTermsApi.getAllIndexTerms();
+        setAllTerms(data);
       } catch (err) {
         setError('Failed to load index terms. Please try again later.');
         console.error('Error fetching index terms:', err);
@@ -70,9 +59,55 @@ export default function IndexTermsContent() {
         setLoading(false);
       }
     };
+    fetchAllData();
+  }, []);
 
-    fetchTerms();
-  }, [page, appliedFilters.word_english, appliedFilters.word_arabic, appliedFilters.startsWith_english, appliedFilters.startsWith_arabic, appliedFilters.language]);
+  // Local Filter Logic
+  const filteredTerms = React.useMemo(() => {
+    let result = [...allTerms];
+
+    const { word_english, word_arabic, startsWith_english, startsWith_arabic, language } = appliedFilters;
+
+    // Language Filter
+    if (language === 'English') {
+      result = result.filter(item => item.word_english && item.word_english.trim() !== '');
+    } else {
+      result = result.filter(item => item.word_arabic && item.word_arabic.trim() !== '');
+    }
+
+    // Search Filter
+    if (language === 'English' && word_english) {
+      const q = word_english.toLowerCase();
+      result = result.filter(item => item.word_english.toLowerCase().includes(q));
+    } else if (language === 'Arabic' && word_arabic) {
+      result = result.filter(item => item.word_arabic.includes(word_arabic));
+    }
+
+    // Alphabet Filter
+    if (language === 'English' && startsWith_english) {
+      const letter = startsWith_english.toLowerCase();
+      result = result.filter(item => {
+        const normalized = item.word_english.toLowerCase().replace(/^[''""‘“’ʿʾ]/, '').trim();
+        return normalized.startsWith(letter);
+      });
+    } else if (language === 'Arabic' && startsWith_arabic) {
+      result = result.filter(item => item.word_arabic.startsWith(startsWith_arabic));
+    }
+
+    // Sort Alphabetically
+    result.sort((a, b) => {
+      const wordA = (language === 'English' ? a.word_english : a.word_arabic) || '';
+      const wordB = (language === 'English' ? b.word_english : b.word_arabic) || '';
+      return wordA.localeCompare(wordB, language === 'Arabic' ? 'ar' : 'en');
+    });
+
+    return result;
+  }, [allTerms, appliedFilters]);
+
+  // Pagination totals
+  const total = filteredTerms.length;
+  const totalPages = Math.ceil(total / pageSize);
+  const terms = filteredTerms.slice((page - 1) * pageSize, page * pageSize);
 
   const handleApplyFilters = (newFilters?: IndexTermsFilters) => {
     const filtersToUse = newFilters || filters;

@@ -14,7 +14,7 @@ export const indexCategories: IndexCategory[] = [
   {
     slug: "names-places",
     title: "Index of Names and Places",
-    description: "",
+    description: "Locate people, tribes, and geographic regions mentioned in Nahj al-Balaghah",
     items: [
       { word: "Aaron", references: ["1.2", "234.1"] },
       { word: "Abraham", references: ["1.2", "3.5", "7.1"] },

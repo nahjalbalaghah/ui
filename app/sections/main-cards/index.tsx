@@ -22,20 +22,6 @@ const MainCardsSection = () => {
       buttonText: "Browse Indexes"
     },
     {
-      icon: ScrollText,
-      title: "Raḍī's Introduction",
-      description: "Read the enlightening introduction by Al-Sharif Al-Raḍī, compiler of Nahj al-Balaghah",
-      href: "/radis",
-      buttonText: "Read Introduction"
-    },
-    {
-      icon: Bookmark,
-      title: "Conclusion",
-      description: "Explore the concluding remarks by Al-Sharif Al-Raḍī on the completion of Nahj al-Balaghah",
-      href: "/conclusions",
-      buttonText: "Read Conclusion"
-    },
-    {
       icon: Info,
       title: "About Nahj al-Balaghah",
       description: "Learn about the history, significance, and compilation of Nahj al-Balaghah, The Way of Eloquence",

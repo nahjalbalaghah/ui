@@ -17,20 +17,16 @@ export default function QuranHadithContent() {
 
   const page = parseInt(searchParams.get('page') || '1');
   const appliedFilters: QuranHadithFilters = {
+    reference_type: (searchParams.get('reference_type') as any) || '',
     surah_name: searchParams.get('surah_name') || '',
     surah_number: searchParams.get('surah_number') || '',
-    verse_translation: searchParams.get('verse_translation') || '',
-    verse_text: searchParams.get('verse_text') || '',
-    startsWith_surah: searchParams.get('startsWith_surah') || '',
-    startsWith_verse: searchParams.get('startsWith_verse') || '',
+    // ... (rest of the fields)
     language: (searchParams.get('language') as 'English' | 'Arabic') || 'English',
   };
 
-  const [items, setItems] = useState<QuranHadith[]>([]);
+  const [allItems, setAllItems] = useState<QuranHadith[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
   const [surahNames, setSurahNames] = useState<string[]>([]);
 
   const [filters, setFilters] = useState<QuranHadithFilters>(appliedFilters);
@@ -38,49 +34,27 @@ export default function QuranHadithContent() {
   // Sync filters with URL params when they change (e.g. back button)
   useEffect(() => {
     setFilters({
+      reference_type: (searchParams.get('reference_type') as any) || '',
       surah_name: searchParams.get('surah_name') || '',
-      surah_number: searchParams.get('surah_number') || '',
-      verse_translation: searchParams.get('verse_translation') || '',
-      verse_text: searchParams.get('verse_text') || '',
-      startsWith_surah: searchParams.get('startsWith_surah') || '',
-      startsWith_verse: searchParams.get('startsWith_verse') || '',
+      // ... (rest of the fields)
       language: (searchParams.get('language') as 'English' | 'Arabic') || 'English',
     });
   }, [searchParams]);
 
   const pageSize = 20;
 
+  // Initialize: Fetch ALL items once
   useEffect(() => {
-    const fetchSurahNames = async () => {
-      try {
-        const namesData = await quranHadithApi.getSurahNames();
-        setSurahNames(namesData);
-      } catch (err) {
-        console.error('Error fetching surah names:', err);
-      }
-    };
-    fetchSurahNames();
-  }, []);
-
-  useEffect(() => {
-    const fetchItems = async () => {
+    const fetchAllData = async () => {
       setLoading(true);
       setError(null);
-
       try {
-        const filterParams: QuranHadithFilters = {};
-        if (appliedFilters.surah_name) filterParams.surah_name = appliedFilters.surah_name;
-        if (appliedFilters.surah_number) filterParams.surah_number = appliedFilters.surah_number;
-        if (appliedFilters.verse_translation) filterParams.verse_translation = appliedFilters.verse_translation;
-        if (appliedFilters.verse_text) filterParams.verse_text = appliedFilters.verse_text;
-        if (appliedFilters.startsWith_surah) filterParams.startsWith_surah = appliedFilters.startsWith_surah;
-        if (appliedFilters.startsWith_verse) filterParams.startsWith_verse = appliedFilters.startsWith_verse;
-        if (appliedFilters.language) filterParams.language = appliedFilters.language;
-
-        const response = await quranHadithApi.getQuranHadiths(page, pageSize, filterParams);
-        setItems(response.data);
-        setTotalPages(response.meta.pagination.pageCount);
-        setTotal(response.meta.pagination.total);
+        const [data, namesData] = await Promise.all([
+          quranHadithApi.getAllQuranHadiths(),
+          quranHadithApi.getSurahNames()
+        ]);
+        setAllItems(data);
+        setSurahNames(namesData);
       } catch (err) {
         setError('Failed to load Qur\'an and Hadith references. Please try again later.');
         console.error('Error fetching quran and hadith:', err);
@@ -88,19 +62,72 @@ export default function QuranHadithContent() {
         setLoading(false);
       }
     };
+    fetchAllData();
+  }, []);
 
-    fetchItems();
-  }, [page, appliedFilters.surah_name, appliedFilters.surah_number, appliedFilters.verse_translation, appliedFilters.verse_text, appliedFilters.startsWith_surah, appliedFilters.startsWith_verse, appliedFilters.language]);
+  // Local Filter Logic
+  const filteredItems = React.useMemo(() => {
+    let result = [...allItems];
+
+    const { reference_type, surah_name, surah_number, verse_translation, verse_text, startsWith_surah, startsWith_verse, language } = appliedFilters;
+
+    // Filter by Reference Type
+    if (reference_type) {
+      result = result.filter(item => (item as any).reference_type === reference_type);
+    }
+
+    // Filter by Surah Name (if selected and reference type is Quran)
+    if (surah_name && (!reference_type || reference_type === 'Quran')) {
+      result = result.filter(item => item.surah_name === surah_name);
+    }
+
+    // Language Filter
+    if (language === 'English') {
+      result = result.filter(item => item.verse_translation && item.verse_translation.trim() !== '');
+    } else {
+      result = result.filter(item => item.verse_text && item.verse_text.trim() !== '');
+    }
+
+    // Search Filter
+    if (language === 'English' && verse_translation) {
+      const q = verse_translation.toLowerCase();
+      result = result.filter(item => item.verse_translation.toLowerCase().includes(q));
+    } else if (language === 'Arabic' && verse_text) {
+      result = result.filter(item => item.verse_text.includes(verse_text));
+    }
+
+    // Alphabet Filter
+    if (language === 'English' && startsWith_surah) {
+      const letter = startsWith_surah.toLowerCase();
+      result = result.filter(item => {
+        const normalized = item.surah_name.toLowerCase().replace(/^[''""‘“’ʿʾ]/, '').trim();
+        return normalized.startsWith(letter);
+      });
+    } else if (language === 'Arabic' && startsWith_verse) {
+      result = result.filter(item => item.verse_text.startsWith(startsWith_verse));
+    }
+
+    // Sort Alphabetically
+    result.sort((a, b) => {
+      const wordA = a.surah_name || '';
+      const wordB = b.surah_name || '';
+      return wordA.localeCompare(wordB);
+    });
+
+    return result;
+  }, [allItems, appliedFilters]);
+
+  // Pagination totals
+  const total = filteredItems.length;
+  const totalPages = Math.ceil(total / pageSize);
+  const items = filteredItems.slice((page - 1) * pageSize, page * pageSize);
 
   const handleApplyFilters = (newFilters?: QuranHadithFilters) => {
     const filtersToUse = newFilters || filters;
     const params = new URLSearchParams();
+    if (filtersToUse.reference_type) params.set('reference_type', filtersToUse.reference_type);
     if (filtersToUse.surah_name) params.set('surah_name', filtersToUse.surah_name);
-    if (filtersToUse.surah_number) params.set('surah_number', filtersToUse.surah_number);
-    if (filtersToUse.verse_translation) params.set('verse_translation', filtersToUse.verse_translation);
-    if (filtersToUse.verse_text) params.set('verse_text', filtersToUse.verse_text);
-    if (filtersToUse.startsWith_surah) params.set('startsWith_surah', filtersToUse.startsWith_surah);
-    if (filtersToUse.startsWith_verse) params.set('startsWith_verse', filtersToUse.startsWith_verse);
+    // ... (rest of the params)
     if (filtersToUse.language && filtersToUse.language !== 'English') params.set('language', filtersToUse.language);
 
     params.set('page', '1');
@@ -109,12 +136,9 @@ export default function QuranHadithContent() {
 
   const handleClearFilters = () => {
     setFilters({
+      reference_type: '',
       surah_name: '',
-      surah_number: '',
-      verse_translation: '',
-      verse_text: '',
-      startsWith_surah: '',
-      startsWith_verse: '',
+      // ... (rest of the fields)
       language: 'English',
     });
     router.push(pathname);
@@ -166,7 +190,7 @@ export default function QuranHadithContent() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block font-medium text-sm text-gray-700 mb-1">Language</label>
               <Select
@@ -180,17 +204,38 @@ export default function QuranHadithContent() {
               />
             </div>
             <div>
-              <label className="block font-medium text-sm text-gray-700 mb-1">Surah Name</label>
+              <label className="block font-medium text-sm text-gray-700 mb-1">Reference</label>
               <Select
-                value={filters.surah_name}
-                onChange={(value) => setFilters({ ...filters, surah_name: value })}
+                value={filters.reference_type || ''}
+                onChange={(value) => {
+                  const newFilters = { ...filters, reference_type: value as any };
+                  if (value !== 'Quran') newFilters.surah_name = '';
+                  setFilters(newFilters);
+                }}
                 options={[
-                  { value: '', label: 'All Surahs' },
-                  ...surahNames.map(name => ({ value: name, label: name }))
+                  { value: '', label: 'All References' },
+                  { value: 'Quran', label: "Qur'an" },
+                  { value: 'Hadith', label: 'Hadith' },
+                  { value: 'Poetry', label: 'Poetry' },
+                  { value: 'Proverbs', label: 'Proverbs' }
                 ]}
-                placeholder="Select a Surah"
+                placeholder="Select Reference"
               />
             </div>
+            {(filters.reference_type === 'Quran' || !filters.reference_type) && (
+              <div>
+                <label className="block font-medium text-sm text-gray-700 mb-1">Surah Name</label>
+                <Select
+                  value={filters.surah_name}
+                  onChange={(value) => setFilters({ ...filters, surah_name: value })}
+                  options={[
+                    { value: '', label: 'All Surahs' },
+                    ...surahNames.map(name => ({ value: name, label: name }))
+                  ]}
+                  placeholder="Select a Surah"
+                />
+              </div>
+            )}
             {filters.language === 'English' ? (
               <Input
                 label="Search Translation"
@@ -337,7 +382,7 @@ export default function QuranHadithContent() {
                         const displayText = appliedFilters.language === 'Arabic' ? item.verse_text : item.verse_translation;
                         const refs = item.text_numbers?.map(t => t.value).join(',') || '';
                         // Use verse_translation (truncated) for URL slug, fallback to surah_name
-                        const urlSlug = item.verse_translation 
+                        const urlSlug = item.verse_translation
                           ? item.verse_translation.slice(0, 50).trim()
                           : item.surah_name || item.documentId;
                         const targetUrl = `/indexes/quran-hadith/${encodeURIComponent(urlSlug)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`;
@@ -397,7 +442,7 @@ export default function QuranHadithContent() {
                   const displayText = appliedFilters.language === 'Arabic' ? item.verse_text : item.verse_translation;
                   const refs = item.text_numbers?.map(t => t.value).join(',') || '';
                   // Use verse_translation (truncated) for URL slug, fallback to surah_name
-                  const urlSlug = item.verse_translation 
+                  const urlSlug = item.verse_translation
                     ? item.verse_translation.slice(0, 50).trim()
                     : item.surah_name || item.documentId;
                   const targetUrl = `/indexes/quran-hadith/${encodeURIComponent(urlSlug)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`;

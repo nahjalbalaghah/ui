@@ -1,6 +1,6 @@
 import api from '../api';
 
-export interface NamePlaceTextNumber  {
+export interface NamePlaceTextNumber {
   id: number;
   value: string;
 }
@@ -14,7 +14,7 @@ export interface NamePlace {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  text_numbers: NamePlaceTextNumber [];
+  text_numbers: NamePlaceTextNumber[];
 }
 
 export interface NamePlacesApiResponse {
@@ -83,6 +83,33 @@ export const namePlacesApi = {
       return response.data;
     } catch (error) {
       console.error('Error fetching names and places:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Fetch all results by following pagination
+   */
+  async getAllNamePlaces(): Promise<NamePlace[]> {
+    try {
+      const firstPage = await this.getNamePlaces(1, 100);
+      let allData = firstPage.data || [];
+      const pageCount = firstPage.meta.pagination.pageCount;
+
+      if (pageCount > 1) {
+        const promises = [];
+        for (let i = 2; i <= pageCount; i++) {
+          promises.push(this.getNamePlaces(i, 100));
+        }
+        const responses = await Promise.all(promises);
+        responses.forEach(res => {
+          if (res.data) allData = [...allData, ...res.data];
+        });
+      }
+
+      return allData;
+    } catch (error) {
+      console.error('Error fetching all names and places:', error);
       throw error;
     }
   },

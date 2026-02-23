@@ -9,8 +9,8 @@ export const formatTextWithBold = (text: string, isArabic: boolean = false): Rea
   if (isArabic) {
     const parts = text.split(/(\([^)]*\)|﴿[^﴾]*﴾)/g);
     return parts.map((part, index) => {
-      if ((part.startsWith('(') && part.endsWith(')')) || 
-          (part.startsWith('﴿') && part.endsWith('﴾'))) {
+      if ((part.startsWith('(') && part.endsWith(')')) ||
+        (part.startsWith('﴿') && part.endsWith('﴾'))) {
         return (
           <span key={index}>
             {part}
@@ -30,7 +30,7 @@ const applyItalicFormatting = (text: string): React.ReactNode => {
   const parts: React.ReactNode[] = [];
   let lastIndex = 0;
   let match;
-  
+
   while ((match = regex.exec(text)) !== null) {
     if (match.index > lastIndex) {
       // Wrap text references before adding italic
@@ -43,17 +43,17 @@ const applyItalicFormatting = (text: string): React.ReactNode => {
     );
     lastIndex = regex.lastIndex;
   }
-  
+
   if (lastIndex < text.length) {
     parts.push(wrapTextReferences(text.slice(lastIndex)));
   }
-  
+
   return parts.length > 0 ? <>{parts}</> : wrapTextReferences(text);
 };
 
 const applyBoldAndItalicFormatting = (text: string): React.ReactNode => {
   const boldParts = text.split(/(\«[^»]*\»)/g);
-  
+
   return boldParts.map((part, index) => {
     if (part.startsWith('«') && part.endsWith('»')) {
       const innerText = part;
@@ -83,17 +83,17 @@ export const formatTextWithFootnotes = (
 
   const relevantFootnotes = currentSection
     ? footnotes.filter((footnote) => {
-        const footnoteSection = footnote.section?.replace(/^"|"$/g, "") || "";
-        if (currentSection === "main") {
-          return (
-            !footnoteSection ||
-            footnoteSection === "main" ||
-            footnoteSection === "" ||
-            !footnoteSection.match(/^\d+(\.\d+)*$/)
-          );
-        }
-        return footnoteSection === currentSection;
-      })
+      const footnoteSection = footnote.section?.replace(/^"|"$/g, "") || "";
+      if (currentSection === "main") {
+        return (
+          !footnoteSection ||
+          footnoteSection === "main" ||
+          footnoteSection === "" ||
+          !footnoteSection.match(/^\d+(\.\d+)*$/)
+        );
+      }
+      return footnoteSection === currentSection;
+    })
     : footnotes;
 
   if (relevantFootnotes.length === 0) {
@@ -226,7 +226,10 @@ export const formatTextWithFootnotes = (
         footnote={fn}
         matchedLanguage={isArabic ? "arabic" : "english"}
       >
-        <span className="">
+        <span
+          id={`footnote-ref-${fn.id}-${isArabic ? "arabic" : "english"}`}
+          className="scroll-mt-32"
+        >
           {occurrence.word}
           <sup className="ml-1 font-bold">{fn.number}</sup>
         </span>
@@ -259,7 +262,7 @@ export const isArabicText = (text: string): boolean => {
 };
 
 export const HighlightArabicText = ({ text }: any) => {
-   // (ashnaqahā), (ashnaqa l-nāqata), (Iṣlāḥ al-manṭiq)
+  // (ashnaqahā), (ashnaqa l-nāqata), (Iṣlāḥ al-manṭiq)
   const regex = /\(([^()]*[āīūḥṣṭẓḍʿʾ]+[^()]*)\)/g;
   const parts = [];
   let lastIndex = 0;
