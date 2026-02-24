@@ -311,7 +311,7 @@ export default function NamesPlacesContent() {
               {/* Desktop Table */}
               <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full table-fixed">
+                  <table className="w-full table-fixed" dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}>
                     <colgroup>
                       <col className="w-24" />
                       {appliedFilters.language === 'English' && <col className="w-1/4" />}
@@ -320,7 +320,7 @@ export default function NamesPlacesContent() {
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Section</th>
+                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>Section</th>
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English</th>}
                         {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 whitespace-nowrap">Arabic</th>}
                         <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">Text References</th>
@@ -353,7 +353,7 @@ export default function NamesPlacesContent() {
                               </td>
                             )}
                             {appliedFilters.language === 'Arabic' && (
-                              <td className="px-6 py-4 text-right" dir="rtl">
+                              <td className="px-6 py-4 text-right">
                                 <span className="text-gray-900 font-medium group-hover:text-[#43896B] transition-colors">
                                   {item.word_arabic || '-'}
                                 </span>
@@ -361,7 +361,7 @@ export default function NamesPlacesContent() {
                             )}
                             <td className="px-6 py-4">
                               <div className="flex justify-center">
-                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors">
+                                <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
                                   <ArrowRight className="w-4 h-4" />
                                 </div>
                               </div>
@@ -387,6 +387,7 @@ export default function NamesPlacesContent() {
                       key={item.id}
                       className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm cursor-pointer hover:border-[#43896B] transition-colors group"
                       onClick={() => name && router.push(targetUrl)}
+                      dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}
                     >
                       <div className="flex items-center gap-3">
                         <div className="flex-1 min-w-0">
@@ -396,12 +397,12 @@ export default function NamesPlacesContent() {
                             </div>
                           )}
                           {appliedFilters.language === 'Arabic' && (
-                            <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors" dir="rtl">
+                            <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
                               {item.word_arabic || '-'}
                             </div>
                           )}
                         </div>
-                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors">
+                        <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
                           <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>
