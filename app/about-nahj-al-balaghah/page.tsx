@@ -36,15 +36,15 @@ export default function AboutNahjAlBalaghahPage() {
   const resourceLinks = [
     {
       label: "\"Introduction\" to Nahj al-Balāghah: The Wisdom and Eloquence of ʿAlī, edited by Tahera Qutbuddin",
-      href: "/pdfs/TQ-Introduction-to-Nahj-al-Balaghah.pdf"
+      href: "https://drive.google.com/file/d/1tXyo4fT0snRTTGj-xPVrGP0LU0jffEfe/view?usp=drive_link"
     },
     {
       label: "\"Nahj al-Balagha\", Qutbuddin, Tahera — Encyclopaedia of Islam, THREE",
-      href: "https://referenceworks.brillonline.com/entries/encyclopaedia-of-islam-3/nahj-al-balagha-COM_27422"
+      href: "https://drive.google.com/file/d/1tH5Hje_5OII4z13HyKf4o3duQNHY9tfH/view?usp=drive_link"
     },
     {
       label: "\"Nahdj al-Balāgha\", Mukhtar Djebli — Encyclopaedia of Islam, Second Edition",
-      href: "https://referenceworks.brillonline.com/entries/encyclopaedia-of-islam-2/nahdj-al-balagha-SIM_5765"
+      href: "https://drive.google.com/file/d/154RZ9rYiHMTXiIO0dIBc0297QnYeggat/view?usp=drive_link"
     }
   ]
 

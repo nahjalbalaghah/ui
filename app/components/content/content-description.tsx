@@ -17,6 +17,7 @@ interface ContentDescriptionProps {
 const ContentDescription = ({ content, contentType, highlightRef, englishWord, arabicWord }: ContentDescriptionProps) => {
   const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
   const [selectedTranslation, setSelectedTranslation] = useState('en');
+  const [selectedEdition, setSelectedEdition] = useState('subhi');
   const [highlightedParagraphNumber, setHighlightedParagraphNumber] = useState<string | null>(null);
   const [radisIntroduction, setRadisIntroduction] = useState<{ arabic: string; translation: string } | null>(null);
 
@@ -200,6 +201,12 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
     label: t.type === 'en' ? 'English' : t.type.toUpperCase()
   }));
 
+  const editionOptions = [
+    { value: 'subhi', label: 'Subhi al-Salih' },
+    { value: 'fayz', label: 'Fayz al-Islam' },
+    { value: 'hadid', label: 'Ibn Abi al-Hadid' },
+  ];
+
   // Utility: clean unwanted HTML tags and entities from Arabic text
   const cleanArabicText = (text: string): string => {
     if (!text) return '';
@@ -238,6 +245,13 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
             value={displayMode}
             onChange={(value) => setDisplayMode(value as 'both' | 'english-only' | 'arabic-only')}
             placeholder="Display Mode"
+            className="w-full sm:w-48"
+          />
+          <Select
+            options={editionOptions}
+            value={selectedEdition}
+            onChange={setSelectedEdition}
+            placeholder="Edition"
             className="w-full sm:w-48"
           />
           {availableTranslations.length > 1 && (

@@ -361,7 +361,7 @@ export default function QuranHadithContent() {
               {/* Desktop Table */}
               <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full table-fixed">
+                  <table className="w-full table-fixed" dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}>
                     <colgroup>
                       <col className="w-32" />
                       <col className="w-20" />
@@ -370,8 +370,8 @@ export default function QuranHadithContent() {
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Surah</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Verse</th>
+                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>Surah</th>
+                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>Verse</th>
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Translation</th>}
                         {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Arabic Text</th>}
                         <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">References</th>
@@ -416,7 +416,7 @@ export default function QuranHadithContent() {
                               </td>
                             )}
                             {appliedFilters.language === 'Arabic' && (
-                              <td className="px-6 py-4 text-right" dir="rtl">
+                              <td className="px-6 py-4 text-right">
                                 <span className="text-gray-900 group-hover:text-[#43896B] transition-colors line-clamp-2">
                                   {item.verse_text || '-'}
                                 </span>
@@ -424,7 +424,7 @@ export default function QuranHadithContent() {
                             )}
                             <td className="px-6 py-4">
                               <div className="flex justify-center">
-                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors">
+                                <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
                                   <ArrowRight className="w-4 h-4" />
                                 </div>
                               </div>
@@ -452,6 +452,7 @@ export default function QuranHadithContent() {
                       key={item.id}
                       className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm cursor-pointer hover:border-[#43896B] transition-colors group"
                       onClick={() => router.push(targetUrl)}
+                      dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}
                     >
                       <div className="flex items-start gap-3">
                         <div className="flex-1 min-w-0">
@@ -471,12 +472,12 @@ export default function QuranHadithContent() {
                             </div>
                           )}
                           {appliedFilters.language === 'Arabic' && (
-                            <div className="text-sm text-gray-900 line-clamp-2" dir="rtl">
+                            <div className="text-sm text-gray-900 line-clamp-2">
                               {item.verse_text || '-'}
                             </div>
                           )}
                         </div>
-                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors shrink-0">
+                        <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors shrink-0 ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
                           <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>

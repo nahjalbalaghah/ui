@@ -199,6 +199,7 @@ export default function IndexTermsContent() {
                 placeholder="Search English word..."
                 value={filters.word_english}
                 onChange={(e) => setFilters({ ...filters, word_english: e.target.value })}
+                className='h-9.5'
               />
             ) : (
               <Input
@@ -206,7 +207,7 @@ export default function IndexTermsContent() {
                 placeholder="Search Arabic word..."
                 value={filters.word_arabic}
                 onChange={(e) => setFilters({ ...filters, word_arabic: e.target.value })}
-                className="text-right"
+                className="text-right h-9.5"
                 dir="rtl"
               />
             )}
@@ -321,7 +322,7 @@ export default function IndexTermsContent() {
               </div>
               <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full table-fixed">
+                  <table className="w-full table-fixed" dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}>
                     <colgroup>
                       <col className="w-24" />
                       {appliedFilters.language === 'English' && <col className="w-1/4" />}
@@ -330,7 +331,7 @@ export default function IndexTermsContent() {
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Section</th>
+                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>Section</th>
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English Word</th>}
                         {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 whitespace-nowrap">Arabic Word</th>}
                         <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">Text References</th>
@@ -362,13 +363,13 @@ export default function IndexTermsContent() {
                               </td>
                             )}
                             {appliedFilters.language === 'Arabic' && (
-                              <td className="px-6 py-4 text-right text-gray-800 font-medium group-hover:text-[#43896B] transition-colors" dir="rtl">
+                              <td className="px-6 py-4 text-right text-gray-800 font-medium group-hover:text-[#43896B] transition-colors">
                                 {term.word_arabic || '-'}
                               </td>
                             )}
                             <td className="px-6 py-4">
                               <div className="flex justify-center">
-                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors">
+                                <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
                                   <ArrowRight className="w-4 h-4" />
                                 </div>
                               </div>
@@ -393,6 +394,7 @@ export default function IndexTermsContent() {
                       key={term.id}
                       className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm cursor-pointer hover:border-[#43896B] transition-colors group"
                       onClick={() => word && router.push(targetUrl)}
+                      dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}
                     >
                       <div className="flex items-center gap-3">
                         <span className="inline-flex items-center justify-center w-10 h-10 bg-[#43896B]/10 text-[#43896B] font-bold rounded-lg text-sm shrink-0">
@@ -405,12 +407,12 @@ export default function IndexTermsContent() {
                             </div>
                           )}
                           {appliedFilters.language === 'Arabic' && (
-                            <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors" dir="rtl">
+                            <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
                               {term.word_arabic || '-'}
                             </div>
                           )}
                         </div>
-                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors">
+                        <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
                           <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>

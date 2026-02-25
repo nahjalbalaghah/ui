@@ -44,17 +44,17 @@ export default function ContentListing({
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024); // lg breakpoint
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const { lastElementRef } = useInfiniteScroll({
     hasNextPage,
     isLoading: isInfiniteLoading,
-    loadMore: onLoadMore || (() => {}),
+    loadMore: onLoadMore || (() => { }),
     threshold: 300
   });
 
@@ -74,16 +74,16 @@ export default function ContentListing({
   const renderLoadingList = () => (
     <div className="space-y-4">
       {[...Array(6)].map((_, index) => (
-        <div 
-          key={index} 
+        <div
+          key={index}
           className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden animate-pulse"
           style={{ animationDelay: `${index * 80}ms` }}
         >
           <div className="flex items-center gap-0">
             <div className="w-20 h-20 bg-gray-200 rounded-2xl rounded-r-none"></div>
-            <div className="flex-grow py-6 pr-6 pl-8">
+            <div className="grow py-6 pr-6 pl-8">
               <div className="flex items-center justify-between">
-                <div className="flex-grow">
+                <div className="grow">
                   <div className="h-6 bg-gray-200 rounded mb-3 w-3/4"></div>
                   <div className="flex gap-2">
                     <div className="h-6 bg-gray-200 rounded-full w-16"></div>
@@ -101,13 +101,13 @@ export default function ContentListing({
   return (
     <div className="w-full relative">
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 gap-4">
-        <p className="text-gray-600 whitespace-nowrap flex-shrink-0">
+        <p className="text-gray-600 whitespace-nowrap shrink-0">
           {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
         </p>
-        
+
         {/* Show pagination only on desktop at top */}
         {showTopPagination && totalPages > 1 && onPageChange && (
-          <div className="hidden lg:block w-full lg:w-auto">
+          <div className="w-full lg:w-auto">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -118,7 +118,7 @@ export default function ContentListing({
           </div>
         )}
       </div>
-      
+
       {loading ? (
         renderLoadingList()
       ) : (
@@ -131,7 +131,7 @@ export default function ContentListing({
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                   <div className="flex items-center gap-0">
                     <div className="w-20 h-20 bg-gray-200 rounded-2xl rounded-r-none"></div>
-                    <div className="flex-grow py-6 pr-6 pl-8">
+                    <div className="grow py-6 pr-6 pl-8">
                       <div className="flex items-center justify-between">
                         <div className="flex-grow">
                           <div className="h-6 bg-gray-200 rounded mb-3 w-3/4"></div>
@@ -151,7 +151,7 @@ export default function ContentListing({
           )}
           {/* Show pagination at bottom on desktop only */}
           {totalPages > 1 && onPageChange && (
-            <div className="hidden lg:block mt-8">
+            <div className="mt-8">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}

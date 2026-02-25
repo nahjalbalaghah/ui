@@ -27,8 +27,8 @@ const AboutNahjSection = () => {
                 </div>
                 <div className="h-1 bg-[#43896B] rounded-full w-24 mb-6"></div>
               </div>
-              <Link 
-                href="/pdfs/TQ-Introduction-to-Nahj-al-Balaghah.pdf" 
+              <Link
+                href="https://drive.google.com/file/d/1tXyo4fT0snRTTGj-xPVrGP0LU0jffEfe/view?usp=drive_link"
                 target="_blank"
                 className="flex-shrink-0 ml-4"
               >

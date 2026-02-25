@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { type Post, orationsApi, lettersApi, sayingsApi } from '@/api/posts';
 import ContentDescription from './content-description';
-import { ArrowLeft, Book, GitCompare, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Book, GitCompare, ChevronLeft, ChevronRight, ScrollText } from 'lucide-react';
 import Link from 'next/link';
 import Button from '../button';
 import Select from '../select';
 import ManuscriptComparisonModal from '../manuscript-comparison-modal';
+import AudioPlayer from './audio-player';
 
 interface ContentDetailsPageProps {
   contentType: 'orations' | 'letters' | 'sayings';
@@ -268,13 +269,7 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
           {/* Bottom Row: Audio and Action Buttons */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-4 border-t border-gray-100">
             {/* Audio Player Placeholder */}
-            <div className="inline-flex items-center gap-3 bg-white border border-gray-200 rounded-full px-5 py-2.5 text-gray-500 shadow-sm">
-              <div className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#43896B] opacity-20"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#43896B]/40"></span>
-              </div>
-              <span className="text-sm font-medium italic">Audio playback coming soon...</span>
-            </div>
+            <AudioPlayer />
 
             <div className="flex flex-wrap items-center gap-3">
               <Button
@@ -288,6 +283,11 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
               <Link href={content?.sermonNumber ? `/manuscripts?section=${content.sermonNumber}` : '/manuscripts'}>
                 <Button variant='outlined' icon={<Book className='w-4 h-4' />} className="h-11">
                   View Manuscripts
+                </Button>
+              </Link>
+              <Link href={`/${contentType}/details/${id}/sources`}>
+                <Button variant='outlined' icon={<ScrollText className='w-4 h-4' />} className="h-11">
+                  Sources
                 </Button>
               </Link>
             </div>

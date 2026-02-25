@@ -19,22 +19,33 @@ export default function Pagination({
   className = '',
   loading = false
 }: PaginationProps) {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640); // sm breakpoint
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Google-style pagination: show pages around current page with ellipsis
   const getVisiblePageNumbers = () => {
     const pages: (number | string)[] = [];
-    const maxVisiblePages = 10;
+    const maxVisiblePages = isMobile ? 5 : 10;
+    const halfWindow = Math.floor(maxVisiblePages / 2);
 
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Sliding window of 10 pages
-      let start = Math.max(1, currentPage - 5);
-      let end = Math.min(totalPages, start + 9);
+      let start = Math.max(1, currentPage - halfWindow);
+      let end = Math.min(totalPages, start + (maxVisiblePages - 1));
 
-      if (end - start < 9) {
-        start = Math.max(1, end - 9);
+      if (end - start < maxVisiblePages - 1) {
+        start = Math.max(1, end - (maxVisiblePages - 1));
       }
 
       for (let i = start; i <= end; i++) {
@@ -46,7 +57,7 @@ export default function Pagination({
   };
 
   const handlePageChange = (page: number) => {
-    if (loading) return;
+    if (loading || page < 1 || page > totalPages) return;
     window.scrollTo({ top: 0, behavior: 'smooth' });
     onPageChange(page);
   };
