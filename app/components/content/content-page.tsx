@@ -13,6 +13,8 @@ interface ContentPageConfig {
     getContent: (page?: number, pageSize?: number) => Promise<ApiResponse>;
     searchContent: (query: string, page?: number, pageSize?: number) => Promise<ApiResponse>;
   };
+  tocArabic?: string;
+  tocEnglish?: string;
 }
 
 interface ContentPageProps {
@@ -127,10 +129,10 @@ function ContentPageContent({ config }: ContentPageProps) {
       if (!response || !response.data) {
         break;
       }
-      
+
       const filteredData = response.data.filter(item => item.heading);
       allData.push(...filteredData);
-      
+
       // Check if there are more pages
       const totalPages = response.meta?.pagination?.pageCount || 1;
       hasMore = currentPage < totalPages;
@@ -446,10 +448,10 @@ function ContentPageContent({ config }: ContentPageProps) {
         }
 
         dataToSearch = fetchedData;
-        
+
         // Sort by sermon number ascending (default order)
         dataToSearch.sort((a, b) => getDisplayNumber(a.sermonNumber) - getDisplayNumber(b.sermonNumber));
-        
+
         // Store for future use
         setAllContent(dataToSearch);
       }
@@ -518,6 +520,29 @@ function ContentPageContent({ config }: ContentPageProps) {
             {config.subtitle}
           </p>
         </div>
+
+        {(config.tocArabic || config.tocEnglish) && (
+          <div className="mb-10 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="p-8 md:p-10 flex flex-col gap-6">
+              {config.tocArabic && (
+                <div className="text-center">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed font-arabic mb-2" dir="rtl">
+                    {config.tocArabic}
+                  </h2>
+                </div>
+              )}
+              {config.tocEnglish && (
+                <div className="text-center max-w-4xl mx-auto">
+                  <p className="text-base md:text-lg text-gray-600 leading-relaxed italic border-t border-gray-50 pt-6">
+                    {config.tocEnglish}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="h-1.5 w-full bg-linear-to-r from-transparent via-[#43896B]/20 to-transparent"></div>
+          </div>
+        )}
+
         <TopFilterBar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
