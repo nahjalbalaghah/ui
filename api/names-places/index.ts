@@ -38,7 +38,43 @@ export interface NamePlacesFilters {
   language?: 'English' | 'Arabic';
 }
 
+export interface GlossaryItem {
+  id: number;
+  documentId: string;
+  word: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface GlossaryApiResponse {
+  data: GlossaryItem[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
 export const namePlacesApi = {
+  async getGlossaryDescription(word: string): Promise<GlossaryApiResponse> {
+    try {
+      const response = await api.get('/api/glossary-of-names', {
+        params: {
+          'filters[word][$eq]': word,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching glossary description:', error);
+      throw error;
+    }
+  },
+
   async getNamePlaces(
     page = 1,
     pageSize = 20,

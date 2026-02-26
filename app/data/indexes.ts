@@ -80,12 +80,6 @@ export const indexCategories: IndexCategory[] = [
       { word: "Repentance (Tawbah)", references: ["142.1"] },
       { word: "Worldliness (Dunya)", references: ["3.1", "32.1", "45.1"] },
     ]
-  },
-  {
-    slug: "general",
-    title: "General Index",
-    description: "Browse a comprehensive list of assorted topics, events, and references found throughout Nahj al-Balaghah.",
-    items: []
   }
 ];
 

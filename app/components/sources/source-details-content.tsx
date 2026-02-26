@@ -1,31 +1,65 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ScrollText } from 'lucide-react';
+import { ArrowLeft, ScrollText, Loader2 } from 'lucide-react';
+import { glossaryEntriesApi, GlossaryEntry } from '@/api/glossary-entries';
 
 export default function SourceDetailsContent() {
     const params = useParams();
     const router = useRouter();
-    const sourceId = params.sourceId as string;
+    const slug = params.slug as string[];
+    const documentId = slug?.[1];
 
-    // Format source name for display
-    const sourceName = sourceId
-        ? decodeURIComponent(sourceId)
-            .split('-')
-            .map(word => {
-                const w = word.toLowerCase();
-                if (w === 'thaqafi') return 'Thaqafī';
-                if (w === 'kulayni') return 'Kulaynī';
-                if (w === 'harrani') return 'Ḥarrānī';
-                if (w === 'qudai') return 'Quḍāʿī';
-                if (w === 'tabrisi') return 'Ṭabrisī';
-                if (w === 'hatim') return 'Ḥātim';
-                if (word.charAt(0) === 'h' && word.length > 1) return 'Ḥ' + word.slice(1);
-                return word.charAt(0).toUpperCase() + word.slice(1);
-            })
-            .join(' ')
-        : 'Unknown Source';
+    const [source, setSource] = useState<GlossaryEntry | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchSourceDetails = async () => {
+            if (!documentId) return;
+            try {
+                setLoading(true);
+                const data = await glossaryEntriesApi.getGlossaryEntryByDocumentId(documentId);
+                setSource(data);
+            } catch (err) {
+                console.error('Failed to fetch source details:', err);
+                setError('Failed to load source details. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSourceDetails();
+    }, [documentId]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <Loader2 className="w-12 h-12 text-[#43896B] animate-spin mx-auto mb-4" />
+                    <p className="text-gray-600">Loading source details...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error || !source) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-red-600 mb-4">{error || 'Source not found'}</p>
+                    <button
+                        onClick={() => router.back()}
+                        className="text-[#43896B] hover:underline flex items-center gap-2 mx-auto"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        Go Back
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -44,34 +78,27 @@ export default function SourceDetailsContent() {
                             <ScrollText className="w-6 h-6 text-[#43896B] bg-white rounded-full p-1" />
                             <span className="font-bold tracking-widest uppercase text-xs">Historical Source</span>
                         </div>
-                        <h1 className="text-3xl md:text-5xl font-black tracking-tight">{sourceName}</h1>
+                        <h1 className="text-3xl md:text-5xl font-black tracking-tight">{source.word}</h1>
                     </div>
 
                     <div className="p-8 md:p-12">
-                        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed italic border-l-4 border-[#43896B] pl-6 py-2 bg-[#43896B]/5 rounded-r-xl mb-12">
-                            <p>
-                                "Text content will be given here. This is a placeholder for the historical text associated with {sourceName} in the context of Nahj al-Balaghah."
-                            </p>
+                        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed border-l-4 border-[#43896B] pl-6 py-2 bg-[#43896B]/5 rounded-r-xl mb-12">
+                            <p className="whitespace-pre-wrap">{source.content}</p>
                         </div>
 
                         <div className="space-y-8">
-                            <div>
-                                <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2 mb-4">Description</h2>
-                                <p className="text-gray-600">
-                                    This section will contain detailed information about the source, its author, and its significance in verifying the authenticity of the narrations in Nahj al-Balaghah.
-                                </p>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                                    <h3 className="font-bold text-gray-800 mb-2">Author Details</h3>
-                                    <p className="text-sm text-gray-600">Information about the narrator or historian will be displayed here.</p>
+                            {source.paragraphs && source.paragraphs.length > 0 && (
+                                <div>
+                                    <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2 mb-4">Related Paragraphs</h2>
+                                    <div className="flex flex-wrap gap-2">
+                                        {source.paragraphs.map((p) => (
+                                            <span key={p.id} className="px-3 py-1 bg-[#43896B]/10 text-[#43896B] rounded-full text-sm font-medium border border-[#43896B]/20">
+                                                {p.number}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                                    <h3 className="font-bold text-gray-800 mb-2">Volume & Page</h3>
-                                    <p className="text-sm text-gray-600">Specific references to volumes, chapters, and pages in the original manuscript.</p>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Tag as TagIcon, Book, BookOpen } from 'lucide-react';
+import { Tag as TagIcon, Book, BookOpen, ScrollText } from 'lucide-react';
+import Link from 'next/link';
+import Button from '@/app/components/button';
 import { type Post, type Footnote } from '@/api/orations';
 import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
@@ -323,9 +325,16 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
 
                 return (
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
-                    <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap" >
-                      {formatTextWithFootnotes(mainTranslation.text, allFootnotes, false, content.sermonNumber || 'main')}
-                    </p>
+                    <div className="flex justify-between items-start gap-4 mb-4">
+                      <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap flex-1" >
+                        {formatTextWithFootnotes(mainTranslation.text, allFootnotes, false, content.sermonNumber || 'main')}
+                      </p>
+                      <Link href={`/${contentType}/details/${content.id}/sources?num=${content.sermonNumber || 'main'}`}>
+                        <Button variant="outlined" icon={<ScrollText className="w-4 h-4" />} className="shrink-0">
+                          Sources
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 );
               })()
@@ -404,9 +413,16 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
 
                   return (
                     <div className="bg-white rounded-lg p-6 border border-gray-200">
-                      <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap">
-                        {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false, paragraph.number)}
-                      </p>
+                      <div className="flex justify-between items-start gap-4 mb-4">
+                        <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap flex-1">
+                          {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false, paragraph.number)}
+                        </p>
+                        <Link href={`/${contentType}/details/${content.id}/sources?num=${paragraph.number}`}>
+                          <Button variant="outlined" icon={<ScrollText className="w-4 h-4" />} className="shrink-0">
+                            Sources
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   );
                 })()}
