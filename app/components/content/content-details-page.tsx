@@ -17,13 +17,22 @@ interface ContentDetailsPageProps {
   api: {
     getContentById: (id: number) => Promise<Post | null>;
   };
+  id?: number;
 }
 
-export default function ContentDetailsPage({ contentType, title, api }: ContentDetailsPageProps) {
+export default function ContentDetailsPage({ contentType, title, api, id: propId }: ContentDetailsPageProps) {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const id = parseInt(params.id as string);
+
+  // Try to get id from prop first, then from params.id, then from catch-all params
+  const id = propId || (() => {
+    if (params.id) return parseInt(params.id as string);
+    if (params.params && Array.isArray(params.params) && params.params.length >= 2) {
+      return parseInt(params.params[1]);
+    }
+    return NaN;
+  })();
   const returnPage = searchParams.get('returnPage');
   const returnSort = searchParams.get('returnSort');
   const returnSearch = searchParams.get('returnSearch');
@@ -171,7 +180,7 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
   };
 
   const navigateToPost = (post: Post) => {
-    router.push(`/${contentType}/details/${post.id}`);
+    router.push(`/content/details/${contentType}/${post.id}`);
   };
 
   if (loading) {
@@ -262,7 +271,7 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
 
               <Select
                 value={id.toString()}
-                onChange={(value: string) => router.push(`/${contentType}/details/${value}`)}
+                onChange={(value: string) => router.push(`/content/details/${contentType}/${value}`)}
                 options={allItemNumbers.map(item => ({ value: item.id.toString(), label: `${getContentTypeLabel()} ${item.number}` }))}
                 placeholder={`Go to #`}
                 className="w-36 h-11 shrink-0"

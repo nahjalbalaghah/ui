@@ -17,8 +17,11 @@ interface ContentSubPathDispatcherProps {
 export default function ContentSubPathDispatcher({ type }: ContentSubPathDispatcherProps) {
     const params = useParams();
     const router = useRouter();
-    const slug = params.slug as string[];
-    const id = params.id as string;
+
+    // Support both old /[id]/[...slug] and new /content/details/[...params]
+    const paramsArray = params.params as string[];
+    const id = paramsArray ? paramsArray[1] : (params.id as string);
+    const slug = paramsArray ? paramsArray.slice(2) : (params.slug as string[]);
 
     const [post, setPost] = useState<Post | null>(null);
     const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
@@ -90,7 +93,7 @@ export default function ContentSubPathDispatcher({ type }: ContentSubPathDispatc
         if (slug.length === 1) {
             return <SourcesListContent contentTypeLabel={labels.label} itemNumber={num} />;
         } else if (slug.length === 2) {
-            return <SourceDetailsContent />;
+            return <SourceDetailsContent documentId={slug[1]} />;
         }
         return notFound();
     }
@@ -200,7 +203,7 @@ export default function ContentSubPathDispatcher({ type }: ContentSubPathDispatc
 
                                 <div className="mt-8 pt-8 border-t border-gray-200">
                                     <Link
-                                        href={`/${type}/details/${post.id}`}
+                                        href={`/content/details/${type}/${post.id}`}
                                         className="inline-flex items-center gap-2 px-6 py-3 bg-[#43896B] text-white rounded-lg hover:bg-[#43896B]/90 transition-colors font-semibold"
                                     >
                                         <Icon className="w-5 h-5" />

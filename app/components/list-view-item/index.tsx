@@ -37,7 +37,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
     const currentPage = searchParams.get('page');
     const currentSort = searchParams.get('sort');
     const currentSearch = searchParams.get('search');
-    const baseUrl = `/${contentType}/details/${item.id}`;
+    const baseUrl = `/content/details/${contentType}/${item.id}`;
 
     const params = new URLSearchParams();
     if (currentPage) params.set('returnPage', currentPage);

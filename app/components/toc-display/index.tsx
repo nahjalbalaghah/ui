@@ -42,7 +42,7 @@ export default function TOCDisplay({
           </h4>
         </div>
         <Link
-          href={`/${contentType}/details/${contentId}/toc`}
+          href={`/content/details/${contentType}/${contentId}/toc`}
           className="text-xs text-[#43896B] hover:underline font-medium"
         >
           View Full TOC
