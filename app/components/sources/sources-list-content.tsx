@@ -1,39 +1,49 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { ScrollText, ArrowRight, X, Search, Book } from 'lucide-react';
+import { ScrollText, ArrowRight, X, Search, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
 import Select from '@/app/components/select';
 import AlphabetChips from '@/app/components/alphabet-chips';
+import { glossaryEntriesApi, GlossaryEntry } from '@/api/glossary-entries';
 
 interface SourcesListContentProps {
     contentTypeLabel: string;
     itemNumber: string;
 }
 
-const sourcesData = [
-    {
-        textNo: "1.1.1",
-        references: [
-            { name: "Thaqafī", ref: "1:170–176" },
-            { name: "Kulaynī", ref: "1:134–136" },
-            { name: "Ḥarrānī", ref: "61" },
-            { name: "Quḍāʿī", ref: "Dustūr 170" },
-            { name: "Ṭabrisī", ref: "Iḥtijāj 1:294, 2:174 (attrib. ʿAlī al-Riḍā)" },
-            { name: "Ḥātim", ref: "Tuḥfah 22" },
-            { name: "Ibn Ṭalḥah", ref: "154" }
-        ]
-    }
-];
-
 export default function SourcesListContent({ contentTypeLabel, itemNumber }: SourcesListContentProps) {
     const router = useRouter();
     const pathname = usePathname();
     const [searchQuery, setSearchQuery] = useState('');
     const [language, setLanguage] = useState<'English' | 'Arabic'>('English');
+    const [sources, setSources] = useState<GlossaryEntry[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchSources = async () => {
+            try {
+                setLoading(true);
+                const response = await glossaryEntriesApi.getGlossaryEntries({
+                    paragraphNumber: itemNumber
+                });
+                setSources(response.data);
+            } catch (err) {
+                console.error('Failed to fetch sources:', err);
+                setError('Failed to load sources. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (itemNumber) {
+            fetchSources();
+        }
+    }, [itemNumber]);
 
     const handleClearFilters = () => {
         setSearchQuery('');
@@ -42,13 +52,30 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
 
     const hasActiveFilters = searchQuery !== '' || language !== 'English';
 
+    const filteredSources = sources.filter(source => {
+        const matchesSearch = source.word.toLowerCase().includes(searchQuery.toLowerCase());
+        // For now, Strapi data might not have language field, so we just filter by search
+        return matchesSearch;
+    });
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <Loader2 className="w-12 h-12 text-[#43896B] animate-spin mx-auto mb-4" />
+                    <p className="text-gray-600">Loading sources...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-2">
                         <ScrollText className="w-6 h-6 text-[#43896B]" />
-                        <h1 className="text-3xl font-bold text-gray-900">Sources for {contentTypeLabel}</h1>
+                        <h1 className="text-3xl font-bold text-gray-900">Sources for {contentTypeLabel} {itemNumber}</h1>
                     </div>
                     <p className="text-gray-600">Historical sources and references verifying the authenticity of this text.</p>
                 </div>
@@ -89,14 +116,6 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                             className='h-9.5'
                         />
                     </div>
-                    <div className="mt-4 flex justify-end">
-                        <Button
-                            variant='outlined'
-                            icon={<Search className="w-4 h-4" />}
-                        >
-                            Apply Filters
-                        </Button>
-                    </div>
                 </div>
 
                 <div className="mb-6">
@@ -108,43 +127,52 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                 </div>
 
                 <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 w-32">Text No</th>
-                                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">References</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {sourcesData.map((item, idx) => (
-                                    <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4 align-top">
-                                            <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-[#43896B]/10 text-[#43896B] font-bold text-sm">
-                                                {item.textNo}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex flex-wrap gap-2 text-gray-700 leading-relaxed">
-                                                {item.references.map((ref, i) => (
-                                                    <React.Fragment key={i}>
-                                                        <Link
-                                                            href={`${pathname}/${ref.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}`}
-                                                            className="inline-flex items-center gap-1 text-[#43896B] hover:text-[#367556] font-medium transition-colors bg-white border border-[#43896B]/20 px-2 py-0.5 rounded-md hover:bg-[#43896B]/5 group"
-                                                        >
-                                                            {ref.name}
-                                                            <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                        </Link>
-                                                        <span className="text-gray-500 mr-2">{ref.ref}{i < item.references.length - 1 ? ';' : ''}</span>
-                                                    </React.Fragment>
-                                                ))}
-                                            </div>
-                                        </td>
+                    {error ? (
+                        <div className="p-8 text-center text-red-600">{error}</div>
+                    ) : filteredSources.length === 0 ? (
+                        <div className="p-8 text-center text-gray-500">No sources found for this text.</div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-gray-50 border-b border-gray-200">
+                                    <tr>
+                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 w-32">ID</th>
+                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Source Word</th>
+                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 w-32">Action</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {filteredSources.map((source) => (
+                                        <tr key={source.id} className="hover:bg-gray-50 transition-colors">
+                                            <td className="px-6 py-4 align-top">
+                                                <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-[#43896B]/10 text-[#43896B] font-bold text-sm">
+                                                    #{source.id}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <Link
+                                                    href={`${pathname}/${source.documentId}`}
+                                                    className="inline-flex items-center gap-1 text-[#43896B] hover:text-[#367556] font-medium transition-colors group"
+                                                >
+                                                    {source.word}
+                                                </Link>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <Link href={`${pathname}/${source.documentId}`}>
+                                                    <Button
+                                                        variant="outlined"
+                                                        icon={<ArrowRight className="w-4 h-4" />}
+                                                    >
+                                                        Details
+                                                    </Button>
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

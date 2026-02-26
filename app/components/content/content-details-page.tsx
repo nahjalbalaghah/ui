@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { type Post, orationsApi, lettersApi, sayingsApi } from '@/api/posts';
+import { audioApi } from '@/api/audio';
 import ContentDescription from './content-description';
 import { ArrowLeft, Book, GitCompare, ChevronLeft, ChevronRight, ScrollText } from 'lucide-react';
 import Link from 'next/link';
@@ -40,6 +41,7 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
   });
   const [adjacentLoading, setAdjacentLoading] = useState(false);
   const [allItemNumbers, setAllItemNumbers] = useState<{ id: number; number: string }[]>([]);
+  const [audioUrl, setAudioUrl] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const fetchAllNumbers = async () => {
@@ -134,6 +136,20 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
       loadData();
     }
   }, [id, api, contentType]);
+
+  useEffect(() => {
+    const fetchAudio = async () => {
+      if (content?.sermonNumber) {
+        const audio = await audioApi.getAudioBySermonNumber(content.sermonNumber);
+        if (audio?.audioFile?.url) {
+          setAudioUrl(audio.audioFile.url);
+        } else {
+          setAudioUrl(undefined);
+        }
+      }
+    };
+    fetchAudio();
+  }, [content]);
 
   const getContentTypeLabel = () => {
     switch (contentType) {
@@ -268,8 +284,8 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
 
           {/* Bottom Row: Audio and Action Buttons */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-4 border-t border-gray-100">
-            {/* Audio Player Placeholder */}
-            <AudioPlayer />
+            {/* Audio Player */}
+            <AudioPlayer url={audioUrl} />
 
             <div className="flex flex-wrap items-center gap-3">
               <Button
@@ -283,11 +299,6 @@ export default function ContentDetailsPage({ contentType, title, api }: ContentD
               <Link href={content?.sermonNumber ? `/manuscripts?section=${content.sermonNumber}` : '/manuscripts'}>
                 <Button variant='outlined' icon={<Book className='w-4 h-4' />} className="h-11">
                   View Manuscripts
-                </Button>
-              </Link>
-              <Link href={`/${contentType}/details/${id}/sources`}>
-                <Button variant='outlined' icon={<ScrollText className='w-4 h-4' />} className="h-11">
-                  Sources
                 </Button>
               </Link>
             </div>
