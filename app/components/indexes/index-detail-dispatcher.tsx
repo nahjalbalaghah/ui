@@ -115,8 +115,12 @@ export default function IndexDetailDispatcher() {
     const params = useParams();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const category = params.slug as string;
-    const termId = params.id as string;
+
+    // Support both old structure and new catch-all params
+    const details = params.details as string[] | undefined;
+    const category = (params.slug as string) || (params.params && Array.isArray(params.params) ? params.params[0] : '');
+    const termId = (params.id as string) || (details && Array.isArray(details) ? details[0] : '') || (params.params && Array.isArray(params.params) ? params.params[1] : '');
+
     const term = decodeURIComponent(termId).trim();
     const refsParam = searchParams.get('refs');
 
@@ -368,7 +372,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
             const isArabicTerm = /[\u0600-\u06FF]/.test(term);
             if (isArabicTerm) params.set('arabicWord', term);
             else params.set('word', term);
-            return `/${contentType}/details/${post.id}?${params.toString()}`;
+            return `/content/details/${contentType}/${post.id}?${params.toString()}`;
         }
         if (type === 'Radis') {
             const radis = data as RadisIntroduction;

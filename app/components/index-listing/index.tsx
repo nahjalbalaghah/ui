@@ -35,50 +35,50 @@ const IndexListing: React.FC<IndexListingProps> = ({ items, categorySlug }) => {
 
               <div className="grow min-w-0 py-6 pr-6 pl-8">
                 <div className="flex flex-col lg:flex-row items-end gap-4 lg:items-start justify-between">
-                  <div className="grow min-w-0">
+                  <Link href={`/indexes/details/${categorySlug}/${item.word}`}>
                     <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-normal">
                       {item.word}
                     </h3>
-                    {item.references.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        {item.references.slice(0, 5).map((ref, refIndex) => {
-                          const [prefix] = ref.split('.');
-                          let linkHref = '';
-                          switch (prefix) {
-                            case '0':
-                              linkHref = `/introduction#${ref}`;
-                              break;
-                            case '1':
-                              linkHref = `/orations#${ref}`;
-                              break;
-                            case '2':
-                              linkHref = `/letters#${ref}`;
-                              break;
-                            case '3':
-                              linkHref = `/sayings#${ref}`;
-                              break;
-                            default:
-                              linkHref = `/#${ref}`;
-                          }
-                          return (
-                            <Link
-                              key={refIndex}
-                              href={linkHref}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-linear-to-r from-[#43896B]/10 to-[#43896B]/5 text-[#43896B] rounded-full border border-[#43896B]/20 hover:from-[#43896B]/20 hover:to-[#43896B]/10 transition-all duration-300"
-                            >
-                              <Hash className="w-3.5 h-3.5" />
-                              {ref}
-                            </Link>
-                          );
-                        })}
-                        {item.references.length > 5 && (
-                          <span className="inline-flex items-center px-3 py-1.5 text-xs font-semibold bg-gray-100 text-gray-600 rounded-full border border-gray-200">
-                            +{item.references.length - 5}
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                  </Link>
+                  {item.references.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {item.references.slice(0, 5).map((ref, refIndex) => {
+                        const [prefix] = ref.split('.');
+                        let linkHref = '';
+                        switch (prefix) {
+                          case '0':
+                            linkHref = `/introduction#${ref}`;
+                            break;
+                          case '1':
+                            linkHref = `/indexes/details/${categorySlug}/${item.word}`;
+                            break;
+                          case '2':
+                            linkHref = `/indexes/details/${categorySlug}/${item.word}`;
+                            break;
+                          case '3':
+                            linkHref = `/indexes/details/${categorySlug}/${item.word}`;
+                            break;
+                          default:
+                            linkHref = `/indexes/details/${categorySlug}/${item.word}`;
+                        }
+                        return (
+                          <Link
+                            key={refIndex}
+                            href={linkHref}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-linear-to-r from-[#43896B]/10 to-[#43896B]/5 text-[#43896B] rounded-full border border-[#43896B]/20 hover:from-[#43896B]/20 hover:to-[#43896B]/10 transition-all duration-300"
+                          >
+                            <Hash className="w-3.5 h-3.5" />
+                            {ref}
+                          </Link>
+                        );
+                      })}
+                      {item.references.length > 5 && (
+                        <span className="inline-flex items-center px-3 py-1.5 text-xs font-semibold bg-gray-100 text-gray-600 rounded-full border border-gray-200">
+                          +{item.references.length - 5}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

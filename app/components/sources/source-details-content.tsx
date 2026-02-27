@@ -5,11 +5,22 @@ import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, ScrollText, Loader2 } from 'lucide-react';
 import { glossaryEntriesApi, GlossaryEntry } from '@/api/glossary-entries';
 
-export default function SourceDetailsContent() {
+interface SourceDetailsContentProps {
+    documentId?: string;
+}
+
+export default function SourceDetailsContent({ documentId: propDocumentId }: SourceDetailsContentProps) {
     const params = useParams();
     const router = useRouter();
-    const slug = params.slug as string[];
-    const documentId = slug?.[1];
+
+    // Support both old structure and new catch-all params
+    const documentId = propDocumentId || (() => {
+        if (params.slug && Array.isArray(params.slug)) return params.slug[1];
+        if (params.params && Array.isArray(params.params) && params.params.length >= 4) {
+            return params.params[3]; // /content/details/type/id/sources/documentId
+        }
+        return undefined;
+    })();
 
     const [source, setSource] = useState<GlossaryEntry | null>(null);
     const [loading, setLoading] = useState(true);
