@@ -516,30 +516,26 @@ function ContentPageContent({ config }: ContentPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-3">{config.title}</h1>
-          <p className="text-lg text-gray-600">
-            {config.subtitle}
-          </p>
         </div>
 
         {(config.tocArabic || config.tocEnglish) && (
-          <div className="mb-10 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-8 md:p-10 flex flex-col gap-6">
+          <div className="mb-10">
+            <div className="flex flex-col">
               {config.tocArabic && (
-                <div className="text-center">
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed font-arabic mb-2" dir="rtl">
+                <div className="text-right">
+                  <h2 className="lg:text-2xl font-bold text-gray-900 leading-relaxed font-arabic mb-2" dir="rtl">
                     {config.tocArabic}
                   </h2>
                 </div>
               )}
               {config.tocEnglish && (
-                <div className="text-center max-w-4xl mx-auto">
-                  <p className="text-base md:text-lg text-gray-600 leading-relaxed italic border-t border-gray-50 pt-6">
+                <div className="text-left">
+                  <p className="lg:text-lg text-gray-600 leading-relaxed border-t border-gray-50 pt-6">
                     {config.tocEnglish}
                   </p>
                 </div>
               )}
             </div>
-            <div className="h-1.5 w-full bg-linear-to-r from-transparent via-[#43896B]/20 to-transparent"></div>
           </div>
         )}
 

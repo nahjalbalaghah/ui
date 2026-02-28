@@ -64,7 +64,7 @@ export default function TopFilterBar({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
+    <div className="mb-8">
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex-1 flex gap-2">
           <div className="flex-1">
@@ -99,7 +99,7 @@ export default function TopFilterBar({
               value={goToValue}
               onChange={(e) => setGoToValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full lg:w-28 pl-10 pr-3 py-2.5 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#43896B]/20 focus:border-[#43896B] transition-all duration-200 placeholder:text-gray-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="w-full bg-white lg:w-28 pl-10 pr-3 py-2.5 text-base border border-[#D7DEE9]! rounded-lg focus:outline-none focus:ring-2 focus:ring-[#43896B]/20 focus:border-[#43896B] transition-all duration-200 placeholder:text-gray-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
             <button
               onClick={handleGoTo}

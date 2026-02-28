@@ -35,6 +35,13 @@ export interface Tag {
   publishedAt: string;
 }
 
+export interface Source {
+  id: number;
+  documentId: string;
+  word?: string;
+  content?: string;
+}
+
 export interface Paragraph {
   id: number;
   documentId: string;
@@ -45,6 +52,7 @@ export interface Paragraph {
   publishedAt: string;
   translations: Translation[];
   footnotes?: Footnote[];
+  appendix_of_sources?: Source[];
 }
 
 export interface Post {
