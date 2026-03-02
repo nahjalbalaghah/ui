@@ -1,7 +1,7 @@
 import api from '../api';
-import { Post, ApiResponse, Translation, Tag, Paragraph, Footnote } from '../orations';
+import { Post, ApiResponse, Translation, Tag, Paragraph, Footnote, Source } from '../orations';
 
-export type { Post, ApiResponse, Translation, Tag, Paragraph, Footnote };
+export type { Post, ApiResponse, Translation, Tag, Paragraph, Footnote, Source };
 
 export interface PostFilters {
   type?: string;
@@ -226,6 +226,7 @@ export const postsApi = {
         'populate[footnotes]': true,
         'populate[paragraphs][populate][translations]': true,
         'populate[paragraphs][populate][footnotes]': true,
+        'populate[paragraphs][populate][appendix_of_sources]': true,
         'populate[tags]': true,
       };
 

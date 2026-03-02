@@ -14,7 +14,7 @@ const Input: React.FC<InputProps> = ({ label, error, className, icon, ...props }
       <div className="relative" >
         <input
           className={`
-            w-full p-3 text-sm placeholder:text-[#5A5D72] border border-[#D7DEE9] rounded-xl outline-none transition 
+            w-full bg-white p-3 text-sm placeholder:text-[#5A5D72] border border-[#D7DEE9] rounded-xl outline-none transition 
             focus:ring-2 focus:ring-[#43896B] focus:border-[#43896B]
             ${error ? "border-red-500" : "border-gray-300"} 
             ${className}

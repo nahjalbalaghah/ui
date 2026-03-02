@@ -329,11 +329,6 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                       <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap flex-1" >
                         {formatTextWithFootnotes(mainTranslation.text, allFootnotes, false, content.sermonNumber || 'main')}
                       </p>
-                      <Link href={`/${contentType}/details/${content.id}/sources?num=${content.sermonNumber || 'main'}`}>
-                        <Button variant="outlined" icon={<ScrollText className="w-4 h-4" />} className="shrink-0">
-                          Sources
-                        </Button>
-                      </Link>
                     </div>
                   </div>
                 );
@@ -354,10 +349,17 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                 className={`border-b border-gray-100 pb-8 last:border-b-0 last:pb-0 ${highlightedParagraphNumber === paragraph.number ? 'highlight-text-ref' : ''}`}
               >
                 {paragraph.number && (
-                  <div className="mb-3">
+                  <div className="mb-3 flex items-center gap-2">
                     <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-[#43896B] bg-[#43896B]/10 rounded-full border border-[#43896B]/20">
                       {paragraph.number}
                     </span>
+                    {paragraph.appendix_of_sources && paragraph.appendix_of_sources.length > 0 && (
+                      <Link href={`/${contentType}/details/${content.id}/sources?num=${paragraph.number}`}>
+                        <Button variant="outlined" icon={<ScrollText className="w-4 h-4" />} className="shrink-0 py-1! px-2! text-xs!">
+                          Sources
+                        </Button>
+                      </Link>
+                    )}
                   </div>
                 )}
                 {(displayMode === 'both' || displayMode === 'arabic-only') && paragraph.arabic && (() => {
@@ -417,11 +419,6 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                         <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap flex-1">
                           {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false, paragraph.number)}
                         </p>
-                        <Link href={`/${contentType}/details/${content.id}/sources?num=${paragraph.number}`}>
-                          <Button variant="outlined" icon={<ScrollText className="w-4 h-4" />} className="shrink-0">
-                            Sources
-                          </Button>
-                        </Link>
                       </div>
                     </div>
                   );
