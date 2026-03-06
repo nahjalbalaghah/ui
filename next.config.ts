@@ -31,7 +31,11 @@ const nextConfig: NextConfig = {
         destination: '/content/details/sayings/:params+',
         permanent: true,
       },
-
+      {
+        source: '/indexes/details/:slug',
+        destination: '/indexes/:slug',
+        permanent: true,
+      },
     ];
   },
 };

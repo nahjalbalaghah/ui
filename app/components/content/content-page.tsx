@@ -5,6 +5,8 @@ import TopFilterBar from '../../orations/sections/top-filter-bar';
 import ContentListing from './content-listing';
 import { type Post, type ApiResponse } from '@/api/posts';
 
+import { normalizeTextForSearch } from '@/app/utils/text-formatting';
+
 interface ContentPageConfig {
   contentType: 'orations' | 'letters' | 'sayings';
   title: string;
@@ -85,29 +87,29 @@ function ContentPageContent({ config }: ContentPageProps) {
       return posts;
     }
 
-    const query = searchQuery.toLowerCase().trim();
+    const query = normalizeTextForSearch(searchQuery);
 
     return posts.filter(post => {
-      if (post.title?.toLowerCase().includes(query)) return true;
+      if (normalizeTextForSearch(post.title || '').includes(query)) return true;
 
-      if (post.heading?.toLowerCase().includes(query)) return true;
+      if (normalizeTextForSearch(post.heading || '').includes(query)) return true;
 
       if (post.translations && Array.isArray(post.translations)) {
         const matchesTranslation = post.translations.some(trans =>
-          trans.text?.toLowerCase().includes(query)
+          normalizeTextForSearch(trans.text || '').includes(query)
         );
         if (matchesTranslation) return true;
       }
 
       if (post.paragraphs && Array.isArray(post.paragraphs)) {
         const matchesArabic = post.paragraphs.some(para =>
-          para.arabic?.toLowerCase().includes(query)
+          normalizeTextForSearch(para.arabic || '').includes(query)
         );
         if (matchesArabic) return true;
 
         const matchesParaTranslations = post.paragraphs.some(para =>
           para.translations?.some(trans =>
-            trans.text?.toLowerCase().includes(query)
+            normalizeTextForSearch(trans.text || '').includes(query)
           )
         );
         if (matchesParaTranslations) return true;

@@ -100,14 +100,10 @@ export default function ContentListing({
 
   return (
     <div className="w-full relative">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 gap-4">
-        <p className="text-gray-600 whitespace-nowrap shrink-0">
-          {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
-        </p>
-
+      <div className="flex flex-col items-center justify-center mb-10 gap-4">
         {/* Show pagination only on desktop at top */}
         {showTopPagination && totalPages > 1 && onPageChange && (
-          <div className="w-full lg:w-auto">
+          <div className="w-full flex justify-center">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -117,8 +113,11 @@ export default function ContentListing({
             />
           </div>
         )}
-      </div>
 
+        <p className="text-gray-500 text-sm whitespace-nowrap shrink-0">
+          {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
+        </p>
+      </div>
       {loading ? (
         renderLoadingList()
       ) : (

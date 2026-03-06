@@ -9,6 +9,7 @@ import Input from '@/app/components/input';
 import Select from '@/app/components/select';
 import Pagination from '@/app/components/pagination';
 import AlphabetChips from '@/app/components/alphabet-chips';
+import { normalizeForSort } from '@/app/utils/text-formatting';
 
 export default function QuranHadithContent() {
   const router = useRouter();
@@ -111,7 +112,7 @@ export default function QuranHadithContent() {
     result.sort((a, b) => {
       const wordA = a.surah_name || '';
       const wordB = b.surah_name || '';
-      return wordA.localeCompare(wordB);
+      return normalizeForSort(wordA).localeCompare(normalizeForSort(wordB));
     });
 
     return result;
@@ -242,6 +243,7 @@ export default function QuranHadithContent() {
                 placeholder="Search translation..."
                 value={filters.verse_translation}
                 onChange={(e) => setFilters({ ...filters, verse_translation: e.target.value })}
+                className='h-9.5'
               />
             ) : (
               <Input
@@ -249,7 +251,7 @@ export default function QuranHadithContent() {
                 placeholder="Search Arabic..."
                 value={filters.verse_text}
                 onChange={(e) => setFilters({ ...filters, verse_text: e.target.value })}
-                className="text-right"
+                className="text-right h-9.5"
                 dir="rtl"
               />
             )}
@@ -355,8 +357,20 @@ export default function QuranHadithContent() {
             </div>
           ) : (
             <>
-              <div className="mb-4 text-sm text-gray-600">
-                Showing {items.length} of {total} results
+              <div className="mb-4 flex items-center justify-between">
+                <div className="text-sm text-gray-600">
+                  Showing <span className="font-semibold text-gray-900">{items.length}</span> of <span className="font-semibold text-gray-900">{total}</span> results
+                </div>
+                {totalPages > 1 && (
+                  <div className="flex justify-end">
+                    <Pagination
+                      currentPage={page}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                      loading={loading}
+                    />
+                  </div>
+                )}
               </div>
               {/* Desktop Table */}
               <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
