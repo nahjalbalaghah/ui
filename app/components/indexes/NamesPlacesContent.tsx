@@ -9,6 +9,7 @@ import Input from '@/app/components/input';
 import Select from '@/app/components/select';
 import Pagination from '@/app/components/pagination';
 import AlphabetChips from '@/app/components/alphabet-chips';
+import { normalizeForSort } from '@/app/utils/text-formatting';
 
 export default function NamesPlacesContent() {
   const router = useRouter();
@@ -97,7 +98,11 @@ export default function NamesPlacesContent() {
     result.sort((a, b) => {
       const wordA = (language === 'English' ? a.word_english : a.word_arabic) || '';
       const wordB = (language === 'English' ? b.word_english : b.word_arabic) || '';
-      return wordA.localeCompare(wordB, language === 'Arabic' ? 'ar' : 'en');
+      
+      if (language === 'English') {
+        return normalizeForSort(wordA).localeCompare(normalizeForSort(wordB));
+      }
+      return wordA.localeCompare(wordB, 'ar');
     });
 
     return result;
@@ -305,8 +310,20 @@ export default function NamesPlacesContent() {
             </div>
           ) : (
             <>
-              <div className="mb-4 text-sm text-gray-600">
-                Showing {items.length} of {total} results
+              <div className="mb-4 flex items-center justify-between">
+                <div className="text-sm text-gray-600">
+                  Showing <span className="font-semibold text-gray-900">{items.length}</span> of <span className="font-semibold text-gray-900">{total}</span> results
+                </div>
+                {totalPages > 1 && (
+                  <div className="flex justify-end">
+                    <Pagination
+                      currentPage={page}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                      loading={loading}
+                    />
+                  </div>
+                )}
               </div>
               {/* Desktop Table */}
               <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">

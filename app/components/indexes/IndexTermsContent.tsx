@@ -10,6 +10,7 @@ import Select from '@/app/components/select';
 import Pagination from '@/app/components/pagination';
 import TextRefChip from '@/app/components/text-ref-chip';
 import AlphabetChips from '@/app/components/alphabet-chips';
+import { normalizeForSort } from '@/app/utils/text-formatting';
 
 export default function IndexTermsContent() {
   const router = useRouter();
@@ -98,7 +99,11 @@ export default function IndexTermsContent() {
     result.sort((a, b) => {
       const wordA = (language === 'English' ? a.word_english : a.word_arabic) || '';
       const wordB = (language === 'English' ? b.word_english : b.word_arabic) || '';
-      return wordA.localeCompare(wordB, language === 'Arabic' ? 'ar' : 'en');
+      
+      if (language === 'English') {
+        return normalizeForSort(wordA).localeCompare(normalizeForSort(wordB));
+      }
+      return wordA.localeCompare(wordB, 'ar');
     });
 
     return result;
@@ -319,6 +324,16 @@ export default function IndexTermsContent() {
                 <p className="text-sm text-gray-600">
                   Showing <span className="font-semibold text-gray-900">{(page - 1) * pageSize + 1}</span>-<span className="font-semibold text-gray-900">{Math.min(page * pageSize, total)}</span> of <span className="font-semibold text-gray-900">{total}</span> terms
                 </p>
+                {totalPages > 1 && (
+                  <div className="flex justify-end">
+                    <Pagination
+                      currentPage={page}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                      loading={loading}
+                    />
+                  </div>
+                )}
               </div>
               <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">

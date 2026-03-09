@@ -8,6 +8,7 @@ import Input from '@/app/components/input';
 import Pagination from '@/app/components/pagination';
 import AlphabetChips from '@/app/components/alphabet-chips';
 import { IndexCategory } from '@/app/data/indexes';
+import { normalizeForSort } from '@/app/utils/text-formatting';
 
 interface StaticIndexListProps {
     category: IndexCategory;
@@ -52,7 +53,9 @@ export default function StaticIndexList({ category }: StaticIndexListProps) {
         }
 
         // Sort Alphabetically
-        items.sort((a, b) => a.word.localeCompare(b.word));
+        items.sort((a, b) => {
+            return normalizeForSort(a.word).localeCompare(normalizeForSort(b.word));
+        });
 
         return items;
     }, [category.items, startLetter, searchQuery]);
@@ -163,6 +166,16 @@ export default function StaticIndexList({ category }: StaticIndexListProps) {
                                 <p className="text-sm text-gray-600">
                                     Showing <span className="font-semibold text-gray-900">{(page - 1) * pageSize + 1}</span>-<span className="font-semibold text-gray-900">{Math.min(page * pageSize, total)}</span> of <span className="font-semibold text-gray-900">{total}</span>
                                 </p>
+                                {totalPages > 1 && (
+                                    <div className="flex justify-end">
+                                        <Pagination
+                                            currentPage={page}
+                                            totalPages={totalPages}
+                                            onPageChange={handlePageChange}
+                                            loading={false}
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             {/* Desktop Table */}

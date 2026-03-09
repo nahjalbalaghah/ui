@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
-import { type Post, orationsApi, lettersApi, sayingsApi } from '@/api/posts';
+import { type Post, orationsApi, lettersApi, sayingsApi, postsApi } from '@/api/posts';
 import { audioApi } from '@/api/audio';
 import ContentDescription from './content-description';
 import { ArrowLeft, Book, GitCompare, ChevronLeft, ChevronRight, ScrollText } from 'lucide-react';
@@ -55,26 +55,55 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
   useEffect(() => {
     const fetchAllNumbers = async () => {
       try {
-        let response;
-        const opts = { pageSize: 500, fields: ['id', 'sermonNumber'] };
-        switch (contentType) {
-          case 'orations':
-            response = await orationsApi.getOrations(1, 500);
-            break;
-          case 'letters':
-            response = await lettersApi.getLetters(1, 500);
-            break;
-          case 'sayings':
-            response = await sayingsApi.getSayings(1, 500);
-            break;
+        let allPosts: any[] = [];
+        let currentPage = 1;
+        let hasMore = true;
+        const pageSize = 100;
+
+        const typeMapping = {
+          'orations': 'Oration',
+          'letters': 'Letter',
+          'sayings': 'Saying'
+        };
+
+        while (hasMore) {
+          const response = await postsApi.getPosts({
+            page: currentPage,
+            pageSize: pageSize,
+            filters: { type: typeMapping[contentType] },
+            fields: ['id', 'sermonNumber'],
+            populate: [], // Optimize: we only need ID and number for the dropdown
+            sort: 'id:asc'
+          });
+
+          if (response?.data && Array.isArray(response.data) && response.data.length > 0) {
+            allPosts.push(...response.data);
+            const totalPages = response.meta?.pagination?.pageCount || 1;
+            hasMore = currentPage < totalPages;
+            currentPage++;
+          } else {
+            hasMore = false;
+          }
         }
-        if (response?.data) {
-          const numbers = response.data
-            .map(p => ({
-              id: p.id,
-              number: p.sermonNumber?.split('.').pop() || p.id.toString()
-            }))
-            .sort((a, b) => parseInt(a.number) - parseInt(b.number));
+
+        if (allPosts.length > 0) {
+          const numbers = allPosts
+            .map(p => {
+              let numStr = p.sermonNumber;
+              if (numStr && numStr.includes('.')) {
+                numStr = numStr.split('.').pop();
+              }
+              return {
+                id: p.id,
+                number: numStr || p.id.toString()
+              };
+            })
+            .sort((a, b) => {
+              const numA = parseInt(a.number);
+              const numB = parseInt(b.number);
+              if (isNaN(numA) || isNaN(numB)) return a.number.localeCompare(b.number);
+              return numA - numB;
+            });
           setAllItemNumbers(numbers);
         }
       } catch (error) {

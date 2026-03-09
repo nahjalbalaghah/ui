@@ -19,8 +19,14 @@ const listingComponents: Record<string, React.FC> = {
 
 export default function IndexSlugPage() {
   const params = useParams();
-  const slug = params.slug as string;
-  const details = params.details as string[] | undefined;
+  let slug = params.slug as string;
+  let details = params.details as string[] | undefined;
+
+  // If slug is 'details', shift to the next param if exists
+  if (slug === 'details' && details && details.length > 0) {
+    slug = details[0];
+    details = details.slice(1);
+  }
 
   if (!VALID_SLUGS.includes(slug)) {
     notFound();

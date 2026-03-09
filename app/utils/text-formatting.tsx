@@ -283,3 +283,40 @@ export const HighlightArabicText = ({ text }: any) => {
   }
   return <span>{parts}</span>;
 }
+/**
+ * Normalizes a string for alphabetical sorting by stripping leading "halfmoons"
+ * (ʿ, ʾ, etc) and other common punctuation.
+ */
+/**
+ * Normalizes a string for search by removing diacritics and special characters.
+ */
+export const normalizeTextForSearch = (text: string): string => {
+  if (!text) return '';
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Remove common diacritics
+    .replace(/[ḤḥṢṣṬṭẒẓḌḍʿʾ]/g, (match) => {
+      // Map specific characters to their base counterparts
+      const mapping: Record<string, string> = {
+        'Ḥ': 'H', 'ḥ': 'h',
+        'Ṣ': 'S', 'ṣ': 's',
+        'Ṭ': 'T', 'ṭ': 't',
+        'Ẓ': 'Z', 'ẓ': 'z',
+        'Ḍ': 'D', 'ḍ': 'd',
+        'ʿ': '', 'ʾ': ''
+      };
+      return mapping[match] || match;
+    })
+    .toLowerCase()
+    .trim();
+};
+
+/**
+ * Normalizes a string for alphabetical sorting by stripping leading "halfmoons"
+ * (ʿ, ʾ, etc) and other common punctuation.
+ */
+export const normalizeForSort = (text: string): string => {
+  if (!text) return '';
+  // Strip leading halfmoons, quotes, and trim
+  return text.replace(/^[''"‘“’ʿʾ]+/, '').trim().toLowerCase();
+};

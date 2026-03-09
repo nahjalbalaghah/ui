@@ -483,11 +483,13 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                     </span>
                   </div>
                   <div className="flex-1 space-y-3">
-                    <p className="text-lg text-gray-800 leading-relaxed font-brill">
-                      {footnote.english_translation}
-                    </p>
-                    {footnote.arabic_interpretation && (
-                      <div className="pt-2 border-t border-gray-100 mt-2">
+                    {(displayMode === 'both' || displayMode === 'english-only') && (
+                      <p className="text-lg text-gray-800 leading-relaxed font-brill">
+                        {footnote.english_translation}
+                      </p>
+                    )}
+                    {(displayMode === 'both' || displayMode === 'arabic-only') && footnote.arabic_interpretation && (
+                      <div className={`pt-2 ${displayMode === 'both' ? 'border-t border-gray-100 mt-2' : ''}`}>
                         <p className="text-xl text-gray-900 leading-relaxed font-taha text-right" dir="rtl">
                           {footnote.arabic_interpretation}
                         </p>
