@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Button from '@/app/components/button';
 import { type Post, type Footnote, type Edition } from '@/api/orations';
 import { postsApi } from '@/api/posts';
+import { glossaryEntriesApi } from '@/api/glossary-entries';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
@@ -33,9 +34,9 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
 
   useEffect(() => {
     if (content.post_base_documentId) {
-       postsApi.getPostsByPostBaseDocumentId(content.post_base_documentId)
-         .then(res => setAvailablePosts(res.data))
-         .catch(console.error);
+      postsApi.getPostsByPostBaseDocumentId(content.post_base_documentId)
+        .then(res => setAvailablePosts(res.data))
+        .catch(console.error);
     }
   }, [content.post_base_documentId]);
 
@@ -52,13 +53,13 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
 
   const handleEditionChange = (editionId: string) => {
     setSelectedEditionId(editionId);
-    
+
     // Update URL with edition parameter
     const params = new URLSearchParams(searchParams.toString());
     params.set('edition', editionId);
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     window.history.pushState(null, '', newUrl);
-    
+
     if (availablePosts.length > 0) {
       const targetPost = availablePosts.find(p => {
         if (p.editions && Array.isArray(p.editions)) {
@@ -68,7 +69,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
         }
         return false;
       });
-      
+
       if (targetPost && targetPost.id !== content.id) {
         // preserve other params when navigating to a different post
         router.push(`/content/details/${contentType}/${targetPost.id}?${params.toString()}`);
@@ -77,6 +78,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
   };
   const [highlightedParagraphNumber, setHighlightedParagraphNumber] = useState<string | null>(null);
   const [radisIntroduction, setRadisIntroduction] = useState<{ arabic: string; translation: string } | null>(null);
+  const [hasPostLevelSources, setHasPostLevelSources] = useState(false);
 
   useEffect(() => {
     const fetchRadisBlurb = async () => {
@@ -94,6 +96,13 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
       }
     };
     fetchRadisBlurb();
+  }, [content.sermonNumber]);
+
+  useEffect(() => {
+    if (!content.sermonNumber) return;
+    glossaryEntriesApi.getGlossaryEntries({ postSermonNumber: content.sermonNumber, pageSize: 1 })
+      .then(res => setHasPostLevelSources(res.data.length > 0))
+      .catch(() => setHasPostLevelSources(false));
   }, [content.sermonNumber]);
 
   let allReferences: string[] = [];
@@ -355,10 +364,17 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
         )}
       </div>
       {content.sermonNumber && (
-        <div className="mb-4">
+        <div className="mb-4 flex items-center gap-2">
           <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-[#43896B] bg-[#43896B]/10 rounded-full border border-[#43896B]/20">
             {content.sermonNumber}
           </span>
+          {hasPostLevelSources && (
+            <Link href={`/${contentType}/details/${content.id}/sources?num=${content.sermonNumber}`}>
+              <Button variant="outlined" icon={<ScrollText className="w-4 h-4" />} className="shrink-0 py-1! px-2! text-xs!">
+                Sources
+              </Button>
+            </Link>
+          )}
         </div>
       )}
       {(content.title || mainTranslation) && (

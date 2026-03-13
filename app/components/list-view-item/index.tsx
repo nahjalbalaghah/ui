@@ -69,12 +69,10 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
   const firstParagraphArabic = firstParagraph?.arabic || '';
   const firstParagraphEnglish = item?.translations?.find((t: any) => t.type === 'en')?.text || '';
 
-  // For expanded view: use paragraph content if available, otherwise use main translations
   const mainTranslationEnglish = item.translations?.find((t: any) => t.type === 'en')?.text || '';
   const expandedEnglish = firstParagraphEnglish;
   const expandedArabic = item.title || '';
 
-  // For preview (collapsed state): use TOC text as short summary
   const previewEnglish = tocEnglish || firstParagraphEnglish || headingTranslation;
   const previewArabic = tocArabic || firstParagraphArabic || arabicTitle;
 
@@ -131,11 +129,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
                   {truncateText(arabicTitle.replace(/[()]/g, ''), 150, 80)}
                 </h3>
               )}
-              {(displayMode === 'both' || displayMode === 'arabic-only') && previewArabic && previewArabic !== arabicTitle && (
-                <p className="text-sm font-taha text-gray-700 mt-2 leading-relaxed" dir="rtl">
-                  {truncateText(previewArabic.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 300, 150)}
-                </p>
-              )}
+
               {item.tags && item.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {item.tags.slice(0, 3).map((tag) => (

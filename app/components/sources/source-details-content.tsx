@@ -91,25 +91,9 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
                         </div>
                         <h1 className="text-3xl md:text-5xl font-black tracking-tight">{source.word}</h1>
                     </div>
-
                     <div className="p-8 md:p-12">
-                        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed border-l-4 border-[#43896B] pl-6 py-2 bg-[#43896B]/5 rounded-r-xl mb-12">
-                            <p className="whitespace-pre-wrap">{source.content}</p>
-                        </div>
-
-                        <div className="space-y-8">
-                            {source.paragraphs && source.paragraphs.length > 0 && (
-                                <div>
-                                    <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2 mb-4">Related Paragraphs</h2>
-                                    <div className="flex flex-wrap gap-2">
-                                        {source.paragraphs.map((p) => (
-                                            <span key={p.id} className="px-3 py-1 bg-[#43896B]/10 text-[#43896B] rounded-full text-sm font-medium border border-[#43896B]/20">
-                                                {p.number}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
+                        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed border-r-4 border-[#43896B] p-4 lg:p-6 bg-[#43896B]/5 rounded-l-xl mb-12">
+                            <p className="whitespace-pre-wrap text-right">{source.content}</p>
                         </div>
                     </div>
                 </div>
