@@ -1,7 +1,7 @@
 import api from '../api';
-import { Post, ApiResponse, Translation, Tag, Paragraph, Footnote, Source } from '../orations';
+import { Post, ApiResponse, Translation, Tag, Paragraph, Footnote, Source, Edition } from '../orations';
 
-export type { Post, ApiResponse, Translation, Tag, Paragraph, Footnote, Source };
+export type { Post, ApiResponse, Translation, Tag, Paragraph, Footnote, Source, Edition };
 
 export interface PostFilters {
   type?: string;
@@ -22,13 +22,68 @@ export interface PostsApiOptions {
 }
 
 export const postsApi = {
+  /**
+   * Helper: extracts Post[] from the post-bases response structure.
+   * Each post-base has a `posts` array; we flatten them all into a single Post[].
+   */
+  _extractPosts(responseData: any[]): Post[] {
+    if (!responseData || !Array.isArray(responseData)) return [];
+    const posts: Post[] = [];
+    for (const base of responseData) {
+      if (base.posts && Array.isArray(base.posts)) {
+        // Carry over the PostBase heading to the child posts if they don't have one
+        const basePosts = base.posts.map((post: any) => ({
+          ...post,
+          heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
+          post_base_documentId: base.documentId
+        }));
+        posts.push(...basePosts);
+      }
+    }
+    return posts;
+  },
+
+  async getEditions(): Promise<{ data: Edition[] }> {
+    try {
+      const response = await api.get('/api/editions');
+      return {
+        data: response.data.data
+      };
+    } catch (error) {
+      console.error('Error fetching editions:', error);
+      throw error;
+    }
+  },
+
+  async getPostsByPostBaseDocumentId(documentId: string): Promise<ApiResponse> {
+    try {
+      const params: any = {
+        'filters[documentId][$eq]': documentId,
+        'populate[posts][populate][paragraphs][populate][0]': 'translations',
+        'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+        'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
+        'populate[posts][populate][editions][fields][0]': 'title',
+      };
+      
+      const response = await api.get('/api/post-bases', { params });
+      const posts = this._extractPosts(response.data.data);
+      return {
+        data: posts,
+        meta: response.data.meta,
+      };
+    } catch (error) {
+      console.error('Error fetching posts by post_base documentId:', error);
+      throw error;
+    }
+  },
+
   async getPosts(options: PostsApiOptions = {}): Promise<ApiResponse> {
     try {
       const {
         page = 1,
         pageSize = 9,
         filters = {},
-        populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags'],
+        populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations'],
         sort,
         fields
       } = options;
@@ -39,94 +94,58 @@ export const postsApi = {
       };
 
       if (filters.type) {
-        params['filters[type][$eq]'] = filters.type;
+        params['filters[posts][type][$eq]'] = filters.type;
       }
 
       if (filters.sermonNumber) {
         if (Array.isArray(filters.sermonNumber)) {
           filters.sermonNumber.forEach((num, index) => {
-            params[`filters[sermonNumber][$in][${index}]`] = num;
+            params[`filters[posts][sermonNumber][$in][${index}]`] = num;
           });
         } else {
-          params['filters[sermonNumber][$eq]'] = filters.sermonNumber;
+          params['filters[posts][sermonNumber][$eq]'] = filters.sermonNumber;
         }
       }
 
       if (filters.paragraphNumber) {
-        params['filters[paragraphs][number][$startsWith]'] = filters.paragraphNumber;
+        params['filters[posts][paragraphs][number][$startsWith]'] = filters.paragraphNumber;
       }
 
       if (filters.search) {
-        params['filters[$or][0][title][$containsi]'] = filters.search;
-        params['filters[$or][1][heading][$containsi]'] = filters.search;
-        params['filters[$or][2][paragraphs][arabic][$containsi]'] = filters.search;
-        params['filters[$or][3][paragraphs][translations][text][$containsi]'] = filters.search;
+        params['filters[posts][$or][0][title][$containsi]'] = filters.search;
+        params['filters[posts][$or][1][heading][$containsi]'] = filters.search;
+        params['filters[posts][$or][2][paragraphs][arabic][$containsi]'] = filters.search;
+        params['filters[posts][$or][3][paragraphs][translations][text][$containsi]'] = filters.search;
       }
 
-      if (filters.tags && filters.tags.length > 0) {
-        filters.tags.forEach((tag, index) => {
-          params[`filters[tags][name][$in][${index}]`] = tag;
-        });
-      }
+
 
       if (fields && fields.length > 0) {
         fields.forEach((field, index) => {
-          params[`fields[${index}]`] = field;
+          params[`populate[posts][fields][${index}]`] = field;
         });
       }
 
       if (populate && populate.length > 0) {
-        populate.forEach((relation, index) => {
-          // Handle complex population (object syntax) manually if needed, 
-          // but for this specific optimization we might just need simple relation names
-          // or we can pass raw strings like 'paragraphs.translations' which Strapi accepts as populate[0]=...
-          // However, existing code used params['populate[footnotes]'] = true; style.
-          // Let's support both: if user passes populate array, we use it.
-          // If we want to maintain the old hardcoded behavior when populate is NOT passed, we kept the default value in destructuring.
-
-          // If populate is passed, we check if it matches the old hardcoded keys to use the old object syntax 
-          // (which might be safer for deep population if Strapi version requires it), 
-          // or just generic array syntax.
-
-          // Actually, looking at the previous code:
-          // params['populate[footnotes]'] = true;
-          // params['populate[paragraphs][populate][translations]'] = true;
-          // This suggests deep population structure.
-
-          // If the caller provides specific populate array, we should probably blindly trust it 
-          // or if they provide nothing (default), we do the detailed one.
-
-          // But wait, the default `populate` array in destructuring is:
-          // ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'tags', 'translations']
-
-          // This array doesn't directly map to the complex object syntax used below:
-          // params['populate[paragraphs][populate][translations]'] = true;
-
-          // So if we just use the array, it might fail for deep relations if Strapi doesn't support dot notation in array `populate[0]=paragraphs.translations`.
-          // Strapi v4 supports dot notation. 
-
-          // Let's change the logic: IF populate is the DEFAULT one, use the hardcoded complex object params.
-          // IF populate is CUSTOM (optimized), use the array syntax.
-
-          params[`populate[${index}]`] = relation;
+        // Map common relations to their nested structure to avoid index-based population errors
+        populate.forEach((relation) => {
+          if (relation === 'paragraphs.translations') {
+            params['populate[posts][populate][paragraphs][populate][0]'] = 'translations';
+          } else if (relation === 'paragraphs.footnotes') {
+            params['populate[posts][populate][paragraphs][populate][1]'] = 'footnotes';
+          } else if (relation === 'footnotes') {
+            // Skipping post-level footnotes for now as it caused "Invalid key 2"
+            // params['populate[posts][populate][footnotes]'] = true;
+          } else if (relation === 'tags') {
+            // Skipping tags as it caused "Invalid key tags"
+          } else {
+            params[`populate[posts][populate][${relation}]`] = true;
+          }
         });
-      } else if (populate && populate.length === 5 && populate[0] === 'footnotes') {
-        // This check is a bit brittle to detect "default". 
-        // Let's check if it IS the default array reference, but we destructured a new array.
-        // Better strategy: checking if we are in the "optimized" mode (passed via options) or "default" mode.
-
-        // If `fields` is present, we are likely in optimized mode.
-        // But let's look at `getPosts` calls.
-
-        // To be safe and minimal:
-        // If `populate` option IS provided in the call, use it as array params.
-        // If `populate` option IS NOT provided (so it uses default), use the hardcoded logic.
-
-        // But we assigned a default value to `populate` in destructuring:
-        // populate = [...]
-
-        // Let's change destructuring to NOT have default, handle it inside.
       }
+
+      // Always populate editions as it is used for TOC
+      params['populate[posts][populate][editions][fields][0]'] = 'title';
 
       if (sort) {
         params['sort'] = sort;
@@ -134,8 +153,12 @@ export const postsApi = {
 
       console.log('Final API params:', params);
 
-      const response = await api.get('/api/posts', { params });
-      return response.data;
+      const response = await api.get('/api/post-bases', { params });
+      const posts = this._extractPosts(response.data.data);
+      return {
+        data: posts,
+        meta: response.data.meta,
+      };
     } catch (error) {
       console.error('Error fetching posts:', error);
       throw error;
@@ -157,26 +180,19 @@ export const postsApi = {
       };
 
       if (filters.type) {
-        params['filters[type][$eq]'] = filters.type;
+        params['filters[posts][type][$eq]'] = filters.type;
       }
 
       if (filters.search) {
-        params['filters[$or][0][title][$containsi]'] = filters.search;
-        params['filters[$or][1][heading][$containsi]'] = filters.search;
-        params['filters[$or][2][paragraphs][arabic][$containsi]'] = filters.search;
-        params['filters[$or][3][paragraphs][translations][text][$containsi]'] = filters.search;
+        params['filters[posts][$or][0][title][$containsi]'] = filters.search;
+        params['filters[posts][$or][1][heading][$containsi]'] = filters.search;
+        params['filters[posts][$or][2][paragraphs][arabic][$containsi]'] = filters.search;
+        params['filters[posts][$or][3][paragraphs][translations][text][$containsi]'] = filters.search;
       }
 
-      if (filters.tags && filters.tags.length > 0) {
-        filters.tags.forEach((tag, index) => {
-          params[`filters[tags][name][$in][${index}]`] = tag;
-        });
-      }
-
-      params['populate[tags]'] = true;
-      params['populate[paragraphs][populate][translations]'] = true;
-      params['populate[paragraphs][populate][footnotes]'] = true;
-      params['populate[footnotes]'] = true;
+      params['populate[posts][populate][paragraphs][populate][0]'] = 'translations';
+      params['populate[posts][populate][paragraphs][populate][1]'] = 'footnotes';
+      params['populate[posts][populate][editions][fields][0]'] = 'title';
 
       if (sort) {
         params['sort'] = sort;
@@ -184,8 +200,12 @@ export const postsApi = {
 
       console.log('Listing API params:', params);
 
-      const response = await api.get('/api/posts', { params });
-      return response.data;
+      const response = await api.get('/api/post-bases', { params });
+      const posts = this._extractPosts(response.data.data);
+      return {
+        data: posts,
+        meta: response.data.meta,
+      };
     } catch (error) {
       console.error('Error fetching posts for listing:', error);
       throw error;
@@ -194,23 +214,26 @@ export const postsApi = {
 
   async getPostBySlug(slug: string, type?: string): Promise<Post | null> {
     try {
-      const filters: PostFilters = { search: undefined };
       const params: any = {
-        'filters[slug][$eq]': slug,
-        'populate[footnotes]': true,
-        'populate[paragraphs][populate][translations]': true,
-        'populate[paragraphs][populate][footnotes]': true,
-        'populate[tags]': true,
+        'filters[posts][slug][$eq]': slug,
+        'populate[posts][populate][paragraphs][populate][0]': 'translations',
+        'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+        'populate[posts][populate][editions][fields][0]': 'title',
       };
 
       if (type) {
-        params['filters[type][$eq]'] = type;
+        params['filters[posts][type][$eq]'] = type;
       }
 
-      const response = await api.get('/api/posts', { params });
+      const response = await api.get('/api/post-bases', { params });
+      const posts = this._extractPosts(response.data.data);
 
-      if (response.data.data && response.data.data.length > 0) {
-        return response.data.data[0];
+      const matchingPost = posts.find((p) => p.slug === slug);
+      if (matchingPost) {
+        return matchingPost;
+      }
+      if (posts.length > 0) {
+        return posts[0];
       }
       return null;
     } catch (error) {
@@ -222,22 +245,26 @@ export const postsApi = {
   async getPostById(id: number, type?: string): Promise<Post | null> {
     try {
       const params: any = {
-        'filters[id][$eq]': id,
-        'populate[footnotes]': true,
-        'populate[paragraphs][populate][translations]': true,
-        'populate[paragraphs][populate][footnotes]': true,
-        'populate[paragraphs][populate][appendix_of_sources]': true,
-        'populate[tags]': true,
+        'filters[posts][id][$eq]': id,
+        'populate[posts][populate][paragraphs][populate][0]': 'translations',
+        'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+        'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
+        'populate[posts][populate][editions][fields][0]': 'title',
       };
 
       if (type) {
-        params['filters[type][$eq]'] = type;
+        params['filters[posts][type][$eq]'] = type;
       }
 
-      const response = await api.get('/api/posts', { params });
+      const response = await api.get('/api/post-bases', { params });
+      const posts = this._extractPosts(response.data.data);
 
-      if (response.data.data && response.data.data.length > 0) {
-        return response.data.data[0];
+      const matchingPost = posts.find((p) => p.id === id);
+      if (matchingPost) {
+        return matchingPost;
+      }
+      if (posts.length > 0) {
+        return posts[0];
       }
       return null;
     } catch (error) {
@@ -401,7 +428,7 @@ export const orationsApi = {
           filters: { type: 'Oration' },
           page: currentPage,
           pageSize: batchSize,
-          fields: ['id', 'heading', 'sermonNumber', 'slug'],
+
           populate: []
         });
 
@@ -569,7 +596,7 @@ export const lettersApi = {
           filters: { type: 'Letter' },
           page: currentPage,
           pageSize: batchSize,
-          fields: ['id', 'heading', 'sermonNumber', 'slug'],
+
           populate: []
         });
 
@@ -735,7 +762,7 @@ export const sayingsApi = {
           filters: { type: 'Saying' },
           page: currentPage,
           pageSize: batchSize,
-          fields: ['id', 'heading', 'sermonNumber', 'slug'],
+
           populate: []
         });
 
@@ -1038,5 +1065,83 @@ export const paragraphsApi = {
       console.error('Error searching paragraphs:', error);
       throw error;
     }
+  }
+};
+
+// ---- Post Bases API (for TOC) ----
+
+export interface PostBaseEdition {
+  id: number;
+  title: string;
+}
+
+export interface PostBasePost {
+  id: number;
+  type: string;
+  heading?: string;
+  sermonNumber?: string;
+  slug?: string;
+  editions?: PostBaseEdition[];
+}
+
+export interface PostBase {
+  id: number;
+  documentId: string;
+  posts: PostBasePost[];
+}
+
+export interface PostBasesApiResponse {
+  data: PostBase[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+export const postBasesApi = {
+  async getPostBases(type: string): Promise<PostBasesApiResponse> {
+    try {
+      const params: any = {
+        'filters[posts][type][$eq]': type,
+        'populate[posts][populate][editions][fields][0]': 'title',
+        'pagination[pageSize]': 300,
+      };
+
+      console.log('PostBases API params:', params);
+
+      const response = await api.get('/api/post-bases', { params });
+      
+      // Enrich posts with parent headings for TOC display
+      if (response.data.data && Array.isArray(response.data.data)) {
+        response.data.data = response.data.data.map((base: any) => ({
+          ...base,
+          posts: base.posts?.map((post: any) => ({
+            ...post,
+            heading: post.heading || base.heading || base.TocEnglish || 'Untitled'
+          }))
+        }));
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching post bases:', error);
+      throw error;
+    }
+  },
+
+  async getOrationsTOC(): Promise<PostBasesApiResponse> {
+    return this.getPostBases('Oration');
+  },
+
+  async getLettersTOC(): Promise<PostBasesApiResponse> {
+    return this.getPostBases('Letter');
+  },
+
+  async getSayingsTOC(): Promise<PostBasesApiResponse> {
+    return this.getPostBases('Saying');
   }
 };
