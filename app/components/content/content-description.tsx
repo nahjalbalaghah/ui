@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Tag as TagIcon, Book, BookOpen, ScrollText } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/app/components/button';
-import { type Post, type Footnote } from '@/api/orations';
+import { type Post, type Footnote, type Edition } from '@/api/orations';
+import { postsApi } from '@/api/posts';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
 import Select from '@/app/components/select';
@@ -17,9 +19,62 @@ interface ContentDescriptionProps {
 }
 
 const ContentDescription = ({ content, contentType, highlightRef, englishWord, arabicWord }: ContentDescriptionProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
   const [selectedTranslation, setSelectedTranslation] = useState('en');
-  const [selectedEdition, setSelectedEdition] = useState('subhi');
+  const [selectedEditionId, setSelectedEditionId] = useState<string>('');
+  const [editions, setEditions] = useState<Edition[]>([]);
+  const [availablePosts, setAvailablePosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    postsApi.getEditions().then(res => setEditions(res.data)).catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (content.post_base_documentId) {
+       postsApi.getPostsByPostBaseDocumentId(content.post_base_documentId)
+         .then(res => setAvailablePosts(res.data))
+         .catch(console.error);
+    }
+  }, [content.post_base_documentId]);
+
+  useEffect(() => {
+    const editionParam = searchParams.get('edition');
+    if (editionParam) {
+      setSelectedEditionId(editionParam);
+    } else if (content.editions && Array.isArray(content.editions) && content.editions.length > 0) {
+      setSelectedEditionId(content.editions[0].id.toString());
+    } else if (content.editions && content.editions.id) {
+      setSelectedEditionId(content.editions.id.toString());
+    }
+  }, [content, searchParams]);
+
+  const handleEditionChange = (editionId: string) => {
+    setSelectedEditionId(editionId);
+    
+    // Update URL with edition parameter
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('edition', editionId);
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState(null, '', newUrl);
+    
+    if (availablePosts.length > 0) {
+      const targetPost = availablePosts.find(p => {
+        if (p.editions && Array.isArray(p.editions)) {
+          return p.editions.some((e: any) => e.id.toString() === editionId);
+        } else if (p.editions && p.editions.id) {
+          return p.editions.id.toString() === editionId;
+        }
+        return false;
+      });
+      
+      if (targetPost && targetPost.id !== content.id) {
+        // preserve other params when navigating to a different post
+        router.push(`/content/details/${contentType}/${targetPost.id}?${params.toString()}`);
+      }
+    }
+  };
   const [highlightedParagraphNumber, setHighlightedParagraphNumber] = useState<string | null>(null);
   const [radisIntroduction, setRadisIntroduction] = useState<{ arabic: string; translation: string } | null>(null);
 
@@ -203,11 +258,26 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
     label: t.type === 'en' ? 'English' : t.type.toUpperCase()
   }));
 
-  const editionOptions = [
-    { value: 'subhi', label: 'Subhi al-Salih' },
-    { value: 'fayz', label: 'Fayz al-Islam' },
-    { value: 'hadid', label: 'Ibn Abi al-Hadid' },
-  ];
+  const editionOptions = editions
+    .filter((ed: Edition) => availablePosts.some((p: Post) => {
+      if (p.editions && Array.isArray(p.editions)) {
+        return p.editions.some((e: any) => e.id === ed.id);
+      } else if (p.editions && p.editions.id) {
+        return p.editions.id === ed.id;
+      }
+      return false;
+    }))
+    .map(ed => ({
+      value: ed.id.toString(),
+      label: ed.title
+    }));
+
+  if (editionOptions.length === 0 && selectedEditionId) {
+    const currentEd = editions.find(e => e.id.toString() === selectedEditionId);
+    if (currentEd) {
+      editionOptions.push({ value: currentEd.id.toString(), label: currentEd.title });
+    }
+  }
 
   // Utility: clean unwanted HTML tags and entities from Arabic text
   const cleanArabicText = (text: string): string => {
@@ -251,8 +321,8 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
           />
           <Select
             options={editionOptions}
-            value={selectedEdition}
-            onChange={setSelectedEdition}
+            value={selectedEditionId}
+            onChange={handleEditionChange}
             placeholder="Edition"
             className="w-full sm:w-48"
           />
@@ -341,7 +411,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
       {sortedParagraphs.length > 0 && (
         <div className="space-y-8">
           {sortedParagraphs.map((paragraph) => {
-            const englishTranslation = paragraph.translations?.find(t => t.type === selectedTranslation);
+            const englishTranslation = paragraph.translations?.find((t: any) => t.type === selectedTranslation);
             return (
               <div
                 key={paragraph.id}
@@ -368,7 +438,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
 
                   return (
                     <div className="p-0 mb-4 border-none">
-                      {lines.map((line, index) => {
+                      {lines.map((line: string, index: number) => {
                         const isCentered = /<center>/i.test(line);
                         const cleanedLine = line
                           .replace(/<center>|<\/center>/gi, '')
