@@ -143,7 +143,7 @@ export const orationsApi = {
           'populate[posts][populate][editions][fields][0]': 'title',
         },
       });
-      
+
       const posts: Post[] = [];
       if (response.data.data && Array.isArray(response.data.data)) {
         for (const base of response.data.data) {
@@ -215,7 +215,7 @@ export const orationsApi = {
           'populate[posts][populate][editions][fields][0]': 'title',
         },
       });
-      
+
       const posts: Post[] = [];
       if (response.data.data && Array.isArray(response.data.data)) {
         for (const base of response.data.data) {

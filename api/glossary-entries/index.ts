@@ -31,9 +31,10 @@ export const glossaryEntriesApi = {
     page?: number;
     pageSize?: number;
     paragraphNumber?: string;
+    postSermonNumber?: string;
   } = {}): Promise<GlossaryEntriesApiResponse> {
     try {
-      const { page = 1, pageSize = 25, paragraphNumber } = options;
+      const { page = 1, pageSize = 25, paragraphNumber, postSermonNumber } = options;
       const params: any = {
         'pagination[page]': page,
         'pagination[pageSize]': pageSize,
@@ -42,6 +43,10 @@ export const glossaryEntriesApi = {
 
       if (paragraphNumber) {
         params['filters[paragraphs][number][$eq]'] = paragraphNumber;
+      }
+
+      if (postSermonNumber) {
+        params['filters[posts][sermonNumber][$eq]'] = postSermonNumber;
       }
 
       const response = await api.get('/api/glossary-entries', { params });

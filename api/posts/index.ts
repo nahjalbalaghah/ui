@@ -22,22 +22,17 @@ export interface PostsApiOptions {
 }
 
 export const postsApi = {
-  /**
-   * Helper: extracts Post[] from the post-bases response structure.
-   * Each post-base has a `posts` array; we flatten them all into a single Post[].
-   */
   _extractPosts(responseData: any[]): Post[] {
     if (!responseData || !Array.isArray(responseData)) return [];
     const posts: Post[] = [];
     for (const base of responseData) {
-      if (base.posts && Array.isArray(base.posts)) {
-        // Carry over the PostBase heading to the child posts if they don't have one
-        const basePosts = base.posts.map((post: any) => ({
-          ...post,
-          heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
+      if (base.posts && Array.isArray(base.posts) && base.posts.length > 0) {
+        const firstPost = base.posts[0];
+        posts.push({
+          ...firstPost,
+          heading: firstPost.heading || base.heading || base.TocEnglish || 'Untitled',
           post_base_documentId: base.documentId
-        }));
-        posts.push(...basePosts);
+        });
       }
     }
     return posts;
@@ -64,7 +59,7 @@ export const postsApi = {
         'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
         'populate[posts][populate][editions][fields][0]': 'title',
       };
-      
+
       const response = await api.get('/api/post-bases', { params });
       const posts = this._extractPosts(response.data.data);
       return {
@@ -1114,7 +1109,7 @@ export const postBasesApi = {
       console.log('PostBases API params:', params);
 
       const response = await api.get('/api/post-bases', { params });
-      
+
       // Enrich posts with parent headings for TOC display
       if (response.data.data && Array.isArray(response.data.data)) {
         response.data.data = response.data.data.map((base: any) => ({

@@ -28,9 +28,14 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
         const fetchSources = async () => {
             try {
                 setLoading(true);
-                const response = await glossaryEntriesApi.getGlossaryEntries({
-                    paragraphNumber: itemNumber
-                });
+                // Determine if this is a post-level number (e.g. "1.1") or paragraph-level (e.g. "1.1.1")
+                const parts = itemNumber.split('.');
+                const isPostLevel = parts.length <= 2;
+                const response = await glossaryEntriesApi.getGlossaryEntries(
+                    isPostLevel
+                        ? { postSermonNumber: itemNumber }
+                        : { paragraphNumber: itemNumber }
+                );
                 setSources(response.data);
             } catch (err) {
                 console.error('Failed to fetch sources:', err);
