@@ -111,17 +111,24 @@ export const orationsApi = {
           'pagination[pageSize]': pageSize,
         },
       });
-      // Extract posts from post-bases with heading inheritance
+      // Extract posts from post-bases with heading inheritance and deduplication
       const posts: Post[] = [];
       if (response.data.data && Array.isArray(response.data.data)) {
         for (const base of response.data.data) {
           if (base.posts && Array.isArray(base.posts)) {
+            // For listing and single slug/number lookup, we usually only want the first post per base
+            // or specific matching ones. For simplicity, we can just deduplicate here.
             const basePosts = base.posts.map((post: any) => ({
               ...post,
               heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
               post_base_documentId: base.documentId
             }));
-            posts.push(...basePosts);
+            
+            // If it's a listing call (detected by presence of meta in caller context, or just general)
+            // we only push the first one if we want deduplication.
+            if (basePosts.length > 0) {
+              posts.push(basePosts[0]);
+            }
           }
         }
       }
