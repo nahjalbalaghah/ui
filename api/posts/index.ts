@@ -27,12 +27,13 @@ export const postsApi = {
     const posts: Post[] = [];
     for (const base of responseData) {
       if (base.posts && Array.isArray(base.posts) && base.posts.length > 0) {
-        const firstPost = base.posts[0];
-        posts.push({
-          ...firstPost,
-          heading: firstPost.heading || base.heading || base.TocEnglish || 'Untitled',
-          post_base_documentId: base.documentId
-        });
+        for (const post of base.posts) {
+          posts.push({
+            ...post,
+            heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
+            post_base_documentId: base.documentId
+          });
+        }
       }
     }
     return posts;

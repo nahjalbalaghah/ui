@@ -46,7 +46,7 @@ export const glossaryEntriesApi = {
       }
 
       if (postSermonNumber) {
-        params['filters[posts][sermonNumber][$eq]'] = postSermonNumber;
+        params['filters[paragraphs][number][$startsWith]'] = `${postSermonNumber}.`;
       }
 
       const response = await api.get('/api/glossary-entries', { params });

@@ -267,7 +267,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
     label: t.type === 'en' ? 'English' : t.type.toUpperCase()
   }));
 
-  const editionOptions = editions
+  const editionOptionsRaw = editions
     .filter((ed: Edition) => availablePosts.some((p: Post) => {
       if (p.editions && Array.isArray(p.editions)) {
         return p.editions.some((e: any) => e.id === ed.id);
@@ -280,6 +280,9 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
       value: ed.id.toString(),
       label: ed.title
     }));
+
+  // Deduplicate editions based on ID
+  const editionOptions = Array.from(new Map(editionOptionsRaw.map(item => [item.value, item])).values());
 
   if (editionOptions.length === 0 && selectedEditionId) {
     const currentEd = editions.find(e => e.id.toString() === selectedEditionId);
