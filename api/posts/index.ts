@@ -22,12 +22,14 @@ export interface PostsApiOptions {
 }
 
 export const postsApi = {
-  _extractPosts(responseData: any[]): Post[] {
+  _extractPosts(responseData: any[], deduplicate = false): Post[] {
     if (!responseData || !Array.isArray(responseData)) return [];
     const posts: Post[] = [];
     for (const base of responseData) {
       if (base.posts && Array.isArray(base.posts) && base.posts.length > 0) {
-        for (const post of base.posts) {
+        // If deduplicate is true, we only take the first post from this post-base
+        const postsToProcess = deduplicate ? [base.posts[0]] : base.posts;
+        for (const post of postsToProcess) {
           posts.push({
             ...post,
             heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
@@ -62,6 +64,7 @@ export const postsApi = {
       };
 
       const response = await api.get('/api/post-bases', { params });
+      // We don't deduplicate here as we want all posts for a base when specifically requested by its ID
       const posts = this._extractPosts(response.data.data);
       return {
         data: posts,
@@ -150,7 +153,7 @@ export const postsApi = {
       console.log('Final API params:', params);
 
       const response = await api.get('/api/post-bases', { params });
-      const posts = this._extractPosts(response.data.data);
+      const posts = this._extractPosts(response.data.data, !!filters.search || options.pageSize === 15);
       return {
         data: posts,
         meta: response.data.meta,
@@ -197,7 +200,7 @@ export const postsApi = {
       console.log('Listing API params:', params);
 
       const response = await api.get('/api/post-bases', { params });
-      const posts = this._extractPosts(response.data.data);
+      const posts = this._extractPosts(response.data.data, true);
       return {
         data: posts,
         meta: response.data.meta,
