@@ -101,8 +101,7 @@ export default function QuranHadithContent() {
     if (language === 'English' && startsWith_surah) {
       const letter = startsWith_surah.toLowerCase();
       result = result.filter(item => {
-        const normalized = item.surah_name.toLowerCase().replace(/^[''""‘“’ʿʾ]/, '').trim();
-        return normalized.startsWith(letter);
+        return normalizeForSort(item.surah_name).startsWith(letter);
       });
     } else if (language === 'Arabic' && startsWith_verse) {
       result = result.filter(item => item.verse_text.startsWith(startsWith_verse));

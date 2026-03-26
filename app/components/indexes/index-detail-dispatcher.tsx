@@ -6,25 +6,40 @@ import {
     postsApi,
     paragraphsApi,
     radisApi,
+    conclusionsApi,
     indexTermsApi,
     quranHadithApi,
     namePlacesApi,
     religiousConceptsApi,
     Post,
     RadisIntroduction,
+    Conclusion,
 } from '@/api';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Button from '@/app/components/button';
 import { parseTextReference } from '@/app/utils/text-reference';
 
 interface CombinedResult {
-    type: 'Post' | 'Paragraph' | 'Radis';
+    type: 'Post' | 'Paragraph' | 'Radis' | 'Conclusion';
     data: any;
     reference: string;
     sourceType?: 'Oration' | 'Letter' | 'Saying';
     matchingParagraphNumber?: string;
     matchingContent?: string;
 }
+
+const getResultDedupKey = (item: CombinedResult): string => {
+    if (item.type === 'Post') {
+        return `Post:${(item.data as Post).id}`;
+    }
+    if (item.type === 'Radis') {
+        return `Radis:${(item.data as RadisIntroduction).number}`;
+    }
+    if (item.type === 'Conclusion') {
+        return `Conclusion:${(item.data as Conclusion).number}`;
+    }
+    return `${item.type}:${item.reference}`;
+};
 
 const checkTextMatch = (text: string, term: string) => {
     if (!text) return false;
@@ -190,7 +205,22 @@ export default function IndexDetailDispatcher() {
                 setLanguage(detectedLanguage);
 
                 const combined: CombinedResult[] = [];
-                const fetchedIds = new Set<string>();
+                const fetchedReferences = new Set<string>();
+                const fetchedContentKeys = new Set<string>();
+
+                const pushUniqueResult = (item: CombinedResult | null) => {
+                    if (!item) return;
+
+                    const dedupKey = getResultDedupKey(item);
+                    if (fetchedContentKeys.has(dedupKey)) {
+                        return;
+                    }
+
+                    // Keep existing behavior of tracking references while avoiding content duplicates.
+                    fetchedReferences.add(item.reference);
+                    fetchedContentKeys.add(dedupKey);
+                    combined.push(item);
+                };
 
                 if (textNumbers.length > 0) {
                     const promises = textNumbers.map(async (refValue) => {
@@ -208,6 +238,33 @@ export default function IndexDetailDispatcher() {
                                     const matchingSentence = extractMatchingSentence(textToSearch, term);
                                     return {
                                         type: 'Radis',
+                                        data: item,
+                                        reference: refValue,
+                                        matchingContent: matchingSentence || textToSearch.slice(0, 300) + (textToSearch.length > 300 ? '...' : '')
+                                    };
+                                }
+
+                                // Some index references can resolve to conclusion entries.
+                                const conclusionsRes = await conclusionsApi.getConclusionsByNumbers([sectionNumber]);
+                                if (conclusionsRes.data && conclusionsRes.data.length > 0) {
+                                    const item = conclusionsRes.data[0];
+                                    const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
+                                    const matchingSentence = extractMatchingSentence(textToSearch, term);
+                                    return {
+                                        type: 'Conclusion',
+                                        data: item,
+                                        reference: refValue,
+                                        matchingContent: matchingSentence || textToSearch.slice(0, 300) + (textToSearch.length > 300 ? '...' : '')
+                                    };
+                                }
+                            } else if (type === 'conclusion') {
+                                const conclusionsRes = await conclusionsApi.getConclusionsByNumbers([sectionNumber]);
+                                if (conclusionsRes.data && conclusionsRes.data.length > 0) {
+                                    const item = conclusionsRes.data[0];
+                                    const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
+                                    const matchingSentence = extractMatchingSentence(textToSearch, term);
+                                    return {
+                                        type: 'Conclusion',
                                         data: item,
                                         reference: refValue,
                                         matchingContent: matchingSentence || textToSearch.slice(0, 300) + (textToSearch.length > 300 ? '...' : '')
@@ -270,12 +327,50 @@ export default function IndexDetailDispatcher() {
                     });
 
                     const resultsFromRefs = await Promise.all(promises);
-                    resultsFromRefs.forEach(r => {
-                        if (r && !fetchedIds.has(r.reference)) {
-                            combined.push(r as CombinedResult);
-                            fetchedIds.add(r.reference);
+                    resultsFromRefs.forEach(r => pushUniqueResult(r as CombinedResult));
+                }
+
+                // Also search introductions/conclusions directly by term so index entries are not limited
+                // to whichever text refs were explicitly attached in the index dataset.
+                if (term) {
+                    const [radisSearchRes, conclusionsSearchRes] = await Promise.all([
+                        radisApi.searchRadisIntroductions(term, 1, 100).catch((err) => {
+                            console.error('Error searching introductions in index dispatcher:', err);
+                            return null;
+                        }),
+                        conclusionsApi.searchConclusions(term, 1, 100).catch((err) => {
+                            console.error('Error searching conclusions in index dispatcher:', err);
+                            return null;
+                        })
+                    ]);
+
+                    if (radisSearchRes?.data) {
+                        for (const intro of radisSearchRes.data) {
+                            const textToSearch = detectedLanguage === 'arabic' ? (intro.arabic || '') : (intro.translation || '');
+                            const matchingSentence = extractMatchingSentence(textToSearch, term);
+
+                            pushUniqueResult({
+                                type: 'Radis',
+                                data: intro,
+                                reference: `0.${intro.number}`,
+                                matchingContent: matchingSentence || textToSearch.slice(0, 300) + (textToSearch.length > 300 ? '...' : '')
+                            });
                         }
-                    });
+                    }
+
+                    if (conclusionsSearchRes?.data) {
+                        for (const conclusion of conclusionsSearchRes.data) {
+                            const textToSearch = detectedLanguage === 'arabic' ? (conclusion.arabic || '') : (conclusion.translation || '');
+                            const matchingSentence = extractMatchingSentence(textToSearch, term);
+
+                            pushUniqueResult({
+                                type: 'Conclusion',
+                                data: conclusion,
+                                reference: `4.${conclusion.number}`,
+                                matchingContent: matchingSentence || textToSearch.slice(0, 300) + (textToSearch.length > 300 ? '...' : '')
+                            });
+                        }
+                    }
                 }
 
                 combined.sort((a, b) => a.reference.localeCompare(b.reference, undefined, { numeric: true }));
@@ -378,6 +473,10 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
             const radis = data as RadisIntroduction;
             return `/radis?highlightRef=${radis.number.startsWith('0.') ? radis.number : `0.${radis.number}`}`;
         }
+        if (type === 'Conclusion') {
+            const conclusion = data as Conclusion;
+            return `/conclusions?highlightRef=${conclusion.number}`;
+        }
         return null;
     };
 
@@ -427,6 +526,22 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
                 </div>
                 <div className="text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} /></div>
                 <div className="mt-4 pt-3 border-t border-gray-100"><span className="text-sm text-[#43896B] font-medium group-hover:underline">View full introduction →</span></div>
+            </div>
+        );
+    }
+
+    if (type === 'Conclusion') {
+        const conclusion = data as Conclusion;
+        const displayContent = matchingContent || (language === 'arabic' ? conclusion.arabic : conclusion.translation) || '';
+        if ((language === 'arabic' && !conclusion.arabic) || (language === 'english' && !conclusion.translation)) return null;
+        return (
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md hover:border-[#43896B] transition-all cursor-pointer relative group" onClick={handleCardClick}>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2"><span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Conclusion</span><span className="text-gray-500 text-sm font-medium">#{conclusion.number}</span></div>
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors"><ArrowRight className="w-4 h-4" /></div>
+                </div>
+                <div className="text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} /></div>
+                <div className="mt-4 pt-3 border-t border-gray-100"><span className="text-sm text-[#43896B] font-medium group-hover:underline">View full conclusion →</span></div>
             </div>
         );
     }

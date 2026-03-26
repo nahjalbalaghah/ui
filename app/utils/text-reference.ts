@@ -1,5 +1,5 @@
 
-export type TextRefType = 'oration' | 'letter' | 'saying' | 'introduction';
+export type TextRefType = 'oration' | 'letter' | 'saying' | 'introduction' | 'conclusion';
 
 export interface ParsedTextRef {
   type: TextRefType;
@@ -37,6 +37,9 @@ export function parseTextReference(textRef: string): ParsedTextRef | null {
     case '0':
       type = 'introduction';
       break;
+    case '4':
+      type = 'conclusion';
+      break;
     default:
       return null;
   }
@@ -58,6 +61,8 @@ export function getTextRefRoutePath(parsed: ParsedTextRef): string {
       return `/sayings/details/${parsed.sectionNumber}?highlightRef=${parsed.number}`;
     case 'introduction':
       return `/radis?highlightRef=${parsed.number}`;
+    case 'conclusion':
+      return `/conclusions?highlightRef=${parsed.sectionNumber}`;
     default:
       return '/';
   }
@@ -73,12 +78,14 @@ export function getContentTypeName(type: TextRefType): string {
       return 'Sayings';
     case 'introduction':
       return 'Introduction';
+    case 'conclusion':
+      return 'Conclusion';
     default:
       return 'Unknown';
   }
 }
 
-export function getContentTypeSlug(type: TextRefType): 'Oration' | 'Letter' | 'Saying' | 'Radis' {
+export function getContentTypeSlug(type: TextRefType): 'Oration' | 'Letter' | 'Saying' | 'Radis' | 'Conclusion' {
   switch (type) {
     case 'oration':
       return 'Oration';
@@ -88,6 +95,8 @@ export function getContentTypeSlug(type: TextRefType): 'Oration' | 'Letter' | 'S
       return 'Saying';
     case 'introduction':
       return 'Radis';
+    case 'conclusion':
+      return 'Conclusion';
     default:
       return 'Oration';
   }
@@ -103,6 +112,8 @@ export function getTextRefTypeColor(type: TextRefType): string {
       return 'bg-orange-100 text-orange-700';
     case 'introduction':
       return 'bg-green-100 text-green-700';
+    case 'conclusion':
+      return 'bg-emerald-100 text-emerald-700';
     default:
       return 'bg-gray-100 text-gray-700';
   }

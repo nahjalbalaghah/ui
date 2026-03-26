@@ -8,7 +8,7 @@ import {
   getContentTypeName,
   getTextRefTypeColor,
 } from '@/app/utils/text-reference';
-import { orationsApi, lettersApi, sayingsApi } from '@/api/posts';
+import { orationsApi, lettersApi, sayingsApi, conclusionsApi } from '@/api/posts';
 
 interface TextRefChipProps {
   textRef: string;
@@ -77,6 +77,18 @@ export default function TextRefChip({
       // For introduction (radis), navigate directly
       if (parsed.type === 'introduction') {
         router.push(`/radis?${queryParams.toString()}`);
+        return;
+      }
+
+      // For conclusion refs, route to the conclusions page.
+      if (parsed.type === 'conclusion') {
+        const conclusion = await conclusionsApi.getConclusionByNumber(parsed.sectionNumber);
+        if (!conclusion) {
+          console.error(`Could not find conclusion with text reference ${parsed.number}`);
+          return;
+        }
+        queryParams.set('highlightRef', parsed.sectionNumber);
+        router.push(`/conclusions?${queryParams.toString()}`);
         return;
       }
 
@@ -156,6 +168,7 @@ export default function TextRefChip({
         letter: 'letters',
         saying: 'sayings',
         introduction: 'radis',
+        conclusion: 'conclusions',
       };
 
       router.push(

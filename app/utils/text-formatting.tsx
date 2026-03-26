@@ -317,6 +317,12 @@ export const normalizeTextForSearch = (text: string): string => {
  */
 export const normalizeForSort = (text: string): string => {
   if (!text) return '';
-  // Strip leading halfmoons, quotes, and trim
-  return text.replace(/^[''"‘“’ʿʾ]+/, '').trim().toLowerCase();
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/^[''"‘“’ʿʾ]+/, '')
+    .trim()
+    .replace(/^al[\s\-']+/i, '')
+    .trim()
+    .toLowerCase();
 };
