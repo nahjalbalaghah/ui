@@ -88,8 +88,7 @@ export default function IndexTermsContent() {
     if (language === 'English' && startsWith_english) {
       const letter = startsWith_english.toLowerCase();
       result = result.filter(item => {
-        const normalized = item.word_english.toLowerCase().replace(/^[''""‘“’ʿʾ]/, '').trim();
-        return normalized.startsWith(letter);
+        return normalizeForSort(item.word_english).startsWith(letter);
       });
     } else if (language === 'Arabic' && startsWith_arabic) {
       result = result.filter(item => item.word_arabic.startsWith(startsWith_arabic));
