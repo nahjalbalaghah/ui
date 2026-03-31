@@ -18,6 +18,7 @@ interface ContentListingProps {
   contentType: 'orations' | 'letters' | 'sayings';
   hasNextPage?: boolean;
   isInfiniteLoading?: boolean;
+  isTransitioning?: boolean;
   displayMode?: 'both' | 'english-only' | 'arabic-only';
   showTopPagination?: boolean;
 }
@@ -35,6 +36,7 @@ export default function ContentListing({
   contentType,
   hasNextPage = false,
   isInfiniteLoading = false,
+  isTransitioning = false,
   displayMode = 'both',
   showTopPagination = false
 }: ContentListingProps) {
@@ -98,6 +100,9 @@ export default function ContentListing({
     </div>
   );
 
+  const showInitialSkeleton = loading && content.length === 0;
+  const showTransitionOverlay = isTransitioning && content.length > 0;
+
   return (
     <div className="w-full relative">
       <div className="flex flex-col items-center justify-center mb-10 gap-4">
@@ -115,13 +120,21 @@ export default function ContentListing({
         )}
 
         <p className="text-gray-500 text-sm whitespace-nowrap shrink-0">
-          {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
+          {showInitialSkeleton ? 'Loading content...' : (subtitle || `Showing ${content.length} of ${total} results`)}
         </p>
       </div>
-      {loading ? (
+      {showInitialSkeleton ? (
         renderLoadingList()
       ) : (
-        <>
+        <div className="relative">
+          {showTransitionOverlay && (
+            <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl bg-white/55 backdrop-blur-[1px]">
+              <div className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-600 shadow-sm">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-[#43896B]" />
+                Updating results...
+              </div>
+            </div>
+          )}
           {renderListView()}
           {/* Show loading indicator on mobile for infinite scroll */}
           {isInfiniteLoading && (
@@ -132,7 +145,7 @@ export default function ContentListing({
                     <div className="w-20 h-20 bg-gray-200 rounded-2xl rounded-r-none"></div>
                     <div className="grow py-6 pr-6 pl-8">
                       <div className="flex items-center justify-between">
-                        <div className="flex-grow">
+                        <div className="grow">
                           <div className="h-6 bg-gray-200 rounded mb-3 w-3/4"></div>
                           <div className="flex gap-2">
                             <div className="h-6 bg-gray-200 rounded-full w-16"></div>
@@ -160,7 +173,7 @@ export default function ContentListing({
               />
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );
