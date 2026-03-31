@@ -240,7 +240,11 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
     return 0;
   });
 
-  const mainTranslation = content.translations?.find(t => t.type === selectedTranslation);
+  const mainTranslation =
+    content.translations?.find((t: any) => t.type === selectedTranslation) ||
+    content.translations?.find((t: any) => typeof t?.text === 'string' && t.text.trim().length > 0);
+
+  const mainTranslationText = mainTranslation?.text?.trim() || '';
 
   const getContentLabel = () => {
     switch (contentType) {
@@ -388,14 +392,14 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                 </div>
               </div>
             )}
-            {(displayMode === 'both' || displayMode === 'english-only') && mainTranslation && (
+            {(displayMode === 'both' || displayMode === 'english-only') && mainTranslationText && (
               (() => {
-                const refs = extractReferences(mainTranslation.text);
+                const refs = extractReferences(mainTranslationText);
                 allReferences = allReferences.concat(refs);
                 console.log('Main translation footnotes debug:', {
                   contentFootnotes: content.footnotes?.length || 0,
                   allFootnotes: allFootnotes.length,
-                  mainTranslationText: mainTranslation.text.substring(0, 100) + '...',
+                  mainTranslationText: mainTranslationText.substring(0, 100) + '...',
                   footnoteDetails: allFootnotes.map(f => ({
                     id: f.id,
                     number: f.number,
@@ -409,7 +413,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                   <div className="bg-white rounded-lg p-6 border border-gray-200">
                     <div className="flex justify-between items-start gap-4 mb-4">
                       <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap flex-1" >
-                        {formatTextWithFootnotes(mainTranslation.text, allFootnotes, false, content.sermonNumber || 'main')}
+                        {formatTextWithFootnotes(mainTranslationText, allFootnotes, false, content.sermonNumber || 'main')}
                       </p>
                     </div>
                   </div>
@@ -423,7 +427,11 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
       {sortedParagraphs.length > 0 && (
         <div className="space-y-8">
           {sortedParagraphs.map((paragraph) => {
-            const englishTranslation = paragraph.translations?.find((t: any) => t.type === selectedTranslation);
+            const englishTranslation =
+              paragraph.translations?.find((t: any) => t.type === selectedTranslation) ||
+              paragraph.translations?.find((t: any) => typeof t?.text === 'string' && t.text.trim().length > 0);
+
+            const englishTranslationText = englishTranslation?.text?.trim() || '';
             return (
               <div
                 key={paragraph.id}
@@ -476,8 +484,8 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                   );
                 })()}
 
-                {(displayMode === 'both' || displayMode === 'english-only') && englishTranslation && (() => {
-                  const refs = extractReferences(englishTranslation.text);
+                {(displayMode === 'both' || displayMode === 'english-only') && englishTranslationText && (() => {
+                  const refs = extractReferences(englishTranslationText);
                   allReferences = allReferences.concat(refs);
                   console.log('Paragraph footnotes debug:', {
                     paragraphId: paragraph.id,
@@ -485,7 +493,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                     contentFootnotes: content.footnotes?.length || 0,
                     paragraphFootnotes: paragraph.footnotes?.length || 0,
                     allFootnotes: allFootnotes.length,
-                    englishTranslationText: englishTranslation.text.substring(0, 100) + '...',
+                    englishTranslationText: englishTranslationText.substring(0, 100) + '...',
                     footnoteDetails: allFootnotes.map(f => ({
                       id: f.id,
                       number: f.number,
@@ -499,7 +507,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                     <div className="bg-white rounded-lg p-6 border border-gray-200">
                       <div className="flex justify-between items-start gap-4 mb-4">
                         <p className="lg:text-xl leading-relaxed text-gray-700 font-brill whitespace-pre-wrap flex-1">
-                          {formatTextWithFootnotes(englishTranslation.text, allFootnotes, false, paragraph.number)}
+                          {formatTextWithFootnotes(englishTranslationText, allFootnotes, false, paragraph.number)}
                         </p>
                       </div>
                     </div>

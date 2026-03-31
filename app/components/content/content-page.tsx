@@ -597,7 +597,7 @@ function ContentPageContent({ config }: ContentPageProps) {
             </div>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2.5 bg-[#43896B] text-white rounded-lg hover:bg-[#367556] transition-all duration-200"
+              className="p-2.5 bg-[#43896B] text-white rounded-lg hover:bg-[#367556] transition-all duration-200 cursor-pointer"
               aria-label="Open filters"
             >
               <SlidersHorizontal className="w-5 h-5" />

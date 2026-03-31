@@ -34,6 +34,8 @@ export const postsApi = {
           posts.push({
             ...post,
             heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
+            TocEnglish: post.TocEnglish || base.TocEnglish || '',
+            TocArabic: post.TocArabic || base.TocArabic || '',
             post_base_documentId: base.documentId
           });
         }
@@ -58,6 +60,7 @@ export const postsApi = {
     try {
       const params: any = {
         'filters[documentId][$eq]': documentId,
+        'populate[posts][populate][translations]': true,
         'populate[posts][populate][paragraphs][populate][0]': 'translations',
         'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
         'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
@@ -112,7 +115,7 @@ export const postsApi = {
       }
 
       if (filters.editionTitle) {
-        params['filters[editions][title][$eqi]'] = filters.editionTitle;
+        params['filters[posts][editions][title][$eqi]'] = filters.editionTitle;
       }
 
       if (filters.search) {
@@ -123,7 +126,7 @@ export const postsApi = {
       }
 
       if (filters.editionTitle) {
-        params['filters[editions][title][$eqi]'] = filters.editionTitle;
+        params['filters[posts][editions][title][$eqi]'] = filters.editionTitle;
       }
 
 
@@ -153,6 +156,7 @@ export const postsApi = {
       }
 
       // Always populate editions as it is used for TOC
+      params['populate[posts][populate][translations]'] = true;
       params['populate[posts][populate][editions][fields][0]'] = 'title';
 
       if (sort) {
@@ -198,8 +202,13 @@ export const postsApi = {
         params['filters[posts][$or][3][paragraphs][translations][text][$containsi]'] = filters.search;
       }
 
+      if (filters.editionTitle) {
+        params['filters[posts][editions][title][$eqi]'] = filters.editionTitle;
+      }
+
       params['populate[posts][populate][paragraphs][populate][0]'] = 'translations';
       params['populate[posts][populate][paragraphs][populate][1]'] = 'footnotes';
+      params['populate[posts][populate][translations]'] = true;
       params['populate[posts][populate][editions][fields][0]'] = 'title';
 
       if (sort) {
@@ -224,6 +233,7 @@ export const postsApi = {
     try {
       const params: any = {
         'filters[posts][slug][$eq]': slug,
+        'populate[posts][populate][translations]': true,
         'populate[posts][populate][paragraphs][populate][0]': 'translations',
         'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
         'populate[posts][populate][editions][fields][0]': 'title',
@@ -254,6 +264,7 @@ export const postsApi = {
     try {
       const params: any = {
         'filters[posts][id][$eq]': id,
+        'populate[posts][populate][translations]': true,
         'populate[posts][populate][paragraphs][populate][0]': 'translations',
         'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
         'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
@@ -1133,7 +1144,7 @@ export const postBasesApi = {
 
       // Add edition filter if provided
       if (edition) {
-        params['filters[editions][title][$eq]'] = edition;
+        params['filters[posts][editions][title][$eqi]'] = edition;
         params['populate[posts][populate][editions][fields][0]'] = 'title';
       }
 
