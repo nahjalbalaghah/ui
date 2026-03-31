@@ -281,31 +281,31 @@ export const postsApi = {
     }
   },
 
-  async searchPosts(query: string, options: Omit<PostsApiOptions, 'filters'> = {}): Promise<ApiResponse> {
+  async searchPosts(query: string, options: PostsApiOptions = {}): Promise<ApiResponse> {
     return this.getPosts({
       ...options,
-      filters: { search: query, ...(options as any).filters }
+      filters: { search: query, ...options.filters }
     });
   },
 
-  async getPostsByTypeForListing(type: string, options: Omit<PostsApiOptions, 'filters'> = {}): Promise<ApiResponse> {
+  async getPostsByTypeForListing(type: string, options: PostsApiOptions = {}): Promise<ApiResponse> {
     return this.getPostsForListing({
       ...options,
-      filters: { type, ...(options as any).filters }
+      filters: { type, ...options.filters }
     });
   },
 
-  async getPostsByType(type: string, options: Omit<PostsApiOptions, 'filters'> = {}): Promise<ApiResponse> {
+  async getPostsByType(type: string, options: PostsApiOptions = {}): Promise<ApiResponse> {
     return this.getPosts({
       ...options,
-      filters: { type, ...(options as any).filters }
+      filters: { type, ...options.filters }
     });
   },
 
-  async getPostsByTags(tags: string[], options: Omit<PostsApiOptions, 'filters'> = {}): Promise<ApiResponse> {
+  async getPostsByTags(tags: string[], options: PostsApiOptions = {}): Promise<ApiResponse> {
     return this.getPosts({
       ...options,
-      filters: { tags, ...(options as any).filters }
+      filters: { tags, ...options.filters }
     });
   }
 };
