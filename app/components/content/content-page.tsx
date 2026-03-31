@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import TopFilterBar from '../../orations/sections/top-filter-bar';
+import { SlidersHorizontal, Search } from 'lucide-react';
+import SidebarFilter from '@/app/components/sidebar-filter';
 import ContentListing from './content-listing';
 import { type Post, type ApiResponse } from '@/api/posts';
 
@@ -12,8 +13,8 @@ interface ContentPageConfig {
   title: string;
   subtitle: string;
   api: {
-    getContent: (page?: number, pageSize?: number) => Promise<ApiResponse>;
-    searchContent: (query: string, page?: number, pageSize?: number) => Promise<ApiResponse>;
+    getContent: (page?: number, pageSize?: number, editionTitle?: string) => Promise<ApiResponse>;
+    searchContent: (query: string, page?: number, pageSize?: number, editionTitle?: string) => Promise<ApiResponse>;
   };
   tocArabic?: string;
   tocEnglish?: string;
@@ -29,7 +30,9 @@ function ContentPageContent({ config }: ContentPageProps) {
 
   const [searchTerm, setSearchTerm] = useState(() => searchParams.get('search') || '');
   const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || '');
+  const [selectedEdition, setSelectedEdition] = useState(() => searchParams.get('edition') || 'Qutbuddin');
   const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [content, setContent] = useState<Post[]>([]);
   const [allContent, setAllContent] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,12 +58,13 @@ function ContentPageContent({ config }: ContentPageProps) {
     return () => clearTimeout(timer);
   }, []);
 
-  const updateUrlParams = (page?: number, search?: string, sort?: string) => {
+  const updateUrlParams = (page?: number, search?: string, sort?: string, edition?: string) => {
     const params = new URLSearchParams();
 
     // Use current state if parameters not provided
     const currentSearch = search !== undefined ? search : searchTerm;
     const currentSort = sort !== undefined ? sort : sortBy;
+    const currentEdition = edition !== undefined ? edition : selectedEdition;
     const currentPageNum = page !== undefined ? page : currentPage;
 
     if (currentPageNum && currentPageNum !== 1) {
@@ -73,6 +77,10 @@ function ContentPageContent({ config }: ContentPageProps) {
 
     if (currentSort && currentSort !== '') {
       params.set('sort', currentSort);
+    }
+
+    if (currentEdition && currentEdition !== '') {
+      params.set('edition', currentEdition);
     }
 
     const queryString = params.toString();
@@ -127,7 +135,7 @@ function ContentPageContent({ config }: ContentPageProps) {
     const allData: Post[] = [];
 
     while (hasMore) {
-      const response = await config.api.getContent(currentPage, batchSize);
+      const response = await config.api.getContent(currentPage, batchSize, selectedEdition);
       if (!response || !response.data) {
         break;
       }
@@ -259,7 +267,7 @@ function ContentPageContent({ config }: ContentPageProps) {
 
       } else {
         // Normal mode: server-side pagination
-        response = await config.api.getContent(page, 15);
+        response = await config.api.getContent(page, 15, selectedEdition);
 
         if (!response || !response.data) {
           throw new Error('Invalid response format from API');
@@ -281,7 +289,7 @@ function ContentPageContent({ config }: ContentPageProps) {
 
       // Update URL after state updates
       if (updateUrl && !append) {
-        updateUrlParams(page, search, sortBy);
+        updateUrlParams(page, search, sortBy, selectedEdition);
       }
     } catch (err) {
       let errorMessage = 'An unexpected error occurred';
@@ -324,22 +332,26 @@ function ContentPageContent({ config }: ContentPageProps) {
     const page = searchParams.get('page');
     const search = searchParams.get('search');
     const sort = searchParams.get('sort');
+    const edition = searchParams.get('edition');
 
     const urlPage = page ? parseInt(page, 10) : 1;
     const urlSearch = search || '';
     const urlSort = sort || '';
+    const urlEdition = edition || 'Qutbuddin';
 
     // Check if URL params differ from current state
     const stateChanged =
       urlPage !== currentPage ||
       urlSearch !== searchTerm ||
-      urlSort !== sortBy;
+      urlSort !== sortBy ||
+      urlEdition !== selectedEdition;
 
     if (isInitialized && stateChanged) {
       // User navigated back/forward, restore state from URL
       setIsRestoringState(true);
       setSearchTerm(urlSearch);
       setSortBy(urlSort);
+      setSelectedEdition(urlEdition);
       setCurrentPage(urlPage);
 
       // Load content with URL parameters
@@ -373,7 +385,7 @@ function ContentPageContent({ config }: ContentPageProps) {
 
     loadContent(1, searchTerm, true, false, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortBy]);
+  }, [sortBy, selectedEdition]);
 
   const sortOptions = [
     { value: 'sermon-asc', label: 'Sermon Number (Ascending)' },
@@ -391,7 +403,7 @@ function ContentPageContent({ config }: ContentPageProps) {
       setContent(paginatedData);
       setCurrentPage(page);
       setHasNextPage(page < totalPages);
-      updateUrlParams(page, searchTerm, sortBy);
+      updateUrlParams(page, searchTerm, sortBy, selectedEdition);
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -481,7 +493,7 @@ function ContentPageContent({ config }: ContentPageProps) {
       setTotalPages(Math.ceil(dataToSearch.length / pageSize));
       setTotal(dataToSearch.length);
       setHasNextPage(targetPage < Math.ceil(dataToSearch.length / pageSize));
-      updateUrlParams(targetPage, searchTerm, sortBy);
+      updateUrlParams(targetPage, searchTerm, sortBy, selectedEdition);
 
       // Wait for React to render the new content, then scroll
       requestAnimationFrame(() => {
@@ -541,7 +553,8 @@ function ContentPageContent({ config }: ContentPageProps) {
           </div>
         )}
 
-        <TopFilterBar
+        {/* Sidebar Filter - rendered as overlay modal */}
+        <SidebarFilter
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           sortBy={sortBy}
@@ -552,12 +565,51 @@ function ContentPageContent({ config }: ContentPageProps) {
           onGoToNumber={handleGoToNumber}
           totalItems={total}
           onSearch={handleSearch}
+          selectedEdition={selectedEdition}
+          onEditionChange={(edition) => {
+            setSelectedEdition(edition);
+            setCurrentPage(1);
+            setContent([]);
+            setAllContent([]);
+          }}
+          isOpen={sidebarOpen}
+          setIsOpen={setSidebarOpen}
         />
+
+        {/* Search Bar and Filters - Above Content */}
+        <div className="mb-8">
+          <div className="flex gap-3 items-center">
+            <div className="flex-1">
+              <div className="relative">
+                <input
+                  placeholder="Search orations, topics, or keywords..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearch();
+                    }
+                  }}
+                  className="w-full px-4 py-2.5 text-base border border-[#D7DEE9] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#43896B]/20 focus:border-[#43896B] transition-all duration-200 placeholder:text-gray-400"
+                />
+                <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2.5 bg-[#43896B] text-white rounded-lg hover:bg-[#367556] transition-all duration-200"
+              aria-label="Open filters"
+            >
+              <SlidersHorizontal className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Main content area */}
         <div className="flex flex-col gap-8">
-          {/* Show a subtle loading overlay when transitioning */}
-          {isTransitioning && (
-            <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-[#43896B] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium">
-              Loading...
+          {(isTransitioning || loading) && (
+            <div className="sticky top-0 z-30 h-1.5 w-full overflow-hidden rounded-full bg-[#43896B]/15">
+              <div className="h-full w-1/3 animate-[loadingBar_1.2s_ease-in-out_infinite] rounded-full bg-[#43896B]" />
             </div>
           )}
           <ContentListing
@@ -572,11 +624,22 @@ function ContentPageContent({ config }: ContentPageProps) {
             contentType={config.contentType}
             hasNextPage={hasNextPage}
             isInfiniteLoading={isInfiniteLoading}
+            isTransitioning={isTransitioning}
             displayMode={displayMode}
             showTopPagination={true}
           />
         </div>
       </div>
+      <style jsx>{`
+        @keyframes loadingBar {
+          0% {
+            transform: translateX(-120%);
+          }
+          100% {
+            transform: translateX(320%);
+          }
+        }
+      `}</style>
     </div>
   );
 }

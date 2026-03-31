@@ -331,13 +331,6 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
             placeholder="Display Mode"
             className="w-full sm:w-48"
           />
-          <Select
-            options={editionOptions}
-            value={selectedEditionId}
-            onChange={handleEditionChange}
-            placeholder="Edition"
-            className="w-full sm:w-48"
-          />
           {availableTranslations.length > 1 && (
             <Select
               options={translationOptions}

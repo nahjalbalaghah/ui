@@ -9,6 +9,7 @@ export interface PostFilters {
   tags?: string[];
   sermonNumber?: string | string[];
   paragraphNumber?: string;
+  editionTitle?: string;
   [key: string]: any;
 }
 
@@ -110,11 +111,19 @@ export const postsApi = {
         params['filters[posts][paragraphs][number][$startsWith]'] = filters.paragraphNumber;
       }
 
+      if (filters.editionTitle) {
+        params['filters[editions][title][$eqi]'] = filters.editionTitle;
+      }
+
       if (filters.search) {
         params['filters[posts][$or][0][title][$containsi]'] = filters.search;
         params['filters[posts][$or][1][heading][$containsi]'] = filters.search;
         params['filters[posts][$or][2][paragraphs][arabic][$containsi]'] = filters.search;
         params['filters[posts][$or][3][paragraphs][translations][text][$containsi]'] = filters.search;
+      }
+
+      if (filters.editionTitle) {
+        params['filters[editions][title][$eqi]'] = filters.editionTitle;
       }
 
 
@@ -302,8 +311,12 @@ export const postsApi = {
 };
 
 export const orationsApi = {
-  async getOrations(page = 1, pageSize = 9): Promise<ApiResponse> {
-    return postsApi.getPostsByTypeForListing('Oration', { page, pageSize });
+  async getOrations(page = 1, pageSize = 9, editionTitle?: string): Promise<ApiResponse> {
+    return postsApi.getPostsByTypeForListing('Oration', {
+      page,
+      pageSize,
+      filters: editionTitle ? { editionTitle } : {}
+    });
   },
 
   async getOrationBySlug(slug: string): Promise<Post | null> {
@@ -314,11 +327,11 @@ export const orationsApi = {
     return postsApi.getPostById(id, 'Oration');
   },
 
-  async searchOrations(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {
+  async searchOrations(query: string, page = 1, pageSize = 9, editionTitle?: string): Promise<ApiResponse> {
     return postsApi.getPostsForListing({
       page,
       pageSize,
-      filters: { search: query, type: 'Oration' }
+      filters: { search: query, type: 'Oration', ...(editionTitle ? { editionTitle } : {}) }
     });
   },
 
@@ -477,8 +490,12 @@ export const orationsApi = {
 };
 
 export const lettersApi = {
-  async getLetters(page = 1, pageSize = 9): Promise<ApiResponse> {
-    return postsApi.getPostsByTypeForListing('Letter', { page, pageSize });
+  async getLetters(page = 1, pageSize = 9, editionTitle?: string): Promise<ApiResponse> {
+    return postsApi.getPostsByTypeForListing('Letter', {
+      page,
+      pageSize,
+      filters: editionTitle ? { editionTitle } : {}
+    });
   },
 
   async getLetterBySlug(slug: string): Promise<Post | null> {
@@ -489,11 +506,11 @@ export const lettersApi = {
     return postsApi.getPostById(id, 'Letter');
   },
 
-  async searchLetters(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {
+  async searchLetters(query: string, page = 1, pageSize = 9, editionTitle?: string): Promise<ApiResponse> {
     return postsApi.getPostsForListing({
       page,
       pageSize,
-      filters: { search: query, type: 'Letter' }
+      filters: { search: query, type: 'Letter', ...(editionTitle ? { editionTitle } : {}) }
     });
   },
 
@@ -643,8 +660,12 @@ export const lettersApi = {
 };
 
 export const sayingsApi = {
-  async getSayings(page = 1, pageSize = 9): Promise<ApiResponse> {
-    return postsApi.getPostsByTypeForListing('Saying', { page, pageSize });
+  async getSayings(page = 1, pageSize = 9, editionTitle?: string): Promise<ApiResponse> {
+    return postsApi.getPostsByTypeForListing('Saying', {
+      page,
+      pageSize,
+      filters: editionTitle ? { editionTitle } : {}
+    });
   },
 
   async getSayingBySlug(slug: string): Promise<Post | null> {
@@ -655,11 +676,11 @@ export const sayingsApi = {
     return postsApi.getPostById(id, 'Saying');
   },
 
-  async searchSayings(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {
+  async searchSayings(query: string, page = 1, pageSize = 9, editionTitle?: string): Promise<ApiResponse> {
     return postsApi.getPostsForListing({
       page,
       pageSize,
-      filters: { search: query, type: 'Saying' }
+      filters: { search: query, type: 'Saying', ...(editionTitle ? { editionTitle } : {}) }
     });
   },
 
@@ -1102,13 +1123,19 @@ export interface PostBasesApiResponse {
 }
 
 export const postBasesApi = {
-  async getPostBases(type: string): Promise<PostBasesApiResponse> {
+  async getPostBases(type: string, edition?: string): Promise<PostBasesApiResponse> {
     try {
       const params: any = {
         'filters[posts][type][$eq]': type,
         'populate[posts][populate][editions][fields][0]': 'title',
         'pagination[pageSize]': 300,
       };
+
+      // Add edition filter if provided
+      if (edition) {
+        params['filters[editions][title][$eq]'] = edition;
+        params['populate[posts][populate][editions][fields][0]'] = 'title';
+      }
 
       console.log('PostBases API params:', params);
 
@@ -1132,15 +1159,15 @@ export const postBasesApi = {
     }
   },
 
-  async getOrationsTOC(): Promise<PostBasesApiResponse> {
-    return this.getPostBases('Oration');
+  async getOrationsTOC(edition?: string): Promise<PostBasesApiResponse> {
+    return this.getPostBases('Oration', edition);
   },
 
-  async getLettersTOC(): Promise<PostBasesApiResponse> {
-    return this.getPostBases('Letter');
+  async getLettersTOC(edition?: string): Promise<PostBasesApiResponse> {
+    return this.getPostBases('Letter', edition);
   },
 
-  async getSayingsTOC(): Promise<PostBasesApiResponse> {
-    return this.getPostBases('Saying');
+  async getSayingsTOC(edition?: string): Promise<PostBasesApiResponse> {
+    return this.getPostBases('Saying', edition);
   }
 };
