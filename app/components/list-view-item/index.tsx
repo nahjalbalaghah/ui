@@ -48,7 +48,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
     return queryString ? `${baseUrl}?${queryString}` : baseUrl;
   };
 
-  const tocHeading = item.heading || '';
+  const tocHeading = item.heading || item.TocEnglish || '';
   const tocEnglish = item.TocEnglish || '';
   const tocArabic = item.TocArabic || '';
 
@@ -119,15 +119,15 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
                   {truncateText(englishHeading, 150, 80)}
                 </h3>
               )}
-              {(displayMode === 'both' || displayMode === 'english-only') && previewEnglish && (
+              {(displayMode === 'both' || displayMode === 'english-only') && tocEnglish && (
                 <p className="text-sm text-gray-700 mt-2 leading-relaxed">
-                  {truncateText(previewEnglish.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 80, 150)}
+                  {truncateText(tocEnglish.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 150, 80)}
                 </p>
               )}
-              {(displayMode === 'both' || displayMode === 'arabic-only') && arabicTitle && (
-                <h3 className={`font-taha lg:text-lg font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-tight ${displayMode === 'both' && englishHeading ? 'mt-3' : ''}`} dir="rtl" style={{ lineHeight: '1.4' }}>
-                  {truncateText(arabicTitle.replace(/[()]/g, ''), 150, 80)}
-                </h3>
+              {(displayMode === 'both' || displayMode === 'arabic-only') && tocArabic && (
+                <p className={`font-taha text-sm lg:text-base text-gray-900 leading-tight ${displayMode === 'both' && (englishHeading || tocEnglish) ? 'mt-2' : ''}`} dir="rtl" style={{ lineHeight: '1.5' }}>
+                  {truncateText(tocArabic.replace(/[()]/g, ''), 150, 80)}
+                </p>
               )}
 
               {item.tags && item.tags.length > 0 && (
