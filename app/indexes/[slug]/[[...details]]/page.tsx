@@ -6,15 +6,17 @@ import NamesPlacesContent from '@/app/components/indexes/NamesPlacesContent';
 import IndexTermsContent from '@/app/components/indexes/IndexTermsContent';
 import QuranHadithContent from '@/app/components/indexes/QuranHadithContent';
 import ReligiousConceptsContent from '@/app/components/indexes/ReligiousConceptsContent';
+import GlossaryContent from '@/app/components/indexes/GlossaryContent';
 import IndexDetailDispatcher from '@/app/components/indexes/index-detail-dispatcher';
 
-const VALID_SLUGS = ['names-places', 'terms', 'quran-hadith', 'religious-concepts'];
+const VALID_SLUGS = ['names-places', 'terms', 'quran-hadith', 'religious-concepts', 'glossary'];
 
 const listingComponents: Record<string, React.FC> = {
   'names-places': NamesPlacesContent,
   'terms': IndexTermsContent,
   'quran-hadith': QuranHadithContent,
   'religious-concepts': ReligiousConceptsContent,
+  'glossary': GlossaryContent,
 };
 
 export default function IndexSlugPage() {

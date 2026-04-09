@@ -358,7 +358,7 @@ export default function NamesPlacesContent() {
                           >
                             <td className="px-6 py-4">
                               <div className="w-10 h-10 bg-[#43896B]/10 rounded-lg flex items-center justify-center text-[#43896B] font-semibold">
-                                {item.section || '-'}
+                                {appliedFilters.language === 'Arabic' ? (item.word_arabic ? item.word_arabic.charAt(0) : '-') : (item.section || '-')}
                               </div>
                             </td>
                             {appliedFilters.language === 'English' && (

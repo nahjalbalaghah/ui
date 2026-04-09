@@ -266,14 +266,6 @@ export default function QuranHadithContent() {
           </div>
         </div>
 
-        <div className="mb-6">
-          <AlphabetChips
-            selectedLetter={filters.language === 'English' ? (filters.startsWith_surah || '') : (filters.startsWith_verse || '')}
-            onSelectLetter={handleLetterSelect}
-            language={filters.language || 'English'}
-          />
-        </div>
-
         <div>
           {loading ? (
             <>
