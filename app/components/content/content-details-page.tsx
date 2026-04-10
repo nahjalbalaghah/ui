@@ -4,7 +4,8 @@ import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { type Post, orationsApi, lettersApi, sayingsApi, postsApi } from '@/api/posts';
 import { audioApi } from '@/api/audio';
 import ContentDescription from './content-description';
-import { ArrowLeft, Book, GitCompare, ChevronLeft, ChevronRight, ScrollText } from 'lucide-react';
+import ParallelView from './parallel-view';
+import { ArrowLeft, Book, GitCompare, ChevronLeft, ChevronRight, ScrollText, Split } from 'lucide-react';
 import Link from 'next/link';
 import Button from '../button';
 import Select from '../select';
@@ -51,6 +52,8 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
   const [adjacentLoading, setAdjacentLoading] = useState(false);
   const [allItemNumbers, setAllItemNumbers] = useState<{ id: number; number: string }[]>([]);
   const [audioUrl, setAudioUrl] = useState<string | undefined>(undefined);
+  const [isParallelViewActive, setIsParallelViewActive] = useState(false);
+  const [availablePosts, setAvailablePosts] = useState<Post[]>([]);
 
   useEffect(() => {
     const fetchAllNumbers = async () => {
@@ -188,6 +191,79 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
     };
     fetchAudio();
   }, [content]);
+
+  useEffect(() => {
+    const fetchAvailablePosts = async () => {
+      if (!content) return;
+
+      try {
+        const typeMapping: Record<string, string> = {
+          'orations': 'Oration',
+          'letters': 'Letter',
+          'sayings': 'Saying'
+        };
+
+        const uniqueById = (posts: Post[]) => {
+          const seen = new Set<number>();
+          return posts.filter(post => {
+            if (seen.has(post.id)) return false;
+            seen.add(post.id);
+            return true;
+          });
+        };
+
+        // Prefer sermonNumber for grouping editions as they can be split across post-bases
+        // and use different prefixes (e.g., 1.1 vs 4.1 for Oration 1)
+        if (content.sermonNumber) {
+          const itemNumber = content.sermonNumber.includes('.')
+            ? content.sermonNumber.split('.').pop()
+            : content.sermonNumber;
+
+          const responseByNumber = await postsApi.getPosts({
+            filters: {
+              $or: [
+                { sermonNumber: itemNumber },
+                { sermonNumber: content.sermonNumber },
+                { sermonNumberEndsWith: `.${itemNumber}` }
+              ],
+              type: typeMapping[contentType]
+            },
+            pageSize: 50 // Ensure we get all editions
+          });
+
+          let responseByBase: Post[] = [];
+          if (content.post_base_documentId) {
+            const byBase = await postsApi.getPostsByPostBaseDocumentId(content.post_base_documentId);
+            responseByBase = byBase.data || [];
+          }
+
+          const combinedResults = uniqueById([
+            ...(responseByNumber.data || []),
+            ...responseByBase,
+            content
+          ]).filter(post => post.type === typeMapping[contentType]);
+
+          // Filter for exact item number match to avoid matching e.g. ".11" when searching for ".1"
+          // and also include the current post and any results with no sermonNumber
+          const matchedPosts = combinedResults.filter(p => {
+            if (!p.sermonNumber) return true;
+            const pNum = p.sermonNumber?.split('.').pop();
+            return pNum === itemNumber;
+          });
+
+          setAvailablePosts(matchedPosts.length > 0 ? matchedPosts : combinedResults);
+        } else if (content.post_base_documentId) {
+          // Fallback to post_base_documentId if sermonNumber is not available
+          const response = await postsApi.getPostsByPostBaseDocumentId(content.post_base_documentId);
+          setAvailablePosts(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch available editions:', error);
+      }
+    };
+
+    fetchAvailablePosts();
+  }, [content?.sermonNumber, content?.post_base_documentId, contentType]);
 
   const getContentTypeLabel = () => {
     switch (contentType) {
@@ -327,6 +403,14 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
 
             <div className="flex flex-wrap items-center gap-3">
               <Button
+                variant={isParallelViewActive ? 'solid' : 'outlined'}
+                icon={<Split className='w-4 h-4' />}
+                onClick={() => setIsParallelViewActive(!isParallelViewActive)}
+                className="h-11"
+              >
+                Parallel View
+              </Button>
+              <Button
                 variant='outlined'
                 icon={<GitCompare className='w-4 h-4' />}
                 onClick={() => setIsComparisonModalOpen(true)}
@@ -346,13 +430,25 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
         {/* Main content */}
         <div className="flex flex-col lg:flex-row gap-8">
           <div className='w-full'>
-            <ContentDescription
-              content={content}
-              contentType={contentType}
-              highlightRef={highlightRef}
-              englishWord={englishWord}
-              arabicWord={arabicWord}
-            />
+            {isParallelViewActive ? (
+              <ParallelView
+                key={content.id}
+                initialPost={content}
+                availablePosts={availablePosts}
+                contentType={contentType}
+                highlightRef={highlightRef}
+                englishWord={englishWord}
+                arabicWord={arabicWord}
+              />
+            ) : (
+              <ContentDescription
+                content={content}
+                contentType={contentType}
+                highlightRef={highlightRef}
+                englishWord={englishWord}
+                arabicWord={arabicWord}
+              />
+            )}
           </div>
         </div>
 

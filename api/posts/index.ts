@@ -23,13 +23,29 @@ export interface PostsApiOptions {
 }
 
 export const postsApi = {
-  _extractPosts(responseData: any[], deduplicate = false): Post[] {
+  _extractPosts(responseData: any[], deduplicate = false, preferredEdition?: string): Post[] {
     if (!responseData || !Array.isArray(responseData)) return [];
     const posts: Post[] = [];
     for (const base of responseData) {
       if (base.posts && Array.isArray(base.posts) && base.posts.length > 0) {
-        // If deduplicate is true, we only take the first post from this post-base
-        const postsToProcess = deduplicate ? [base.posts[0]] : base.posts;
+        let postsToProcess = base.posts;
+        if (deduplicate) {
+          if (preferredEdition) {
+            // Find a post that matches the preferred edition title
+            const matchingPost = base.posts.find(p => {
+              const eds = p.editions;
+              if (Array.isArray(eds)) {
+                return eds.some((e: any) => e.title?.toLowerCase() === preferredEdition.toLowerCase());
+              } else if (eds && eds.title) {
+                return eds.title.toLowerCase() === preferredEdition.toLowerCase();
+              }
+              return false;
+            });
+            postsToProcess = [matchingPost || base.posts[0]];
+          } else {
+            postsToProcess = [base.posts[0]];
+          }
+        }
         for (const post of postsToProcess) {
           posts.push({
             ...post,
@@ -110,6 +126,10 @@ export const postsApi = {
         }
       }
 
+      if (filters.sermonNumberEndsWith) {
+        params['filters[posts][sermonNumber][$endsWith]'] = filters.sermonNumberEndsWith;
+      }
+
       if (filters.paragraphNumber) {
         params['filters[posts][paragraphs][number][$startsWith]'] = filters.paragraphNumber;
       }
@@ -118,15 +138,23 @@ export const postsApi = {
         params['filters[posts][editions][title][$eqi]'] = filters.editionTitle;
       }
 
-      if (filters.search) {
-        params['filters[posts][$or][0][title][$containsi]'] = filters.search;
-        params['filters[posts][$or][1][heading][$containsi]'] = filters.search;
-        params['filters[posts][$or][2][paragraphs][arabic][$containsi]'] = filters.search;
-        params['filters[posts][$or][3][paragraphs][translations][text][$containsi]'] = filters.search;
+      // Handle the $or filter from fetchAvailablePosts
+      if (filters.$or && Array.isArray(filters.$or)) {
+        filters.$or.forEach((condition: any, index: number) => {
+          if (condition.sermonNumber) {
+            params[`filters[$or][${index}][posts][sermonNumber][$eq]`] = condition.sermonNumber;
+          } else if (condition.sermonNumberEndsWith) {
+            params[`filters[$or][${index}][posts][sermonNumber][$endsWith]`] = condition.sermonNumberEndsWith;
+          }
+        });
       }
 
-      if (filters.editionTitle) {
-        params['filters[posts][editions][title][$eqi]'] = filters.editionTitle;
+      if (filters.search) {
+        const searchIndexOffset = (filters.$or?.length || 0);
+        params[`filters[posts][$or][${searchIndexOffset + 0}][title][$containsi]`] = filters.search;
+        params[`filters[posts][$or][${searchIndexOffset + 1}][heading][$containsi]`] = filters.search;
+        params[`filters[posts][$or][${searchIndexOffset + 2}][paragraphs][arabic][$containsi]`] = filters.search;
+        params[`filters[posts][$or][${searchIndexOffset + 3}][paragraphs][translations][text][$containsi]`] = filters.search;
       }
 
 
@@ -166,7 +194,11 @@ export const postsApi = {
       console.log('Final API params:', params);
 
       const response = await api.get('/api/post-bases', { params });
-      const posts = this._extractPosts(response.data.data, !!filters.search || options.pageSize === 15);
+      const posts = this._extractPosts(
+        response.data.data, 
+        !!filters.search || options.pageSize === 15,
+        filters.editionTitle
+      );
       return {
         data: posts,
         meta: response.data.meta,
@@ -218,7 +250,7 @@ export const postsApi = {
       console.log('Listing API params:', params);
 
       const response = await api.get('/api/post-bases', { params });
-      const posts = this._extractPosts(response.data.data, true);
+      const posts = this._extractPosts(response.data.data, true, filters.editionTitle);
       return {
         data: posts,
         meta: response.data.meta,
