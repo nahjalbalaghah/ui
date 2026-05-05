@@ -20,10 +20,8 @@ export default function IndexTermsContent() {
   const page = parseInt(searchParams.get('page') || '1');
   const appliedFilters: IndexTermsFilters = {
     word_english: searchParams.get('word_english') || '',
-    word_arabic: searchParams.get('word_arabic') || '',
     startsWith_english: searchParams.get('startsWith_english') || '',
-    startsWith_arabic: searchParams.get('startsWith_arabic') || '',
-    language: (searchParams.get('language') as 'English' | 'Arabic') || 'English',
+    language: 'English',
   };
 
   const [allTerms, setAllTerms] = useState<IndexTerm[]>([]);
@@ -36,10 +34,8 @@ export default function IndexTermsContent() {
   useEffect(() => {
     setFilters({
       word_english: searchParams.get('word_english') || '',
-      word_arabic: searchParams.get('word_arabic') || '',
       startsWith_english: searchParams.get('startsWith_english') || '',
-      startsWith_arabic: searchParams.get('startsWith_arabic') || '',
-      language: (searchParams.get('language') as 'English' | 'Arabic') || 'English',
+      language: 'English',
     });
   }, [searchParams]);
 
@@ -67,42 +63,29 @@ export default function IndexTermsContent() {
   const filteredTerms = React.useMemo(() => {
     let result = [...allTerms];
 
-    const { word_english, word_arabic, startsWith_english, startsWith_arabic, language } = appliedFilters;
+    const { word_english, startsWith_english } = appliedFilters;
 
-    // Language Filter
-    if (language === 'English') {
-      result = result.filter(item => item.word_english && item.word_english.trim() !== '');
-    } else {
-      result = result.filter(item => item.word_arabic && item.word_arabic.trim() !== '');
-    }
+    result = result.filter(item => item.word_english && item.word_english.trim() !== '');
 
     // Search Filter
-    if (language === 'English' && word_english) {
+    if (word_english) {
       const q = word_english.toLowerCase();
       result = result.filter(item => item.word_english.toLowerCase().includes(q));
-    } else if (language === 'Arabic' && word_arabic) {
-      result = result.filter(item => item.word_arabic.includes(word_arabic));
     }
 
     // Alphabet Filter
-    if (language === 'English' && startsWith_english) {
+    if (startsWith_english) {
       const letter = startsWith_english.toLowerCase();
       result = result.filter(item => {
         return normalizeForSort(item.word_english).startsWith(letter);
       });
-    } else if (language === 'Arabic' && startsWith_arabic) {
-      result = result.filter(item => item.word_arabic.startsWith(startsWith_arabic));
     }
 
     // Sort Alphabetically
     result.sort((a, b) => {
-      const wordA = (language === 'English' ? a.word_english : a.word_arabic) || '';
-      const wordB = (language === 'English' ? b.word_english : b.word_arabic) || '';
-      
-      if (language === 'English') {
-        return normalizeForSort(wordA).localeCompare(normalizeForSort(wordB));
-      }
-      return wordA.localeCompare(wordB, 'ar');
+      const wordA = a.word_english || '';
+      const wordB = b.word_english || '';
+      return normalizeForSort(wordA).localeCompare(normalizeForSort(wordB));
     });
 
     return result;
@@ -117,10 +100,7 @@ export default function IndexTermsContent() {
     const filtersToUse = newFilters || filters;
     const params = new URLSearchParams();
     if (filtersToUse.word_english) params.set('word_english', filtersToUse.word_english);
-    if (filtersToUse.word_arabic) params.set('word_arabic', filtersToUse.word_arabic);
     if (filtersToUse.startsWith_english) params.set('startsWith_english', filtersToUse.startsWith_english);
-    if (filtersToUse.startsWith_arabic) params.set('startsWith_arabic', filtersToUse.startsWith_arabic);
-    if (filtersToUse.language && filtersToUse.language !== 'English') params.set('language', filtersToUse.language);
 
     params.set('page', '1');
     router.push(`${pathname}?${params.toString()}`);
@@ -129,9 +109,7 @@ export default function IndexTermsContent() {
   const handleClearFilters = () => {
     setFilters({
       word_english: '',
-      word_arabic: '',
       startsWith_english: '',
-      startsWith_arabic: '',
       language: 'English',
     });
     router.push(pathname);
@@ -144,17 +122,10 @@ export default function IndexTermsContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const hasActiveFilters = appliedFilters.word_english || appliedFilters.word_arabic || appliedFilters.startsWith_english || appliedFilters.startsWith_arabic || appliedFilters.language !== 'English';
+  const hasActiveFilters = appliedFilters.word_english || appliedFilters.startsWith_english;
 
   const handleLetterSelect = (letter: string) => {
-    const updatedFilters = { ...filters };
-    if (filters.language === 'English') {
-      updatedFilters.startsWith_english = letter;
-      updatedFilters.startsWith_arabic = ''; // Clear other language filter
-    } else {
-      updatedFilters.startsWith_arabic = letter;
-      updatedFilters.startsWith_english = ''; // Clear other language filter
-    }
+    const updatedFilters = { ...filters, startsWith_english: letter };
     setFilters(updatedFilters);
     handleApplyFilters(updatedFilters);
   };
@@ -163,7 +134,7 @@ export default function IndexTermsContent() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">Index of Terms</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">Index of Terms (English)</h1>
           <p className="text-lg text-gray-600">
             Discover the rich vocabulary and terminology used by Imam Ali (AS) in Nahj al-Balaghah
           </p>
@@ -185,19 +156,6 @@ export default function IndexTermsContent() {
 
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block font-medium text-sm text-gray-700 mb-1">Language</label>
-              <Select
-                value={filters.language || 'English'}
-                onChange={(value) => setFilters({ ...filters, language: value as 'English' | 'Arabic' })}
-                options={[
-                  { value: 'English', label: 'English' },
-                  { value: 'Arabic', label: 'Arabic' }
-                ]}
-                placeholder="Select Language"
-              />
-            </div>
-            {filters.language === 'English' ? (
               <Input
                 label="English Word"
                 placeholder="Search English word..."
@@ -205,16 +163,6 @@ export default function IndexTermsContent() {
                 onChange={(e) => setFilters({ ...filters, word_english: e.target.value })}
                 className='h-9.5'
               />
-            ) : (
-              <Input
-                label="Arabic Word"
-                placeholder="Search Arabic word..."
-                value={filters.word_arabic}
-                onChange={(e) => setFilters({ ...filters, word_arabic: e.target.value })}
-                className="text-right h-9.5"
-                dir="rtl"
-              />
-            )}
           </div>
           <div className="mt-4 flex justify-end">
             <Button
@@ -229,9 +177,9 @@ export default function IndexTermsContent() {
 
         <div className="mb-6">
           <AlphabetChips
-            selectedLetter={filters.language === 'English' ? (filters.startsWith_english || '') : (filters.startsWith_arabic || '')}
+            selectedLetter={filters.startsWith_english || ''}
             onSelectLetter={handleLetterSelect}
-            language={filters.language || 'English'}
+            language="English"
           />
         </div>
 
@@ -244,15 +192,13 @@ export default function IndexTermsContent() {
                   <table className="w-full table-fixed">
                     <colgroup>
                       <col className="w-24" />
-                      {appliedFilters.language === 'English' && <col className="w-1/4" />}
-                      {appliedFilters.language === 'Arabic' && <col className="w-1/5" />}
+                      <col className="w-1/4" />
                       <col />
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
                         <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Section</th>
-                        {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English Word</th>}
-                        {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 whitespace-nowrap">Arabic Word</th>}
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English Word</th>
                         <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">Text References</th>
                       </tr>
                     </thead>
@@ -262,16 +208,9 @@ export default function IndexTermsContent() {
                           <td className="px-6 py-4">
                             <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
                           </td>
-                          {appliedFilters.language === 'English' && (
-                            <td className="px-6 py-4">
-                              <div className="h-5 bg-gray-200 rounded w-32"></div>
-                            </td>
-                          )}
-                          {appliedFilters.language === 'Arabic' && (
-                            <td className="px-6 py-4">
-                              <div className="h-5 bg-gray-200 rounded w-24 ml-auto"></div>
-                            </td>
-                          )}
+                          <td className="px-6 py-4">
+                            <div className="h-5 bg-gray-200 rounded w-32"></div>
+                          </td>
                           <td className="px-6 py-4">
                             <div className="flex gap-2 justify-center">
                               <div className="h-7 bg-gray-200 rounded-full w-16"></div>
@@ -336,24 +275,22 @@ export default function IndexTermsContent() {
               </div>
               <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full table-fixed" dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}>
+                  <table className="w-full table-fixed" dir="ltr">
                     <colgroup>
                       <col className="w-24" />
-                      {appliedFilters.language === 'English' && <col className="w-1/4" />}
-                      {appliedFilters.language === 'Arabic' && <col className="w-1/5" />}
+                      <col className="w-1/4" />
                       <col />
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
-                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>Section</th>
-                        {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English Word</th>}
-                        {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 whitespace-nowrap">Arabic Word</th>}
+                        <th className="px-6 py-4 text-sm font-semibold text-gray-700 text-left">Section</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English Word</th>
                         <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">Text References</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {terms.map((term) => {
-                        const word = appliedFilters.language === 'Arabic' ? term.word_arabic : term.word_english;
+                        const word = term.word_english;
                         // Gather all text reference values
                         const refs = term.text_numbers?.map(t => t.value).join(',') || '';
                         const targetUrl = word
@@ -371,19 +308,12 @@ export default function IndexTermsContent() {
                                 {term.section}
                               </span>
                             </td>
-                            {appliedFilters.language === 'English' && (
-                              <td className="px-6 py-4 text-gray-800 font-medium group-hover:text-[#43896B] transition-colors">
-                                {term.word_english || '-'}
-                              </td>
-                            )}
-                            {appliedFilters.language === 'Arabic' && (
-                              <td className="px-6 py-4 text-right text-gray-800 font-medium group-hover:text-[#43896B] transition-colors">
-                                {term.word_arabic || '-'}
-                              </td>
-                            )}
+                            <td className="px-6 py-4 text-gray-800 font-medium group-hover:text-[#43896B] transition-colors">
+                              {term.word_english || '-'}
+                            </td>
                             <td className="px-6 py-4">
                               <div className="flex justify-center">
-                                <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
+                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors">
                                   <ArrowRight className="w-4 h-4" />
                                 </div>
                               </div>
@@ -397,7 +327,7 @@ export default function IndexTermsContent() {
               </div>
               <div className="md:hidden space-y-4">
                 {terms.map((term) => {
-                  const word = appliedFilters.language === 'Arabic' ? term.word_arabic : term.word_english;
+                  const word = term.word_english;
                   const refs = term.text_numbers?.map(t => t.value).join(',') || '';
                   const targetUrl = word
                     ? `/indexes/terms/${encodeURIComponent(word)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`
@@ -408,25 +338,18 @@ export default function IndexTermsContent() {
                       key={term.id}
                       className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm cursor-pointer hover:border-[#43896B] transition-colors group"
                       onClick={() => word && router.push(targetUrl)}
-                      dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}
+                      dir="ltr"
                     >
                       <div className="flex items-center gap-3">
                         <span className="inline-flex items-center justify-center w-10 h-10 bg-[#43896B]/10 text-[#43896B] font-bold rounded-lg text-sm shrink-0">
                           {term.section}
                         </span>
                         <div className="flex-1 min-w-0">
-                          {appliedFilters.language === 'English' && (
-                            <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
-                              {term.word_english || '-'}
-                            </div>
-                          )}
-                          {appliedFilters.language === 'Arabic' && (
-                            <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
-                              {term.word_arabic || '-'}
-                            </div>
-                          )}
+                          <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
+                            {term.word_english || '-'}
+                          </div>
                         </div>
-                        <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
+                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors">
                           <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>

@@ -235,6 +235,8 @@ export default function IndexDetailDispatcher() {
                                 if (radisRes.data && radisRes.data.length > 0) {
                                     const item = radisRes.data[0];
                                     const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
+                                    if (detectedLanguage === 'arabic' && !item.arabic) return null;
+                                    if (detectedLanguage === 'english' && !item.translation) return null;
                                     const matchingSentence = extractMatchingSentence(textToSearch, term);
                                     return {
                                         type: 'Radis',
@@ -249,6 +251,8 @@ export default function IndexDetailDispatcher() {
                                 if (conclusionsRes.data && conclusionsRes.data.length > 0) {
                                     const item = conclusionsRes.data[0];
                                     const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
+                                    if (detectedLanguage === 'arabic' && !item.arabic) return null;
+                                    if (detectedLanguage === 'english' && !item.translation) return null;
                                     const matchingSentence = extractMatchingSentence(textToSearch, term);
                                     return {
                                         type: 'Conclusion',
@@ -262,6 +266,8 @@ export default function IndexDetailDispatcher() {
                                 if (conclusionsRes.data && conclusionsRes.data.length > 0) {
                                     const item = conclusionsRes.data[0];
                                     const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
+                                    if (detectedLanguage === 'arabic' && !item.arabic) return null;
+                                    if (detectedLanguage === 'english' && !item.translation) return null;
                                     const matchingSentence = extractMatchingSentence(textToSearch, term);
                                     return {
                                         type: 'Conclusion',
@@ -296,6 +302,8 @@ export default function IndexDetailDispatcher() {
                                                 const ara = targetPara.arabic || '';
                                                 const textToSearch = detectedLanguage === 'arabic' ? ara : eng;
                                                 const matchingSentence = extractMatchingSentence(textToSearch, term);
+                                                if (detectedLanguage === 'arabic' && !ara) return null;
+                                                if (detectedLanguage === 'english' && !eng) return null;
                                                 return {
                                                     type: 'Post',
                                                     data: matchedPost,
@@ -306,9 +314,12 @@ export default function IndexDetailDispatcher() {
                                                 };
                                             }
                                         }
-                                        const firstContent = matchedPost.paragraphs?.[0]?.translations?.[0]?.text ||
-                                            matchedPost.translations?.[0]?.text ||
-                                            matchedPost.heading || '';
+                                        const firstContent = detectedLanguage === 'arabic'
+                                            ? (matchedPost.paragraphs?.[0]?.arabic || matchedPost.TocArabic || '')
+                                            : (matchedPost.paragraphs?.[0]?.translations?.[0]?.text || matchedPost.translations?.[0]?.text || matchedPost.heading || '');
+                                        
+                                        if (!firstContent) return null;
+
                                         const matchingSentence = extractMatchingSentence(firstContent, term);
                                         return {
                                             type: 'Post',
@@ -347,6 +358,8 @@ export default function IndexDetailDispatcher() {
                     if (radisSearchRes?.data) {
                         for (const intro of radisSearchRes.data) {
                             const textToSearch = detectedLanguage === 'arabic' ? (intro.arabic || '') : (intro.translation || '');
+                            if (detectedLanguage === 'arabic' && !intro.arabic) continue;
+                            if (detectedLanguage === 'english' && !intro.translation) continue;
                             const matchingSentence = extractMatchingSentence(textToSearch, term);
 
                             pushUniqueResult({
@@ -361,6 +374,8 @@ export default function IndexDetailDispatcher() {
                     if (conclusionsSearchRes?.data) {
                         for (const conclusion of conclusionsSearchRes.data) {
                             const textToSearch = detectedLanguage === 'arabic' ? (conclusion.arabic || '') : (conclusion.translation || '');
+                            if (detectedLanguage === 'arabic' && !conclusion.arabic) continue;
+                            if (detectedLanguage === 'english' && !conclusion.translation) continue;
                             const matchingSentence = extractMatchingSentence(textToSearch, term);
 
                             pushUniqueResult({
@@ -428,10 +443,10 @@ export default function IndexDetailDispatcher() {
             </div>
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-8">
-                {category === 'names-places' && (
-                    <div className="bg-[#43896B]/5 border-l-4 border-[#43896B] p-6 rounded-r-xl mb-8">
-                        <p className="text-gray-700 italic leading-relaxed">
-                            {glossaryDescription || (language === 'arabic' ? 'وصف لهذا العنصر سيتم إضافته من خلال لوحة التحكم...' : 'Description for this item will be added via the admin panel...')}
+                {category === 'names-places' && glossaryDescription && (
+                    <div className="bg-[#43896B]/5 border-l-4 border-[#43896B] p-6 rounded-r-xl mb-8" dir={language === 'arabic' ? 'rtl' : 'ltr'}>
+                        <p className={`text-gray-700 italic leading-relaxed ${language === 'arabic' ? 'text-right' : ''}`}>
+                            {glossaryDescription}
                         </p>
                     </div>
                 )}
@@ -508,7 +523,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
                     <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors"><ArrowRight className="w-4 h-4" /></div>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#43896B] transition-colors">{displayTitle}</h3>
-                <div className="space-y-4 text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} /></div>
+                <div className="space-y-4 text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} language={language} /></div>
                 <div className="mt-4 pt-3 border-t border-gray-100"><span className="text-sm text-[#43896B] font-medium group-hover:underline">View full {post.type.toLowerCase()} →</span></div>
             </div>
         );
@@ -524,7 +539,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
                     <div className="flex items-center gap-2"><span className="bg-purple-50 text-purple-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Radis Introduction</span><span className="text-gray-500 text-sm font-medium">#{radis.number}</span></div>
                     <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors"><ArrowRight className="w-4 h-4" /></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} /></div>
+                <div className="text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} language={language} /></div>
                 <div className="mt-4 pt-3 border-t border-gray-100"><span className="text-sm text-[#43896B] font-medium group-hover:underline">View full introduction →</span></div>
             </div>
         );
@@ -540,7 +555,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
                     <div className="flex items-center gap-2"><span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Conclusion</span><span className="text-gray-500 text-sm font-medium">#{conclusion.number}</span></div>
                     <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors"><ArrowRight className="w-4 h-4" /></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} /></div>
+                <div className="text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} language={language} /></div>
                 <div className="mt-4 pt-3 border-t border-gray-100"><span className="text-sm text-[#43896B] font-medium group-hover:underline">View full conclusion →</span></div>
             </div>
         );
@@ -548,8 +563,8 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
     return null;
 }
 
-function HighlightText({ text, term }: { text: string; term: string }) {
-    if (!text || !term) return <p className="text-gray-800 text-lg leading-loose">{text}</p>;
+function HighlightText({ text, term, language }: { text: string; term: string; language?: 'english' | 'arabic' }) {
+    if (!text || !term) return <p className={`text-gray-800 text-lg leading-loose ${language === 'arabic' ? 'text-right' : ''}`} dir={language === 'arabic' ? 'rtl' : 'ltr'}>{text}</p>;
     const t = term.toLowerCase().trim();
     const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     let regexStr = escape(t);
@@ -560,7 +575,7 @@ function HighlightText({ text, term }: { text: string; term: string }) {
 
     const parts = text.split(new RegExp(`(${regexStr})`, 'gi'));
     return (
-        <p className="text-gray-800 text-lg leading-loose">
+        <p className={`text-gray-800 text-lg leading-loose ${language === 'arabic' ? 'text-right' : ''}`} dir={language === 'arabic' ? 'rtl' : 'ltr'}>
             {parts.map((part, i) =>
                 new RegExp(`^${regexStr}$`, 'i').test(part) ? <span key={i} className="bg-yellow-200 text-gray-900 font-medium px-1 rounded">{part}</span> : part
             )}

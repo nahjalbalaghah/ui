@@ -217,10 +217,23 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
     }
   };
 
-  const allFootnotes = [
+  const allFootnotesRaw = [
     ...(content.footnotes || []),
     ...content.paragraphs.flatMap(p => p.footnotes || [])
   ];
+
+  // Deduplicate by ID
+  const allFootnotes = Array.from(new Map(allFootnotesRaw.map(fn => [fn.id, fn])).values());
+
+  // Filter footnotes based on displayMode and content presence
+  const filteredFootnotes = allFootnotes.filter(fn => {
+    const hasEnglish = fn.english_translation && fn.english_translation.trim().length > 0;
+    const hasArabic = fn.arabic_interpretation && fn.arabic_interpretation.trim().length > 0;
+
+    if (displayMode === 'english-only') return hasEnglish;
+    if (displayMode === 'arabic-only') return hasArabic;
+    return hasEnglish || hasArabic;
+  });
 
   const sortedParagraphs = [...content.paragraphs].sort((a, b) => {
     const parseNumber = (num: string) => {
@@ -524,7 +537,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
         </div>
       )}
 
-      {allFootnotes.length > 0 && (
+      {filteredFootnotes.length > 0 && (
         <div className="mt-16 pt-10 border-t border-gray-200">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
             <div className="bg-[#43896B]/10 p-2 rounded-lg">
@@ -533,7 +546,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
             Footnotes
           </h2>
           <div className="space-y-6">
-            {allFootnotes
+            {filteredFootnotes
               .sort((a: Footnote, b: Footnote) => {
                 const parse = (s: string) => s.split('.').map(n => parseInt(n) || 0);
                 const ap = parse(a.number);
@@ -572,20 +585,20 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                       {footnote.number.split('.').pop()}
                     </span>
                   </div>
-                  <div className="flex-1 space-y-3">
-                    {(displayMode === 'both' || displayMode === 'english-only') && (
-                      <p className="text-lg text-gray-800 leading-relaxed font-brill">
-                        {footnote.english_translation}
-                      </p>
-                    )}
-                    {(displayMode === 'both' || displayMode === 'arabic-only') && footnote.arabic_interpretation && (
-                      <div className={`pt-2 ${displayMode === 'both' ? 'border-t border-gray-100 mt-2' : ''}`}>
-                        <p className="text-xl text-gray-900 leading-relaxed font-taha text-right" dir="rtl">
-                          {footnote.arabic_interpretation}
+                    <div className="flex-1 space-y-3">
+                      {(displayMode === 'both' || displayMode === 'english-only') && footnote.english_translation && footnote.english_translation.trim() !== '' && (
+                        <p className="text-lg text-gray-800 leading-relaxed font-brill">
+                          {footnote.english_translation}
                         </p>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                      {(displayMode === 'both' || displayMode === 'arabic-only') && footnote.arabic_interpretation && footnote.arabic_interpretation.trim() !== '' && (
+                        <div className={`pt-2 ${displayMode === 'both' && footnote.english_translation && footnote.english_translation.trim() !== '' ? 'border-t border-gray-100 mt-2' : ''}`}>
+                          <p className="text-xl text-gray-900 leading-relaxed font-taha text-right" dir="rtl">
+                            {footnote.arabic_interpretation}
+                          </p>
+                        </div>
+                      )}
+                    </div>
                 </div>
               ))}
           </div>

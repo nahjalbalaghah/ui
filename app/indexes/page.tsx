@@ -57,6 +57,12 @@ const indexes = [
     title: "Index of Religious and Ethical Concepts",
     description: "Delve into the fundamental Islamic principles and ethical teachings that form the backbone of Nahj al-Balaghah. This index covers concepts such as justice, piety, leadership, and spirituality.",
     href: "/indexes/religious-concepts"
+  },
+  {
+    icon: BookOpen,
+    title: "Glossary",
+    description: "Explore the descriptions and meanings of various terms, names, and places from the glossary.",
+    href: "/indexes/glossary"
   }
 ]
 
