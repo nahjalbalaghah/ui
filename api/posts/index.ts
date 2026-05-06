@@ -32,7 +32,7 @@ export const postsApi = {
         if (deduplicate) {
           if (preferredEdition) {
             // Find a post that matches the preferred edition title
-            const matchingPost = base.posts.find(p => {
+            const matchingPost = base.posts.find((p: any) => {
               const eds = p.editions;
               if (Array.isArray(eds)) {
                 return eds.some((e: any) => e.title?.toLowerCase() === preferredEdition.toLowerCase());
