@@ -102,7 +102,7 @@ export const postsApi = {
         page = 1,
         pageSize = 9,
         filters = {},
-        populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations'],
+        populate = ['footnotes', 'paragraphs.footnotes', 'paragraphs.translations', 'paragraphs.appendix_of_sources'],
         sort,
         fields
       } = options;
@@ -172,6 +172,8 @@ export const postsApi = {
             params['populate[posts][populate][paragraphs][populate][0]'] = 'translations';
           } else if (relation === 'paragraphs.footnotes') {
             params['populate[posts][populate][paragraphs][populate][1]'] = 'footnotes';
+          } else if (relation === 'paragraphs.appendix_of_sources') {
+            params['populate[posts][populate][paragraphs][populate][2]'] = 'appendix_of_sources';
           } else if (relation === 'footnotes') {
             // Skipping post-level footnotes for now as it caused "Invalid key 2"
             // params['populate[posts][populate][footnotes]'] = true;
@@ -240,6 +242,7 @@ export const postsApi = {
 
       params['populate[posts][populate][paragraphs][populate][0]'] = 'translations';
       params['populate[posts][populate][paragraphs][populate][1]'] = 'footnotes';
+      params['populate[posts][populate][paragraphs][populate][2]'] = 'appendix_of_sources';
       params['populate[posts][populate][translations]'] = true;
       params['populate[posts][populate][editions][fields][0]'] = 'title';
 
@@ -268,6 +271,7 @@ export const postsApi = {
         'populate[posts][populate][translations]': true,
         'populate[posts][populate][paragraphs][populate][0]': 'translations',
         'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+        'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
         'populate[posts][populate][editions][fields][0]': 'title',
       };
 

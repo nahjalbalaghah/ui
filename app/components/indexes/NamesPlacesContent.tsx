@@ -9,7 +9,7 @@ import Input from '@/app/components/input';
 import Select from '@/app/components/select';
 import Pagination from '@/app/components/pagination';
 import AlphabetChips from '@/app/components/alphabet-chips';
-import { normalizeForSort } from '@/app/utils/text-formatting';
+import { normalizeForSort, normalizeArabic } from '@/app/utils/text-formatting';
 
 export default function NamesPlacesContent() {
   const router = useRouter();
@@ -80,7 +80,8 @@ export default function NamesPlacesContent() {
       const q = word_english.toLowerCase();
       result = result.filter(item => item.word_english.toLowerCase().includes(q));
     } else if (language === 'Arabic' && word_arabic) {
-      result = result.filter(item => item.word_arabic.includes(word_arabic));
+      const q = normalizeArabic(word_arabic);
+      result = result.filter(item => normalizeArabic(item.word_arabic).includes(q));
     }
 
     // Alphabet Filter
@@ -90,7 +91,7 @@ export default function NamesPlacesContent() {
         return normalizeForSort(item.word_english).startsWith(letter);
       });
     } else if (language === 'Arabic' && startsWith_arabic) {
-      result = result.filter(item => item.word_arabic.startsWith(startsWith_arabic));
+      result = result.filter(item => normalizeArabic(item.word_arabic).startsWith(startsWith_arabic));
     }
 
     // Sort Alphabetically

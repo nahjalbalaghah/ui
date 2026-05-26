@@ -175,13 +175,19 @@ export default function IndexDetailDispatcher() {
                     }
 
                     // Special case for Quran Hadith search keys
-                    let filters: any = { word_english: term };
+                    let filters: any = {};
                     if (category === 'quran-hadith') {
-                        filters = { verse_translation: term };
+                        filters.verse_translation = term;
+                    } else if (category !== 'religious-concepts') {
+                        filters.word_english = term;
                     }
 
-                    let response = await api(1, 1, filters);
-                    if (response.data && response.data.length > 0) {
+                    let response = null;
+                    if (Object.keys(filters).length > 0) {
+                        response = await api(1, 1, filters);
+                    }
+
+                    if (response && response.data && response.data.length > 0) {
                         indexItem = response.data[0];
                         detectedLanguage = 'english';
                         if (category === 'quran-hadith') setDisplayTitle(indexItem.verse_translation || term);

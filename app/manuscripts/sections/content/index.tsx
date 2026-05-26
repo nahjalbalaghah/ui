@@ -11,7 +11,6 @@ import {
   librariesApi,
   Library,
   convertLibraryItemToManuscriptDetails,
-  getContentTypeFromSection
 } from '@/api/manuscripts';
 import { STATIC_MANUSCRIPTS } from '@/data/static-manuscripts';
 import { Loader2, BookOpen, GitCompare, Layout, Maximize2, X, Image as ImageIcon } from 'lucide-react';
@@ -26,7 +25,7 @@ const ManuscriptsContent = () => {
   const [selectedManuscript, setSelectedManuscript] = useState<Manuscript | null>(null);
   const [libraries, setLibraries] = useState<Library[]>([]);
   const [selectedLibrary, setSelectedLibrary] = useState<Library | null>(null);
-  const [selectedType, setSelectedType] = useState<'oration' | 'letter' | 'saying'>('oration');
+  const [selectedType, setSelectedType] = useState<'oration' | 'letter' | 'saying' | 'introduction' | 'conclusion'>('oration');
   const [selectedNumber, setSelectedNumber] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +37,6 @@ const ManuscriptsContent = () => {
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [secondManuscript, setSecondManuscript] = useState<Manuscript | null>(null);
   const [secondLibrary, setSecondLibrary] = useState<Library | null>(null);
-  const [secondNumber, setSecondNumber] = useState<string>('');
 
   // Helper function to extract section number for display
   const getSectionDisplayNumber = useCallback((section: string): string => {
@@ -46,16 +44,23 @@ const ManuscriptsContent = () => {
     return parts.length > 1 ? parts[1] : section;
   }, []);
 
+  const getTypeFromSection = useCallback((section: string): 'oration' | 'letter' | 'saying' | 'introduction' | null => {
+    if (section.startsWith('1')) return 'oration';
+    if (section.startsWith('2')) return 'letter';
+    if (section.startsWith('3')) return 'saying';
+    if (section.startsWith('0')) return 'introduction';
+    return null;
+  }, []);
+
   // Initialize from URL if present
   useEffect(() => {
     if (sectionFromUrl) {
-      const type = getContentTypeFromSection(sectionFromUrl);
+      const type = getTypeFromSection(sectionFromUrl);
       if (type) setSelectedType(type);
       setUrlSection(sectionFromUrl);
       setSelectedNumber(getSectionDisplayNumber(sectionFromUrl));
-      setSecondNumber(getSectionDisplayNumber(sectionFromUrl));
     }
-  }, [sectionFromUrl, getSectionDisplayNumber]);
+  }, [sectionFromUrl, getSectionDisplayNumber, getTypeFromSection]);
 
   // Fetch normalized content when in reading mode or when selection changes
   useEffect(() => {
@@ -69,7 +74,9 @@ const ManuscriptsContent = () => {
         setIsContentLoading(true);
         const sectionNum = selectedType === 'oration' ? `1.${selectedNumber}` :
           selectedType === 'letter' ? `2.${selectedNumber}` :
-            selectedType === 'saying' ? `3.${selectedNumber}` : '';
+            selectedType === 'saying' ? `3.${selectedNumber}` :
+              selectedType === 'introduction' ? `0.${selectedNumber}` :
+                selectedType === 'conclusion' ? `0.${selectedNumber}` : '';
 
         if (!sectionNum) return;
 
@@ -126,24 +133,28 @@ const ManuscriptsContent = () => {
     if (!selectedLibrary) return [];
 
     return allManuscripts.filter(m => {
-      const type = getContentTypeFromSection(m.section);
-      const isTypeMatch = type === selectedType;
+      const type = getTypeFromSection(m.section);
+      const isTypeMatch = selectedType === 'introduction' || selectedType === 'conclusion'
+        ? m.section.startsWith('0')
+        : type === selectedType;
       const isLibraryMatch = manuscriptBelongsToLibrary(m, selectedLibrary);
       return isTypeMatch && isLibraryMatch;
     });
-  }, [allManuscripts, selectedType, selectedLibrary, manuscriptBelongsToLibrary]);
+  }, [allManuscripts, selectedType, selectedLibrary, manuscriptBelongsToLibrary, getTypeFromSection]);
 
   // Filter for second manuscript in comparison mode
   const secondFilteredByLibraryAndType = useMemo(() => {
     if (!secondLibrary) return [];
 
     return allManuscripts.filter(m => {
-      const type = getContentTypeFromSection(m.section);
-      const isTypeMatch = type === selectedType;
+      const type = getTypeFromSection(m.section);
+      const isTypeMatch = selectedType === 'introduction' || selectedType === 'conclusion'
+        ? m.section.startsWith('0')
+        : type === selectedType;
       const isLibraryMatch = manuscriptBelongsToLibrary(m, secondLibrary);
       return isTypeMatch && isLibraryMatch;
     });
-  }, [allManuscripts, selectedType, secondLibrary, manuscriptBelongsToLibrary]);
+  }, [allManuscripts, selectedType, secondLibrary, manuscriptBelongsToLibrary, getTypeFromSection]);
 
   // Sort and get available numbers for the selected type and library
   const availableSections = useMemo(() => {
@@ -266,23 +277,21 @@ const ManuscriptsContent = () => {
     if (viewMode === 'comparison' && secondAvailableSections.length > 0) {
       let manuscriptToSelect = null;
 
-      if (secondNumber) {
+      if (selectedNumber) {
         manuscriptToSelect = secondAvailableSections.find(m =>
-          getSectionDisplayNumber(m.section) === secondNumber
+          getSectionDisplayNumber(m.section) === selectedNumber
         );
       }
 
       if (manuscriptToSelect) {
         setSecondManuscript(manuscriptToSelect);
-      } else {
-        manuscriptToSelect = secondAvailableSections[0];
-        setSecondNumber(getSectionDisplayNumber(manuscriptToSelect.section));
-        setSecondManuscript(manuscriptToSelect);
+      } else if (selectedNumber) {
+        setSecondManuscript(null);
       }
     } else if (viewMode !== 'comparison') {
       setSecondManuscript(null);
     }
-  }, [secondAvailableSections, secondNumber, secondLibrary, getSectionDisplayNumber, viewMode]);
+  }, [secondAvailableSections, selectedNumber, secondLibrary, getSectionDisplayNumber, viewMode]);
 
   const handleLibraryChange = (value: string) => {
     const library = libraries.find(l => l.documentId === value);
@@ -291,14 +300,13 @@ const ManuscriptsContent = () => {
   };
 
   const handleTypeChange = (value: string) => {
-    setSelectedType(value as 'oration' | 'letter' | 'saying');
+    setSelectedType(value as 'oration' | 'letter' | 'saying' | 'introduction' | 'conclusion');
     setSelectedNumber('');
     setUrlSection(null);
   };
 
   const handleNumberChange = (value: string) => {
     setSelectedNumber(value);
-    if (viewMode !== 'comparison') setSecondNumber(value);
   };
 
   const handleSecondLibraryChange = (value: string) => {
@@ -306,24 +314,17 @@ const ManuscriptsContent = () => {
     if (library) setSecondLibrary(library);
   };
 
-  const handleSecondNumberChange = (value: string) => {
-    setSecondNumber(value);
-  };
-
   const libraryOptions = libraries.map(lib => ({
     value: lib.documentId,
     label: lib.name
   }));
 
-  const secondNumberOptions = useMemo(() => {
-    const uniqueNumbers = Array.from(new Set(secondAvailableSections.map(m => getSectionDisplayNumber(m.section))));
-    return uniqueNumbers.map(num => ({ value: num, label: num }));
-  }, [secondAvailableSections, getSectionDisplayNumber]);
-
   const typeOptions = [
     { value: 'oration', label: 'Orations' },
     { value: 'letter', label: 'Letters' },
-    { value: 'saying', label: 'Sayings' }
+    { value: 'saying', label: 'Sayings' },
+    { value: 'introduction', label: 'Introduction' },
+    { value: 'conclusion', label: 'Conclusion' }
   ];
 
   const numberOptions = useMemo(() => {
@@ -442,13 +443,10 @@ const ManuscriptsContent = () => {
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                {viewMode === 'comparison' ? 'Numbers' : 'Number'}
+                Number
               </label>
               <div className="flex gap-2">
                 <Select options={numberOptions} value={selectedNumber} onChange={handleNumberChange} placeholder="No." className="flex-1" />
-                {viewMode === 'comparison' && (
-                  <Select options={secondNumberOptions} value={secondNumber} onChange={handleSecondNumberChange} placeholder="No." className="flex-1" />
-                )}
               </div>
             </div>
           </div>
@@ -549,10 +547,16 @@ const ManuscriptsContent = () => {
                   </div>
                 ) : normalizedContent ? (
                   <div className="p-0">
-                    <ContentDescription
-                      content={normalizedContent}
-                      contentType={selectedType === 'oration' ? 'orations' : selectedType === 'letter' ? 'letters' : 'sayings'}
-                    />
+                    {selectedType === 'oration' || selectedType === 'letter' || selectedType === 'saying' ? (
+                      <ContentDescription
+                        content={normalizedContent}
+                        contentType={selectedType === 'oration' ? 'orations' : selectedType === 'letter' ? 'letters' : 'sayings'}
+                      />
+                    ) : (
+                      <div className="p-12 text-center text-gray-500">
+                        Normalized content is currently available only for Orations, Letters, and Sayings.
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="p-12 text-center text-gray-500">

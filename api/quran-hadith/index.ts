@@ -10,6 +10,7 @@ export interface QuranHadith {
   documentId: string;
   surah_number: string;
   surah_name: string;
+  surah_name_arabic?: string;
   verse_numbers: string;
   verse_text: string;
   verse_translation: string;
@@ -138,16 +139,18 @@ export const quranHadithApi = {
     }
   },
 
-  async getSurahNames(): Promise<string[]> {
+  async getSurahNames(): Promise<{ name: string; arabicName: string }[]> {
     try {
       const response = await this.getQuranHadiths(1, 200);
-      const names = new Set<string>();
+      const uniqueNames = new Map<string, string>();
       response.data.forEach((item) => {
         if (item.surah_name) {
-          names.add(item.surah_name);
+          uniqueNames.set(item.surah_name, item.surah_name_arabic || '');
         }
       });
-      return Array.from(names).sort();
+      return Array.from(uniqueNames.entries())
+        .map(([name, arabicName]) => ({ name, arabicName }))
+        .sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
       console.error('Error fetching surah names:', error);
       throw error;

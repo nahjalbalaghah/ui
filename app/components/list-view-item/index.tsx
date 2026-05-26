@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Book, Tag as TagIcon, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 
@@ -10,10 +9,16 @@ interface ListViewItemProps {
   item: Post;
   contentType: 'orations' | 'letters' | 'sayings';
   displayMode?: 'both' | 'english-only' | 'arabic-only';
+  listingParams?: {
+    page?: string;
+    search?: string;
+    sort?: string;
+    edition?: string;
+    display?: string;
+  };
 }
 
-export default function ListViewItem({ item, contentType, displayMode = 'both' }: ListViewItemProps) {
-  const searchParams = useSearchParams();
+export default function ListViewItem({ item, contentType, displayMode = 'both', listingParams }: ListViewItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -34,15 +39,14 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
   };
 
   const getCardLink = () => {
-    const currentPage = searchParams.get('page');
-    const currentSort = searchParams.get('sort');
-    const currentSearch = searchParams.get('search');
     const baseUrl = `/content/details/${contentType}/${item.id}`;
 
     const params = new URLSearchParams();
-    if (currentPage) params.set('returnPage', currentPage);
-    if (currentSort) params.set('returnSort', currentSort);
-    if (currentSearch) params.set('returnSearch', currentSearch);
+    if (listingParams?.page) params.set('returnPage', listingParams.page);
+    if (listingParams?.sort) params.set('returnSort', listingParams.sort);
+    if (listingParams?.search) params.set('returnSearch', listingParams.search);
+    if (listingParams?.edition) params.set('edition', listingParams.edition);
+    if (listingParams?.display && listingParams.display !== 'both') params.set('display', listingParams.display);
 
     const queryString = params.toString();
     return queryString ? `${baseUrl}?${queryString}` : baseUrl;

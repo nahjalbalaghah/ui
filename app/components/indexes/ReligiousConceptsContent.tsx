@@ -9,7 +9,7 @@ import Input from '@/app/components/input';
 import Select from '@/app/components/select';
 import Pagination from '@/app/components/pagination';
 import AlphabetChips from '@/app/components/alphabet-chips';
-import { normalizeForSort } from '@/app/utils/text-formatting';
+import { normalizeForSort, normalizeArabic } from '@/app/utils/text-formatting';
 
 export default function ReligiousConceptsContent() {
   const router = useRouter();
@@ -18,11 +18,9 @@ export default function ReligiousConceptsContent() {
 
   const page = parseInt(searchParams.get('page') || '1');
   const appliedFilters: ReligiousConceptsFilters = {
-    word_english: searchParams.get('word_english') || '',
     word_arabic: searchParams.get('word_arabic') || '',
-    startsWith_english: searchParams.get('startsWith_english') || '',
     startsWith_arabic: searchParams.get('startsWith_arabic') || '',
-    language: (searchParams.get('language') as 'English' | 'Arabic') || 'Arabic',
+    language: 'Arabic',
   };
 
   const [allItems, setAllItems] = useState<ReligiousConcept[]>([]);
@@ -34,11 +32,9 @@ export default function ReligiousConceptsContent() {
   // Sync filters with URL params when they change (e.g. back button)
   useEffect(() => {
     setFilters({
-      word_english: searchParams.get('word_english') || '',
       word_arabic: searchParams.get('word_arabic') || '',
-      startsWith_english: searchParams.get('startsWith_english') || '',
       startsWith_arabic: searchParams.get('startsWith_arabic') || '',
-      language: (searchParams.get('language') as 'English' | 'Arabic') || 'Arabic',
+      language: 'Arabic',
     });
   }, [searchParams]);
 
@@ -66,42 +62,28 @@ export default function ReligiousConceptsContent() {
   const filteredItems = React.useMemo(() => {
     let result = [...allItems];
 
-    const { word_english, word_arabic, startsWith_english, startsWith_arabic, language } = appliedFilters;
+    const { word_arabic, startsWith_arabic } = appliedFilters;
 
-    // Language Filter
-    if (language === 'English') {
-      result = result.filter(item => item.word_english && item.word_english.trim() !== '');
-    } else {
-      result = result.filter(item => item.word_arabic && item.word_arabic.trim() !== '');
-    }
+    // Language Filter - Force Arabic
+    result = result.filter(item => item.word_arabic && item.word_arabic.trim() !== '');
 
     // Search Filter
-    if (language === 'English' && word_english) {
-      const q = word_english.toLowerCase();
-      result = result.filter(item => item.word_english.toLowerCase().includes(q));
-    } else if (language === 'Arabic' && word_arabic) {
-      result = result.filter(item => item.word_arabic.includes(word_arabic));
+    if (word_arabic) {
+      const q = normalizeArabic(word_arabic);
+      result = result.filter(item => normalizeArabic(item.word_arabic).includes(q));
     }
 
     // Alphabet Filter
-    if (language === 'English' && startsWith_english) {
-      const letter = startsWith_english.toLowerCase();
-      result = result.filter(item => {
-        return normalizeForSort(item.word_english).startsWith(letter);
-      });
-    } else if (language === 'Arabic' && startsWith_arabic) {
-      result = result.filter(item => item.word_arabic.startsWith(startsWith_arabic));
+    if (startsWith_arabic) {
+      result = result.filter(item => normalizeArabic(item.word_arabic).startsWith(startsWith_arabic));
     }
 
     // Sort Alphabetically
     result.sort((a, b) => {
-      const wordA = (language === 'English' ? a.word_english : a.word_arabic) || '';
-      const wordB = (language === 'English' ? b.word_english : b.word_arabic) || '';
+      const wordA = a.word_arabic || '';
+      const wordB = b.word_arabic || '';
       
-      if (language === 'English') {
-        return normalizeForSort(wordA).localeCompare(normalizeForSort(wordB));
-      }
-      return wordA.localeCompare(wordB, 'ar');
+      return normalizeForSort(wordA).localeCompare(normalizeForSort(wordB), 'ar');
     });
 
     return result;
@@ -115,11 +97,9 @@ export default function ReligiousConceptsContent() {
   const handleApplyFilters = (newFilters?: ReligiousConceptsFilters) => {
     const filtersToUse = newFilters || filters;
     const params = new URLSearchParams();
-    if (filtersToUse.word_english) params.set('word_english', filtersToUse.word_english);
     if (filtersToUse.word_arabic) params.set('word_arabic', filtersToUse.word_arabic);
-    if (filtersToUse.startsWith_english) params.set('startsWith_english', filtersToUse.startsWith_english);
     if (filtersToUse.startsWith_arabic) params.set('startsWith_arabic', filtersToUse.startsWith_arabic);
-    if (filtersToUse.language && filtersToUse.language !== 'Arabic') params.set('language', filtersToUse.language);
+    params.set('language', 'Arabic');
 
     params.set('page', '1');
     router.push(`${pathname}?${params.toString()}`);
@@ -127,9 +107,7 @@ export default function ReligiousConceptsContent() {
 
   const handleClearFilters = () => {
     setFilters({
-      word_english: '',
       word_arabic: '',
-      startsWith_english: '',
       startsWith_arabic: '',
       language: 'Arabic',
     });
@@ -143,17 +121,11 @@ export default function ReligiousConceptsContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const hasActiveFilters = appliedFilters.word_english || appliedFilters.word_arabic || appliedFilters.startsWith_english || appliedFilters.startsWith_arabic || appliedFilters.language !== 'Arabic';
+  const hasActiveFilters = appliedFilters.word_arabic || appliedFilters.startsWith_arabic;
 
   const handleLetterSelect = (letter: string) => {
     const updatedFilters = { ...filters };
-    if (filters.language === 'English') {
-      updatedFilters.startsWith_english = letter;
-      updatedFilters.startsWith_arabic = '';
-    } else {
-      updatedFilters.startsWith_arabic = letter;
-      updatedFilters.startsWith_english = '';
-    }
+    updatedFilters.startsWith_arabic = letter;
     setFilters(updatedFilters);
     handleApplyFilters(updatedFilters);
   };
@@ -183,34 +155,14 @@ export default function ReligiousConceptsContent() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block font-medium text-sm text-gray-700 mb-1">Language</label>
-              <Select
-                value={filters.language || 'Arabic'}
-                onChange={(value) => setFilters({ ...filters, language: value as 'English' | 'Arabic' })}
-                options={[
-                  { value: 'Arabic', label: 'Arabic' }
-                ]}
-                placeholder="Select Language"
-              />
-            </div>
-            {filters.language === 'English' ? (
-              <Input
-                label="English Word"
-                placeholder="Search English..."
-                value={filters.word_english}
-                onChange={(e) => setFilters({ ...filters, word_english: e.target.value })}
-              />
-            ) : (
-              <Input
-                label="Arabic Word"
-                placeholder="Search Arabic..."
-                value={filters.word_arabic}
-                onChange={(e) => setFilters({ ...filters, word_arabic: e.target.value })}
-                className="text-right"
-                dir="rtl"
-              />
-            )}
+            <Input
+              label="Arabic Word"
+              placeholder="Search Arabic..."
+              value={filters.word_arabic}
+              onChange={(e) => setFilters({ ...filters, word_arabic: e.target.value })}
+              className="text-right"
+              dir="rtl"
+            />
           </div>
           <div className="mt-4 flex justify-end">
             <Button
@@ -225,9 +177,9 @@ export default function ReligiousConceptsContent() {
 
         <div className="mb-6">
           <AlphabetChips
-            selectedLetter={filters.language === 'English' ? (filters.startsWith_english || '') : (filters.startsWith_arabic || '')}
+            selectedLetter={filters.startsWith_arabic || ''}
             onSelectLetter={handleLetterSelect}
-            language={filters.language || 'English'}
+            language="Arabic"
           />
         </div>
 
@@ -240,15 +192,13 @@ export default function ReligiousConceptsContent() {
                   <table className="w-full table-fixed">
                     <colgroup>
                       <col className="w-24" />
-                      {appliedFilters.language === 'English' && <col className="w-1/4" />}
-                      {appliedFilters.language === 'Arabic' && <col className="w-1/5" />}
+                      <col className="w-1/5" />
                       <col />
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
                         <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Section</th>
-                        {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English</th>}
-                        {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 whitespace-nowrap">Arabic</th>}
+                        <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 whitespace-nowrap">Arabic</th>
                         <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">Text References</th>
                       </tr>
                     </thead>
@@ -328,24 +278,22 @@ export default function ReligiousConceptsContent() {
               {/* Desktop Table */}
               <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full table-fixed" dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}>
+                  <table className="w-full table-fixed" dir="rtl">
                     <colgroup>
                       <col className="w-24" />
-                      {appliedFilters.language === 'English' && <col className="w-1/4" />}
-                      {appliedFilters.language === 'Arabic' && <col className="w-1/5" />}
+                      <col className="w-1/5" />
                       <col />
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
-                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>Section</th>
-                        {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English</th>}
-                        {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 whitespace-nowrap">Arabic</th>}
+                        <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Section</th>
+                        <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 whitespace-nowrap">Arabic</th>
                         <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">Text References</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {items.map((item) => {
-                        const name = appliedFilters.language === 'Arabic' ? item.word_arabic : item.word_english;
+                        const name = item.word_arabic;
                         const refs = item.text_numbers?.map(t => t.value).join(',') || '';
                         const targetUrl = name
                           ? `/indexes/religious-concepts/${encodeURIComponent(name)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`
@@ -362,23 +310,14 @@ export default function ReligiousConceptsContent() {
                                 {item.section || '-'}
                               </div>
                             </td>
-                            {appliedFilters.language === 'English' && (
-                              <td className="px-6 py-4">
-                                <span className="text-gray-900 font-medium group-hover:text-[#43896B] transition-colors">
-                                  {item.word_english || '-'}
-                                </span>
-                              </td>
-                            )}
-                            {appliedFilters.language === 'Arabic' && (
-                              <td className="px-6 py-4 text-right">
-                                <span className="text-gray-900 font-medium group-hover:text-[#43896B] transition-colors">
-                                  {item.word_arabic || '-'}
-                                </span>
-                              </td>
-                            )}
+                            <td className="px-6 py-4 text-right">
+                              <span className="text-gray-900 font-medium group-hover:text-[#43896B] transition-colors">
+                                {item.word_arabic || '-'}
+                              </span>
+                            </td>
                             <td className="px-6 py-4">
                               <div className="flex justify-center">
-                                <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
+                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors rotate-180">
                                   <ArrowRight className="w-4 h-4" />
                                 </div>
                               </div>
@@ -393,7 +332,7 @@ export default function ReligiousConceptsContent() {
               {/* Mobile Cards */}
               <div className="md:hidden space-y-4">
                 {items.map((item) => {
-                  const name = appliedFilters.language === 'Arabic' ? item.word_arabic : item.word_english;
+                  const name = item.word_arabic;
                   const refs = item.text_numbers?.map(t => t.value).join(',') || '';
                   const targetUrl = name
                     ? `/indexes/religious-concepts/${encodeURIComponent(name)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`
@@ -404,22 +343,15 @@ export default function ReligiousConceptsContent() {
                       key={item.id}
                       className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm cursor-pointer hover:border-[#43896B] transition-colors group"
                       onClick={() => name && router.push(targetUrl)}
-                      dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}
+                      dir="rtl"
                     >
                       <div className="flex items-center gap-3">
                         <div className="flex-1 min-w-0">
-                          {appliedFilters.language === 'English' && (
-                            <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
-                              {item.word_english || '-'}
-                            </div>
-                          )}
-                          {appliedFilters.language === 'Arabic' && (
-                            <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
-                              {item.word_arabic || '-'}
-                            </div>
-                          )}
+                          <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
+                            {item.word_arabic || '-'}
+                          </div>
                         </div>
-                        <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
+                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors rotate-180">
                           <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>

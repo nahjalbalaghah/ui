@@ -292,7 +292,13 @@ export const HighlightArabicText = ({ text }: any) => {
  */
 export const normalizeTextForSearch = (text: string): string => {
   if (!text) return '';
-  return text
+
+  let normalized = text;
+  if (isArabicText(text)) {
+    normalized = normalizeArabic(text);
+  }
+
+  return normalized
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "") // Remove common diacritics
     .replace(/[ḤḥṢṣṬṭẒẓḌḍʿʾ]/g, (match) => {
@@ -312,12 +318,32 @@ export const normalizeTextForSearch = (text: string): string => {
 };
 
 /**
+ * Normalizes a string for search by removing diacritics and special characters.
+ */
+export const normalizeArabic = (text: string): string => {
+  if (!text) return '';
+  return text
+    .replace(/[\u064B-\u0652]/g, '') // Remove Arabic diacritics (tashkeel)
+    .replace(/[أإآٱ]/g, 'ا')        // Normalize Alif variations to plain Alif
+    .replace(/ة/g, 'ه')              // Normalize Teh Marbuta to Heh
+    .replace(/ى/g, 'ي')              // Normalize Alif Maqsura to Yeh
+    .trim();
+};
+
+/**
  * Normalizes a string for alphabetical sorting by stripping leading "halfmoons"
  * (ʿ, ʾ, etc) and other common punctuation.
  */
 export const normalizeForSort = (text: string): string => {
   if (!text) return '';
-  return text
+  
+  // First normalize Arabic if it's Arabic text
+  let normalized = text;
+  if (isArabicText(text)) {
+    normalized = normalizeArabic(text);
+  }
+
+  return normalized
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/^[''"‘“’ʿʾ]+/, '')

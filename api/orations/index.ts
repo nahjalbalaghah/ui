@@ -37,9 +37,12 @@ export interface Tag {
 
 export interface Source {
   id: number;
-  documentId: string;
+  documentId?: string;
   word?: string;
   content?: string;
+  author?: string;
+  title?: string;
+  volumepage?: string;
 }
 
 export interface Paragraph {
@@ -106,6 +109,7 @@ export const orationsApi = {
           'filters[posts][type][$eq]': 'Oration',
           'populate[posts][populate][paragraphs][populate][0]': 'translations',
           'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+          'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
           'populate[posts][populate][editions][fields][0]': 'title',
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
@@ -147,6 +151,7 @@ export const orationsApi = {
           'filters[posts][type][$eq]': 'Oration',
           'populate[posts][populate][paragraphs][populate][0]': 'translations',
           'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+          'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
           'populate[posts][populate][editions][fields][0]': 'title',
         },
       });
@@ -186,6 +191,7 @@ export const orationsApi = {
           'filters[posts][$or][3][paragraphs][translations][text][$containsi]': query,
           'populate[posts][populate][paragraphs][populate][0]': 'translations',
           'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+          'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
           'populate[posts][populate][editions][fields][0]': 'title',
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
@@ -219,6 +225,7 @@ export const orationsApi = {
           'filters[posts][type][$eq]': 'Oration',
           'populate[posts][populate][paragraphs][populate][0]': 'translations',
           'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+          'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
           'populate[posts][populate][editions][fields][0]': 'title',
         },
       });

@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { SlidersHorizontal, Search } from 'lucide-react';
 import SidebarFilter from '@/app/components/sidebar-filter';
 import ContentListing from './content-listing';
@@ -29,9 +30,14 @@ function ContentPageContent({ config }: ContentPageProps) {
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState(() => searchParams.get('search') || '');
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState(() => searchParams.get('search') || '');
   const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || '');
   const [selectedEdition, setSelectedEdition] = useState(() => searchParams.get('edition') || 'Qutbuddin');
-  const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>('both');
+  const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>(() => {
+    const raw = searchParams.get('display');
+    if (raw === 'english-only' || raw === 'arabic-only' || raw === 'both') return raw;
+    return 'both';
+  });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [content, setContent] = useState<Post[]>([]);
   const [allContent, setAllContent] = useState<Post[]>([]);
@@ -50,6 +56,10 @@ function ContentPageContent({ config }: ContentPageProps) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isRestoringState, setIsRestoringState] = useState(false);
 
+  const aboutEditionHref = selectedEdition
+    ? `/editions/about?edition=${encodeURIComponent(selectedEdition)}`
+    : '/editions/about';
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setMinLoadingTime(false);
@@ -58,14 +68,15 @@ function ContentPageContent({ config }: ContentPageProps) {
     return () => clearTimeout(timer);
   }, []);
 
-  const updateUrlParams = (page?: number, search?: string, sort?: string, edition?: string) => {
+  const updateUrlParams = (page?: number, search?: string, sort?: string, edition?: string, display?: string) => {
     const params = new URLSearchParams();
 
     // Use current state if parameters not provided
-    const currentSearch = search !== undefined ? search : searchTerm;
+    const currentSearch = search !== undefined ? search : appliedSearchTerm;
     const currentSort = sort !== undefined ? sort : sortBy;
     const currentEdition = edition !== undefined ? edition : selectedEdition;
     const currentPageNum = page !== undefined ? page : currentPage;
+    const currentDisplay = display !== undefined ? display : displayMode;
 
     if (currentPageNum && currentPageNum !== 1) {
       params.set('page', currentPageNum.toString());
@@ -81,6 +92,10 @@ function ContentPageContent({ config }: ContentPageProps) {
 
     if (currentEdition && currentEdition !== '') {
       params.set('edition', currentEdition);
+    }
+
+    if (currentDisplay && currentDisplay !== 'both') {
+      params.set('display', currentDisplay);
     }
 
     const queryString = params.toString();
@@ -289,7 +304,7 @@ function ContentPageContent({ config }: ContentPageProps) {
 
       // Update URL after state updates
       if (updateUrl && !append) {
-        updateUrlParams(page, search, sortBy, selectedEdition);
+        updateUrlParams(page, search, sortBy, selectedEdition, displayMode);
       }
     } catch (err) {
       let errorMessage = 'An unexpected error occurred';
@@ -333,25 +348,30 @@ function ContentPageContent({ config }: ContentPageProps) {
     const search = searchParams.get('search');
     const sort = searchParams.get('sort');
     const edition = searchParams.get('edition');
+    const display = searchParams.get('display');
 
     const urlPage = page ? parseInt(page, 10) : 1;
     const urlSearch = search || '';
     const urlSort = sort || '';
     const urlEdition = edition || 'Qutbuddin';
+    const urlDisplay = display === 'english-only' || display === 'arabic-only' || display === 'both' ? display : 'both';
 
     // Check if URL params differ from current state
     const stateChanged =
       urlPage !== currentPage ||
       urlSearch !== searchTerm ||
       urlSort !== sortBy ||
-      urlEdition !== selectedEdition;
+      urlEdition !== selectedEdition ||
+      urlDisplay !== displayMode;
 
     if (isInitialized && stateChanged) {
       // User navigated back/forward, restore state from URL
       setIsRestoringState(true);
       setSearchTerm(urlSearch);
+      setAppliedSearchTerm(urlSearch);
       setSortBy(urlSort);
       setSelectedEdition(urlEdition);
+      setDisplayMode(urlDisplay);
       setCurrentPage(urlPage);
 
       // Load content with URL parameters
@@ -360,6 +380,8 @@ function ContentPageContent({ config }: ContentPageProps) {
       });
     } else if (!isInitialized) {
       // Initial load
+      setDisplayMode(urlDisplay);
+      setAppliedSearchTerm(urlSearch);
       loadContent(urlPage, urlSearch, false, false).finally(() => {
         setIsInitialized(true);
       });
@@ -371,6 +393,7 @@ function ContentPageContent({ config }: ContentPageProps) {
   const handleSearch = () => {
     setCurrentPage(1);
     setAllContent([]); // Clear cached content to force fresh search
+    setAppliedSearchTerm(searchTerm);
     loadContent(1, searchTerm, true, false);
   };
 
@@ -383,9 +406,15 @@ function ContentPageContent({ config }: ContentPageProps) {
     setContent([]);
     setAllContent([]);
 
-    loadContent(1, searchTerm, true, false, true);
+    loadContent(1, appliedSearchTerm, true, false, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, selectedEdition]);
+
+  useEffect(() => {
+    if (!isInitialized || isRestoringState) return;
+    updateUrlParams(currentPage, undefined, undefined, undefined, displayMode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [displayMode]);
 
   const sortOptions = [
     { value: 'sermon-asc', label: 'Sermon Number (Ascending)' },
@@ -403,7 +432,7 @@ function ContentPageContent({ config }: ContentPageProps) {
       setContent(paginatedData);
       setCurrentPage(page);
       setHasNextPage(page < totalPages);
-      updateUrlParams(page, searchTerm, sortBy, selectedEdition);
+      updateUrlParams(page, appliedSearchTerm, sortBy, selectedEdition, displayMode);
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -493,7 +522,7 @@ function ContentPageContent({ config }: ContentPageProps) {
       setTotalPages(Math.ceil(dataToSearch.length / pageSize));
       setTotal(dataToSearch.length);
       setHasNextPage(targetPage < Math.ceil(dataToSearch.length / pageSize));
-      updateUrlParams(targetPage, searchTerm, sortBy, selectedEdition);
+      updateUrlParams(targetPage, appliedSearchTerm, sortBy, selectedEdition, displayMode);
 
       // Wait for React to render the new content, then scroll
       requestAnimationFrame(() => {
@@ -549,6 +578,14 @@ function ContentPageContent({ config }: ContentPageProps) {
                   </p>
                 </div>
               )}
+              <div className="mt-4 flex justify-start">
+                <Link
+                  href={aboutEditionHref}
+                  className="text-sm font-semibold text-[#43896B] hover:text-[#367556] underline underline-offset-4"
+                >
+                  About this edition
+                </Link>
+              </div>
             </div>
           </div>
         )}
@@ -626,6 +663,13 @@ function ContentPageContent({ config }: ContentPageProps) {
             isInfiniteLoading={isInfiniteLoading}
             isTransitioning={isTransitioning}
             displayMode={displayMode}
+            listingParams={{
+              page: currentPage > 1 ? currentPage.toString() : '',
+              search: appliedSearchTerm,
+              sort: sortBy,
+              edition: selectedEdition,
+              display: displayMode
+            }}
             showTopPagination={true}
           />
         </div>

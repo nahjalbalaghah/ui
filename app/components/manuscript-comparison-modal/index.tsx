@@ -1,8 +1,8 @@
 'use client';
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { X, ZoomIn, ZoomOut, Loader2, FileText, Book, Maximize2, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { manuscriptsApi, Manuscript, getManuscriptImageUrl } from '@/api/manuscripts';
+import { librariesApi, Library, manuscriptsApi, Manuscript, getManuscriptImageUrl } from '@/api/manuscripts';
 import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes } from '@/app/utils/text-formatting';
 import Select from '../select';
@@ -41,6 +41,274 @@ const MissingPagePlaceholder: React.FC<{ pageNumber: number; className?: string 
     </div>
 );
 
+type ZoomPanHandle = {
+    zoomIn: (clientX?: number, clientY?: number) => void;
+    zoomOut: (clientX?: number, clientY?: number) => void;
+    reset: () => void;
+};
+
+type ZoomPanImageProps = {
+    src: string;
+    alt: string;
+    onZoomChange: (percent: number) => void;
+};
+
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+
+const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, alt, onZoomChange }, ref) => {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const pointersRef = useRef(new Map<number, { x: number; y: number }>());
+    const dragRef = useRef<{ active: boolean; startX: number; startY: number; startTx: number; startTy: number; moved: boolean }>({
+        active: false,
+        startX: 0,
+        startY: 0,
+        startTx: 0,
+        startTy: 0,
+        moved: false
+    });
+    const pinchRef = useRef<{
+        active: boolean;
+        startDistance: number;
+        startScale: number;
+        startTx: number;
+        startTy: number;
+    }>({
+        active: false,
+        startDistance: 0,
+        startScale: 1,
+        startTx: 0,
+        startTy: 0
+    });
+
+    const [containerSize, setContainerSize] = useState<{ w: number; h: number }>({ w: 1, h: 1 });
+    const [imageSize, setImageSize] = useState<{ w: number; h: number } | null>(null);
+    const [baseScale, setBaseScale] = useState(1);
+    const [scale, setScale] = useState(1);
+    const [translate, setTranslate] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
+    const totalScale = useMemo(() => baseScale * scale, [baseScale, scale]);
+
+    const updateContainerSize = useCallback(() => {
+        const el = containerRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        setContainerSize({ w: Math.max(1, rect.width), h: Math.max(1, rect.height) });
+    }, []);
+
+    useEffect(() => {
+        updateContainerSize();
+        window.addEventListener('resize', updateContainerSize);
+        return () => window.removeEventListener('resize', updateContainerSize);
+    }, [updateContainerSize]);
+
+    const centerImage = useCallback((nextBaseScale: number, nextScale: number) => {
+        if (!imageSize) return;
+        const nextTotal = nextBaseScale * nextScale;
+        const x = (containerSize.w - imageSize.w * nextTotal) / 2;
+        const scaledHeight = imageSize.h * nextTotal;
+        const y = scaledHeight > containerSize.h ? 0 : (containerSize.h - scaledHeight) / 2;
+        setTranslate({ x, y });
+    }, [containerSize.h, containerSize.w, imageSize]);
+
+    useEffect(() => {
+        if (!imageSize) return;
+        const fitWidth = containerSize.w / imageSize.w;
+        const nextBase = isFinite(fitWidth) && fitWidth > 0 ? clamp(fitWidth, 0.01, 3) : 1;
+        setBaseScale(nextBase);
+        setScale(1);
+        centerImage(nextBase, 1);
+        onZoomChange(100);
+    }, [centerImage, containerSize.h, containerSize.w, imageSize, onZoomChange, src]);
+
+    const setScaleAroundPoint = useCallback((clientX: number, clientY: number, nextScale: number) => {
+        const el = containerRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const px = clamp(clientX - rect.left, 0, rect.width);
+        const py = clamp(clientY - rect.top, 0, rect.height);
+
+        const startTotal = totalScale;
+        const nextTotal = baseScale * nextScale;
+        const contentX = (px - translate.x) / startTotal;
+        const contentY = (py - translate.y) / startTotal;
+        const nextTx = px - contentX * nextTotal;
+        const nextTy = py - contentY * nextTotal;
+
+        setScale(nextScale);
+        setTranslate({ x: nextTx, y: nextTy });
+        onZoomChange(Math.round(nextScale * 100));
+    }, [baseScale, onZoomChange, totalScale, translate.x, translate.y]);
+
+    const zoomIn = useCallback((clientX?: number, clientY?: number) => {
+        const next = clamp(scale * 1.25, 1, 8);
+        const el = containerRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        setScaleAroundPoint(clientX ?? rect.left + rect.width / 2, clientY ?? rect.top + rect.height / 2, next);
+    }, [scale, setScaleAroundPoint]);
+
+    const zoomOut = useCallback((clientX?: number, clientY?: number) => {
+        const next = clamp(scale / 1.25, 1, 8);
+        const el = containerRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        setScaleAroundPoint(clientX ?? rect.left + rect.width / 2, clientY ?? rect.top + rect.height / 2, next);
+    }, [scale, setScaleAroundPoint]);
+
+    const reset = useCallback(() => {
+        setScale(1);
+        onZoomChange(100);
+        centerImage(baseScale, 1);
+    }, [baseScale, centerImage, onZoomChange]);
+
+    React.useImperativeHandle(ref, () => ({ zoomIn, zoomOut, reset }), [reset, zoomIn, zoomOut]);
+
+    const onWheel = useCallback((e: React.WheelEvent) => {
+        e.preventDefault();
+        const factor = Math.exp(-e.deltaY * 0.002);
+        const next = clamp(scale * factor, 1, 8);
+        setScaleAroundPoint(e.clientX, e.clientY, next);
+    }, [scale, setScaleAroundPoint]);
+
+    const onPointerDown = useCallback((e: React.PointerEvent) => {
+        if (e.button === 1) return;
+        const el = containerRef.current;
+        if (!el) return;
+        el.setPointerCapture(e.pointerId);
+        pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (pointersRef.current.size === 1) {
+            dragRef.current = {
+                active: true,
+                startX: e.clientX,
+                startY: e.clientY,
+                startTx: translate.x,
+                startTy: translate.y,
+                moved: false
+            };
+            pinchRef.current.active = false;
+        }
+
+        if (pointersRef.current.size === 2) {
+            const pts = Array.from(pointersRef.current.values());
+            const dx = pts[0].x - pts[1].x;
+            const dy = pts[0].y - pts[1].y;
+            const dist = Math.hypot(dx, dy);
+            pinchRef.current = {
+                active: true,
+                startDistance: dist,
+                startScale: scale,
+                startTx: translate.x,
+                startTy: translate.y
+            };
+            dragRef.current.active = false;
+        }
+    }, [scale, translate.x, translate.y]);
+
+    const onPointerMove = useCallback((e: React.PointerEvent) => {
+        if (!pointersRef.current.has(e.pointerId)) return;
+        pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (pinchRef.current.active && pointersRef.current.size >= 2) {
+            const pts = Array.from(pointersRef.current.values());
+            const dx = pts[0].x - pts[1].x;
+            const dy = pts[0].y - pts[1].y;
+            const dist = Math.hypot(dx, dy);
+            const cx = (pts[0].x + pts[1].x) / 2;
+            const cy = (pts[0].y + pts[1].y) / 2;
+
+            const startTotal = baseScale * pinchRef.current.startScale;
+            const contentX = (cx - pinchRef.current.startTx) / startTotal;
+            const contentY = (cy - pinchRef.current.startTy) / startTotal;
+
+            const ratio = pinchRef.current.startDistance > 0 ? dist / pinchRef.current.startDistance : 1;
+            const nextScale = clamp(pinchRef.current.startScale * ratio, 1, 8);
+            const nextTotal = baseScale * nextScale;
+            const nextTx = cx - contentX * nextTotal;
+            const nextTy = cy - contentY * nextTotal;
+
+            setScale(nextScale);
+            setTranslate({ x: nextTx, y: nextTy });
+            onZoomChange(Math.round(nextScale * 100));
+            return;
+        }
+
+        if (!dragRef.current.active) return;
+        const dx = e.clientX - dragRef.current.startX;
+        const dy = e.clientY - dragRef.current.startY;
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+            dragRef.current.moved = true;
+        }
+        if (scale === 1) return;
+        setTranslate({ x: dragRef.current.startTx + dx, y: dragRef.current.startTy + dy });
+    }, [baseScale, onZoomChange, scale]);
+
+    const onPointerUp = useCallback((e: React.PointerEvent) => {
+        pointersRef.current.delete(e.pointerId);
+        const wasMoved = dragRef.current.moved;
+
+        if (pointersRef.current.size < 2) {
+            pinchRef.current.active = false;
+        }
+        if (pointersRef.current.size === 0) {
+            dragRef.current.active = false;
+        }
+
+        if (wasMoved) return;
+        if (e.button === 0) {
+            zoomIn(e.clientX, e.clientY);
+        } else if (e.button === 2) {
+            zoomOut(e.clientX, e.clientY);
+        }
+    }, [zoomIn, zoomOut]);
+
+    const onPointerCancel = useCallback((e: React.PointerEvent) => {
+        pointersRef.current.delete(e.pointerId);
+        dragRef.current.active = false;
+        pinchRef.current.active = false;
+    }, []);
+
+    return (
+        <div
+            ref={containerRef}
+            className={`relative w-full h-full overflow-hidden ${scale > 1 ? 'cursor-grab' : 'cursor-zoom-in'}`}
+            style={{ touchAction: 'none' }}
+            onWheel={onWheel}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerCancel}
+            onContextMenu={(e) => e.preventDefault()}
+        >
+            <div
+                className="absolute top-0 left-0 will-change-transform"
+                style={{
+                    transform: `translate(${translate.x}px, ${translate.y}px) scale(${totalScale})`,
+                    transformOrigin: '0 0'
+                }}
+            >
+                <img
+                    src={src}
+                    alt={alt}
+                    className="block select-none"
+                    draggable={false}
+                    onLoad={(e) => {
+                        const img = e.currentTarget;
+                        setImageSize({ w: img.naturalWidth || img.width, h: img.naturalHeight || img.height });
+                    }}
+                    onError={(e) => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = '/file.svg';
+                    }}
+                />
+            </div>
+        </div>
+    );
+});
+
+ZoomPanImage.displayName = 'ZoomPanImage';
+
 export default function ManuscriptComparisonModal({
     isOpen,
     onClose,
@@ -48,6 +316,9 @@ export default function ManuscriptComparisonModal({
     contentType
 }: ManuscriptComparisonModalProps) {
     const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
+    const [libraries, setLibraries] = useState<Library[]>([]);
+    const [selectedLibraryName, setSelectedLibraryName] = useState<string>('');
+    const [secondLibraryName, setSecondLibraryName] = useState<string>('');
     const [selectedManuscript, setSelectedManuscript] = useState<Manuscript | null>(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [zoom, setZoom] = useState(100);
@@ -57,6 +328,8 @@ export default function ManuscriptComparisonModal({
     const [viewMode, setViewMode] = useState<'content' | 'comparison'>('content');
     const [secondManuscript, setSecondManuscript] = useState<Manuscript | null>(null);
     const [secondPage, setSecondPage] = useState(0);
+    const zoomPanLeftRef = useRef<ZoomPanHandle | null>(null);
+    const zoomPanRightRef = useRef<ZoomPanHandle | null>(null);
 
     // Get the section number, handling both Post (sermonNumber) and RadisContent (number)
     const getSectionNumber = () => {
@@ -74,19 +347,94 @@ export default function ManuscriptComparisonModal({
         }
     }, [isOpen, sectionNumber]);
 
+    const inferLibraryNameForManuscript = useCallback((manuscript: Manuscript, availableLibraries: Library[]): string | null => {
+        const fileNamesJoined = (manuscript.files || []).map(f => f.name?.toLowerCase() || '').join(' ');
+        if (!fileNamesJoined) return null;
+
+        for (const library of availableLibraries) {
+            const libraryName = (library.name || '').toLowerCase();
+            if (!libraryName) continue;
+
+            if (libraryName.includes('mar') && libraryName.includes('ashi')) {
+                if (fileNamesJoined.includes("mar'ashi") || fileNamesJoined.includes("marashi") || fileNamesJoined.includes("mar_ashi") || fileNamesJoined.includes("qum_mar")) {
+                    return library.name;
+                }
+                continue;
+            }
+
+            if (libraryName.includes('shahrastan')) {
+                if (fileNamesJoined.includes('shahrastan')) {
+                    return library.name;
+                }
+                continue;
+            }
+
+            if (libraryName.includes('rampur')) {
+                if (fileNamesJoined.includes('rampur')) {
+                    return library.name;
+                }
+                continue;
+            }
+
+            const significantPart = libraryName.split(' ')[0];
+            if (significantPart && significantPart.length > 3 && fileNamesJoined.includes(significantPart)) {
+                return library.name;
+            }
+        }
+
+        return null;
+    }, []);
+
     const fetchManuscripts = async () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await manuscriptsApi.getManuscriptsBySection(sectionNumber!);
-            if (response.data && response.data.length > 0) {
-                setManuscripts(response.data);
-                setSelectedManuscript(response.data[0]);
-                if (response.data.length > 1) {
-                    setSecondManuscript(response.data[1]);
-                } else {
-                    setSecondManuscript(response.data[0]);
+            const fetchAllLibraries = async (): Promise<Library[]> => {
+                const first = await librariesApi.getAllLibraries(1, 100);
+                let all = first.data || [];
+                const totalPages = first.meta?.pagination?.pageCount || 1;
+
+                if (totalPages > 1) {
+                    const rest = [];
+                    for (let page = 2; page <= totalPages; page++) {
+                        rest.push(librariesApi.getAllLibraries(page, 100));
+                    }
+                    const responses = await Promise.all(rest);
+                    for (const resp of responses) {
+                        if (resp.data) {
+                            all = [...all, ...resp.data];
+                        }
+                    }
                 }
+
+                return all;
+            };
+
+            const [fetchedLibraries, manuscriptsResponse] = await Promise.all([
+                fetchAllLibraries(),
+                manuscriptsApi.getManuscriptsBySection(sectionNumber!)
+            ]);
+
+            setLibraries(fetchedLibraries);
+
+            const fetchedManuscripts = manuscriptsResponse.data || [];
+            const manuscriptsWithLibraryNames = fetchedManuscripts.filter(m => inferLibraryNameForManuscript(m, fetchedLibraries));
+
+            if (manuscriptsWithLibraryNames.length > 0) {
+                setManuscripts(manuscriptsWithLibraryNames);
+
+                const uniqueLibraryNames = Array.from(new Set(manuscriptsWithLibraryNames.map(m => inferLibraryNameForManuscript(m, fetchedLibraries)).filter(Boolean) as string[]));
+                const firstLibraryName = uniqueLibraryNames[0] || '';
+                const secondName = uniqueLibraryNames[1] || firstLibraryName;
+
+                setSelectedLibraryName(firstLibraryName);
+                setSecondLibraryName(secondName);
+
+                const firstManuscript = manuscriptsWithLibraryNames.find(m => inferLibraryNameForManuscript(m, fetchedLibraries) === firstLibraryName) || null;
+                const secondSelected = manuscriptsWithLibraryNames.find(m => inferLibraryNameForManuscript(m, fetchedLibraries) === secondName) || firstManuscript;
+
+                setSelectedManuscript(firstManuscript);
+                setSecondManuscript(secondSelected);
                 setCurrentPage(0);
                 setSecondPage(0);
             } else {
@@ -103,16 +451,27 @@ export default function ManuscriptComparisonModal({
 
 
     const handleZoomIn = () => {
-        setZoom(prev => Math.min(200, prev + 25));
+        zoomPanLeftRef.current?.zoomIn();
+        zoomPanRightRef.current?.zoomIn();
     };
 
     const handleZoomOut = () => {
-        setZoom(prev => Math.max(50, prev - 25));
+        zoomPanLeftRef.current?.zoomOut();
+        zoomPanRightRef.current?.zoomOut();
     };
 
     const toggleImageFullscreen = () => {
         setIsImageFullscreen(!isImageFullscreen);
     };
+
+    useEffect(() => {
+        zoomPanLeftRef.current?.reset();
+        setZoom(100);
+    }, [selectedManuscript, currentPage]);
+
+    useEffect(() => {
+        zoomPanRightRef.current?.reset();
+    }, [secondManuscript, secondPage]);
 
     const allPages = useMemo(() => {
         if (!selectedManuscript) return [];
@@ -168,17 +527,25 @@ export default function ManuscriptComparisonModal({
             .trim();
     };
 
-    // Helper function to get library/manuscript name
-    const getManuscriptDisplayName = useCallback((ms: Manuscript): string => {
-        if (ms.bookName) return ms.bookName;
-        if (ms.library) return ms.library;
-        // Try to infer from file names
-        const firstFileName = ms.files?.[0]?.name?.toLowerCase() || '';
-        if (firstFileName.includes("mar'ashi") || firstFileName.includes("marashi") || firstFileName.includes("qum_mar")) return "Mar'ashi MS";
-        if (firstFileName.includes("shahrastan")) return "Shahrastani MS";
-        if (firstFileName.includes("rampur")) return "Rampur Raza MS";
-        return `Manuscript ${ms.id}`;
-    }, []);
+    const availableLibraryOptions = useMemo(() => {
+        const uniqueNames = Array.from(new Set(libraries.map(l => l.name).filter(Boolean)));
+        uniqueNames.sort((a, b) => a.localeCompare(b));
+        return uniqueNames.map(name => ({ value: name, label: name }));
+    }, [libraries]);
+
+    const handleLibraryChange = useCallback((libraryName: string) => {
+        setSelectedLibraryName(libraryName);
+        const ms = manuscripts.find(m => inferLibraryNameForManuscript(m, libraries) === libraryName) || null;
+        setSelectedManuscript(ms);
+        setCurrentPage(0);
+    }, [inferLibraryNameForManuscript, libraries, manuscripts]);
+
+    const handleSecondLibraryChange = useCallback((libraryName: string) => {
+        setSecondLibraryName(libraryName);
+        const ms = manuscripts.find(m => inferLibraryNameForManuscript(m, libraries) === libraryName) || null;
+        setSecondManuscript(ms);
+        setSecondPage(0);
+    }, [inferLibraryNameForManuscript, libraries, manuscripts]);
 
     // Sort paragraphs by number
     const sortedParagraphs = [...(content.paragraphs || [])].sort((a, b) => {
@@ -317,22 +684,16 @@ export default function ManuscriptComparisonModal({
                                         <div className="px-4 py-3 border-b border-gray-200 bg-white flex justify-between items-center bg-linear-to-r from-[#43896B]/5 to-transparent shrink-0">
                                             <div className="flex-1 max-w-[250px]">
                                                 <Select
-                                                    value={String(selectedManuscript?.id || '')}
-                                                    onChange={(value) => {
-                                                        const ms = manuscripts.find(m => m.id === parseInt(value));
-                                                        if (ms) handleManuscriptChange(ms);
-                                                    }}
-                                                    options={manuscripts.map(ms => ({
-                                                        value: String(ms.id),
-                                                        label: getManuscriptDisplayName(ms)
-                                                    }))}
+                                                    value={selectedLibraryName}
+                                                    onChange={handleLibraryChange}
+                                                    options={availableLibraryOptions}
                                                     className="w-full"
                                                 />
                                             </div>
                                             <div className="flex items-center gap-2 ml-4">
-                                                <button onClick={handleZoomOut} disabled={zoom <= 50} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ZoomOut className="w-4 h-4" /></button>
+                                                <button onClick={handleZoomOut} disabled={zoom <= 100} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ZoomOut className="w-4 h-4" /></button>
                                                 <span className="text-xs font-bold text-gray-500 w-10 text-center">{zoom}%</span>
-                                                <button onClick={handleZoomIn} disabled={zoom >= 200} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ZoomIn className="w-4 h-4" /></button>
+                                                <button onClick={handleZoomIn} disabled={zoom >= 800} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ZoomIn className="w-4 h-4" /></button>
                                             </div>
                                             <div className="flex items-center gap-2 ml-4">
                                                 <button onClick={handlePrevPage} disabled={currentPage === 0} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ChevronLeft className="w-5 h-5" /></button>
@@ -341,15 +702,15 @@ export default function ManuscriptComparisonModal({
                                             </div>
                                         </div>
 
-                                        <div className="flex-1 overflow-auto p-4 bg-gray-900/5 custom-scrollbar">
+                                        <div className="flex-1 overflow-hidden p-4 bg-gray-900/5 custom-scrollbar">
                                             {currentPageUrl ? (
-                                                <div className="flex items-center justify-center min-h-full">
-                                                    <img
+                                                <div className="w-full h-full bg-white shadow-2xl rounded-lg overflow-hidden">
+                                                    <ZoomPanImage
+                                                        key={`${selectedManuscript?.id || 'm1'}-${currentPage}`}
+                                                        ref={zoomPanLeftRef}
                                                         src={currentPageUrl}
                                                         alt="Manuscript 1"
-                                                        className="max-w-full h-auto shadow-2xl rounded-lg transition-transform cursor-zoom-in"
-                                                        onDoubleClick={() => setZoom(prev => prev > 100 ? 100 : 175)}
-                                                        style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'top center' }}
+                                                        onZoomChange={setZoom}
                                                     />
                                                 </div>
                                             ) : <MissingPagePlaceholder pageNumber={currentPage + 1} />}
@@ -407,18 +768,9 @@ export default function ManuscriptComparisonModal({
                                                 <div className="px-4 py-3 border-b border-gray-200 bg-white flex justify-between items-center bg-linear-to-l from-[#43896B]/5 to-transparent shrink-0">
                                                     <div className="flex-1 max-w-[250px]">
                                                         <Select
-                                                            value={String(secondManuscript?.id || '')}
-                                                            onChange={(value) => {
-                                                                const ms = manuscripts.find(m => m.id === parseInt(value));
-                                                                if (ms) {
-                                                                    setSecondManuscript(ms);
-                                                                    setSecondPage(0);
-                                                                }
-                                                            }}
-                                                            options={manuscripts.map(ms => ({
-                                                                value: String(ms.id),
-                                                                label: getManuscriptDisplayName(ms)
-                                                            }))}
+                                                            value={secondLibraryName}
+                                                            onChange={handleSecondLibraryChange}
+                                                            options={availableLibraryOptions}
                                                             className="w-full"
                                                         />
                                                     </div>
@@ -428,15 +780,15 @@ export default function ManuscriptComparisonModal({
                                                         <button onClick={() => setSecondPage(p => Math.min(secondManuscriptPages.length - 1, p + 1))} disabled={secondPage === secondManuscriptPages.length - 1} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ChevronRight className="w-5 h-5" /></button>
                                                     </div>
                                                 </div>
-                                                <div className="flex-1 overflow-auto p-4 bg-gray-900/5 custom-scrollbar">
+                                                <div className="flex-1 overflow-hidden p-4 bg-gray-900/5 custom-scrollbar">
                                                     {secondPageUrl ? (
-                                                        <div className="flex items-center justify-center min-h-full">
-                                                            <img
+                                                        <div className="w-full h-full bg-white shadow-2xl rounded-lg overflow-hidden">
+                                                            <ZoomPanImage
+                                                                key={`${secondManuscript?.id || 'm2'}-${secondPage}`}
+                                                                ref={zoomPanRightRef}
                                                                 src={secondPageUrl}
                                                                 alt="Manuscript 2"
-                                                                className="max-w-full h-auto shadow-2xl rounded-lg transition-transform cursor-zoom-in"
-                                                                onDoubleClick={() => setZoom(prev => prev > 100 ? 100 : 175)}
-                                                                style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'top center' }}
+                                                                onZoomChange={setZoom}
                                                             />
                                                         </div>
                                                     ) : <MissingPagePlaceholder pageNumber={secondPage + 1} />}

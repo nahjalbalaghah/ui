@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, ScrollText, Loader2 } from 'lucide-react';
-import { glossaryEntriesApi, GlossaryEntry } from '@/api/glossary-entries';
+import { Source } from '@/api/orations';
+import { postsApi } from '@/api/posts';
 
 interface SourceDetailsContentProps {
     documentId?: string;
@@ -22,17 +23,37 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
         return undefined;
     })();
 
-    const [source, setSource] = useState<GlossaryEntry | null>(null);
+    const postId = params.params && Array.isArray(params.params) ? params.params[1] : undefined;
+
+    const [source, setSource] = useState<Source | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchSourceDetails = async () => {
-            if (!documentId) return;
+            if (!documentId || !postId) return;
             try {
                 setLoading(true);
-                const data = await glossaryEntriesApi.getGlossaryEntryByDocumentId(documentId);
-                setSource(data);
+                // Fetch the post to find the source in its paragraphs
+                const post = await postsApi.getPostById(parseInt(postId));
+                if (post) {
+                    let foundSource: Source | undefined;
+                    for (const p of post.paragraphs) {
+                        if (p.appendix_of_sources) {
+                            foundSource = p.appendix_of_sources.find(s => 
+                                s.documentId === documentId || s.id.toString() === documentId
+                            );
+                            if (foundSource) break;
+                        }
+                    }
+                    if (foundSource) {
+                        setSource(foundSource);
+                    } else {
+                        setError('Source not found in this post');
+                    }
+                } else {
+                    setError('Post not found');
+                }
             } catch (err) {
                 console.error('Failed to fetch source details:', err);
                 setError('Failed to load source details. Please try again later.');
@@ -42,7 +63,7 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
         };
 
         fetchSourceDetails();
-    }, [documentId]);
+    }, [documentId, postId]);
 
     if (loading) {
         return (

@@ -20,6 +20,13 @@ interface ContentListingProps {
   isInfiniteLoading?: boolean;
   isTransitioning?: boolean;
   displayMode?: 'both' | 'english-only' | 'arabic-only';
+  listingParams?: {
+    page?: string;
+    search?: string;
+    sort?: string;
+    edition?: string;
+    display?: string;
+  };
   showTopPagination?: boolean;
 }
 
@@ -38,6 +45,7 @@ export default function ContentListing({
   isInfiniteLoading = false,
   isTransitioning = false,
   displayMode = 'both',
+  listingParams,
   showTopPagination = false
 }: ContentListingProps) {
   const [isMobile, setIsMobile] = useState(false);
@@ -67,7 +75,7 @@ export default function ContentListing({
           key={index}
           ref={index === content.length - 1 && isMobile ? lastElementRef : undefined}
         >
-          <ListViewItem item={item} contentType={contentType} displayMode={displayMode} />
+          <ListViewItem item={item} contentType={contentType} displayMode={displayMode} listingParams={listingParams} />
         </div>
       ))}
     </div>

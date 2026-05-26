@@ -8,7 +8,8 @@ import Button from '@/app/components/button';
 import Input from '@/app/components/input';
 import Select from '@/app/components/select';
 import AlphabetChips from '@/app/components/alphabet-chips';
-import { glossaryEntriesApi, GlossaryEntry } from '@/api/glossary-entries';
+import { Source } from '@/api/orations';
+import { postsApi } from '@/api/posts';
 
 interface SourcesListContentProps {
     contentTypeLabel: string;
@@ -20,7 +21,7 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
     const pathname = usePathname();
     const [searchQuery, setSearchQuery] = useState('');
     const [language, setLanguage] = useState<'English' | 'Arabic'>('English');
-    const [sources, setSources] = useState<GlossaryEntry[]>([]);
+    const [sources, setSources] = useState<Source[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -28,15 +29,39 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
         const fetchSources = async () => {
             try {
                 setLoading(true);
-                // Determine if this is a post-level number (e.g. "1.1") or paragraph-level (e.g. "1.1.1")
+                // itemNumber can be "1.1" (post) or "1.1.1" (paragraph)
                 const parts = itemNumber.split('.');
-                const isPostLevel = parts.length <= 2;
-                const response = await glossaryEntriesApi.getGlossaryEntries(
-                    isPostLevel
-                        ? { postSermonNumber: itemNumber }
-                        : { paragraphNumber: itemNumber }
-                );
-                setSources(response.data);
+                const sermonNumber = parts.slice(0, 2).join('.');
+                const isParagraphLevel = parts.length > 2;
+
+                const response = await postsApi.getPosts({
+                    filters: {
+                        sermonNumber,
+                        type: contentTypeLabel.slice(0, -1) // "Orations" -> "Oration"
+                    }
+                });
+
+                if (response.data && response.data.length > 0) {
+                    const post = response.data[0];
+                    let allSources: Source[] = [];
+
+                    if (isParagraphLevel) {
+                        const paragraph = post.paragraphs.find(p => p.number === itemNumber);
+                        if (paragraph && paragraph.appendix_of_sources) {
+                            allSources = paragraph.appendix_of_sources;
+                        }
+                    } else {
+                        // Collect sources from all paragraphs in the post
+                        post.paragraphs.forEach(p => {
+                            if (p.appendix_of_sources) {
+                                allSources = [...allSources, ...p.appendix_of_sources];
+                            }
+                        });
+                    }
+                    setSources(allSources);
+                } else {
+                    setSources([]);
+                }
             } catch (err) {
                 console.error('Failed to fetch sources:', err);
                 setError('Failed to load sources. Please try again later.');
@@ -48,7 +73,7 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
         if (itemNumber) {
             fetchSources();
         }
-    }, [itemNumber]);
+    }, [itemNumber, contentTypeLabel]);
 
     const handleClearFilters = () => {
         setSearchQuery('');
@@ -58,9 +83,13 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
     const hasActiveFilters = searchQuery !== '' || language !== 'English';
 
     const filteredSources = sources.filter(source => {
-        const matchesSearch = source.word.toLowerCase().includes(searchQuery.toLowerCase());
+        const query = searchQuery.toLowerCase();
+        const matchesSearch = 
+            (source.word && source.word.toLowerCase().includes(query)) ||
+            (source.author && source.author.toLowerCase().includes(query)) ||
+            (source.title && source.title.toLowerCase().includes(query));
         // For now, Strapi data might not have language field, so we just filter by search
-        return matchesSearch;
+        return !!matchesSearch;
     });
 
     if (loading) {
@@ -156,14 +185,14 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                                             </td>
                                             <td className="px-6 py-4">
                                                 <Link
-                                                    href={`${pathname}/${source.documentId}`}
+                                                    href={`${pathname}/${source.documentId || source.id}`}
                                                     className="inline-flex items-center gap-1 text-[#43896B] hover:text-[#367556] font-medium transition-colors group"
                                                 >
                                                     {source.word}
                                                 </Link>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <Link href={`${pathname}/${source.documentId}`}>
+                                                <Link href={`${pathname}/${source.documentId || source.id}`}>
                                                     <Button
                                                         variant="outlined"
                                                         icon={<ArrowRight className="w-4 h-4" />}

@@ -37,9 +37,16 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
   const returnPage = searchParams.get('returnPage');
   const returnSort = searchParams.get('returnSort');
   const returnSearch = searchParams.get('returnSearch');
+  const editionId = searchParams.get('edition');
+  const display = searchParams.get('display');
   const highlightRef = searchParams.get('highlightRef');
   const englishWord = searchParams.get('word');
   const arabicWord = searchParams.get('arabicWord');
+
+  const buildDetailsUrl = (postId: number | string) => {
+    const qs = searchParams.toString();
+    return qs ? `/content/details/${contentType}/${postId}?${qs}` : `/content/details/${contentType}/${postId}`;
+  };
 
   const [content, setContent] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
@@ -69,11 +76,18 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
           'sayings': 'Saying'
         };
 
+        let editionTitle: string | undefined;
+        if (editionId) {
+          const editionsResponse = await postsApi.getEditions();
+          const matchingEdition = (editionsResponse.data || []).find((ed: any) => ed?.id?.toString() === editionId);
+          editionTitle = matchingEdition?.title;
+        }
+
         while (hasMore) {
           const response = await postsApi.getPosts({
             page: currentPage,
             pageSize: pageSize,
-            filters: { type: typeMapping[contentType] },
+            filters: { type: typeMapping[contentType], ...(editionTitle ? { editionTitle } : {}) },
             fields: ['id', 'sermonNumber'],
             populate: [], // Optimize: we only need ID and number for the dropdown
             sort: 'id:asc'
@@ -101,6 +115,8 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
                 number: numStr || p.id.toString()
               };
             })
+            .filter(item => item.number)
+            .filter((item, index, arr) => arr.findIndex(x => x.number === item.number) === index)
             .sort((a, b) => {
               const numA = parseInt(a.number);
               const numB = parseInt(b.number);
@@ -114,13 +130,15 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
       }
     };
     fetchAllNumbers();
-  }, [contentType]);
+  }, [contentType, editionId]);
 
   const getBackUrl = () => {
     const urlParams = new URLSearchParams();
     if (returnPage) urlParams.set('page', returnPage);
     if (returnSort) urlParams.set('sort', returnSort);
     if (returnSearch) urlParams.set('search', returnSearch);
+    if (editionId) urlParams.set('edition', editionId);
+    if (display) urlParams.set('display', display);
 
     const queryString = urlParams.toString();
     return queryString ? `/${contentType}?${queryString}` : `/${contentType}`;
@@ -129,7 +147,7 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
   const handleBackNavigation = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    if (window.history.length > 1 && (returnPage || returnSort || returnSearch)) {
+    if (window.history.length > 1 && (returnPage || returnSort || returnSearch || editionId || display)) {
       router.back();
     } else {
       router.push(getBackUrl());
@@ -285,7 +303,7 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
   };
 
   const navigateToPost = (post: Post) => {
-    router.push(`/content/details/${contentType}/${post.id}`);
+    router.push(buildDetailsUrl(post.id));
   };
 
   if (loading) {
@@ -376,7 +394,7 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
 
               <Select
                 value={id.toString()}
-                onChange={(value: string) => router.push(`/content/details/${contentType}/${value}`)}
+                onChange={(value: string) => router.push(buildDetailsUrl(value))}
                 options={allItemNumbers.map(item => ({ value: item.id.toString(), label: `${getContentTypeLabel()} ${item.number}` }))}
                 placeholder={`Go to #`}
                 className="w-36 h-11 shrink-0"

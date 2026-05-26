@@ -21,14 +21,17 @@ export default function QuranHadithContent() {
     reference_type: (searchParams.get('reference_type') as any) || '',
     surah_name: searchParams.get('surah_name') || '',
     surah_number: searchParams.get('surah_number') || '',
-    // ... (rest of the fields)
+    verse_translation: searchParams.get('verse_translation') || '',
+    verse_text: searchParams.get('verse_text') || '',
+    startsWith_surah: searchParams.get('startsWith_surah') || '',
+    startsWith_verse: searchParams.get('startsWith_verse') || '',
     language: (searchParams.get('language') as 'English' | 'Arabic') || 'English',
   };
 
   const [allItems, setAllItems] = useState<QuranHadith[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [surahNames, setSurahNames] = useState<string[]>([]);
+  const [surahNames, setSurahNames] = useState<{ name: string; arabicName: string }[]>([]);
 
   const [filters, setFilters] = useState<QuranHadithFilters>(appliedFilters);
 
@@ -37,7 +40,11 @@ export default function QuranHadithContent() {
     setFilters({
       reference_type: (searchParams.get('reference_type') as any) || '',
       surah_name: searchParams.get('surah_name') || '',
-      // ... (rest of the fields)
+      surah_number: searchParams.get('surah_number') || '',
+      verse_translation: searchParams.get('verse_translation') || '',
+      verse_text: searchParams.get('verse_text') || '',
+      startsWith_surah: searchParams.get('startsWith_surah') || '',
+      startsWith_verse: searchParams.get('startsWith_verse') || '',
       language: (searchParams.get('language') as 'English' | 'Arabic') || 'English',
     });
   }, [searchParams]);
@@ -109,8 +116,13 @@ export default function QuranHadithContent() {
 
     // Sort Alphabetically
     result.sort((a, b) => {
-      const wordA = a.surah_name || '';
-      const wordB = b.surah_name || '';
+      const isArabic = appliedFilters.language === 'Arabic';
+      const wordA = (isArabic && a.surah_name_arabic) ? a.surah_name_arabic : (a.surah_name || '');
+      const wordB = (isArabic && b.surah_name_arabic) ? b.surah_name_arabic : (b.surah_name || '');
+      
+      if (isArabic) {
+        return wordA.localeCompare(wordB, 'ar');
+      }
       return normalizeForSort(wordA).localeCompare(normalizeForSort(wordB));
     });
 
@@ -127,7 +139,11 @@ export default function QuranHadithContent() {
     const params = new URLSearchParams();
     if (filtersToUse.reference_type) params.set('reference_type', filtersToUse.reference_type);
     if (filtersToUse.surah_name) params.set('surah_name', filtersToUse.surah_name);
-    // ... (rest of the params)
+    if (filtersToUse.surah_number) params.set('surah_number', filtersToUse.surah_number);
+    if (filtersToUse.verse_translation) params.set('verse_translation', filtersToUse.verse_translation);
+    if (filtersToUse.verse_text) params.set('verse_text', filtersToUse.verse_text);
+    if (filtersToUse.startsWith_surah) params.set('startsWith_surah', filtersToUse.startsWith_surah);
+    if (filtersToUse.startsWith_verse) params.set('startsWith_verse', filtersToUse.startsWith_verse);
     if (filtersToUse.language && filtersToUse.language !== 'English') params.set('language', filtersToUse.language);
 
     params.set('page', '1');
@@ -138,7 +154,11 @@ export default function QuranHadithContent() {
     setFilters({
       reference_type: '',
       surah_name: '',
-      // ... (rest of the fields)
+      surah_number: '',
+      verse_translation: '',
+      verse_text: '',
+      startsWith_surah: '',
+      startsWith_verse: '',
       language: 'English',
     });
     router.push(pathname);
@@ -230,7 +250,10 @@ export default function QuranHadithContent() {
                   onChange={(value) => setFilters({ ...filters, surah_name: value })}
                   options={[
                     { value: '', label: 'All Surahs' },
-                    ...surahNames.map(name => ({ value: name, label: name }))
+                    ...surahNames.map(surah => ({ 
+                      value: surah.name, 
+                      label: filters.language === 'Arabic' && surah.arabicName ? surah.arabicName : surah.name 
+                    }))
                   ]}
                   placeholder="Select a Surah"
                 />
@@ -264,6 +287,14 @@ export default function QuranHadithContent() {
               Apply Filters
             </Button>
           </div>
+        </div>
+
+        <div className="mb-6">
+          <AlphabetChips
+            selectedLetter={filters.language === 'English' ? filters.startsWith_surah || '' : filters.startsWith_verse || ''}
+            onSelectLetter={handleLetterSelect}
+            language={filters.language || 'English'}
+          />
         </div>
 
         <div>
@@ -350,7 +381,15 @@ export default function QuranHadithContent() {
             <>
               <div className="mb-4 flex items-center justify-between">
                 <div className="text-sm text-gray-600">
-                  Showing <span className="font-semibold text-gray-900">{items.length}</span> of <span className="font-semibold text-gray-900">{total}</span> results
+                  {appliedFilters.language === 'Arabic' ? (
+                    <>
+                      عرض <span className="font-semibold text-gray-900">{items.length}</span> من <span className="font-semibold text-gray-900">{total}</span> نتائج
+                    </>
+                  ) : (
+                    <>
+                      Showing <span className="font-semibold text-gray-900">{items.length}</span> of <span className="font-semibold text-gray-900">{total}</span> results
+                    </>
+                  )}
                 </div>
                 {totalPages > 1 && (
                   <div className="flex justify-end">
@@ -375,11 +414,17 @@ export default function QuranHadithContent() {
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
-                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>Surah</th>
-                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>Verse</th>
+                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>
+                          {appliedFilters.language === 'Arabic' ? 'السورة' : 'Surah'}
+                        </th>
+                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>
+                          {appliedFilters.language === 'Arabic' ? 'الآية' : 'Verse'}
+                        </th>
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Translation</th>}
-                        {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Arabic Text</th>}
-                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">References</th>
+                        {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">النص العربي</th>}
+                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
+                          {appliedFilters.language === 'Arabic' ? 'المراجع' : 'References'}
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -400,10 +445,12 @@ export default function QuranHadithContent() {
                           >
                             <td className="px-6 py-4">
                               <span className="text-gray-900 font-medium">
-                                {item.surah_name || '-'}
+                                {(appliedFilters.language === 'Arabic' && item.surah_name_arabic) 
+                                  ? item.surah_name_arabic 
+                                  : (item.surah_name || '-')}
                               </span>
                               {item.surah_number && (
-                                <span className="text-gray-500 text-sm ml-1">
+                                <span className={`text-gray-500 text-sm ${appliedFilters.language === 'Arabic' ? 'mr-1' : 'ml-1'}`}>
                                   ({item.surah_number})
                                 </span>
                               )}
@@ -463,11 +510,13 @@ export default function QuranHadithContent() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="text-sm font-semibold text-[#43896B]">
-                              {item.surah_name}
+                              {(appliedFilters.language === 'Arabic' && item.surah_name_arabic) 
+                                ? item.surah_name_arabic 
+                                : item.surah_name}
                             </span>
                             {item.verse_numbers && (
                               <span className="text-sm text-gray-500">
-                                Verse {item.verse_numbers}
+                                {appliedFilters.language === 'Arabic' ? 'الآية' : 'Verse'} {item.verse_numbers}
                               </span>
                             )}
                           </div>

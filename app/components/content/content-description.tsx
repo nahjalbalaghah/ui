@@ -99,11 +99,27 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
   }, [content.sermonNumber]);
 
   useEffect(() => {
-    if (!content.sermonNumber) return;
-    glossaryEntriesApi.getGlossaryEntries({ postSermonNumber: content.sermonNumber, pageSize: 1 })
-      .then(res => setHasPostLevelSources(res.data.length > 0))
-      .catch(() => setHasPostLevelSources(false));
-  }, [content.sermonNumber]);
+    // Check if any paragraph has sources in the appendix
+    const hasAppendixSources = content.paragraphs.some(p => {
+      const s = p.appendix_of_sources || (p as any).sources;
+      if (!s) return false;
+      if (Array.isArray(s)) return s.length > 0;
+      if ((s as any).data && Array.isArray((s as any).data)) return (s as any).data.length > 0;
+      return false;
+    });
+
+    if (hasAppendixSources) {
+      setHasPostLevelSources(true);
+      return;
+    }
+
+    // Fallback: check if there are any glossary entries for this post
+    if (content.sermonNumber) {
+      glossaryEntriesApi.getGlossaryEntries({ postSermonNumber: content.sermonNumber, pageSize: 1 })
+        .then(res => setHasPostLevelSources(res.data.length > 0))
+        .catch(() => setHasPostLevelSources(false));
+    }
+  }, [content.paragraphs, content.sermonNumber]);
 
   let allReferences: string[] = [];
   const heading = content.heading;
@@ -456,7 +472,11 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                     <span className="inline-flex items-center px-3 py-1 text-sm font-semibold text-[#43896B] bg-[#43896B]/10 rounded-full border border-[#43896B]/20">
                       {paragraph.number}
                     </span>
-                    {paragraph.appendix_of_sources && paragraph.appendix_of_sources.length > 0 && (
+                    {(() => {
+                      const s = paragraph.appendix_of_sources || (paragraph as any).sources;
+                      const hasSources = s && (Array.isArray(s) ? s.length > 0 : ((s as any).data && Array.isArray((s as any).data) && (s as any).data.length > 0));
+                      return hasSources;
+                    })() && (
                       <Link href={`/${contentType}/details/${content.id}/sources?num=${paragraph.number}`}>
                         <Button variant="outlined" icon={<ScrollText className="w-4 h-4" />} className="shrink-0 py-1! px-2! text-xs!">
                           Sources
