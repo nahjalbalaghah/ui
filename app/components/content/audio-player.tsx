@@ -4,25 +4,35 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward } from 'lucide-react';
 
 interface AudioPlayerProps {
-    url?: string;
+    tracks?: {
+        arabic?: string;
+        english?: string;
+    };
 }
 
-export default function AudioPlayer({ url }: AudioPlayerProps) {
+export default function AudioPlayer({ tracks }: AudioPlayerProps) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [selectedTrack, setSelectedTrack] = useState<'arabic' | 'english'>(() => tracks?.arabic ? 'arabic' : 'english');
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    const fullUrl = url ? (url.startsWith('http') ? url : `https://test-admin.nahjalbalaghah.org${url}`) : null;
+    const currentUrl = selectedTrack === 'arabic' ? tracks?.arabic : tracks?.english;
+
+    useEffect(() => {
+        if (tracks?.arabic) setSelectedTrack('arabic');
+        else if (tracks?.english) setSelectedTrack('english');
+    }, [tracks?.arabic, tracks?.english]);
 
     useEffect(() => {
         if (audioRef.current) {
             audioRef.current.pause();
             setIsPlaying(false);
             setCurrentTime(0);
+            setDuration(0);
         }
-    }, [url]);
+    }, [currentUrl]);
 
     const togglePlay = () => {
         if (!audioRef.current) return;
@@ -68,13 +78,40 @@ export default function AudioPlayer({ url }: AudioPlayerProps) {
 
     const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
-    if (!url) return null;
+    if (!tracks?.arabic && !tracks?.english) return null;
 
     return (
-        <div className="flex items-center gap-4 bg-white border border-gray-200 rounded-2xl px-6 py-3 hover:shadow-md transition-all group max-w-md w-full">
+        <div className="flex flex-col gap-3 bg-white border border-gray-200 rounded-2xl px-6 py-4 hover:shadow-md transition-all group max-w-xl w-full">
+            {(tracks?.arabic || tracks?.english) && (
+                <div className="flex items-center gap-2">
+                    {tracks?.arabic && (
+                        <button
+                            onClick={() => setSelectedTrack('arabic')}
+                            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${selectedTrack === 'arabic'
+                                ? 'bg-[#43896B] text-white'
+                                : 'bg-[#43896B]/10 text-[#43896B] hover:bg-[#43896B]/20'
+                                }`}
+                        >
+                            Arabic
+                        </button>
+                    )}
+                    {tracks?.english && (
+                        <button
+                            onClick={() => setSelectedTrack('english')}
+                            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${selectedTrack === 'english'
+                                ? 'bg-[#43896B] text-white'
+                                : 'bg-[#43896B]/10 text-[#43896B] hover:bg-[#43896B]/20'
+                                }`}
+                        >
+                            English
+                        </button>
+                    )}
+                </div>
+            )}
+            <div className="flex items-center gap-4">
             <audio
                 ref={audioRef}
-                src={fullUrl || ''}
+                src={currentUrl || ''}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleEnded}
@@ -136,6 +173,7 @@ export default function AudioPlayer({ url }: AudioPlayerProps) {
                         <Volume2 className="w-4 h-4" />
                     )}
                 </button>
+            </div>
             </div>
         </div>
     );

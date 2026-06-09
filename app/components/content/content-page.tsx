@@ -31,7 +31,7 @@ function ContentPageContent({ config }: ContentPageProps) {
 
   const [searchTerm, setSearchTerm] = useState(() => searchParams.get('search') || '');
   const [appliedSearchTerm, setAppliedSearchTerm] = useState(() => searchParams.get('search') || '');
-  const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || '');
+  const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || 'sermon-asc');
   const [selectedEdition, setSelectedEdition] = useState(() => searchParams.get('edition') || 'Qutbuddin');
   const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>(() => {
     const raw = searchParams.get('display');
@@ -352,7 +352,7 @@ function ContentPageContent({ config }: ContentPageProps) {
 
     const urlPage = page ? parseInt(page, 10) : 1;
     const urlSearch = search || '';
-    const urlSort = sort || '';
+    const urlSort = sort || 'sermon-asc';
     const urlEdition = edition || 'Qutbuddin';
     const urlDisplay = display === 'english-only' || display === 'arabic-only' || display === 'both' ? display : 'both';
 

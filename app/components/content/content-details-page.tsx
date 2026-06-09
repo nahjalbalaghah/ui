@@ -58,7 +58,7 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
   });
   const [adjacentLoading, setAdjacentLoading] = useState(false);
   const [allItemNumbers, setAllItemNumbers] = useState<{ id: number; number: string }[]>([]);
-  const [audioUrl, setAudioUrl] = useState<string | undefined>(undefined);
+  const [audioTracks, setAudioTracks] = useState<{ arabic?: string; english?: string }>({});
   const [isParallelViewActive, setIsParallelViewActive] = useState(false);
   const [availablePosts, setAvailablePosts] = useState<Post[]>([]);
 
@@ -200,11 +200,12 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
     const fetchAudio = async () => {
       if (content?.sermonNumber) {
         const audio = await audioApi.getAudioBySermonNumber(content.sermonNumber);
-        if (audio?.audioFile?.url) {
-          setAudioUrl(audio.audioFile.url);
-        } else {
-          setAudioUrl(undefined);
-        }
+        setAudioTracks({
+          arabic: audio?.audioTracks?.arabic?.url,
+          english: audio?.audioTracks?.english?.url,
+        });
+      } else {
+        setAudioTracks({});
       }
     };
     fetchAudio();
@@ -417,7 +418,7 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
           {/* Bottom Row: Audio and Action Buttons */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-4 border-t border-gray-100">
             {/* Audio Player */}
-            <AudioPlayer url={audioUrl} />
+            <AudioPlayer tracks={audioTracks} />
 
             <div className="flex flex-wrap items-center gap-3">
               <Button

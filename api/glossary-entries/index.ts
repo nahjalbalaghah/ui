@@ -5,6 +5,9 @@ export interface GlossaryEntry {
   documentId: string;
   word: string;
   content: string;
+  author?: string | null;
+  title?: string | null;
+  volumepage?: string | null;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -80,9 +83,14 @@ export const glossaryEntriesApi = {
       const params: any = {
         'populate': '*',
       };
+      if (/^\d+$/.test(documentId)) params['filters[id][$eq]'] = documentId;
+      else params['filters[documentId][$eq]'] = documentId;
 
-      const response = await api.get(`/api/glossary-entries/${documentId}`, { params });
-      return response.data.data;
+      const response = await api.get('/api/glossary-entries', { params });
+      if (response.data.data && response.data.data.length > 0) {
+        return response.data.data[0];
+      }
+      return null;
     } catch (error) {
       console.error('Error fetching glossary entry by documentId:', error);
       throw error;

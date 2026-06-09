@@ -54,9 +54,11 @@ type ZoomPanImageProps = {
 };
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+const INITIAL_FIT_BOOST = 1.03;
 
 const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, alt, onZoomChange }, ref) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const imgRef = useRef<HTMLImageElement | null>(null);
     const pointersRef = useRef(new Map<number, { x: number; y: number }>());
     const dragRef = useRef<{ active: boolean; startX: number; startY: number; startTx: number; startTy: number; moved: boolean }>({
         active: false,
@@ -101,23 +103,39 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
         return () => window.removeEventListener('resize', updateContainerSize);
     }, [updateContainerSize]);
 
+    useEffect(() => {
+        setImageSize(null);
+        setBaseScale(1);
+        setScale(1);
+        setTranslate({ x: 0, y: 0 });
+        const img = imgRef.current;
+        if (!img || !img.complete) return;
+        const w = img.naturalWidth || img.width;
+        const h = img.naturalHeight || img.height;
+        if (w > 0 && h > 0) {
+            setImageSize({ w, h });
+        }
+    }, [src]);
+
     const centerImage = useCallback((nextBaseScale: number, nextScale: number) => {
         if (!imageSize) return;
         const nextTotal = nextBaseScale * nextScale;
         const x = (containerSize.w - imageSize.w * nextTotal) / 2;
-        const scaledHeight = imageSize.h * nextTotal;
-        const y = scaledHeight > containerSize.h ? 0 : (containerSize.h - scaledHeight) / 2;
+        const y = (containerSize.h - imageSize.h * nextTotal) / 2;
         setTranslate({ x, y });
     }, [containerSize.h, containerSize.w, imageSize]);
 
     useEffect(() => {
         if (!imageSize) return;
         const fitWidth = containerSize.w / imageSize.w;
-        const nextBase = isFinite(fitWidth) && fitWidth > 0 ? clamp(fitWidth, 0.01, 3) : 1;
+        const fitHeight = containerSize.h / imageSize.h;
+        const nextBase = (isFinite(fitWidth) && fitWidth > 0 && isFinite(fitHeight) && fitHeight > 0)
+            ? clamp(Math.max(fitWidth, fitHeight) * INITIAL_FIT_BOOST, 0.01, 5)
+            : 1;
         setBaseScale(nextBase);
         setScale(1);
         centerImage(nextBase, 1);
-        onZoomChange(100);
+        onZoomChange(Math.round(nextBase * 100));
     }, [centerImage, containerSize.h, containerSize.w, imageSize, onZoomChange, src]);
 
     const setScaleAroundPoint = useCallback((clientX: number, clientY: number, nextScale: number) => {
@@ -136,7 +154,7 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
 
         setScale(nextScale);
         setTranslate({ x: nextTx, y: nextTy });
-        onZoomChange(Math.round(nextScale * 100));
+        onZoomChange(Math.round(nextTotal * 100));
     }, [baseScale, onZoomChange, totalScale, translate.x, translate.y]);
 
     const zoomIn = useCallback((clientX?: number, clientY?: number) => {
@@ -157,7 +175,7 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
 
     const reset = useCallback(() => {
         setScale(1);
-        onZoomChange(100);
+        onZoomChange(Math.round(baseScale * 100));
         centerImage(baseScale, 1);
     }, [baseScale, centerImage, onZoomChange]);
 
@@ -229,7 +247,7 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
 
             setScale(nextScale);
             setTranslate({ x: nextTx, y: nextTy });
-            onZoomChange(Math.round(nextScale * 100));
+            onZoomChange(Math.round(nextTotal * 100));
             return;
         }
 
@@ -288,9 +306,10 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
                 }}
             >
                 <img
+                    ref={imgRef}
                     src={src}
                     alt={alt}
-                    className="block select-none"
+                    className="block max-w-none select-none"
                     draggable={false}
                     onLoad={(e) => {
                         const img = e.currentTarget;

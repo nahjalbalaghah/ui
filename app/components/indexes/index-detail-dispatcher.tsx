@@ -32,6 +32,11 @@ const getResultDedupKey = (item: CombinedResult): string => {
     if (item.type === 'Post') {
         return `Post:${(item.data as Post).id}`;
     }
+    if (item.type === 'Paragraph') {
+        const postId = (item.data?.post as Post | undefined)?.id ?? 'unknown';
+        const paragraphNumber = item.data?.paragraph?.number ?? item.matchingParagraphNumber ?? item.reference;
+        return `Paragraph:${postId}:${paragraphNumber}`;
+    }
     if (item.type === 'Radis') {
         return `Radis:${(item.data as RadisIntroduction).number}`;
     }
@@ -145,6 +150,7 @@ export default function IndexDetailDispatcher() {
     const [language, setLanguage] = useState<'english' | 'arabic' | undefined>(undefined);
     const [displayTitle, setDisplayTitle] = useState<string>(term);
     const [glossaryDescription, setGlossaryDescription] = useState<string | null>(null);
+    const [hasLinkedTextReferences, setHasLinkedTextReferences] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -155,6 +161,7 @@ export default function IndexDetailDispatcher() {
             try {
                 let textNumbers: string[] = [];
                 let indexItem: any = null;
+                setHasLinkedTextReferences(true);
 
                 if (refsParam) {
                     textNumbers = refsParam.split(',').filter(Boolean);
@@ -209,10 +216,55 @@ export default function IndexDetailDispatcher() {
                 }
 
                 setLanguage(detectedLanguage);
+                setHasLinkedTextReferences(textNumbers.length > 0);
 
                 const combined: CombinedResult[] = [];
                 const fetchedReferences = new Set<string>();
                 const fetchedContentKeys = new Set<string>();
+
+                const postsBySermonNumber = new Map<string, Post[]>();
+                if (textNumbers.length > 0) {
+                    const parsedRefs = textNumbers
+                        .map((refValue) => ({ refValue, parsed: parseTextReference(refValue) }))
+                        .filter((x): x is { refValue: string; parsed: ReturnType<typeof parseTextReference> } => !!x.parsed);
+
+                    const typeMap: Record<string, string> = { 'oration': 'Oration', 'letter': 'Letter', 'saying': 'Saying' };
+                    const prefixMap: Record<string, string> = { 'oration': '1.', 'letter': '2.', 'saying': '3.' };
+
+                    const sermonNumbersByType: Record<'oration' | 'letter' | 'saying', Set<string>> = {
+                        oration: new Set<string>(),
+                        letter: new Set<string>(),
+                        saying: new Set<string>(),
+                    };
+
+                    for (const { parsed } of parsedRefs) {
+                        if (parsed.type !== 'oration' && parsed.type !== 'letter' && parsed.type !== 'saying') continue;
+                        const mainId = parsed.sectionNumber.split('.')[0];
+                        const sermonNumber = `${prefixMap[parsed.type]}${mainId}`;
+                        sermonNumbersByType[parsed.type].add(sermonNumber);
+                    }
+
+                    const fetchTypePosts = async (type: 'oration' | 'letter' | 'saying') => {
+                        const sermonNumbers = Array.from(sermonNumbersByType[type]);
+                        if (sermonNumbers.length === 0) return;
+                        const res = await postsApi.getPosts({
+                            filters: { sermonNumber: sermonNumbers, type: typeMap[type] },
+                            pageSize: Math.max(50, sermonNumbers.length * 3),
+                        });
+                        for (const post of res.data || []) {
+                            if (!post?.sermonNumber) continue;
+                            const arr = postsBySermonNumber.get(post.sermonNumber) || [];
+                            arr.push(post);
+                            postsBySermonNumber.set(post.sermonNumber, arr);
+                        }
+                    };
+
+                    await Promise.all([
+                        fetchTypePosts('oration').catch((e) => console.error('Failed to prefetch orations for refs', e)),
+                        fetchTypePosts('letter').catch((e) => console.error('Failed to prefetch letters for refs', e)),
+                        fetchTypePosts('saying').catch((e) => console.error('Failed to prefetch sayings for refs', e)),
+                    ]);
+                }
 
                 const pushUniqueResult = (item: CombinedResult | null) => {
                     if (!item) return;
@@ -240,9 +292,9 @@ export default function IndexDetailDispatcher() {
                                 const radisRes = await radisApi.getRadisIntroductionsByNumbers([sectionNumber]);
                                 if (radisRes.data && radisRes.data.length > 0) {
                                     const item = radisRes.data[0];
-                                    const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
-                                    if (detectedLanguage === 'arabic' && !item.arabic) return null;
-                                    if (detectedLanguage === 'english' && !item.translation) return null;
+                                    const preferred = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
+                                    const fallback = detectedLanguage === 'arabic' ? (item.translation || '') : (item.arabic || '');
+                                    const textToSearch = preferred || fallback || '';
                                     const matchingSentence = extractMatchingSentence(textToSearch, term);
                                     return {
                                         type: 'Radis',
@@ -256,9 +308,9 @@ export default function IndexDetailDispatcher() {
                                 const conclusionsRes = await conclusionsApi.getConclusionsByNumbers([sectionNumber]);
                                 if (conclusionsRes.data && conclusionsRes.data.length > 0) {
                                     const item = conclusionsRes.data[0];
-                                    const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
-                                    if (detectedLanguage === 'arabic' && !item.arabic) return null;
-                                    if (detectedLanguage === 'english' && !item.translation) return null;
+                                    const preferred = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
+                                    const fallback = detectedLanguage === 'arabic' ? (item.translation || '') : (item.arabic || '');
+                                    const textToSearch = preferred || fallback || '';
                                     const matchingSentence = extractMatchingSentence(textToSearch, term);
                                     return {
                                         type: 'Conclusion',
@@ -271,9 +323,9 @@ export default function IndexDetailDispatcher() {
                                 const conclusionsRes = await conclusionsApi.getConclusionsByNumbers([sectionNumber]);
                                 if (conclusionsRes.data && conclusionsRes.data.length > 0) {
                                     const item = conclusionsRes.data[0];
-                                    const textToSearch = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
-                                    if (detectedLanguage === 'arabic' && !item.arabic) return null;
-                                    if (detectedLanguage === 'english' && !item.translation) return null;
+                                    const preferred = detectedLanguage === 'arabic' ? (item.arabic || '') : (item.translation || '');
+                                    const fallback = detectedLanguage === 'arabic' ? (item.translation || '') : (item.arabic || '');
+                                    const textToSearch = preferred || fallback || '';
                                     const matchingSentence = extractMatchingSentence(textToSearch, term);
                                     return {
                                         type: 'Conclusion',
@@ -283,18 +335,40 @@ export default function IndexDetailDispatcher() {
                                     };
                                 }
                             } else {
+                                const typeMap: Record<string, string> = { 'oration': 'Oration', 'letter': 'Letter', 'saying': 'Saying' };
+                                const prefixMap: Record<string, string> = { 'oration': '1.', 'letter': '2.', 'saying': '3.' };
+
                                 const parts = sectionNumber.split('.');
                                 const mainId = parts[0];
                                 const subId = parts.length > 1 ? parts[1] : null;
 
-                                const typeMap: Record<string, string> = { 'oration': 'Oration', 'letter': 'Letter', 'saying': 'Saying' };
-                                const prefixMap: Record<string, string> = { 'oration': '1.', 'letter': '2.', 'saying': '3.' };
+                                const itemNumber = mainId;
+                                const querySermonNumber = `${prefixMap[type] || ''}${itemNumber}`;
 
-                                const querySermonNumber = `${prefixMap[type] || ''}${mainId}`;
+                                const fromCache = postsBySermonNumber.get(querySermonNumber) || [];
+                                const cacheCandidates = fromCache.filter(p => p.type === typeMap[type] && isValidPost(p));
 
-                                const postsRes = await postsApi.getPosts({ filters: { sermonNumber: querySermonNumber } });
-                                if (postsRes.data) {
-                                    const matchedPost = postsRes.data.find(p => p.type === typeMap[type] && isValidPost(p));
+                                let candidatePosts: Post[] = cacheCandidates;
+                                if (candidatePosts.length === 0) {
+                                    const postsRes = await postsApi.getPosts({
+                                        filters: {
+                                            $or: [
+                                                { sermonNumber: itemNumber },
+                                                { sermonNumber: querySermonNumber },
+                                                { sermonNumberEndsWith: `.${itemNumber}` }
+                                            ],
+                                            type: typeMap[type]
+                                        },
+                                        pageSize: 50
+                                    });
+                                    candidatePosts = (postsRes.data || []).filter(p => p.type === typeMap[type] && isValidPost(p));
+                                }
+
+                                if (candidatePosts.length > 0) {
+                                    const matchedPost = candidatePosts.find(p => {
+                                        const pNum = p.sermonNumber?.split('.').pop();
+                                        return pNum === itemNumber;
+                                    }) || candidatePosts[0];
                                     if (matchedPost) {
                                         if (subId) {
                                             const targetPara = matchedPost.paragraphs?.find(p => {
@@ -306,13 +380,13 @@ export default function IndexDetailDispatcher() {
                                             if (targetPara) {
                                                 const eng = targetPara.translations?.[0]?.text || '';
                                                 const ara = targetPara.arabic || '';
-                                                const textToSearch = detectedLanguage === 'arabic' ? ara : eng;
+                                                const preferred = detectedLanguage === 'arabic' ? ara : eng;
+                                                const fallback = detectedLanguage === 'arabic' ? eng : ara;
+                                                const textToSearch = preferred || fallback || '';
                                                 const matchingSentence = extractMatchingSentence(textToSearch, term);
-                                                if (detectedLanguage === 'arabic' && !ara) return null;
-                                                if (detectedLanguage === 'english' && !eng) return null;
                                                 return {
-                                                    type: 'Post',
-                                                    data: matchedPost,
+                                                    type: 'Paragraph',
+                                                    data: { post: matchedPost, paragraph: targetPara },
                                                     reference: refValue,
                                                     sourceType: matchedPost.type as any,
                                                     matchingParagraphNumber: targetPara.number,
@@ -320,11 +394,15 @@ export default function IndexDetailDispatcher() {
                                                 };
                                             }
                                         }
-                                        const firstContent = detectedLanguage === 'arabic'
+                                        const preferredFirstContent = detectedLanguage === 'arabic'
                                             ? (matchedPost.paragraphs?.[0]?.arabic || matchedPost.TocArabic || '')
                                             : (matchedPost.paragraphs?.[0]?.translations?.[0]?.text || matchedPost.translations?.[0]?.text || matchedPost.heading || '');
-                                        
-                                        if (!firstContent) return null;
+
+                                        const fallbackFirstContent = detectedLanguage === 'arabic'
+                                            ? (matchedPost.paragraphs?.[0]?.translations?.[0]?.text || matchedPost.translations?.[0]?.text || matchedPost.heading || '')
+                                            : (matchedPost.paragraphs?.[0]?.arabic || matchedPost.TocArabic || '');
+
+                                        const firstContent = preferredFirstContent || fallbackFirstContent || '';
 
                                         const matchingSentence = extractMatchingSentence(firstContent, term);
                                         return {
@@ -363,9 +441,9 @@ export default function IndexDetailDispatcher() {
 
                     if (radisSearchRes?.data) {
                         for (const intro of radisSearchRes.data) {
-                            const textToSearch = detectedLanguage === 'arabic' ? (intro.arabic || '') : (intro.translation || '');
-                            if (detectedLanguage === 'arabic' && !intro.arabic) continue;
-                            if (detectedLanguage === 'english' && !intro.translation) continue;
+                            const preferred = detectedLanguage === 'arabic' ? (intro.arabic || '') : (intro.translation || '');
+                            const fallback = detectedLanguage === 'arabic' ? (intro.translation || '') : (intro.arabic || '');
+                            const textToSearch = preferred || fallback || '';
                             const matchingSentence = extractMatchingSentence(textToSearch, term);
 
                             pushUniqueResult({
@@ -379,9 +457,9 @@ export default function IndexDetailDispatcher() {
 
                     if (conclusionsSearchRes?.data) {
                         for (const conclusion of conclusionsSearchRes.data) {
-                            const textToSearch = detectedLanguage === 'arabic' ? (conclusion.arabic || '') : (conclusion.translation || '');
-                            if (detectedLanguage === 'arabic' && !conclusion.arabic) continue;
-                            if (detectedLanguage === 'english' && !conclusion.translation) continue;
+                            const preferred = detectedLanguage === 'arabic' ? (conclusion.arabic || '') : (conclusion.translation || '');
+                            const fallback = detectedLanguage === 'arabic' ? (conclusion.translation || '') : (conclusion.arabic || '');
+                            const textToSearch = preferred || fallback || '';
                             const matchingSentence = extractMatchingSentence(textToSearch, term);
 
                             pushUniqueResult({
@@ -461,7 +539,16 @@ export default function IndexDetailDispatcher() {
             <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-8 space-y-6">
                 {results.length === 0 ? (
                     <div className="text-center py-12 text-gray-500">
-                        <p className="text-xl mb-4">No content found for &ldquo;{displayTitle || term}&rdquo;.</p>
+                        <p className="text-xl mb-4">
+                            {category === 'quran-hadith' && !hasLinkedTextReferences
+                                ? `This entry does not have any linked text references yet.`
+                                : `No content found for “${displayTitle || term}”.`}
+                        </p>
+                        {category === 'quran-hadith' && !hasLinkedTextReferences && (
+                            <p className="text-sm text-gray-400">
+                                Add values to `text_numbers` in Strapi to connect this entry to orations, letters, sayings, introductions, or conclusions.
+                            </p>
+                        )}
                     </div>
                 ) : (
                     results.map((item, index) => (
@@ -484,6 +571,18 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
             const contentType = contentTypeMap[post.type] || 'orations';
             const params = new URLSearchParams();
             const highlightRef = matchingParagraphNumber || post.sermonNumber;
+            if (highlightRef) params.set('highlightRef', highlightRef);
+            const isArabicTerm = /[\u0600-\u06FF]/.test(term);
+            if (isArabicTerm) params.set('arabicWord', term);
+            else params.set('word', term);
+            return `/content/details/${contentType}/${post.id}?${params.toString()}`;
+        }
+        if (type === 'Paragraph') {
+            const post = data?.post as Post;
+            const contentTypeMap: Record<string, string> = { 'Oration': 'orations', 'Letter': 'letters', 'Saying': 'sayings' };
+            const contentType = contentTypeMap[post.type] || 'orations';
+            const params = new URLSearchParams();
+            const highlightRef = matchingParagraphNumber || data?.paragraph?.number || post.sermonNumber;
             if (highlightRef) params.set('highlightRef', highlightRef);
             const isArabicTerm = /[\u0600-\u06FF]/.test(term);
             if (isArabicTerm) params.set('arabicWord', term);
@@ -531,6 +630,41 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
                 <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#43896B] transition-colors">{displayTitle}</h3>
                 <div className="space-y-4 text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} language={language} /></div>
                 <div className="mt-4 pt-3 border-t border-gray-100"><span className="text-sm text-[#43896B] font-medium group-hover:underline">View full {post.type.toLowerCase()} →</span></div>
+            </div>
+        );
+    }
+
+    if (type === 'Paragraph') {
+        const post = data?.post as Post;
+        const paragraph = data?.paragraph;
+        const displayContent =
+            matchingContent ||
+            (language === 'arabic' ? (paragraph?.arabic || '') : (paragraph?.translations?.[0]?.text || '')) ||
+            'No content available';
+
+        let displayTitle = post.title || post.heading || `${post.type} ${post.sermonNumber}`;
+        const isArabicTitle = /[\u0600-\u06FF]/.test(displayTitle);
+        if (language === 'english' && isArabicTitle) {
+            if (post.title && !/[\u0600-\u06FF]/.test(post.title)) displayTitle = post.title;
+            else displayTitle = `${post.type === 'Oration' ? 'Sermon' : post.type} ${post.sermonNumber}`;
+        } else if (language === 'arabic' && !isArabicTitle) {
+            if (post.heading && /[\u0600-\u06FF]/.test(post.heading)) displayTitle = post.heading;
+        }
+
+        return (
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md hover:border-[#43896B] transition-all cursor-pointer relative group" onClick={handleCardClick}>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                        <span className="bg-gray-50 text-gray-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Paragraph</span>
+                        <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">{post.type}</span>
+                        <span className="text-gray-500 text-sm font-medium">#{post.sermonNumber}</span>
+                        {matchingParagraphNumber && <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">Para: {matchingParagraphNumber}</span>}
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors"><ArrowRight className="w-4 h-4" /></div>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#43896B] transition-colors">{displayTitle}</h3>
+                <div className="space-y-4 text-gray-700 leading-relaxed"><HighlightText text={displayContent} term={term} language={language} /></div>
+                <div className="mt-4 pt-3 border-t border-gray-100"><span className="text-sm text-[#43896B] font-medium group-hover:underline">View in {post.type.toLowerCase()} →</span></div>
             </div>
         );
     }

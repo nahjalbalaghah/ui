@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, ScrollText, Loader2 } from 'lucide-react';
-import { Source } from '@/api/orations';
-import { postsApi } from '@/api/posts';
+import { GlossaryEntry, glossaryEntriesApi } from '@/api';
 
 interface SourceDetailsContentProps {
     documentId?: string;
@@ -23,36 +22,20 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
         return undefined;
     })();
 
-    const postId = params.params && Array.isArray(params.params) ? params.params[1] : undefined;
-
-    const [source, setSource] = useState<Source | null>(null);
+    const [source, setSource] = useState<GlossaryEntry | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchSourceDetails = async () => {
-            if (!documentId || !postId) return;
+            if (!documentId) return;
             try {
                 setLoading(true);
-                // Fetch the post to find the source in its paragraphs
-                const post = await postsApi.getPostById(parseInt(postId));
-                if (post) {
-                    let foundSource: Source | undefined;
-                    for (const p of post.paragraphs) {
-                        if (p.appendix_of_sources) {
-                            foundSource = p.appendix_of_sources.find(s => 
-                                s.documentId === documentId || s.id.toString() === documentId
-                            );
-                            if (foundSource) break;
-                        }
-                    }
-                    if (foundSource) {
-                        setSource(foundSource);
-                    } else {
-                        setError('Source not found in this post');
-                    }
+                const foundSource = await glossaryEntriesApi.getGlossaryEntryByDocumentId(documentId);
+                if (foundSource) {
+                    setSource(foundSource);
                 } else {
-                    setError('Post not found');
+                    setError('Source not found');
                 }
             } catch (err) {
                 console.error('Failed to fetch source details:', err);
@@ -63,7 +46,7 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
         };
 
         fetchSourceDetails();
-    }, [documentId, postId]);
+    }, [documentId]);
 
     if (loading) {
         return (
@@ -111,6 +94,11 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
                             <span className="font-bold tracking-widest uppercase text-xs">Historical Source</span>
                         </div>
                         <h1 className="text-3xl md:text-5xl font-black tracking-tight">{source.word}</h1>
+                        <div className="mt-4 space-y-1 text-white/90">
+                            {source.author && <p className="text-lg font-semibold">{source.author}</p>}
+                            {source.title && <p className="text-base">{source.title}</p>}
+                            {source.volumepage && <p className="text-sm">{source.volumepage}</p>}
+                        </div>
                     </div>
                     <div className="p-8 md:p-12">
                         <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed border-r-4 border-[#43896B] p-4 lg:p-6 bg-[#43896B]/5 rounded-l-xl mb-12">

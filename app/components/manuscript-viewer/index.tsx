@@ -23,6 +23,7 @@ type ZoomPanImageProps = {
 };
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+const INITIAL_FIT_BOOST = 1.03;
 
 const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, alt, onZoomChange, onLoadingChange }, ref) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -56,23 +57,22 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
   });
 
   const [containerSize, setContainerSize] = useState<{ w: number; h: number }>({ w: 1, h: 1 });
-  const [imageSize, setImageSize] = useState<{ w: number; h: number } | null>(null);
+  // Store imageSize together with the src it belongs to, so we never apply stale sizes
+  const [imageSizeForSrc, setImageSizeForSrc] = useState<{ src: string; w: number; h: number } | null>(null);
   const [baseScale, setBaseScale] = useState(1);
   const [scale, setScale] = useState(1);
   const [translate, setTranslate] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-
+  const imageSize = imageSizeForSrc?.src === src ? imageSizeForSrc : null;
   const totalScale = useMemo(() => baseScale * scale, [baseScale, scale]);
 
   const centerImage = useCallback(
-    (nextBaseScale: number, nextScale: number) => {
-      if (!imageSize) return;
+    (nextBaseScale: number, nextScale: number, imgW: number, imgH: number, cW: number, cH: number) => {
       const nextTotalScale = nextBaseScale * nextScale;
-      const x = (containerSize.w - imageSize.w * nextTotalScale) / 2;
-      const scaledHeight = imageSize.h * nextTotalScale;
-      const y = scaledHeight > containerSize.h ? 0 : (containerSize.h - scaledHeight) / 2;
+      const x = (cW - imgW * nextTotalScale) / 2;
+      const y = (cH - imgH * nextTotalScale) / 2;
       setTranslate({ x, y });
     },
-    [containerSize.h, containerSize.w, imageSize]
+    []
   );
 
   const updateContainerSize = useCallback(() => {
@@ -88,19 +88,40 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
     return () => window.removeEventListener('resize', updateContainerSize);
   }, [updateContainerSize]);
 
+  // When src changes: mark as not ready and signal loading
   useEffect(() => {
+    setImageSizeForSrc(null);
+    setBaseScale(1);
+    setScale(1);
+    setTranslate({ x: 0, y: 0 });
     onLoadingChange?.(true);
-  }, [onLoadingChange, src]);
+    const img = imgRef.current;
+    if (!img || !img.complete) return;
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    if (w > 0 && h > 0) {
+      setImageSizeForSrc({ src, w, h });
+    }
+  }, [src, onLoadingChange]);
 
+  // Once we have a valid imageSize for the *current* src, compute layout
   useEffect(() => {
     if (!imageSize) return;
-    const fitWidth = containerSize.w / imageSize.w;
-    const nextBaseScale = isFinite(fitWidth) && fitWidth > 0 ? clamp(fitWidth, 0.01, 3) : 1;
+    const { w: imgW, h: imgH } = imageSize;
+    const { w: cW, h: cH } = containerSize;
+
+    const fitWidth = cW / imgW;
+    const fitHeight = cH / imgH;
+    const nextBaseScale = (isFinite(fitWidth) && fitWidth > 0 && isFinite(fitHeight) && fitHeight > 0)
+      ? clamp(Math.max(fitWidth, fitHeight) * INITIAL_FIT_BOOST, 0.01, 5)
+      : 1;
+
     setBaseScale(nextBaseScale);
     setScale(1);
-    centerImage(nextBaseScale, 1);
-    onZoomChange(100);
-  }, [centerImage, containerSize.h, containerSize.w, imageSize, onZoomChange, src]);
+    centerImage(nextBaseScale, 1, imgW, imgH, cW, cH);
+    onZoomChange(Math.round(nextBaseScale * 100));
+    onLoadingChange?.(false);
+  }, [imageSize, containerSize, centerImage, onLoadingChange, onZoomChange]);
 
   const setScaleAroundPoint = useCallback(
     (clientX: number, clientY: number, nextScale: number) => {
@@ -121,7 +142,7 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
 
       setScale(nextScale);
       setTranslate({ x: nextTx, y: nextTy });
-      onZoomChange(Math.round(nextScale * 100));
+      onZoomChange(Math.round(nextTotal * 100));
     },
     [baseScale, imageSize, onZoomChange, totalScale, translate.x, translate.y]
   );
@@ -149,10 +170,11 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
   );
 
   const reset = useCallback(() => {
+    if (!imageSize) return;
     setScale(1);
-    onZoomChange(100);
-    centerImage(baseScale, 1);
-  }, [baseScale, centerImage, onZoomChange]);
+    onZoomChange(Math.round(baseScale * 100));
+    centerImage(baseScale, 1, imageSize.w, imageSize.h, containerSize.w, containerSize.h);
+  }, [baseScale, centerImage, containerSize, imageSize, onZoomChange]);
 
   React.useImperativeHandle(ref, () => ({ zoomIn, zoomOut, reset }), [reset, zoomIn, zoomOut]);
 
@@ -229,7 +251,7 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
 
       setScale(nextScale);
       setTranslate({ x: nextTx, y: nextTy });
-      onZoomChange(Math.round(nextScale * 100));
+      onZoomChange(Math.round(nextTotal * 100));
       return;
     }
 
@@ -291,19 +313,21 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
         className="absolute top-0 left-0 will-change-transform"
         style={{
           transform: `translate(${translate.x}px, ${translate.y}px) scale(${totalScale})`,
-          transformOrigin: '0 0'
+          transformOrigin: '0 0',
         }}
       >
         <img
           ref={imgRef}
           src={src}
           alt={alt}
-          className="block select-none"
+          className="block max-w-none select-none"
           draggable={false}
           onLoad={(e) => {
             const img = e.currentTarget;
-            setImageSize({ w: img.naturalWidth || img.width, h: img.naturalHeight || img.height });
-            onLoadingChange?.(false);
+            const w = img.naturalWidth || img.width;
+            const h = img.naturalHeight || img.height;
+            // Tag the measurement with the src so stale loads are ignored
+            setImageSizeForSrc({ src, w, h });
           }}
           onError={(e) => {
             const target = e.currentTarget as HTMLImageElement;
@@ -512,8 +536,6 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
                           className="w-full h-auto block"
                           onError={(e) => {
                             const target = e.currentTarget as HTMLImageElement;
-                            console.error('Image failed to load:', page);
-                            // Replace failed remote image with a local fallback
                             target.onerror = null;
                             target.src = '/file.svg';
                           }}

@@ -127,13 +127,33 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
   // Handle highlighting when component mounts or highlightRef changes
   useEffect(() => {
     if (highlightRef) {
-      // The highlightRef is already the full paragraph number (e.g., "1.26.1")
       setHighlightedParagraphNumber(highlightRef);
 
       // Give DOM time to render and then scroll to it
       const timer = setTimeout(() => {
-        // Try exact match first
-        let element = document.querySelector(`[data-text-ref="${highlightRef}"]`);
+        const candidates: string[] = [];
+        const addCandidate = (v?: string | null) => {
+          if (!v) return;
+          if (candidates.includes(v)) return;
+          candidates.push(v);
+        };
+
+        addCandidate(highlightRef);
+
+        const highlightParts = highlightRef.split('.').filter(Boolean);
+        if (highlightParts.length >= 2) addCandidate(highlightParts.slice(1).join('.'));
+        if (highlightParts.length >= 3) addCandidate(highlightParts.slice(2).join('.'));
+
+        if (content.sermonNumber && highlightParts.length >= 3) {
+          const last = highlightParts[highlightParts.length - 1];
+          addCandidate(`${content.sermonNumber}.${last}`);
+        }
+
+        let element: Element | null = null;
+        for (const candidate of candidates) {
+          element = document.querySelector(`[data-text-ref="${candidate}"]`);
+          if (element) break;
+        }
 
         // If no exact match, try to find a partial match (paragraph that contains this ref)
         if (!element) {
@@ -141,7 +161,11 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
           const allTextRefElements = document.querySelectorAll('[data-text-ref]');
           for (const el of allTextRefElements) {
             const refValue = el.getAttribute('data-text-ref');
-            if (refValue && (refValue === highlightRef || refValue.startsWith(highlightRef + '.') || highlightRef.startsWith(refValue + '.'))) {
+            if (
+              refValue &&
+              (candidates.includes(refValue) ||
+                candidates.some((c) => refValue === c || refValue.startsWith(c + '.') || c.startsWith(refValue + '.')))
+            ) {
               element = el;
               break;
             }
@@ -177,7 +201,27 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
 
       return () => clearTimeout(timer);
     }
-  }, [highlightRef, englishWord, arabicWord]);
+  }, [highlightRef, englishWord, arabicWord, content.sermonNumber]);
+
+  const isHighlightedTextRef = (refValue?: string | null) => {
+    if (!highlightedParagraphNumber || !refValue) return false;
+    if (refValue === highlightedParagraphNumber) return true;
+    if (highlightedParagraphNumber.startsWith(refValue + '.') || refValue.startsWith(highlightedParagraphNumber + '.')) return true;
+
+    const highlightParts = highlightedParagraphNumber.split('.').filter(Boolean);
+    const suffix1 = highlightParts.length >= 2 ? highlightParts.slice(1).join('.') : null;
+    const suffix2 = highlightParts.length >= 3 ? highlightParts.slice(2).join('.') : null;
+
+    if (suffix1 && (refValue === suffix1 || suffix1.startsWith(refValue + '.') || refValue.startsWith(suffix1 + '.'))) return true;
+    if (suffix2 && refValue === suffix2) return true;
+
+    if (content.sermonNumber && highlightParts.length >= 3) {
+      const last = highlightParts[highlightParts.length - 1];
+      if (refValue === `${content.sermonNumber}.${last}`) return true;
+    }
+
+    return false;
+  };
 
   // Function to highlight a word within a specific paragraph
   const highlightWordInParagraph = (paragraphDiv: Element, word: string) => {
@@ -465,7 +509,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
               <div
                 key={paragraph.id}
                 data-text-ref={paragraph.number}
-                className={`border-b border-gray-100 pb-8 last:border-b-0 last:pb-0 ${highlightedParagraphNumber === paragraph.number ? 'highlight-text-ref' : ''}`}
+                className={`border-b border-gray-100 pb-8 last:border-b-0 last:pb-0 ${isHighlightedTextRef(paragraph.number) ? 'highlight-text-ref' : ''}`}
               >
                 {paragraph.number && (
                   <div className="mb-3 flex items-center gap-2">

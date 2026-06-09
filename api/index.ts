@@ -6,6 +6,7 @@ export * from './index-terms';
 export * from './names-places';
 export * from './quran-hadith';
 export * from './religious-concepts';
+export * from './glossary-entries';
 export {
 	postsApi,
 	orationsApi,

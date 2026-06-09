@@ -8,8 +8,7 @@ import Button from '@/app/components/button';
 import Input from '@/app/components/input';
 import Select from '@/app/components/select';
 import AlphabetChips from '@/app/components/alphabet-chips';
-import { Source } from '@/api/orations';
-import { postsApi } from '@/api/posts';
+import { GlossaryEntry, glossaryEntriesApi } from '@/api';
 
 interface SourcesListContentProps {
     contentTypeLabel: string;
@@ -21,7 +20,7 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
     const pathname = usePathname();
     const [searchQuery, setSearchQuery] = useState('');
     const [language, setLanguage] = useState<'English' | 'Arabic'>('English');
-    const [sources, setSources] = useState<Source[]>([]);
+    const [sources, setSources] = useState<GlossaryEntry[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -29,39 +28,15 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
         const fetchSources = async () => {
             try {
                 setLoading(true);
-                // itemNumber can be "1.1" (post) or "1.1.1" (paragraph)
                 const parts = itemNumber.split('.');
-                const sermonNumber = parts.slice(0, 2).join('.');
                 const isParagraphLevel = parts.length > 2;
-
-                const response = await postsApi.getPosts({
-                    filters: {
-                        sermonNumber,
-                        type: contentTypeLabel.slice(0, -1) // "Orations" -> "Oration"
-                    }
+                const response = await glossaryEntriesApi.getGlossaryEntries({
+                    pageSize: 200,
+                    ...(isParagraphLevel
+                        ? { paragraphNumber: itemNumber }
+                        : { postSermonNumber: itemNumber })
                 });
-
-                if (response.data && response.data.length > 0) {
-                    const post = response.data[0];
-                    let allSources: Source[] = [];
-
-                    if (isParagraphLevel) {
-                        const paragraph = post.paragraphs.find(p => p.number === itemNumber);
-                        if (paragraph && paragraph.appendix_of_sources) {
-                            allSources = paragraph.appendix_of_sources;
-                        }
-                    } else {
-                        // Collect sources from all paragraphs in the post
-                        post.paragraphs.forEach(p => {
-                            if (p.appendix_of_sources) {
-                                allSources = [...allSources, ...p.appendix_of_sources];
-                            }
-                        });
-                    }
-                    setSources(allSources);
-                } else {
-                    setSources([]);
-                }
+                setSources(response.data || []);
             } catch (err) {
                 console.error('Failed to fetch sources:', err);
                 setError('Failed to load sources. Please try again later.');
@@ -87,9 +62,15 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
         const matchesSearch = 
             (source.word && source.word.toLowerCase().includes(query)) ||
             (source.author && source.author.toLowerCase().includes(query)) ||
-            (source.title && source.title.toLowerCase().includes(query));
-        // For now, Strapi data might not have language field, so we just filter by search
-        return !!matchesSearch;
+            (source.title && source.title.toLowerCase().includes(query)) ||
+            (source.content && source.content.toLowerCase().includes(query)) ||
+            (source.volumepage && source.volumepage.toLowerCase().includes(query));
+
+        const matchesLanguage = language === 'Arabic'
+            ? /[\u0600-\u06FF]/.test(`${source.word || ''} ${source.content || ''} ${source.title || ''} ${source.author || ''}`)
+            : true;
+
+        return !!matchesSearch && matchesLanguage;
     });
 
     if (loading) {
@@ -170,19 +151,14 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                             <table className="w-full">
                                 <thead className="bg-gray-50 border-b border-gray-200">
                                     <tr>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 w-32">ID</th>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Source Word</th>
+                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Source</th>
+                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Author / Book</th>
                                         <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 w-32">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
                                     {filteredSources.map((source) => (
                                         <tr key={source.id} className="hover:bg-gray-50 transition-colors">
-                                            <td className="px-6 py-4 align-top">
-                                                <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-[#43896B]/10 text-[#43896B] font-bold text-sm">
-                                                    #{source.id}
-                                                </span>
-                                            </td>
                                             <td className="px-6 py-4">
                                                 <Link
                                                     href={`${pathname}/${source.documentId || source.id}`}
@@ -190,6 +166,13 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                                                 >
                                                     {source.word}
                                                 </Link>
+                                                {source.volumepage && (
+                                                    <div className="text-sm text-gray-500 mt-1">{source.volumepage}</div>
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-gray-800 font-medium">{source.author || '-'}</div>
+                                                <div className="text-sm text-gray-500">{source.title || '-'}</div>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <Link href={`${pathname}/${source.documentId || source.id}`}>
