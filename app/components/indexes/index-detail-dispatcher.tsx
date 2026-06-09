@@ -226,7 +226,7 @@ export default function IndexDetailDispatcher() {
                 if (textNumbers.length > 0) {
                     const parsedRefs = textNumbers
                         .map((refValue) => ({ refValue, parsed: parseTextReference(refValue) }))
-                        .filter((x): x is { refValue: string; parsed: ReturnType<typeof parseTextReference> } => !!x.parsed);
+                        .filter((x): x is { refValue: string; parsed: NonNullable<ReturnType<typeof parseTextReference>> } => !!x.parsed);
 
                     const typeMap: Record<string, string> = { 'oration': 'Oration', 'letter': 'Letter', 'saying': 'Saying' };
                     const prefixMap: Record<string, string> = { 'oration': '1.', 'letter': '2.', 'saying': '3.' };
