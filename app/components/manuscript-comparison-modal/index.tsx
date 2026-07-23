@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { X, ZoomIn, ZoomOut, Loader2, FileText, Book, Maximize2, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { librariesApi, Library, manuscriptsApi, Manuscript, getManuscriptImageUrl } from '@/api/manuscripts';
+import { librariesApi, Library, manuscriptsApi, Manuscript, getManuscriptImageUrl, manuscriptMatchesLibrary } from '@/api/manuscripts';
 import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes } from '@/app/utils/text-formatting';
 import Select from '../select';
@@ -367,41 +367,7 @@ export default function ManuscriptComparisonModal({
     }, [isOpen, sectionNumber]);
 
     const inferLibraryNameForManuscript = useCallback((manuscript: Manuscript, availableLibraries: Library[]): string | null => {
-        const fileNamesJoined = (manuscript.files || []).map(f => f.name?.toLowerCase() || '').join(' ');
-        if (!fileNamesJoined) return null;
-
-        for (const library of availableLibraries) {
-            const libraryName = (library.name || '').toLowerCase();
-            if (!libraryName) continue;
-
-            if (libraryName.includes('mar') && libraryName.includes('ashi')) {
-                if (fileNamesJoined.includes("mar'ashi") || fileNamesJoined.includes("marashi") || fileNamesJoined.includes("mar_ashi") || fileNamesJoined.includes("qum_mar")) {
-                    return library.name;
-                }
-                continue;
-            }
-
-            if (libraryName.includes('shahrastan')) {
-                if (fileNamesJoined.includes('shahrastan')) {
-                    return library.name;
-                }
-                continue;
-            }
-
-            if (libraryName.includes('rampur')) {
-                if (fileNamesJoined.includes('rampur')) {
-                    return library.name;
-                }
-                continue;
-            }
-
-            const significantPart = libraryName.split(' ')[0];
-            if (significantPart && significantPart.length > 3 && fileNamesJoined.includes(significantPart)) {
-                return library.name;
-            }
-        }
-
-        return null;
+        return availableLibraries.find(library => manuscriptMatchesLibrary(manuscript, library))?.name || null;
     }, []);
 
     const fetchManuscripts = async () => {

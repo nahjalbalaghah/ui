@@ -11,6 +11,7 @@ import {
   librariesApi,
   Library,
   convertLibraryItemToManuscriptDetails,
+  manuscriptMatchesLibrary,
 } from '@/api/manuscripts';
 import { STATIC_MANUSCRIPTS } from '@/data/static-manuscripts';
 import { Loader2, BookOpen, GitCompare, Layout, Maximize2, X, Image as ImageIcon } from 'lucide-react';
@@ -102,44 +103,7 @@ const ManuscriptsContent = () => {
   // Helper function to determine if a manuscript belongs to a library
   // Since the library relation isn't populated in the API, we infer from file names
   const manuscriptBelongsToLibrary = useCallback((manuscript: Manuscript, library: Library): boolean => {
-    // Prefer direct library -> manuscript linkage from the libraries API when available.
-    const linkedManuscript = library.manuscript;
-    if (linkedManuscript) {
-      if (linkedManuscript.id && manuscript.id === linkedManuscript.id) {
-        return true;
-      }
-      if (linkedManuscript.documentId && manuscript.documentId === linkedManuscript.documentId) {
-        return true;
-      }
-    }
-
-    // Check if the manuscript has a direct library relation (for future when API populates this)
-    if (manuscript.library && manuscript.library === library.name) {
-      return true;
-    }
-
-    const libraryName = library.name.toLowerCase();
-
-    if (manuscript.files && manuscript.files.length > 0) {
-      const fileNamesJoined = manuscript.files.map(f => f.name.toLowerCase()).join(' ');
-
-      if (libraryName.includes('mar') && libraryName.includes('ashi')) {
-        return fileNamesJoined.includes("mar'ashi") ||
-          fileNamesJoined.includes("marashi") ||
-          fileNamesJoined.includes("mar_ashi");
-      }
-
-      if (libraryName.includes('shahrastan')) {
-        return fileNamesJoined.includes('shahrastan');
-      }
-
-      const significantPart = libraryName.split(' ')[0];
-      if (significantPart.length > 3) {
-        return fileNamesJoined.includes(significantPart);
-      }
-    }
-
-    return false;
+    return manuscriptMatchesLibrary(manuscript, library);
   }, []);
 
   // Filter manuscripts based on selected type AND library
@@ -765,7 +729,10 @@ const ManuscriptsContent = () => {
 // Helper function to get library/manuscript name
 const getManuscriptDisplayName = (ms: Manuscript): string => {
   if (ms.bookName) return ms.bookName;
-  if (ms.library) return ms.library;
+  if (typeof ms.library === 'string') return ms.library;
+  if (Array.isArray(ms.library) && ms.library[0]?.name) return ms.library[0].name;
+  if (ms.library && 'name' in ms.library) return ms.library.name;
+  if (ms.libraries?.[0]?.name) return ms.libraries[0].name;
   const firstFileName = ms.files?.[0]?.name?.toLowerCase() || '';
   if (firstFileName.includes("mar'ashi") || firstFileName.includes("marashi") || firstFileName.includes("qum_mar")) return "Mar'ashi MS";
   if (firstFileName.includes("shahrastan")) return "Shahrastani MS";
