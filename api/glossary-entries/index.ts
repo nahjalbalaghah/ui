@@ -15,6 +15,10 @@ export interface GlossaryEntry {
     id: number;
     number: string;
   }[];
+  posts?: {
+    id: number;
+    sermonNumber: string;
+  }[];
 }
 
 export interface GlossaryEntriesApiResponse {
@@ -42,6 +46,7 @@ export const glossaryEntriesApi = {
         'pagination[page]': page,
         'pagination[pageSize]': pageSize,
         'populate[paragraphs][fields][0]': 'number',
+        'populate[posts][fields][0]': 'sermonNumber',
       };
 
       if (paragraphNumber) {
@@ -49,7 +54,11 @@ export const glossaryEntriesApi = {
       }
 
       if (postSermonNumber) {
-        params['filters[paragraphs][number][$startsWith]'] = `${postSermonNumber}.`;
+        // Sources can be attached either directly to a post or to one of its
+        // paragraphs. Include both relations when deciding whether to show the
+        // Sources control for an oration, letter, or saying.
+        params['filters[$or][0][posts][sermonNumber][$eq]'] = postSermonNumber;
+        params['filters[$or][1][paragraphs][number][$startsWith]'] = `${postSermonNumber}.`;
       }
 
       const response = await api.get('/api/glossary-entries', { params });

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Search, X, Book, ArrowRight } from 'lucide-react';
+import { X, Book, ArrowRight } from 'lucide-react';
 import { quranHadithApi, QuranHadith, QuranHadithFilters } from '@/api';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
@@ -34,6 +34,7 @@ export default function QuranHadithContent() {
   const [surahNames, setSurahNames] = useState<{ name: string; arabicName: string }[]>([]);
 
   const [filters, setFilters] = useState<QuranHadithFilters>(appliedFilters);
+  const isArabic = filters.language === 'Arabic';
 
   // Sync filters with URL params when they change (e.g. back button)
   useEffect(() => {
@@ -66,7 +67,11 @@ export default function QuranHadithContent() {
   const getTargetUrl = (item: QuranHadith) => {
     const refs = item.text_numbers?.map(t => t.value).join(',') || '';
     const urlSlug = item.title || item.reference || item.surah_name || item.documentId;
-    return `/indexes/quran-hadith/${encodeURIComponent(urlSlug)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`;
+    const params = new URLSearchParams({
+      ...(refs ? { refs } : {}),
+      entry: item.documentId,
+    });
+    return `/indexes/quran-hadith/${encodeURIComponent(urlSlug)}?${params.toString()}`;
   };
 
   // Initialize: Fetch ALL items once
@@ -165,8 +170,17 @@ export default function QuranHadithContent() {
     if (filtersToUse.language && filtersToUse.language !== 'English') params.set('language', filtersToUse.language);
 
     params.set('page', '1');
-    router.push(`${pathname}?${params.toString()}`);
+    if (params.toString() !== searchParams.toString()) {
+      router.replace(`${pathname}?${params.toString()}`);
+    }
   };
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      handleApplyFilters(filters);
+    }, 500);
+    return () => window.clearTimeout(timeout);
+  }, [filters]);
 
   const handleClearFilters = () => {
     setFilters({
@@ -216,33 +230,33 @@ export default function QuranHadithContent() {
 
         <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-800">Filters</h2>
+            <h2 className="text-lg font-bold text-gray-800">{isArabic ? 'عوامل التصفية' : 'Filters'}</h2>
             {hasActiveFilters && (
               <Button
                 onClick={handleClearFilters}
                 variant='danger'
                 icon={<X className="w-4 h-4" />}
               >
-                Clear Filters
+                {isArabic ? 'مسح عوامل التصفية' : 'Clear Filters'}
               </Button>
             )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block font-medium text-sm text-gray-700 mb-1">Language</label>
+              <label className="block font-medium text-sm text-gray-700 mb-1">{isArabic ? 'اللغة' : 'Language'}</label>
               <Select
                 value={filters.language || 'English'}
                 onChange={(value) => setFilters({ ...filters, language: value as 'English' | 'Arabic' })}
                 options={[
-                  { value: 'English', label: 'English' },
-                  { value: 'Arabic', label: 'Arabic' }
+                  { value: 'English', label: isArabic ? 'الإنجليزية' : 'English' },
+                  { value: 'Arabic', label: isArabic ? 'العربية' : 'Arabic' }
                 ]}
-                placeholder="Select Language"
+                placeholder={isArabic ? 'اختر اللغة' : 'Select Language'}
               />
             </div>
             <div>
-              <label className="block font-medium text-sm text-gray-700 mb-1">Reference</label>
+              <label className="block font-medium text-sm text-gray-700 mb-1">{isArabic ? 'المرجع' : 'Reference'}</label>
               <Select
                 value={filters.reference_type || ''}
                 onChange={(value) => {
@@ -251,29 +265,29 @@ export default function QuranHadithContent() {
                   setFilters(newFilters);
                 }}
                 options={[
-                  { value: '', label: 'All References' },
-                  { value: 'Quran', label: "Qur'an" },
-                  { value: 'Hadith', label: 'Hadith' },
-                  { value: 'Poetry', label: 'Poetry' },
-                  { value: 'Proverbs', label: 'Proverbs' }
+                  { value: '', label: isArabic ? 'جميع المراجع' : 'All References' },
+                  { value: 'Quran', label: isArabic ? 'القرآن' : "Qur'an" },
+                  { value: 'Hadith', label: isArabic ? 'الحديث' : 'Hadith' },
+                  { value: 'Poetry', label: isArabic ? 'الشعر' : 'Poetry' },
+                  { value: 'Proverbs', label: isArabic ? 'الأمثال' : 'Proverbs' }
                 ]}
-                placeholder="Select Reference"
+                placeholder={isArabic ? 'اختر المرجع' : 'Select Reference'}
               />
             </div>
             {(filters.reference_type === 'Quran' || !filters.reference_type) && (
               <div>
-                <label className="block font-medium text-sm text-gray-700 mb-1">Reference Name</label>
+                <label className="block font-medium text-sm text-gray-700 mb-1">{isArabic ? 'السورة' : 'Surah'}</label>
                 <Select
                   value={filters.surah_name}
                   onChange={(value) => setFilters({ ...filters, surah_name: value })}
                   options={[
-                    { value: '', label: 'All References' },
+                    { value: '', label: isArabic ? 'جميع السور' : 'All Surahs' },
                     ...surahNames.map(surah => ({ 
                       value: surah.name, 
                       label: filters.language === 'Arabic' && surah.arabicName ? surah.arabicName : surah.name 
                     }))
                   ]}
-                  placeholder="Select a Reference"
+                  placeholder={isArabic ? 'اختر السورة' : 'Select a Surah'}
                 />
               </div>
             )}
@@ -287,23 +301,14 @@ export default function QuranHadithContent() {
               />
             ) : (
               <Input
-                label="Search Arabic Text"
-                placeholder="Search Arabic..."
+                label="البحث في النص العربي"
+                placeholder="ابحث بالعربية..."
                 value={filters.verse_text}
                 onChange={(e) => setFilters({ ...filters, verse_text: e.target.value })}
                 className="text-right h-9.5"
                 dir="rtl"
               />
             )}
-          </div>
-          <div className="mt-4 flex justify-end">
-            <Button
-              onClick={() => handleApplyFilters()}
-              variant='outlined'
-              icon={<Search className="w-4 h-4" />}
-            >
-              Apply Filters
-            </Button>
           </div>
         </div>
 

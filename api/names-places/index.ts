@@ -1,4 +1,5 @@
 import api from '../api';
+import type { LinkedFootnote } from '../index-terms';
 
 export interface NamePlaceTextNumber {
   id: number;
@@ -15,6 +16,7 @@ export interface NamePlace {
   updatedAt: string;
   publishedAt: string;
   text_numbers: NamePlaceTextNumber[];
+  LinkFootnote?: LinkedFootnote[];
 }
 
 export interface NamePlacesApiResponse {

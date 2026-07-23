@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Search, X, BookOpen, ArrowRight, ChevronDown } from 'lucide-react';
+import { X, BookOpen, ArrowRight, ChevronDown } from 'lucide-react';
 import { namePlacesApi, GlossaryItem } from '@/api';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
@@ -14,7 +14,8 @@ export default function GlossaryContent() {
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get('page') || '1');
-  const [searchWord, setSearchWord] = useState(searchParams.get('word') || '');
+  const appliedSearchWord = searchParams.get('word') || '';
+  const [searchWord, setSearchWord] = useState(appliedSearchWord);
 
   const [allItems, setAllItems] = useState<GlossaryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,8 +48,8 @@ export default function GlossaryContent() {
 
   const filteredItems = React.useMemo(() => {
     let result = [...allItems];
-    if (searchWord) {
-      const q = searchWord.toLowerCase();
+    if (appliedSearchWord) {
+      const q = appliedSearchWord.toLowerCase();
       result = result.filter(item => 
         item.word.toLowerCase().includes(q) || 
         (item.description && item.description.toLowerCase().includes(q))
@@ -56,7 +57,7 @@ export default function GlossaryContent() {
     }
     result.sort((a, b) => a.word.localeCompare(b.word));
     return result;
-  }, [allItems, searchWord]);
+  }, [allItems, appliedSearchWord]);
 
   const total = filteredItems.length;
   const totalPages = Math.ceil(total / pageSize);
@@ -66,8 +67,15 @@ export default function GlossaryContent() {
     const params = new URLSearchParams();
     if (searchWord) params.set('word', searchWord);
     params.set('page', '1');
-    router.push(`${pathname}?${params.toString()}`);
+    if (params.toString() !== searchParams.toString()) {
+      router.replace(`${pathname}?${params.toString()}`);
+    }
   };
+
+  useEffect(() => {
+    const timeout = window.setTimeout(handleApplyFilters, 500);
+    return () => window.clearTimeout(timeout);
+  }, [searchWord]);
 
   const handleClearFilters = () => {
     setSearchWord('');
@@ -82,7 +90,7 @@ export default function GlossaryContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const hasActiveFilters = !!searchWord;
+  const hasActiveFilters = !!appliedSearchWord;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -116,15 +124,6 @@ export default function GlossaryContent() {
               onChange={(e) => setSearchWord(e.target.value)}
               className='h-9.5'
             />
-          </div>
-          <div className="mt-4 flex justify-end">
-            <Button
-              onClick={() => handleApplyFilters()}
-              variant='outlined'
-              icon={<Search className="w-4 h-4" />}
-            >
-              Search
-            </Button>
           </div>
         </div>
 

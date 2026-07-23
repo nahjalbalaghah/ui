@@ -320,21 +320,22 @@ const ManuscriptsContent = () => {
       // If we have a selection from selectedNumber, use it
       if (manuscriptToSelect) {
         setSelectedManuscript(manuscriptToSelect);
-      } else if (!urlSection) {
+      } else if (!urlSection && viewMode !== 'comparison') {
         // Only default to the first one if not from URL
         manuscriptToSelect = availableSections[0];
         const newNumber = getSectionDisplayNumber(manuscriptToSelect.section);
         setSelectedNumber(newNumber);
         setSelectedManuscript(manuscriptToSelect);
       } else {
-        // URL section not valid, don't select anything
+        // In comparison mode the selected number may only exist in one of
+        // the other libraries. Keep the number and leave this column empty.
         setSelectedManuscript(null);
       }
     } else {
       setSelectedManuscript(null);
     }
     // We use dependencies that clearly change when the selection should update
-  }, [availableSections, selectedNumber, selectedLibrary, getSectionDisplayNumber, urlSection]);
+  }, [availableSections, selectedNumber, selectedLibrary, getSectionDisplayNumber, urlSection, viewMode]);
 
   // Handle second manuscript selection
   useEffect(() => {
@@ -380,12 +381,12 @@ const ManuscriptsContent = () => {
 
   useEffect(() => {
     if (viewMode !== 'comparison') return;
-    const allowed = comparisonNumbers.common.length > 0 ? comparisonNumbers.common : comparisonNumbers.union;
+    const allowed = comparisonNumbers.union;
     if (allowed.length === 0) return;
     if (!selectedNumber || !allowed.includes(selectedNumber)) {
       setSelectedNumber(allowed[0]);
     }
-  }, [comparisonNumbers.common, comparisonNumbers.union, selectedNumber, viewMode]);
+  }, [comparisonNumbers.union, selectedNumber, viewMode]);
 
   const handleLibraryChange = (value: string) => {
     const library = libraries.find(l => l.documentId === value);

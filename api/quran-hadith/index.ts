@@ -1,4 +1,5 @@
 import api from '../api';
+import type { LinkedFootnote } from '../index-terms';
 
 export interface QuranHadithTextNumber {
   id: number;
@@ -25,6 +26,7 @@ export interface QuranHadith {
   updatedAt: string;
   publishedAt: string;
   text_numbers: QuranHadithTextNumber[];
+  LinkFootnote?: LinkedFootnote[];
 }
 
 export interface QuranHadithApiResponse {

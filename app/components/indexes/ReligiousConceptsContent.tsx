@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Search, X, Book, ArrowRight } from 'lucide-react';
+import { X, Book, ArrowRight } from 'lucide-react';
 import { religiousConceptsApi, ReligiousConcept, ReligiousConceptsFilters } from '@/api';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
@@ -102,8 +102,17 @@ export default function ReligiousConceptsContent() {
     params.set('language', 'Arabic');
 
     params.set('page', '1');
-    router.push(`${pathname}?${params.toString()}`);
+    if (params.toString() !== searchParams.toString()) {
+      router.replace(`${pathname}?${params.toString()}`);
+    }
   };
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      handleApplyFilters(filters);
+    }, 500);
+    return () => window.clearTimeout(timeout);
+  }, [filters]);
 
   const handleClearFilters = () => {
     setFilters({
@@ -163,15 +172,6 @@ export default function ReligiousConceptsContent() {
               className="text-right"
               dir="rtl"
             />
-          </div>
-          <div className="mt-4 flex justify-end">
-            <Button
-              onClick={() => handleApplyFilters()}
-              variant='outlined'
-              icon={<Search className="w-4 h-4" />}
-            >
-              Apply Filters
-            </Button>
           </div>
         </div>
 

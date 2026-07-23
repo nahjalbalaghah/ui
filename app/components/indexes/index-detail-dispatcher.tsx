@@ -14,8 +14,9 @@ import {
     Post,
     RadisIntroduction,
     Conclusion,
+    LinkedFootnote,
 } from '@/api';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
 import Button from '@/app/components/button';
 import { parseTextReference } from '@/app/utils/text-reference';
 
@@ -143,6 +144,7 @@ export default function IndexDetailDispatcher() {
 
     const term = decodeURIComponent(termId).trim();
     const refsParam = searchParams.get('refs');
+    const entryId = searchParams.get('entry');
 
     const [results, setResults] = useState<CombinedResult[]>([]);
     const [loading, setLoading] = useState(true);
@@ -151,11 +153,13 @@ export default function IndexDetailDispatcher() {
     const [displayTitle, setDisplayTitle] = useState<string>(term);
     const [glossaryDescription, setGlossaryDescription] = useState<string | null>(null);
     const [hasLinkedTextReferences, setHasLinkedTextReferences] = useState(true);
+    const [linkedFootnotes, setLinkedFootnotes] = useState<LinkedFootnote[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             setError(null);
+            setLinkedFootnotes([]);
             let detectedLanguage: 'english' | 'arabic' | undefined = undefined;
 
             try {
@@ -214,6 +218,28 @@ export default function IndexDetailDispatcher() {
                         textNumbers = indexItem.text_numbers.map((t: any) => t.value);
                     }
                 }
+
+                if (entryId) {
+                    const getEntryById = {
+                        'terms': indexTermsApi.getIndexTermById,
+                        'names-places': namePlacesApi.getNamePlaceById,
+                        'quran-hadith': quranHadithApi.getQuranHadithById,
+                    }[category];
+
+                    if (getEntryById) {
+                        const entryResponse = await getEntryById(entryId);
+                        indexItem = entryResponse.data;
+                        if (!refsParam && indexItem?.text_numbers) {
+                            textNumbers = indexItem.text_numbers.map((t: any) => t.value);
+                        }
+                    }
+                }
+
+                setLinkedFootnotes(
+                    Array.isArray(indexItem?.LinkFootnote)
+                        ? indexItem.LinkFootnote.filter((note: LinkedFootnote) => note?.text?.trim())
+                        : []
+                );
 
                 setLanguage(detectedLanguage);
                 setHasLinkedTextReferences(textNumbers.length > 0);
@@ -495,7 +521,7 @@ export default function IndexDetailDispatcher() {
         };
 
         if (term) fetchData();
-    }, [term, refsParam, category]);
+    }, [term, refsParam, entryId, category]);
 
     if (loading) {
         return (
@@ -534,6 +560,7 @@ export default function IndexDetailDispatcher() {
                         </p>
                     </div>
                 )}
+
             </div>
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-8 space-y-6">
@@ -554,6 +581,39 @@ export default function IndexDetailDispatcher() {
                     results.map((item, index) => (
                         <ContentCard key={`${item.type}-${item.reference}-${index}`} item={item} term={term} language={language} />
                     ))
+                )}
+
+                {linkedFootnotes.length > 0 && (
+                    <section className="pt-6" aria-labelledby="linked-footnotes-heading">
+                        <div className="flex items-center gap-3 mb-5">
+                            <div className="w-11 h-11 rounded-xl bg-[#43896B]/10 text-[#43896B] flex items-center justify-center">
+                                <BookOpen className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h2 id="linked-footnotes-heading" className="text-2xl font-bold text-gray-900">Footnotes</h2>
+                                <p className="text-sm text-gray-500">Notes linked to &ldquo;{displayTitle || term}&rdquo;</p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-4">
+                            {linkedFootnotes.map((footnote, index) => (
+                                <article
+                                    key={footnote.id}
+                                    className="relative overflow-hidden rounded-2xl border border-[#43896B]/15 bg-white p-6 shadow-sm"
+                                >
+                                    <div className="absolute inset-y-0 left-0 w-1 bg-[#43896B]" />
+                                    <div className="flex items-start gap-4">
+                                        <span className="shrink-0 w-9 h-9 rounded-full bg-[#43896B]/10 text-[#43896B] font-bold flex items-center justify-center">
+                                            {index + 1}
+                                        </span>
+                                        <div className="min-w-0 flex-1">
+                                            <HighlightText text={footnote.text} term={term} language={language} />
+                                        </div>
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+                    </section>
                 )}
             </div>
         </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Search, X, Book, ArrowRight } from 'lucide-react';
+import { X, Book, ArrowRight } from 'lucide-react';
 import { indexTermsApi, IndexTerm, IndexTermsFilters } from '@/api';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
@@ -103,8 +103,17 @@ export default function IndexTermsContent() {
     if (filtersToUse.startsWith_english) params.set('startsWith_english', filtersToUse.startsWith_english);
 
     params.set('page', '1');
-    router.push(`${pathname}?${params.toString()}`);
+    if (params.toString() !== searchParams.toString()) {
+      router.replace(`${pathname}?${params.toString()}`);
+    }
   };
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      handleApplyFilters(filters);
+    }, 500);
+    return () => window.clearTimeout(timeout);
+  }, [filters]);
 
   const handleClearFilters = () => {
     setFilters({
@@ -163,15 +172,6 @@ export default function IndexTermsContent() {
                 onChange={(e) => setFilters({ ...filters, word_english: e.target.value })}
                 className='h-9.5'
               />
-          </div>
-          <div className="mt-4 flex justify-end">
-            <Button
-              onClick={() => handleApplyFilters()}
-              variant='outlined'
-              icon={<Search className="w-4 h-4" />}
-            >
-              Apply Filters
-            </Button>
           </div>
         </div>
 
@@ -294,7 +294,10 @@ export default function IndexTermsContent() {
                         // Gather all text reference values
                         const refs = term.text_numbers?.map(t => t.value).join(',') || '';
                         const targetUrl = word
-                          ? `/indexes/terms/${encodeURIComponent(word)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`
+                          ? `/indexes/terms/${encodeURIComponent(word)}?${new URLSearchParams({
+                              ...(refs ? { refs } : {}),
+                              entry: term.documentId,
+                            }).toString()}`
                           : '#';
 
                         return (
@@ -330,7 +333,10 @@ export default function IndexTermsContent() {
                   const word = term.word_english;
                   const refs = term.text_numbers?.map(t => t.value).join(',') || '';
                   const targetUrl = word
-                    ? `/indexes/terms/${encodeURIComponent(word)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`
+                    ? `/indexes/terms/${encodeURIComponent(word)}?${new URLSearchParams({
+                        ...(refs ? { refs } : {}),
+                        entry: term.documentId,
+                      }).toString()}`
                     : '#';
 
                   return (

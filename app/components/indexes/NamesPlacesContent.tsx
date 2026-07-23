@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Search, X, Book, ArrowRight } from 'lucide-react';
+import { X, Book, ArrowRight } from 'lucide-react';
 import { namePlacesApi, NamePlace, NamePlacesFilters } from '@/api';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
@@ -123,8 +123,17 @@ export default function NamesPlacesContent() {
     if (filtersToUse.language && filtersToUse.language !== 'English') params.set('language', filtersToUse.language);
 
     params.set('page', '1');
-    router.push(`${pathname}?${params.toString()}`);
+    if (params.toString() !== searchParams.toString()) {
+      router.replace(`${pathname}?${params.toString()}`);
+    }
   };
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      handleApplyFilters(filters);
+    }, 500);
+    return () => window.clearTimeout(timeout);
+  }, [filters]);
 
   const handleClearFilters = () => {
     setFilters({
@@ -211,15 +220,6 @@ export default function NamesPlacesContent() {
                 dir="rtl"
               />
             )}
-          </div>
-          <div className="mt-4 flex justify-end">
-            <Button
-              onClick={() => handleApplyFilters()}
-              variant='outlined'
-              icon={<Search className="w-4 h-4" />}
-            >
-              Apply Filters
-            </Button>
           </div>
         </div>
 
@@ -348,7 +348,10 @@ export default function NamesPlacesContent() {
                         const name = appliedFilters.language === 'Arabic' ? item.word_arabic : item.word_english;
                         const refs = item.text_numbers?.map(t => t.value).join(',') || '';
                         const targetUrl = name
-                          ? `/indexes/names-places/${encodeURIComponent(name)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`
+                          ? `/indexes/names-places/${encodeURIComponent(name)}?${new URLSearchParams({
+                              ...(refs ? { refs } : {}),
+                              entry: item.documentId,
+                            }).toString()}`
                           : '#';
 
                         return (
@@ -396,7 +399,10 @@ export default function NamesPlacesContent() {
                   const name = appliedFilters.language === 'Arabic' ? item.word_arabic : item.word_english;
                   const refs = item.text_numbers?.map(t => t.value).join(',') || '';
                   const targetUrl = name
-                    ? `/indexes/names-places/${encodeURIComponent(name)}${refs ? `?refs=${encodeURIComponent(refs)}` : ''}`
+                    ? `/indexes/names-places/${encodeURIComponent(name)}?${new URLSearchParams({
+                        ...(refs ? { refs } : {}),
+                        entry: item.documentId,
+                      }).toString()}`
                     : '#';
 
                   return (

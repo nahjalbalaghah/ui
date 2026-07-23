@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
-import { type Post, orationsApi, lettersApi, sayingsApi, postsApi } from '@/api/posts';
+import { type Post, postsApi } from '@/api/posts';
 import { audioApi } from '@/api/audio';
 import ContentDescription from './content-description';
 import ParallelView from './parallel-view';
@@ -58,9 +58,34 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
   });
   const [adjacentLoading, setAdjacentLoading] = useState(false);
   const [allItemNumbers, setAllItemNumbers] = useState<{ id: number; number: string }[]>([]);
+  const [navigationPosts, setNavigationPosts] = useState<Post[]>([]);
   const [audioTracks, setAudioTracks] = useState<{ arabic?: string; english?: string }>({});
   const [isParallelViewActive, setIsParallelViewActive] = useState(false);
   const [availablePosts, setAvailablePosts] = useState<Post[]>([]);
+
+  const getDisplayNumber = (sermonNumber?: string | null) => {
+    if (!sermonNumber) return '';
+    if (sermonNumber.includes('.')) {
+      return sermonNumber.split('.').pop() || sermonNumber;
+    }
+    return sermonNumber;
+  };
+
+  const getEditionPrefix = (sermonNumber?: string | null) => {
+    if (!sermonNumber || !sermonNumber.includes('.')) return '';
+    return sermonNumber.split('.')[0] || '';
+  };
+
+  const sortPostsByDisplayNumber = (posts: Post[]) => {
+    return [...posts].sort((a, b) => {
+      const aNum = parseInt(getDisplayNumber(a.sermonNumber), 10);
+      const bNum = parseInt(getDisplayNumber(b.sermonNumber), 10);
+      if (isNaN(aNum) || isNaN(bNum)) {
+        return getDisplayNumber(a.sermonNumber).localeCompare(getDisplayNumber(b.sermonNumber));
+      }
+      return aNum - bNum;
+    });
+  };
 
   useEffect(() => {
     const fetchAllNumbers = async () => {
@@ -82,6 +107,7 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
           const matchingEdition = (editionsResponse.data || []).find((ed: any) => ed?.id?.toString() === editionId);
           editionTitle = matchingEdition?.title;
         }
+        const editionPrefix = !editionTitle ? getEditionPrefix(content?.sermonNumber) : '';
 
         while (hasMore) {
           const response = await postsApi.getPosts({
@@ -104,12 +130,17 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
         }
 
         if (allPosts.length > 0) {
-          const numbers = allPosts
+          const scopedPosts = editionPrefix
+            ? allPosts.filter((post) => getEditionPrefix(post?.sermonNumber) === editionPrefix)
+            : allPosts;
+          const sortedPosts = sortPostsByDisplayNumber(
+            scopedPosts.filter((post): post is Post => !!post?.id)
+          );
+          setNavigationPosts(sortedPosts);
+
+          const numbers = sortedPosts
             .map(p => {
-              let numStr = p.sermonNumber;
-              if (numStr && numStr.includes('.')) {
-                numStr = numStr.split('.').pop();
-              }
+              const numStr = getDisplayNumber(p.sermonNumber);
               return {
                 id: p.id,
                 number: numStr || p.id.toString()
@@ -124,13 +155,18 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
               return numA - numB;
             });
           setAllItemNumbers(numbers);
+        } else {
+          setNavigationPosts([]);
+          setAllItemNumbers([]);
         }
       } catch (error) {
         console.error('Failed to fetch item numbers:', error);
+        setNavigationPosts([]);
+        setAllItemNumbers([]);
       }
     };
     fetchAllNumbers();
-  }, [contentType, editionId]);
+  }, [content?.sermonNumber, contentType, editionId]);
 
   const getBackUrl = () => {
     const urlParams = new URLSearchParams();
@@ -161,27 +197,9 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
         setAdjacentLoading(true);
         setError(null);
 
-        const contentPromise = api.getContentById(id);
-
-        let adjacentPromise: Promise<{ previous: Post | null; next: Post | null }>;
-        switch (contentType) {
-          case 'orations':
-            adjacentPromise = orationsApi.getAdjacentOrations(id);
-            break;
-          case 'letters':
-            adjacentPromise = lettersApi.getAdjacentLetters(id);
-            break;
-          case 'sayings':
-            adjacentPromise = sayingsApi.getAdjacentSayings(id);
-            break;
-          default:
-            adjacentPromise = Promise.resolve({ previous: null, next: null });
-        }
-
-        const [contentData, adjacentData] = await Promise.all([contentPromise, adjacentPromise]);
+        const contentData = await api.getContentById(id);
 
         setContent(contentData);
-        setAdjacentPosts(adjacentData);
       } catch (err) {
         setError(`Failed to load ${contentType.slice(0, -1)} details. Please try again.`);
         console.error(`Error loading ${contentType.slice(0, -1)}:`, err);
@@ -195,6 +213,32 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
       loadData();
     }
   }, [id, api, contentType]);
+
+  useEffect(() => {
+    if (!content || navigationPosts.length === 0) {
+      setAdjacentPosts({ previous: null, next: null });
+      setAdjacentLoading(false);
+      return;
+    }
+
+    const currentNumber = getDisplayNumber(content.sermonNumber);
+    const currentIndex = navigationPosts.findIndex((post) => {
+      if (post.id === content.id) return true;
+      return currentNumber !== '' && getDisplayNumber(post.sermonNumber) === currentNumber;
+    });
+
+    if (currentIndex === -1) {
+      setAdjacentPosts({ previous: null, next: null });
+      setAdjacentLoading(false);
+      return;
+    }
+
+    setAdjacentPosts({
+      previous: currentIndex > 0 ? navigationPosts[currentIndex - 1] : null,
+      next: currentIndex < navigationPosts.length - 1 ? navigationPosts[currentIndex + 1] : null,
+    });
+    setAdjacentLoading(false);
+  }, [content, navigationPosts]);
 
   useEffect(() => {
     const fetchAudio = async () => {

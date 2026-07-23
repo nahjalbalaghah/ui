@@ -79,6 +79,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
   const [highlightedParagraphNumber, setHighlightedParagraphNumber] = useState<string | null>(null);
   const [radisIntroduction, setRadisIntroduction] = useState<{ arabic: string; translation: string } | null>(null);
   const [hasPostLevelSources, setHasPostLevelSources] = useState(false);
+  const [paragraphNumbersWithSources, setParagraphNumbersWithSources] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchRadisBlurb = async () => {
@@ -110,14 +111,26 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
 
     if (hasAppendixSources) {
       setHasPostLevelSources(true);
-      return;
     }
 
-    // Fallback: check if there are any glossary entries for this post
+    // The source relation is not consistently included in nested post
+    // responses, so use the source endpoint as the authoritative fallback.
     if (content.sermonNumber) {
-      glossaryEntriesApi.getGlossaryEntries({ postSermonNumber: content.sermonNumber, pageSize: 1 })
-        .then(res => setHasPostLevelSources(res.data.length > 0))
-        .catch(() => setHasPostLevelSources(false));
+      glossaryEntriesApi.getGlossaryEntries({ postSermonNumber: content.sermonNumber, pageSize: 200 })
+        .then(res => {
+          setHasPostLevelSources(hasAppendixSources || res.data.length > 0);
+          setParagraphNumbersWithSources(new Set(
+            res.data.flatMap(source => source.paragraphs || [])
+              .map(paragraph => paragraph.number)
+              .filter(Boolean)
+          ));
+        })
+        .catch(() => {
+          setHasPostLevelSources(hasAppendixSources);
+          setParagraphNumbersWithSources(new Set());
+        });
+    } else {
+      setParagraphNumbersWithSources(new Set());
     }
   }, [content.paragraphs, content.sermonNumber]);
 
@@ -519,7 +532,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
                     {(() => {
                       const s = paragraph.appendix_of_sources || (paragraph as any).sources;
                       const hasSources = s && (Array.isArray(s) ? s.length > 0 : ((s as any).data && Array.isArray((s as any).data) && (s as any).data.length > 0));
-                      return hasSources;
+                      return hasSources || paragraphNumbersWithSources.has(paragraph.number);
                     })() && (
                       <Link href={`/${contentType}/details/${content.id}/sources?num=${paragraph.number}`}>
                         <Button variant="outlined" icon={<ScrollText className="w-4 h-4" />} className="shrink-0 py-1! px-2! text-xs!">

@@ -77,6 +77,7 @@ export const postsApi = {
       const params: any = {
         'filters[documentId][$eq]': documentId,
         'populate[posts][populate][translations]': true,
+        'populate[posts][populate][footnotes]': true,
         'populate[posts][populate][paragraphs][populate][0]': 'translations',
         'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
         'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
@@ -175,8 +176,7 @@ export const postsApi = {
           } else if (relation === 'paragraphs.appendix_of_sources') {
             params['populate[posts][populate][paragraphs][populate][2]'] = 'appendix_of_sources';
           } else if (relation === 'footnotes') {
-            // Skipping post-level footnotes for now as it caused "Invalid key 2"
-            // params['populate[posts][populate][footnotes]'] = true;
+            params['populate[posts][populate][footnotes]'] = true;
           } else if (relation === 'tags') {
             // Skipping tags as it caused "Invalid key tags"
           } else {
@@ -187,6 +187,7 @@ export const postsApi = {
 
       // Always populate editions as it is used for TOC
       params['populate[posts][populate][translations]'] = true;
+      params['populate[posts][populate][footnotes]'] = true;
       params['populate[posts][populate][editions][fields][0]'] = 'title';
 
       if (sort) {
@@ -269,6 +270,7 @@ export const postsApi = {
       const params: any = {
         'filters[posts][slug][$eq]': slug,
         'populate[posts][populate][translations]': true,
+        'populate[posts][populate][footnotes]': true,
         'populate[posts][populate][paragraphs][populate][0]': 'translations',
         'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
         'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
@@ -301,6 +303,7 @@ export const postsApi = {
       const params: any = {
         'filters[posts][id][$eq]': id,
         'populate[posts][populate][translations]': true,
+        'populate[posts][populate][footnotes]': true,
         'populate[posts][populate][paragraphs][populate][0]': 'translations',
         'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
         'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
