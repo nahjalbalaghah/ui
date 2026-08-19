@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Book, Tag as TagIcon, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { type Post } from '@/api/posts';
 import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
 
@@ -10,10 +9,16 @@ interface ListViewItemProps {
   item: Post;
   contentType: 'orations' | 'letters' | 'sayings';
   displayMode?: 'both' | 'english-only' | 'arabic-only';
+  listingParams?: {
+    page?: string;
+    search?: string;
+    sort?: string;
+    edition?: string;
+    display?: string;
+  };
 }
 
-export default function ListViewItem({ item, contentType, displayMode = 'both' }: ListViewItemProps) {
-  const searchParams = useSearchParams();
+export default function ListViewItem({ item, contentType, displayMode = 'both', listingParams }: ListViewItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -34,21 +39,20 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
   };
 
   const getCardLink = () => {
-    const currentPage = searchParams.get('page');
-    const currentSort = searchParams.get('sort');
-    const currentSearch = searchParams.get('search');
-    const baseUrl = `/${contentType}/details/${item.id}`;
+    const baseUrl = `/content/details/${contentType}/${item.id}`;
 
     const params = new URLSearchParams();
-    if (currentPage) params.set('returnPage', currentPage);
-    if (currentSort) params.set('returnSort', currentSort);
-    if (currentSearch) params.set('returnSearch', currentSearch);
+    if (listingParams?.page) params.set('returnPage', listingParams.page);
+    if (listingParams?.sort) params.set('returnSort', listingParams.sort);
+    if (listingParams?.search) params.set('returnSearch', listingParams.search);
+    if (listingParams?.edition) params.set('edition', listingParams.edition);
+    if (listingParams?.display && listingParams.display !== 'both') params.set('display', listingParams.display);
 
     const queryString = params.toString();
     return queryString ? `${baseUrl}?${queryString}` : baseUrl;
   };
 
-  const tocHeading = item.heading || '';
+  const tocHeading = item.heading || item.TocEnglish || '';
   const tocEnglish = item.TocEnglish || '';
   const tocArabic = item.TocArabic || '';
 
@@ -69,12 +73,10 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
   const firstParagraphArabic = firstParagraph?.arabic || '';
   const firstParagraphEnglish = item?.translations?.find((t: any) => t.type === 'en')?.text || '';
 
-  // For expanded view: use paragraph content if available, otherwise use main translations
   const mainTranslationEnglish = item.translations?.find((t: any) => t.type === 'en')?.text || '';
   const expandedEnglish = firstParagraphEnglish;
   const expandedArabic = item.title || '';
 
-  // For preview (collapsed state): use TOC text as short summary
   const previewEnglish = tocEnglish || firstParagraphEnglish || headingTranslation;
   const previewArabic = tocArabic || firstParagraphArabic || arabicTitle;
 
@@ -121,21 +123,17 @@ export default function ListViewItem({ item, contentType, displayMode = 'both' }
                   {truncateText(englishHeading, 150, 80)}
                 </h3>
               )}
-              {(displayMode === 'both' || displayMode === 'english-only') && previewEnglish && (
+              {(displayMode === 'both' || displayMode === 'english-only') && tocEnglish && (
                 <p className="text-sm text-gray-700 mt-2 leading-relaxed">
-                  {truncateText(previewEnglish.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 80, 150)}
+                  {truncateText(tocEnglish.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 150, 80)}
                 </p>
               )}
-              {(displayMode === 'both' || displayMode === 'arabic-only') && arabicTitle && (
-                <h3 className={`font-taha lg:text-lg font-bold text-gray-900 group-hover:text-[#43896B] transition-colors duration-300 leading-tight ${displayMode === 'both' && englishHeading ? 'mt-3' : ''}`} dir="rtl" style={{ lineHeight: '1.4' }}>
-                  {truncateText(arabicTitle.replace(/[()]/g, ''), 150, 80)}
-                </h3>
-              )}
-              {(displayMode === 'both' || displayMode === 'arabic-only') && previewArabic && previewArabic !== arabicTitle && (
-                <p className="text-sm font-taha text-gray-700 mt-2 leading-relaxed" dir="rtl">
-                  {truncateText(previewArabic.replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim(), 300, 150)}
+              {(displayMode === 'both' || displayMode === 'arabic-only') && tocArabic && (
+                <p className={`font-taha text-sm lg:text-base text-gray-900 leading-tight ${displayMode === 'both' && (englishHeading || tocEnglish) ? 'mt-2' : ''}`} dir="rtl" style={{ lineHeight: '1.5' }}>
+                  {truncateText(tocArabic.replace(/[()]/g, ''), 150, 80)}
                 </p>
               )}
+
               {item.tags && item.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {item.tags.slice(0, 3).map((tag) => (

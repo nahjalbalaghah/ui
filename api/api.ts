@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 const API_BASE_URL = 'https://test-admin.nahjalbalaghah.org/';
+// const API_BASE_URL = 'http://localhost:1337/';
+
+                  
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -27,16 +30,16 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    
+
     if (
       (error.code === 'ECONNABORTED' || error.message.includes('timeout')) &&
       !originalRequest._retry
     ) {
       originalRequest._retry = true;
       console.warn('Request timeout, retrying...');
-      
+
       originalRequest.timeout = 90000;
-      
+
       try {
         return await api(originalRequest);
       } catch (retryError) {
@@ -44,7 +47,7 @@ api.interceptors.response.use(
         return Promise.reject(retryError);
       }
     }
-    
+
     // console.error('API Error:', error.response?.status, error.response?.statusText);
     // console.error('API Error Details:', error.response?.data || error.message);
     return Promise.reject(error);

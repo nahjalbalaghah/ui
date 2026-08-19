@@ -35,6 +35,16 @@ export interface Tag {
   publishedAt: string;
 }
 
+export interface Source {
+  id: number;
+  documentId?: string;
+  word?: string;
+  content?: string;
+  author?: string;
+  title?: string;
+  volumepage?: string;
+}
+
 export interface Paragraph {
   id: number;
   documentId: string;
@@ -45,6 +55,7 @@ export interface Paragraph {
   publishedAt: string;
   translations: Translation[];
   footnotes?: Footnote[];
+  appendix_of_sources?: Source[];
 }
 
 export interface Post {
@@ -65,6 +76,17 @@ export interface Post {
   paragraphs: Paragraph[];
   tags: Tag[];
   footnotes: Footnote[];
+  post_base_documentId?: string;
+  editions?: any;
+}
+
+export interface Edition {
+  id: number;
+  documentId: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
 
 export interface ApiResponse {
@@ -82,18 +104,39 @@ export interface ApiResponse {
 export const orationsApi = {
   async getOrations(page = 1, pageSize = 9): Promise<ApiResponse> {
     try {
-      const response = await api.get('/api/posts', {
+      const response = await api.get('/api/post-bases', {
         params: {
-          'filters[type][$eq]': 'Oration',
-          'populate[footnotes]': true,
-          'populate[paragraphs][populate][translations]': true,
-          'populate[paragraphs][populate][footnotes]': true,
-          'populate[tags]': true,
+          'filters[posts][type][$eq]': 'Oration',
+          'populate[posts][populate][paragraphs][populate][0]': 'translations',
+          'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+          'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
+          'populate[posts][populate][editions][fields][0]': 'title',
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
         },
       });
-      return response.data;
+      // Extract posts from post-bases with heading inheritance and deduplication
+      const posts: Post[] = [];
+      if (response.data.data && Array.isArray(response.data.data)) {
+        for (const base of response.data.data) {
+          if (base.posts && Array.isArray(base.posts)) {
+            // For listing and single slug/number lookup, we usually only want the first post per base
+            // or specific matching ones. For simplicity, we can just deduplicate here.
+            const basePosts = base.posts.map((post: any) => ({
+              ...post,
+              heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
+              post_base_documentId: base.documentId
+            }));
+            
+            // If it's a listing call (detected by presence of meta in caller context, or just general)
+            // we only push the first one if we want deduplication.
+            if (basePosts.length > 0) {
+              posts.push(basePosts[0]);
+            }
+          }
+        }
+      }
+      return { data: posts, meta: response.data.meta };
     } catch (error) {
       console.error('Error fetching orations:', error);
       throw error;
@@ -102,21 +145,35 @@ export const orationsApi = {
 
   async getOrationBySlug(slug: string): Promise<Post | null> {
     try {
-      const response = await api.get('/api/posts', {
+      const response = await api.get('/api/post-bases', {
         params: {
-          'filters[slug][$eq]': slug,
-          'filters[type][$eq]': 'Oration',
-          'populate[footnotes]': true,
-          'populate[paragraphs][populate][translations]': true,
-          'populate[paragraphs][populate][footnotes]': true,
-          'populate[tags]': true,
+          'filters[posts][slug][$eq]': slug,
+          'filters[posts][type][$eq]': 'Oration',
+          'populate[posts][populate][paragraphs][populate][0]': 'translations',
+          'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+          'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
+          'populate[posts][populate][editions][fields][0]': 'title',
         },
       });
-      
-      if (response.data.data && response.data.data.length > 0) {
-        return response.data.data[0];
+
+      const posts: Post[] = [];
+      if (response.data.data && Array.isArray(response.data.data)) {
+        for (const base of response.data.data) {
+          if (base.posts && Array.isArray(base.posts)) {
+            const basePosts = base.posts.map((post: any) => ({
+              ...post,
+              heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
+              post_base_documentId: base.documentId
+            }));
+            posts.push(...basePosts);
+          }
+        }
       }
-      return null;
+      const matchingPost = posts.find((p) => p.slug === slug);
+      if (matchingPost) {
+        return matchingPost;
+      }
+      return posts.length > 0 ? posts[0] : null;
     } catch (error) {
       console.error('Error fetching oration by slug:', error);
       throw error;
@@ -125,22 +182,35 @@ export const orationsApi = {
 
   async searchOrations(query: string, page = 1, pageSize = 9): Promise<ApiResponse> {
     try {
-      const response = await api.get('/api/posts', {
+      const response = await api.get('/api/post-bases', {
         params: {
-          'filters[type][$eq]': 'Oration',
-          'filters[$or][0][title][$containsi]': query,
-          'filters[$or][1][heading][$containsi]': query,
-          'filters[$or][2][paragraphs][arabic][$containsi]': query,
-          'filters[$or][3][paragraphs][translations][text][$containsi]': query,
-          'populate[footnotes]': true,
-          'populate[paragraphs][populate][translations]': true,
-          'populate[paragraphs][populate][footnotes]': true,
-          'populate[tags]': true,
+          'filters[posts][type][$eq]': 'Oration',
+          'filters[posts][$or][0][title][$containsi]': query,
+          'filters[posts][$or][1][heading][$containsi]': query,
+          'filters[posts][$or][2][paragraphs][arabic][$containsi]': query,
+          'filters[posts][$or][3][paragraphs][translations][text][$containsi]': query,
+          'populate[posts][populate][paragraphs][populate][0]': 'translations',
+          'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+          'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
+          'populate[posts][populate][editions][fields][0]': 'title',
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
         },
       });
-      return response.data;
+      const posts: Post[] = [];
+      if (response.data.data && Array.isArray(response.data.data)) {
+        for (const base of response.data.data) {
+          if (base.posts && Array.isArray(base.posts)) {
+            const basePosts = base.posts.map((post: any) => ({
+              ...post,
+              heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
+              post_base_documentId: base.documentId
+            }));
+            posts.push(...basePosts);
+          }
+        }
+      }
+      return { data: posts, meta: response.data.meta };
     } catch (error) {
       console.error('Error searching orations:', error);
       throw error;
@@ -149,21 +219,31 @@ export const orationsApi = {
 
   async getOrationBySermonNumber(sermonNumber: string): Promise<Post | null> {
     try {
-      const response = await api.get('/api/posts', {
+      const response = await api.get('/api/post-bases', {
         params: {
-          'filters[sermonNumber][$eq]': sermonNumber,
-          'filters[type][$eq]': 'Oration',
-          'populate[footnotes]': true,
-          'populate[paragraphs][populate][translations]': true,
-          'populate[paragraphs][populate][footnotes]': true,
-          'populate[tags]': true,
+          'filters[posts][sermonNumber][$eq]': sermonNumber,
+          'filters[posts][type][$eq]': 'Oration',
+          'populate[posts][populate][paragraphs][populate][0]': 'translations',
+          'populate[posts][populate][paragraphs][populate][1]': 'footnotes',
+          'populate[posts][populate][paragraphs][populate][2]': 'appendix_of_sources',
+          'populate[posts][populate][editions][fields][0]': 'title',
         },
       });
-      
-      if (response.data.data && response.data.data.length > 0) {
-        return response.data.data[0];
+
+      const posts: Post[] = [];
+      if (response.data.data && Array.isArray(response.data.data)) {
+        for (const base of response.data.data) {
+          if (base.posts && Array.isArray(base.posts)) {
+            const basePosts = base.posts.map((post: any) => ({
+              ...post,
+              heading: post.heading || base.heading || base.TocEnglish || 'Untitled',
+              post_base_documentId: base.documentId
+            }));
+            posts.push(...basePosts);
+          }
+        }
       }
-      return null;
+      return posts.length > 0 ? posts[0] : null;
     } catch (error) {
       console.error('Error fetching oration by sermon number:', error);
       throw error;

@@ -5,6 +5,11 @@ export interface TextNumber {
   value: string;
 }
 
+export interface LinkedFootnote {
+  id: number;
+  text: string;
+}
+
 export interface IndexTerm {
   id: number;
   documentId: string;
@@ -15,6 +20,7 @@ export interface IndexTerm {
   updatedAt: string;
   publishedAt: string;
   text_numbers: TextNumber[];
+  LinkFootnote?: LinkedFootnote[];
 }
 
 export interface IndexTermsApiResponse {

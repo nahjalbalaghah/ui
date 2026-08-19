@@ -14,9 +14,9 @@ export function wrapTextReferences(text: string | React.ReactNode): React.ReactN
     return text;
   }
 
-  // Regex to match text references: X.Y or X.Y.Z (where X is 0-3, followed by digits)
+  // Regex to match text references: X.Y or X.Y.Z (where X is 0-4, followed by digits)
   // Match patterns like: 1.26, 1.26.1, 2.10.5, etc.
-  const textRefRegex = /([0-3]\.\d+(?:\.\d+)*)/g;
+  const textRefRegex = /([0-4]\.\d+(?:\.\d+)*)/g;
 
   const parts: React.ReactNode[] = [];
   let lastIndex = 0;

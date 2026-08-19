@@ -6,7 +6,9 @@ import {
     postsApi,
     radisApi,
     Post,
-    RadisIntroduction
+    RadisIntroduction,
+    conclusionsApi,
+    Conclusion
 } from '@/api';
 import { ArrowLeft } from 'lucide-react';
 import Button from '@/app/components/button';
@@ -14,7 +16,7 @@ import { parseTextReference } from '@/app/utils/text-reference';
 import { getCategoryBySlug } from '@/app/data/indexes';
 
 interface CombinedResult {
-    type: 'Post' | 'Paragraph' | 'Radis';
+    type: 'Post' | 'Paragraph' | 'Radis' | 'Conclusion';
     data: any;
     reference: string;
     sourceType?: 'Oration' | 'Letter' | 'Saying';
@@ -131,6 +133,12 @@ export default function StaticIndexDetails({ categorySlug, termSlug }: StaticInd
                                 if (radisRes.data && radisRes.data.length > 0) {
                                     const item = radisRes.data[0];
                                     return { type: 'Radis', data: item, reference: refValue };
+                                }
+                            } else if (type === 'conclusion') {
+                                const conclusionRes = await conclusionsApi.getConclusionsByNumbers([sectionNumber]);
+                                if (conclusionRes.data && conclusionRes.data.length > 0) {
+                                    const item = conclusionRes.data[0];
+                                    return { type: 'Conclusion', data: item, reference: refValue };
                                 }
                             } else {
                                 // Posts: "1.94.2" -> Query Sermon "1.94"
@@ -314,6 +322,27 @@ function ContentCard({ item, term }: { item: CombinedResult; term: string }) {
 
                 <div>
                     <HighlightText text={radis.translation} term={term} />
+                </div>
+            </div>
+        );
+    }
+
+    if (type === 'Conclusion') {
+        const conclusion = data as Conclusion;
+
+        return (
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow relative">
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                        <span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">
+                            Conclusion
+                        </span>
+                        <span className="text-gray-500 text-sm font-medium">#{conclusion.number}</span>
+                    </div>
+                </div>
+
+                <div>
+                    <HighlightText text={conclusion.translation} term={term} />
                 </div>
             </div>
         );

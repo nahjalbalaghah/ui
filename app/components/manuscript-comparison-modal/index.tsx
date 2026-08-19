@@ -170,8 +170,10 @@ export default function ManuscriptComparisonModal({
 
     // Helper function to get library/manuscript name
     const getManuscriptDisplayName = useCallback((ms: Manuscript): string => {
-        if (ms.bookName) return ms.bookName;
         if (ms.library) return ms.library;
+        if (ms.holdingInstitution) return ms.holdingInstitution;
+        if (ms.repository) return ms.repository;
+        if (ms.bookName) return ms.bookName;
         // Try to infer from file names
         const firstFileName = ms.files?.[0]?.name?.toLowerCase() || '';
         if (firstFileName.includes("mar'ashi") || firstFileName.includes("marashi") || firstFileName.includes("qum_mar")) return "Mar'ashi MS";
@@ -322,7 +324,8 @@ export default function ManuscriptComparisonModal({
                                                         const ms = manuscripts.find(m => m.id === parseInt(value));
                                                         if (ms) handleManuscriptChange(ms);
                                                     }}
-                                                    options={manuscripts.map(ms => ({
+                                                    options={manuscripts.map(ms => 
+                                                        ({
                                                         value: String(ms.id),
                                                         label: getManuscriptDisplayName(ms)
                                                     }))}

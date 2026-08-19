@@ -14,6 +14,30 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/orations/details/:params+',
+        destination: '/content/details/orations/:params+',
+        permanent: true,
+      },
+      {
+        source: '/letters/details/:params+',
+        destination: '/content/details/letters/:params+',
+        permanent: true,
+      },
+      {
+        source: '/sayings/details/:params+',
+        destination: '/content/details/sayings/:params+',
+        permanent: true,
+      },
+      {
+        source: '/indexes/details/:slug',
+        destination: '/indexes/:slug',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {

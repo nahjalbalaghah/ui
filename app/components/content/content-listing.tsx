@@ -18,7 +18,15 @@ interface ContentListingProps {
   contentType: 'orations' | 'letters' | 'sayings';
   hasNextPage?: boolean;
   isInfiniteLoading?: boolean;
+  isTransitioning?: boolean;
   displayMode?: 'both' | 'english-only' | 'arabic-only';
+  listingParams?: {
+    page?: string;
+    search?: string;
+    sort?: string;
+    edition?: string;
+    display?: string;
+  };
   showTopPagination?: boolean;
 }
 
@@ -35,7 +43,9 @@ export default function ContentListing({
   contentType,
   hasNextPage = false,
   isInfiniteLoading = false,
+  isTransitioning = false,
   displayMode = 'both',
+  listingParams,
   showTopPagination = false
 }: ContentListingProps) {
   const [isMobile, setIsMobile] = useState(false);
@@ -44,17 +54,17 @@ export default function ContentListing({
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024); // lg breakpoint
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const { lastElementRef } = useInfiniteScroll({
     hasNextPage,
     isLoading: isInfiniteLoading,
-    loadMore: onLoadMore || (() => {}),
+    loadMore: onLoadMore || (() => { }),
     threshold: 300
   });
 
@@ -65,7 +75,7 @@ export default function ContentListing({
           key={index}
           ref={index === content.length - 1 && isMobile ? lastElementRef : undefined}
         >
-          <ListViewItem item={item} contentType={contentType} displayMode={displayMode} />
+          <ListViewItem item={item} contentType={contentType} displayMode={displayMode} listingParams={listingParams} />
         </div>
       ))}
     </div>
@@ -74,16 +84,16 @@ export default function ContentListing({
   const renderLoadingList = () => (
     <div className="space-y-4">
       {[...Array(6)].map((_, index) => (
-        <div 
-          key={index} 
+        <div
+          key={index}
           className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden animate-pulse"
           style={{ animationDelay: `${index * 80}ms` }}
         >
           <div className="flex items-center gap-0">
             <div className="w-20 h-20 bg-gray-200 rounded-2xl rounded-r-none"></div>
-            <div className="flex-grow py-6 pr-6 pl-8">
+            <div className="grow py-6 pr-6 pl-8">
               <div className="flex items-center justify-between">
-                <div className="flex-grow">
+                <div className="grow">
                   <div className="h-6 bg-gray-200 rounded mb-3 w-3/4"></div>
                   <div className="flex gap-2">
                     <div className="h-6 bg-gray-200 rounded-full w-16"></div>
@@ -98,16 +108,15 @@ export default function ContentListing({
     </div>
   );
 
+  const showInitialSkeleton = loading && content.length === 0;
+  const showTransitionOverlay = isTransitioning && content.length > 0;
+
   return (
     <div className="w-full relative">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 gap-4">
-        <p className="text-gray-600 whitespace-nowrap flex-shrink-0">
-          {loading ? "Loading..." : (subtitle || `Showing ${content.length} of ${total} results`)}
-        </p>
-        
+      <div className="flex flex-col items-center justify-center mb-10 gap-4">
         {/* Show pagination only on desktop at top */}
         {showTopPagination && totalPages > 1 && onPageChange && (
-          <div className="hidden lg:block w-full lg:w-auto">
+          <div className="w-full flex justify-center">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -117,12 +126,23 @@ export default function ContentListing({
             />
           </div>
         )}
+
+        <p className="text-gray-500 text-sm whitespace-nowrap shrink-0">
+          {showInitialSkeleton ? 'Loading content...' : (subtitle || `Showing ${content.length} of ${total} results`)}
+        </p>
       </div>
-      
-      {loading ? (
+      {showInitialSkeleton ? (
         renderLoadingList()
       ) : (
-        <>
+        <div className="relative">
+          {showTransitionOverlay && (
+            <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl bg-white/55 backdrop-blur-[1px]">
+              <div className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-600 shadow-sm">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-[#43896B]" />
+                Updating results...
+              </div>
+            </div>
+          )}
           {renderListView()}
           {/* Show loading indicator on mobile for infinite scroll */}
           {isInfiniteLoading && (
@@ -131,9 +151,9 @@ export default function ContentListing({
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                   <div className="flex items-center gap-0">
                     <div className="w-20 h-20 bg-gray-200 rounded-2xl rounded-r-none"></div>
-                    <div className="flex-grow py-6 pr-6 pl-8">
+                    <div className="grow py-6 pr-6 pl-8">
                       <div className="flex items-center justify-between">
-                        <div className="flex-grow">
+                        <div className="grow">
                           <div className="h-6 bg-gray-200 rounded mb-3 w-3/4"></div>
                           <div className="flex gap-2">
                             <div className="h-6 bg-gray-200 rounded-full w-16"></div>
@@ -151,7 +171,7 @@ export default function ContentListing({
           )}
           {/* Show pagination at bottom on desktop only */}
           {totalPages > 1 && onPageChange && (
-            <div className="hidden lg:block mt-8">
+            <div className="mt-8">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
@@ -161,7 +181,7 @@ export default function ContentListing({
               />
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

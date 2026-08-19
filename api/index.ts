@@ -6,4 +6,16 @@ export * from './index-terms';
 export * from './names-places';
 export * from './quran-hadith';
 export * from './religious-concepts';
-export { postsApi, orationsApi, lettersApi, sayingsApi, radisApi, paragraphsApi, type RadisIntroduction } from './posts';
+export * from './glossary-entries';
+export {
+	postsApi,
+	orationsApi,
+	lettersApi,
+	sayingsApi,
+	radisApi,
+	conclusionsApi,
+	paragraphsApi,
+	postBasesApi,
+	type RadisIntroduction,
+	type Conclusion
+} from './posts';

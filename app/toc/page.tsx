@@ -1,38 +1,105 @@
-import React from 'react';
-import { BookOpen, FileText } from 'lucide-react';
-import type { Metadata } from 'next';
+'use client';
+import React, { useState, useEffect } from 'react';
+import { BookOpen, FileText, Search } from 'lucide-react';
 import Link from 'next/link';
+import { postBasesApi, type PostBase } from '@/api/posts';
 
-export const metadata: Metadata = {
-  title: "Table of Contents | Nahj al-Balaghah",
-  description: "Browse the complete table of contents for Nahj al-Balaghah with headings in English and Arabic, along with historical manuscript references.",
-  openGraph: {
-    title: "Table of Contents | Nahj al-Balaghah",
-    description: "Browse the complete table of contents for Nahj al-Balaghah with headings in English and Arabic, along with historical manuscript references.",
-    url: "https://nahj-al-balagha.com/toc",
-    images: [
-      {
-        url: "/globe.svg",
-        width: 1200,
-        height: 630,
-        alt: "Nahj al-Balaghah Logo"
-      }
-    ]
+type TabType = 'orations' | 'letters' | 'sayings';
+
+const TAB_CONFIG = {
+  orations: {
+    label: 'Orations',
+    sublabel: 'Khutbah',
+    type: 'Oration' as const,
+    color: 'blue',
+    icon: BookOpen,
+    prefix: '1',
+    fetchTOC: () => postBasesApi.getOrationsTOC(),
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Table of Contents | Nahj al-Balaghah",
-    description: "Browse the complete table of contents for Nahj al-Balaghah with headings in English and Arabic, along with historical manuscript references.",
-    images: [
-      {
-        url: "/globe.svg",
-        alt: "Nahj al-Balaghah Logo"
-      }
-    ]
-  }
+  letters: {
+    label: 'Letters',
+    sublabel: 'Maktoobat',
+    type: 'Letter' as const,
+    color: 'green',
+    icon: FileText,
+    prefix: '2',
+    fetchTOC: () => postBasesApi.getLettersTOC(),
+  },
+  sayings: {
+    label: 'Sayings',
+    sublabel: 'Hikam',
+    type: 'Saying' as const,
+    color: 'purple',
+    icon: FileText,
+    prefix: '3',
+    fetchTOC: () => postBasesApi.getSayingsTOC(),
+  },
+};
+
+const COLOR_MAP: Record<string, { bg: string; border: string; text: string; hoverBorder: string; tabActive: string; tabBg: string }> = {
+  blue: { bg: 'bg-blue-50', border: 'border-blue-100', text: 'text-blue-600', hoverBorder: 'hover:border-blue-200', tabActive: 'border-blue-600 text-blue-600', tabBg: 'bg-blue-50' },
+  green: { bg: 'bg-green-50', border: 'border-green-100', text: 'text-green-600', hoverBorder: 'hover:border-green-200', tabActive: 'border-green-600 text-green-600', tabBg: 'bg-green-50' },
+  purple: { bg: 'bg-purple-50', border: 'border-purple-100', text: 'text-purple-600', hoverBorder: 'hover:border-purple-200', tabActive: 'border-purple-600 text-purple-600', tabBg: 'bg-purple-50' },
 };
 
 export default function TOCIndexPage() {
+  const [activeTab, setActiveTab] = useState<TabType>('orations');
+  const [data, setData] = useState<Record<TabType, PostBase[]>>({ orations: [], letters: [], sayings: [] });
+  const [loading, setLoading] = useState<Record<TabType, boolean>>({ orations: true, letters: false, sayings: false });
+  const [error, setError] = useState<Record<TabType, string | null>>({ orations: null, letters: null, sayings: null });
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchData = async (tab: TabType) => {
+    if (data[tab].length > 0) return; // Already loaded
+
+    setLoading(prev => ({ ...prev, [tab]: true }));
+    setError(prev => ({ ...prev, [tab]: null }));
+
+    try {
+      const config = TAB_CONFIG[tab];
+      const response = await config.fetchTOC();
+      setData(prev => ({ ...prev, [tab]: response.data || [] }));
+    } catch (err) {
+      console.error(`Error fetching ${tab} TOC:`, err);
+      setError(prev => ({ ...prev, [tab]: `Failed to load ${tab}. Please try again.` }));
+    } finally {
+      setLoading(prev => ({ ...prev, [tab]: false }));
+    }
+  };
+
+  useEffect(() => {
+    fetchData('orations');
+  }, []);
+
+  useEffect(() => {
+    fetchData(activeTab);
+  }, [activeTab]);
+
+  const config = TAB_CONFIG[activeTab];
+  const colors = COLOR_MAP[config.color];
+  const items = data[activeTab];
+
+  // Filter items by search term
+  const filteredItems = items.filter(item => {
+    if (!searchTerm.trim()) return true;
+    const query = searchTerm.toLowerCase();
+    return item.posts?.some(post =>
+      (post.heading?.toLowerCase().includes(query)) ||
+      (post.sermonNumber?.includes(query))
+    );
+  });
+
+  // Sort items by sermon number
+  const sortedItems = [...filteredItems].sort((a, b) => {
+    const getNum = (item: PostBase) => {
+      const post = item.posts?.[0];
+      if (!post?.sermonNumber) return 0;
+      const parts = post.sermonNumber.split('.');
+      return parseInt(parts.length > 1 ? parts[1] : parts[0], 10) || 0;
+    };
+    return getNum(a) - getNum(b);
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -48,103 +115,136 @@ export default function TOCIndexPage() {
             </h1>
             <div className="h-1 bg-[#43896B] rounded-full w-24 mx-auto mb-8"></div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Access detailed table of contents entries with English and Arabic headings, 
+              Access detailed table of contents entries with English and Arabic headings,
               along with historical manuscript images and metadata.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Content Sections */}
+      {/* Tabs + Content */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Orations */}
-            <Link 
-              href="/orations"
-              className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 shadow-sm border border-blue-100 hover:shadow-lg hover:border-blue-200 transition-all duration-300 group"
-            >
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <BookOpen className="w-7 h-7 text-blue-600" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                    Orations
-                  </h2>
-                  <p className="text-sm text-gray-500">Khutbah</p>
-                </div>
-              </div>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                View the table of contents for all orations (sermons) in Nahj al-Balaghah. 
-                Each entry includes the heading and opening lines in English and Arabic.
-              </p>
-              <div className="inline-flex items-center gap-2 text-blue-600 font-semibold group-hover:gap-3 transition-all">
-                <span>Browse Orations</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </Link>
-
-            {/* Letters */}
-            <Link 
-              href="/letters"
-              className="bg-gradient-to-br from-green-50 to-white rounded-2xl p-8 shadow-sm border border-green-100 hover:shadow-lg hover:border-green-200 transition-all duration-300 group"
-            >
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <FileText className="w-7 h-7 text-green-600" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">
-                    Letters
-                  </h2>
-                  <p className="text-sm text-gray-500">Maktoobat</p>
-                </div>
-              </div>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Explore the table of contents for letters written by Imam Ali (AS). 
-                View headings and key excerpts with manuscript references.
-              </p>
-              <div className="inline-flex items-center gap-2 text-green-600 font-semibold group-hover:gap-3 transition-all">
-                <span>Browse Letters</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </Link>
-
-            {/* Sayings */}
-            <Link 
-              href="/sayings"
-              className="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-8 shadow-sm border border-purple-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 group"
-            >
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">
-                    Sayings
-                  </h2>
-                  <p className="text-sm text-gray-500">Hikam</p>
-                </div>
-              </div>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Access the table of contents for short sayings and wisdom. 
-                Each saying is presented with English and Arabic text.
-              </p>
-              <div className="inline-flex items-center gap-2 text-purple-600 font-semibold group-hover:gap-3 transition-all">
-                <span>Browse Sayings</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </Link>
+          {/* Tabs */}
+          <div className="flex border-b border-gray-200 mb-8">
+            {(Object.keys(TAB_CONFIG) as TabType[]).map(tab => {
+              const tabConfig = TAB_CONFIG[tab];
+              const tabColors = COLOR_MAP[tabConfig.color];
+              const isActive = activeTab === tab;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => { setActiveTab(tab); setSearchTerm(''); }}
+                  className={`flex-1 sm:flex-none px-6 py-4 text-sm font-semibold border-b-2 transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? `${tabColors.tabActive} border-b-2`
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <tabConfig.icon className="w-4 h-4" />
+                    <span>{tabConfig.label}</span>
+                    {data[tab].length > 0 && (
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${isActive ? tabColors.tabBg : 'bg-gray-100'}`}>
+                        {data[tab].length}
+                      </span>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
+
+          {/* Search */}
+          <div className="mb-8">
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder={`Search ${config.label.toLowerCase()}...`}
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#43896B]/30 focus:border-[#43896B] transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Loading */}
+          {loading[activeTab] && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {[...Array(12)].map((_, i) => (
+                <div key={i} className="animate-pulse bg-gray-100 rounded-xl h-24"></div>
+              ))}
+            </div>
+          )}
+
+          {/* Error */}
+          {error[activeTab] && (
+            <div className="text-center py-12">
+              <p className="text-red-500 mb-4">{error[activeTab]}</p>
+              <button
+                onClick={() => { setData(prev => ({ ...prev, [activeTab]: [] })); fetchData(activeTab); }}
+                className="bg-[#43896B] text-white px-6 py-2 rounded-lg hover:bg-[#367556] transition-colors cursor-pointer"
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+
+          {/* Content Grid */}
+          {!loading[activeTab] && !error[activeTab] && (
+            <>
+              {sortedItems.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  {searchTerm ? `No ${config.label.toLowerCase()} found matching "${searchTerm}"` : `No ${config.label.toLowerCase()} found.`}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {sortedItems.map(item => {
+                    const post = item.posts?.[0];
+                    if (!post) return null;
+
+                    const displayNum = post.sermonNumber
+                      ? post.sermonNumber.includes('.')
+                        ? post.sermonNumber.split('.').pop()
+                        : post.sermonNumber
+                      : '?';
+
+                    return (
+                      <Link
+                        key={item.id}
+                        href={`/content/details/${activeTab}/${post.id}`}
+                        className={`group rounded-xl p-4 border ${colors.border} ${colors.bg} ${colors.hoverBorder} hover:shadow-md transition-all duration-200`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg ${colors.text} bg-white border ${colors.border} text-sm font-bold shrink-0`}>
+                            {displayNum}
+                          </span>
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-gray-900 group-hover:text-gray-700 line-clamp-2 leading-snug">
+                              {post.heading || 'Untitled'}
+                            </p>
+                            {post.editions && post.editions.length > 0 && (
+                              <p className="text-xs text-gray-500 mt-1 line-clamp-1">
+                                {post.editions.map(e => e.title).join(', ')}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Count */}
+              {sortedItems.length > 0 && (
+                <p className="text-sm text-gray-400 text-center mt-6">
+                  Showing {sortedItems.length} of {items.length} {config.label.toLowerCase()}
+                </p>
+              )}
+            </>
+          )}
         </div>
       </section>
 
@@ -152,7 +252,7 @@ export default function TOCIndexPage() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            What You'll Find in the TOC
+            What You&apos;ll Find in the TOC
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">

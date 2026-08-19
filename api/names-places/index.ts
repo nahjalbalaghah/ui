@@ -1,4 +1,5 @@
 import api from '../api';
+import type { LinkedFootnote } from '../index-terms';
 
 export interface NamePlaceTextNumber {
   id: number;
@@ -15,6 +16,7 @@ export interface NamePlace {
   updatedAt: string;
   publishedAt: string;
   text_numbers: NamePlaceTextNumber[];
+  LinkFootnote?: LinkedFootnote[];
 }
 
 export interface NamePlacesApiResponse {
@@ -38,7 +40,84 @@ export interface NamePlacesFilters {
   language?: 'English' | 'Arabic';
 }
 
+export interface GlossaryItem {
+  id: number;
+  documentId: string;
+  word: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface GlossaryApiResponse {
+  data: GlossaryItem[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
 export const namePlacesApi = {
+  async getGlossaryDescription(word: string): Promise<GlossaryApiResponse> {
+    try {
+      const response = await api.get('/api/glossary-of-names', {
+        params: {
+          'filters[word][$eq]': word,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching glossary description:', error);
+      throw error;
+    }
+  },
+
+  async getGlossaryItems(page = 1, pageSize = 20, searchWord?: string): Promise<GlossaryApiResponse> {
+    try {
+      const params: Record<string, any> = {
+        'pagination[page]': page,
+        'pagination[pageSize]': pageSize,
+      };
+      if (searchWord) {
+        params['filters[word][$containsi]'] = searchWord;
+      }
+      const response = await api.get('/api/glossary-of-names', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching glossary items:', error);
+      throw error;
+    }
+  },
+
+  async getAllGlossaryItems(): Promise<GlossaryItem[]> {
+    try {
+      const firstPage = await this.getGlossaryItems(1, 100);
+      let allData = firstPage.data || [];
+      const pageCount = firstPage.meta?.pagination?.pageCount || 1;
+
+      if (pageCount > 1) {
+        const promises = [];
+        for (let i = 2; i <= pageCount; i++) {
+          promises.push(this.getGlossaryItems(i, 100));
+        }
+        const responses = await Promise.all(promises);
+        responses.forEach(res => {
+          if (res.data) allData = [...allData, ...res.data];
+        });
+      }
+
+      return allData;
+    } catch (error) {
+      console.error('Error fetching all glossary items:', error);
+      throw error;
+    }
+  },
+
   async getNamePlaces(
     page = 1,
     pageSize = 20,

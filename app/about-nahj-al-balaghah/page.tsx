@@ -1,5 +1,5 @@
 import React from 'react'
-import { BookOpen, ExternalLink } from 'lucide-react'
+import { BookOpen, Download } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
@@ -40,11 +40,11 @@ export default function AboutNahjAlBalaghahPage() {
     },
     {
       label: "\"Nahj al-Balagha\", Qutbuddin, Tahera — Encyclopaedia of Islam, THREE",
-      href: "https://referenceworks.brillonline.com/entries/encyclopaedia-of-islam-3/nahj-al-balagha-COM_27422"
+      href: "/pdfs/Qutbuddin_Nahj al-Balagha_EI3.pdf"
     },
     {
       label: "\"Nahdj al-Balāgha\", Mukhtar Djebli — Encyclopaedia of Islam, Second Edition",
-      href: "https://referenceworks.brillonline.com/entries/encyclopaedia-of-islam-2/nahdj-al-balagha-SIM_5765"
+      href: "/pdfs/Nahdj al-Balagha_Djebli_EI2.pdf"
     }
   ]
 
@@ -70,18 +70,22 @@ export default function AboutNahjAlBalaghahPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-4">
             {resourceLinks.map((link, index) => (
-              <Link
+              <div
                 key={index}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between p-6 bg-white rounded-xl border-2 border-[#43896B]/20 hover:border-[#43896B]/40 hover:shadow-lg transition-all duration-300 group"
+                className="flex items-center justify-between p-6 bg-white rounded-xl border-2 border-[#43896B]/20 transition-all duration-300 group"
               >
-                <span className="text-lg text-gray-800 group-hover:text-[#43896B] transition-colors duration-300 pr-4">
+                <span className="text-lg text-gray-800 transition-colors duration-300 pr-4">
                   {link.label}
                 </span>
-                <ExternalLink className="w-5 h-5 text-[#43896B] flex-shrink-0" />
-              </Link>
+                <Link
+                  href={link.href}
+                  download
+                  className="flex items-center gap-2 px-4 py-2 bg-[#43896B] text-white rounded-lg hover:bg-[#366e56] transition-colors duration-300 flex-shrink-0"
+                >
+                  <Download className="w-4 h-4" />
+                  <span className="text-sm font-semibold">Download</span>
+                </Link>
+              </div>
             ))}
           </div>
         </div>

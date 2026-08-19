@@ -27,9 +27,9 @@ const AboutNahjSection = () => {
                 </div>
                 <div className="h-1 bg-[#43896B] rounded-full w-24 mb-6"></div>
               </div>
-              <Link 
-                href="/pdfs/TQ-Introduction-to-Nahj-al-Balaghah.pdf" 
-                target="_blank"
+              <Link
+                href="/pdfs/TQ-Introduction-to-Nahj-al-Balaghah.pdf"
+                download
                 className="flex-shrink-0 ml-4"
               >
                 <motion.div

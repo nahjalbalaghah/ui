@@ -72,7 +72,8 @@ export interface Manuscript {
   id: number;
   documentId: string;
   section: string;
-  library?: string;
+  library?: string | Library | Library[];
+  libraries?: Library[];
   title?: string;
   description?: string;
   bookName?: string;
@@ -125,7 +126,7 @@ export const manuscriptsApi = {
     try {
       const response = await api.get('/api/manuscripts', {
         params: {
-          'populate': 'files',
+          'populate': '*',
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
         },
@@ -146,7 +147,7 @@ export const manuscriptsApi = {
       const response = await api.get('/api/manuscripts', {
         params: {
           'filters[section][$eq]': sectionNumber,
-          'populate': 'files',
+          'populate': '*',
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
         },
@@ -165,7 +166,7 @@ export const manuscriptsApi = {
     try {
       const response = await api.get(`/api/manuscripts/${id}`, {
         params: {
-          'populate': 'files',
+          'populate': '*',
         },
       });
       return response.data.data;
@@ -197,7 +198,7 @@ export const manuscriptsApi = {
       const response = await api.get('/api/manuscripts', {
         params: {
           'filters[section][$startsWith]': sectionPrefix,
-          'populate': 'files',
+          'populate': '*',
           'pagination[page]': page,
           'pagination[pageSize]': pageSize,
         },
@@ -209,6 +210,102 @@ export const manuscriptsApi = {
     }
   },
 };
+
+/**
+ * Normalize manuscript/library labels so catalog diacritics and filename
+ * spellings (for example Naṣīrī/Nasiri) compare consistently.
+ */
+export function normalizeManuscriptIdentity(value: string): string {
+  return (value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+export function manuscriptMatchesLibrary(manuscript: Manuscript, library: Library): boolean {
+  const linkedFromLibrary = Array.isArray(library.manuscript)
+    ? library.manuscript
+    : library.manuscript
+      ? [library.manuscript]
+      : [];
+
+  if (linkedFromLibrary.some((linked: any) =>
+    (linked?.id && linked.id === manuscript.id) ||
+    (linked?.documentId && linked.documentId === manuscript.documentId)
+  )) {
+    return true;
+  }
+
+  const manuscriptLibraries = [
+    ...((Array.isArray(manuscript.library) ? manuscript.library : manuscript.library ? [manuscript.library] : []) as any[]),
+    ...((manuscript.libraries || []) as any[]),
+  ];
+  const normalizedLibraryName = normalizeManuscriptIdentity(library.name);
+
+  if (manuscriptLibraries.some((linked: any) => {
+    if (typeof linked === 'string') {
+      return normalizeManuscriptIdentity(linked) === normalizedLibraryName;
+    }
+    return (
+      (linked?.id && linked.id === library.id) ||
+      (linked?.documentId && linked.documentId === library.documentId) ||
+      (linked?.name && normalizeManuscriptIdentity(linked.name) === normalizedLibraryName)
+    );
+  })) {
+    return true;
+  }
+
+  const searchableManuscriptText = normalizeManuscriptIdentity([
+    manuscript.title,
+    manuscript.description,
+    manuscript.bookName,
+    manuscript.siglaEnglish,
+    typeof manuscript.library === 'string' ? manuscript.library : '',
+    ...(manuscript.files || []).map(file => file.name),
+  ].filter(Boolean).join(' '));
+
+  const compactLibraryName = normalizedLibraryName.replace(/\s+/g, '');
+  const compactManuscriptText = searchableManuscriptText.replace(/\s+/g, '');
+  const aliases = new Set<string>([normalizedLibraryName, compactLibraryName]);
+
+  // Include useful catalog metadata because uploaded page filenames often use
+  // a siglum or shelfmark rather than the library's complete display name.
+  for (const item of library.library_items || []) {
+    for (const value of [item.Sigla, item.libraryRef, item.catalogNumber]) {
+      const normalized = normalizeManuscriptIdentity(value || '');
+      if (normalized.length > 2) {
+        aliases.add(normalized);
+        aliases.add(normalized.replace(/\s+/g, ''));
+      }
+    }
+  }
+
+  const genericWords = new Set([
+    'library', 'manuscript', 'manuscripts', 'collection', 'archive',
+    'national', 'university', 'institute', 'institution', 'museum', 'the',
+  ]);
+  for (const token of normalizedLibraryName.split(' ')) {
+    if (token.length > 3 && !genericWords.has(token)) aliases.add(token);
+  }
+
+  if (compactLibraryName.includes('nasiri')) aliases.add('nasiri');
+  if (compactLibraryName.includes('shahrastani') || compactLibraryName.includes('shahristani')) {
+    aliases.add('shahrastani');
+    aliases.add('shahristani');
+  }
+  if (compactLibraryName.includes('marashi')) {
+    aliases.add('marashi');
+    aliases.add('qum mar');
+    aliases.add('qummar');
+  }
+
+  return Array.from(aliases).some(alias => {
+    if (alias.length <= 3) return false;
+    return searchableManuscriptText.includes(alias) || compactManuscriptText.includes(alias.replace(/\s+/g, ''));
+  });
+}
 
 /**
  * Helper function to determine the content type based on section number

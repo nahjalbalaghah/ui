@@ -57,6 +57,12 @@ const indexes = [
     title: "Index of Religious and Ethical Concepts",
     description: "Delve into the fundamental Islamic principles and ethical teachings that form the backbone of Nahj al-Balaghah. This index covers concepts such as justice, piety, leadership, and spirituality.",
     href: "/indexes/religious-concepts"
+  },
+  {
+    icon: BookOpen,
+    title: "Glossary",
+    description: "Explore the descriptions and meanings of various terms, names, and places from the glossary.",
+    href: "/indexes/glossary"
   }
 ]
 
@@ -82,7 +88,7 @@ export default function IndexesPage() {
       </section>
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {indexes.map((index, i) => (
               <Link
                 key={index.title}
