@@ -17,18 +17,6 @@ jobs:
           npm install
           npm run build
 
-      - name: Backup MySQL database on server
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.SFTP_HOST }}
-          username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASS }}
-          script: |
-            mkdir -p /home/tmq_user/backups
-            mysqldump -h ${{ secrets.DB_HOST }} -u ${{ secrets.DB_USER }} -p'${{ secrets.DB_PASS }}' ${{ secrets.DB_NAME }} | gzip > /home/tmq_user/backups/db_backup_$(date +%F_%H-%M-%S).sql.gz
-            # keep only last 7 days of db backups
-            find /home/tmq_user/backups/db_backup_*.sql.gz -type f -mtime +7 -delete
-
       - name: Backup current frontend on server
         uses: appleboy/ssh-action@v1.0.0
         with:
