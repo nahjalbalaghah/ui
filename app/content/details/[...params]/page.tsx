@@ -1,51 +1,50 @@
-'use client';
-
-import React, { useMemo, useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import ContentDetailsPage from '@/app/components/content/content-details-page';
-import ContentSubPathDispatcher from '@/app/components/content/content-sub-path-dispatcher';
+import { Suspense } from 'react';
 import { orationsApi, lettersApi, sayingsApi } from '@/api/posts';
+import ContentDetailsClient from './ContentDetailsClient';
 
-export default function UnifiedContentDetailsPage() {
-  const params = useParams();
-  const paramsArray = params.params as string[];
+// Pre-render every oration/letter/saying's base detail page at build time
+// (static export has no server, so dynamic segments must be enumerated here).
+// Nested sub-paths (toc, sources, sources/[documentId]) are NOT enumerated --
+// they're served by rewriting to this same id's static shell at the web
+// server, and rendered client-side by ContentSubPathDispatcher after hydration.
+export async function generateStaticParams() {
+  const contentTypes: { type: string; listFn: (page: number, pageSize: number) => Promise<{ data: { id: number }[]; meta: { pagination: { pageCount: number } } }> }[] = [
+    { type: 'orations', listFn: orationsApi.getOrations },
+    { type: 'letters', listFn: lettersApi.getLetters },
+    { type: 'sayings', listFn: sayingsApi.getSayings },
+  ];
 
-  if (!paramsArray || paramsArray.length < 2) {
-    return <div>Invalid path</div>;
+  const allParams: { params: string[] }[] = [];
+
+  for (const { type, listFn } of contentTypes) {
+    let page = 1;
+    const pageSize = 100;
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const res = await listFn(page, pageSize);
+      const items = res?.data || [];
+      for (const item of items) {
+        if (item?.id != null) {
+          allParams.push({ params: [type, String(item.id)] });
+        }
+      }
+      const pageCount = res?.meta?.pagination?.pageCount || 1;
+      if (page >= pageCount || items.length === 0) break;
+      page++;
+    }
   }
 
-  const [type, id, ...rest] = paramsArray;
+  return allParams;
+}
 
-  const apiMap: Record<string, any> = {
-    orations: orationsApi.getOrationById,
-    letters: lettersApi.getLetterById,
-    sayings: sayingsApi.getSayingById,
-  };
+// Unlisted (type, id) combos 404 at the Next level; the Apache rewrite is
+// what actually serves nested sub-paths, so this stays strict.
+export const dynamicParams = false;
 
-  const titleMap: Record<string, string> = {
-    orations: 'Orations',
-    letters: 'Letters',
-    sayings: 'Sayings',
-  };
-
-  const api = useMemo(() => ({
-    getContentById: apiMap[type],
-  }), [type]);
-
-  if (rest.length > 0) {
-    return <ContentSubPathDispatcher type={type as any} />;
-  }
-
-  if (!api.getContentById) {
-    return <div>Content type not found</div>;
-  }
-
+export default function Page() {
   return (
-    <ContentDetailsPage
-      contentType={type as any}
-      title={titleMap[type] || type}
-      api={api}
-      id={parseInt(id)}
-    />
+    <Suspense fallback={null}>
+      <ContentDetailsClient />
+    </Suspense>
   );
 }

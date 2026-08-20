@@ -1,0 +1,49 @@
+This app now builds with `output: 'export'` (see next.config.ts) and deploys
+via scp to /home/nahjalbalaghah/t.nahjalbalaghah.org (deploy-frontend.yml).
+Static export has no server, so two things that used to run inside Next.js
+now have to happen at the Apache layer instead. Place the rules below in
+/home/nahjalbalaghah/t.nahjalbalaghah.org/.htaccess on the server.
+
+The scp step in deploy-frontend.yml uploads the contents of out/ with
+`rm: false`, so it will NOT delete this file on future deploys -- it only
+needs to be placed once.
+
+--------------------------------------------------------------------------
+RewriteEngine On
+
+# --- 1. Legacy path redirects -------------------------------------------
+# These used to be next.config.ts's redirects(), which isn't supported
+# under output: 'export'.
+RewriteRule ^orations/details/(.+)$ /content/details/orations/$1 [R=301,L]
+RewriteRule ^letters/details/(.+)$ /content/details/letters/$1 [R=301,L]
+RewriteRule ^sayings/details/(.+)$ /content/details/sayings/$1 [R=301,L]
+RewriteRule ^indexes/details/([^/]+)$ /indexes/$1 [R=301,L]
+
+# --- 2. SPA-fallback shells for routes not enumerated at build time ------
+# generateStaticParams() only pre-renders the base pages:
+#   /content/details/{orations|letters|sayings}/{id}/
+#   /indexes/{names-places|terms|quran-hadith|religious-concepts|glossary}/
+# Deeper paths (toc, sources, sources/{docId}, individual term/entry detail
+# pages) are fully client-rendered -- they read the real params from
+# window.location after hydration, regardless of which HTML file was
+# actually served. So: reuse that item's own generated page as the shell.
+# (Internal rewrites, no [R] flag -- the browser's address bar and any
+# query string stay exactly as requested.)
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^content/details/([a-z]+)/([0-9]+)/.*$ /content/details/$1/$2/index.html [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^indexes/([a-z-]+)/.*$ /indexes/$1/index.html [L]
+--------------------------------------------------------------------------
+
+Notes:
+- The `!-f` / `!-d` conditions make sure real files/directories (JS chunks
+  under _next/static, images, etc.) are always served as-is and never
+  caught by the fallback rules.
+- Sentry's tunnelRoute (/monitoring proxy) also doesn't work under static
+  export -- the build now warns about this and falls back to reporting
+  errors directly to Sentry's domain. Not a routing concern, just lower
+  reliability of error reports in browsers with aggressive ad-blockers.

@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.SFTP_PASS }}
           script: |
             mkdir -p /home/nahjalbalaghah/backups
-            zip -r /home/nahjalbalaghah/backups/backup_$(date +%F_%H-%M-%S).zip /home/nahjalbalaghah/t.nahjalbalaghah.org -x "/home/nahjalbalaghah/t.nahjalbalaghah.org/.git/*" 
+            zip -r /home/nahjalbalaghah/backups/backup_$(date +%F_%H-%M-%S).zip /home/nahjalbalaghah/t.nahjalbalaghah.org -x "/home/nahjalbalaghah/t.nahjalbalaghah.org/.git/*"  "/home/nahjalbalaghah/t.nahjalbalaghah.org/.dh-diag/*"
             # keep only last 7 days of frontend backups
             find /home/nahjalbalaghah/backups/backup_*.zip -type f -mtime +7 -delete
 
@@ -35,7 +35,7 @@ jobs:
           host: ${{ secrets.SFTP_HOST }}
           username: ${{ secrets.SFTP_USER }}
           password: ${{ secrets.SFTP_PASS }}
-          source: "dist/"
+          source: "out/"
           target: "/home/nahjalbalaghah/t.nahjalbalaghah.org"
           strip_components: 1
           rm: false

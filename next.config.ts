@@ -2,7 +2,17 @@ import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Static export: `next build` writes plain HTML/JS to out/ instead of
+  // running a Node server. Deployed via scp to the target box and served by
+  // Apache. See .github/workflows/deploy-frontend.yml and
+  // deploy/apache-rewrites.conf (rewrites replace the redirects() below,
+  // and serve the SPA-fallback shells for routes not enumerated by
+  // generateStaticParams -- static export can't run rewrites/redirects
+  // itself, there's no server).
+  output: 'export',
+  trailingSlash: true,
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -13,30 +23,6 @@ const nextConfig: NextConfig = {
         hostname: "images.stockcake.com",
       },
     ],
-  },
-  async redirects() {
-    return [
-      {
-        source: '/orations/details/:params+',
-        destination: '/content/details/orations/:params+',
-        permanent: true,
-      },
-      {
-        source: '/letters/details/:params+',
-        destination: '/content/details/letters/:params+',
-        permanent: true,
-      },
-      {
-        source: '/sayings/details/:params+',
-        destination: '/content/details/sayings/:params+',
-        permanent: true,
-      },
-      {
-        source: '/indexes/details/:slug',
-        destination: '/indexes/:slug',
-        permanent: true,
-      },
-    ];
   },
 };
 

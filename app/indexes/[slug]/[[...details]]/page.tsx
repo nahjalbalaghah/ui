@@ -1,48 +1,25 @@
-'use client';
-
-import React from 'react';
-import { useParams, notFound } from 'next/navigation';
-import NamesPlacesContent from '@/app/components/indexes/NamesPlacesContent';
-import IndexTermsContent from '@/app/components/indexes/IndexTermsContent';
-import QuranHadithContent from '@/app/components/indexes/QuranHadithContent';
-import ReligiousConceptsContent from '@/app/components/indexes/ReligiousConceptsContent';
-import GlossaryContent from '@/app/components/indexes/GlossaryContent';
-import IndexDetailDispatcher from '@/app/components/indexes/index-detail-dispatcher';
+import { Suspense } from 'react';
+import IndexSlugClient from './IndexSlugClient';
 
 const VALID_SLUGS = ['names-places', 'terms', 'quran-hadith', 'religious-concepts', 'glossary'];
 
-const listingComponents: Record<string, React.FC> = {
-  'names-places': NamesPlacesContent,
-  'terms': IndexTermsContent,
-  'quran-hadith': QuranHadithContent,
-  'religious-concepts': ReligiousConceptsContent,
-  'glossary': GlossaryContent,
-};
+// Only the 5 top-level listing pages are pre-rendered. Detail/search pages
+// under each category (e.g. /indexes/terms/some-word) are entirely
+// client-rendered and query-string driven (see IndexDetailDispatcher), so
+// there's no real static content to gain by enumerating every term -- the
+// Apache rewrite serves this same listing shell for any deeper path, and
+// IndexSlugClient's own routing logic (reading the real URL post-hydration)
+// takes it from there.
+export async function generateStaticParams() {
+  return VALID_SLUGS.map((slug) => ({ slug, details: [] }));
+}
 
-export default function IndexSlugPage() {
-  const params = useParams();
-  let slug = params.slug as string;
-  let details = params.details as string[] | undefined;
+export const dynamicParams = false;
 
-  // If slug is 'details', shift to the next param if exists
-  if (slug === 'details' && details && details.length > 0) {
-    slug = details[0];
-    details = details.slice(1);
-  }
-
-  if (!VALID_SLUGS.includes(slug)) {
-    notFound();
-  }
-
-  // No details means listing page
-  if (!details || details.length === 0) {
-    const ListingComponent = listingComponents[slug];
-    if (!ListingComponent) {
-      notFound();
-    }
-    return <ListingComponent />;
-  }
-
-  // Has details means detail/dispatcher page
-  return <IndexDetailDispatcher />;
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <IndexSlugClient />
+    </Suspense>
+  );
 }
