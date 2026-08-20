@@ -170,7 +170,14 @@ export default function ManuscriptComparisonModal({
 
     // Helper function to get library/manuscript name
     const getManuscriptDisplayName = useCallback((ms: Manuscript): string => {
-        if (ms.library) return ms.library;
+        if (ms.library) {
+            if (typeof ms.library === 'string') return ms.library;
+            if (Array.isArray(ms.library)) {
+                if (ms.library[0]?.name) return ms.library[0].name;
+            } else if ('name' in ms.library) {
+                return ms.library.name;
+            }
+        }
         if (ms.holdingInstitution) return ms.holdingInstitution;
         if (ms.repository) return ms.repository;
         if (ms.bookName) return ms.bookName;
