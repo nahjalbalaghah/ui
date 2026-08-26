@@ -25,7 +25,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           command_timeout: 15m
-          script_stop: true
 
           script: |
             set -e
@@ -38,64 +37,43 @@ jobs:
 
             cd "$APP_DIR"
 
-            echo ""
-            echo ">>> Current commit"
-            git rev-parse --short HEAD || true
-
-            echo ""
             echo ">>> Fetching latest code"
             git fetch origin main
 
-            echo ""
             echo ">>> Updating working tree"
             git reset --hard origin/main
 
-            echo ""
-            echo ">>> Cleaning old build"
-            rm -rf .next
-
-            echo ""
             echo ">>> Loading Node.js"
             source /home/nahjui/.nvm/nvm.sh
             nvm use 22
 
-            echo ""
-            echo ">>> Node version"
+            echo ">>> Node:"
             node -v
 
-            echo ""
-            echo ">>> npm version"
+            echo ">>> npm:"
             npm -v
 
-            echo ""
             echo ">>> Installing dependencies"
             npm ci
 
-            echo ""
             echo ">>> Building Next.js"
             npm run build
 
-            echo ""
             echo ">>> Restarting UI"
             sudo systemctl restart nahj-ui
 
-            echo ""
-            echo ">>> Waiting for UI"
+            echo ">>> Waiting for application"
             sleep 3
 
-            echo ""
             echo ">>> Checking service"
             sudo systemctl is-active --quiet nahj-ui
 
-            echo ""
-            echo ">>> Checking local Next.js"
+            echo ">>> Checking Next.js"
             curl -f -I http://127.0.0.1:3000
 
-            echo ""
             echo "========================================"
             echo "Deployment successful"
             echo "========================================"
 
-            echo ""
-            echo ">>> Deployed commit"
+            echo ">>> Deployed commit:"
             git rev-parse --short HEAD
