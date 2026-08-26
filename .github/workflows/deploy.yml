@@ -1,40 +1,101 @@
-name: Deploy Frontend
+name: Deploy Next.js UI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+
+  workflow_dispatch:
+
+concurrency:
+  group: production-ui
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  deploy:
+    name: Deploy UI to VPS
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Build frontend
-        run: |
-          npm install
-          npm run build
-
-      - name: Backup current frontend on server
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.2
         with:
-          host: ${{ secrets.SFTP_HOST }}
-          username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASS }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          command_timeout: 15m
+          script_stop: true
+
           script: |
-            zip -r /home/nahjalbalaghah/backups/backup_$(date +%F_%H-%M-%S).zip /home/nahjalbalaghah/t.nahjalbalaghah.org -x "/home/nahjalbalaghah/t.nahjalbalaghah.org/.git/*"  "/home/nahjalbalaghah/t.nahjalbalaghah.org/.dh-diag/*"
-            # keep only last 7 days of frontend backups
-            find /home/nahjalbalaghah/backups/backup_*.zip -type f -mtime +7 -delete
+            set -e
 
-      - name: Upload new frontend build
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SFTP_HOST }}
-          username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASS }}
-          source: "out/"
-          target: "/home/nahjalbalaghah/t.nahjalbalaghah.org"
-          strip_components: 1
-          rm: false
+            APP_DIR="/home/nahjui/app"
+
+            echo "========================================"
+            echo "Deploying Nahj al-Balagha UI"
+            echo "========================================"
+
+            cd "$APP_DIR"
+
+            echo ""
+            echo ">>> Current commit"
+            git rev-parse --short HEAD || true
+
+            echo ""
+            echo ">>> Fetching latest code"
+            git fetch origin main
+
+            echo ""
+            echo ">>> Updating working tree"
+            git reset --hard origin/main
+
+            echo ""
+            echo ">>> Cleaning old build"
+            rm -rf .next
+
+            echo ""
+            echo ">>> Loading Node.js"
+            source /home/nahjui/.nvm/nvm.sh
+            nvm use 22
+
+            echo ""
+            echo ">>> Node version"
+            node -v
+
+            echo ""
+            echo ">>> npm version"
+            npm -v
+
+            echo ""
+            echo ">>> Installing dependencies"
+            npm ci
+
+            echo ""
+            echo ">>> Building Next.js"
+            npm run build
+
+            echo ""
+            echo ">>> Restarting UI"
+            sudo systemctl restart nahj-ui
+
+            echo ""
+            echo ">>> Waiting for UI"
+            sleep 3
+
+            echo ""
+            echo ">>> Checking service"
+            sudo systemctl is-active --quiet nahj-ui
+
+            echo ""
+            echo ">>> Checking local Next.js"
+            curl -f -I http://127.0.0.1:3000
+
+            echo ""
+            echo "========================================"
+            echo "Deployment successful"
+            echo "========================================"
+
+            echo ""
+            echo ">>> Deployed commit"
+            git rev-parse --short HEAD
