@@ -10,11 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build application
+      - name: Build Next.js
         run: |
           npm ci
           npm run build
@@ -22,16 +21,24 @@ jobs:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.2.2
         with:
-          host: ${{ secrets.SFTP_HOST }}
-          username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASS }}
-          script_stop: true
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASS }}
           script: |
             set -e
 
             echo "========================================"
             echo "Deploying Nahj al-Balagha UI"
             echo "========================================"
+
+            echo "Server:"
+            hostname
+
+            echo "Deployment user:"
+            whoami
+
+            echo "Checking nahjui user..."
+            id nahjui
 
             sudo -u nahjui -H bash -lc '
               set -e
@@ -55,10 +62,10 @@ jobs:
             echo "Restarting Next.js..."
             sudo -n systemctl restart nahj-ui
 
-            echo "Checking Next.js..."
+            echo "Checking Next.js service..."
             sudo -n systemctl is-active --quiet nahj-ui
 
-            echo "Testing local application..."
+            echo "Testing Next.js..."
             curl -f http://127.0.0.1:3000/ > /dev/null
 
             echo "========================================"
