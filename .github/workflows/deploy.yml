@@ -62,8 +62,28 @@ jobs:
             echo "Restarting Next.js..."
             sudo -n systemctl restart nahj-ui
 
+            for i in {1..30}; do
+              if sudo ss -lntp | grep -q ':3000'; then
+                echo "Next.js is listening on port 3000"
+                break
+              fi
+
+              echo "Waiting... ($i/30)"
+              sleep 2
+            done
+
             echo "Checking Next.js service..."
             sudo -n systemctl is-active --quiet nahj-ui
+
+            for i in {1..15}; do
+              if curl -fsS http://127.0.0.1:3000/ > /dev/null; then
+                echo "Next.js is responding"
+                break
+              fi
+
+              echo "Waiting for HTTP response... ($i/15)"
+              sleep 2
+            done
 
             echo "Testing Next.js..."
             curl -f http://127.0.0.1:3000/ > /dev/null
