@@ -52,7 +52,7 @@ export interface AudioApiResponse {
 const toAbsoluteMediaUrl = (url?: string): string => {
     if (!url) return '';
     if (/^https?:\/\//i.test(url)) return url;
-    return `https://test-admin.nahjalbalaghah.org${url.startsWith('/') ? '' : '/'}${url}`;
+    return `https://cms.nahjalbalaghah.org${url.startsWith('/') ? '' : '/'}${url}`;
 };
 
 const normalizeAudioUpload = (item: any): AudioUpload => {

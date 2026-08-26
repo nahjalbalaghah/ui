@@ -1,0 +1,41 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build frontend
+        run: |
+          npm install
+          npm run build
+
+      - name: Backup current frontend on server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASS }}
+          script: |
+            mkdir -p /home/nahjalbalaghah/backups
+            zip -r /home/nahjalbalaghah/backups/backup_$(date +%F_%H-%M-%S).zip /home/nahjalbalaghah/t.nahjalbalaghah.org -x "/home/nahjalbalaghah/t.nahjalbalaghah.org/.git/*"  "/home/nahjalbalaghah/t.nahjalbalaghah.org/.dh-diag/*"
+            # keep only last 7 days of frontend backups
+            find /home/nahjalbalaghah/backups/backup_*.zip -type f -mtime +7 -delete
+
+      - name: Upload new frontend build
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASS }}
+          source: "out/"
+          target: "/home/nahjalbalaghah/t.nahjalbalaghah.org"
+          strip_components: 1
+          rm: false

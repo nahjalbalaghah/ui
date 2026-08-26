@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://test-admin.nahjalbalaghah.org/';
+const API_BASE_URL = 'https://cms.nahjalbalaghah.org/';
 // const API_BASE_URL = 'http://localhost:1337/';
 
                   

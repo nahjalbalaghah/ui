@@ -320,7 +320,7 @@ export function getContentTypeFromSection(section: string): 'oration' | 'letter'
 /**
  * Helper function to format manuscript image URL
  */
-export function getManuscriptImageUrl(url: string, baseUrl = 'https://test-admin.nahjalbalaghah.org'): string {
+export function getManuscriptImageUrl(url: string, baseUrl = 'https://cms.nahjalbalaghah.org'): string {
   if (url.startsWith('http')) {
     return url;
   }

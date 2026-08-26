@@ -1,0 +1,24 @@
+name: Rollback Frontend
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_file:
+        description: "Name of the frontend backup zip file (example: fe_2025-01-03_15-20-00.zip)"
+        required: true
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Restore frontend backup
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASS }}
+          script: |
+            echo "Restoring backup: /home/nahjalbalaghah/backups/${{ github.event.inputs.backup_file }}"
+            unzip -o /home/nahjalbalaghah/backups/${{ github.event.inputs.backup_file }} -d /
+            echo "Frontend rollback complete."

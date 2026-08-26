@@ -911,7 +911,7 @@ export const radisApi = {
         'sort[0]': 'number:asc'
       });
 
-      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/radis-introductions?${params}`);
+      const response = await fetch(`https://cms.nahjalbalaghah.org/api/radis-introductions?${params}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -929,7 +929,7 @@ export const radisApi = {
         'pagination[pageSize]': '1'
       });
 
-      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/radis-introductions?${params}`);
+      const response = await fetch(`https://cms.nahjalbalaghah.org/api/radis-introductions?${params}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -955,7 +955,7 @@ export const radisApi = {
         'sort[0]': 'number:asc'
       });
 
-      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/radis-introductions?${params}`);
+      const response = await fetch(`https://cms.nahjalbalaghah.org/api/radis-introductions?${params}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -976,7 +976,7 @@ export const radisApi = {
         params.append(`filters[number][$in][${index}]`, num);
       });
 
-      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/radis-introductions?${params}`);
+      const response = await fetch(`https://cms.nahjalbalaghah.org/api/radis-introductions?${params}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -1020,7 +1020,7 @@ export const conclusionsApi = {
         'sort[0]': 'number:asc'
       });
 
-      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/conclusions?${params}`);
+      const response = await fetch(`https://cms.nahjalbalaghah.org/api/conclusions?${params}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -1038,7 +1038,7 @@ export const conclusionsApi = {
         'pagination[pageSize]': '1'
       });
 
-      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/conclusions?${params}`);
+      const response = await fetch(`https://cms.nahjalbalaghah.org/api/conclusions?${params}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -1064,7 +1064,7 @@ export const conclusionsApi = {
         'sort[0]': 'number:asc'
       });
 
-      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/conclusions?${params}`);
+      const response = await fetch(`https://cms.nahjalbalaghah.org/api/conclusions?${params}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -1085,7 +1085,7 @@ export const conclusionsApi = {
         params.append(`filters[number][$in][${index}]`, num);
       });
 
-      const response = await fetch(`https://test-admin.nahjalbalaghah.org/api/conclusions?${params}`);
+      const response = await fetch(`https://cms.nahjalbalaghah.org/api/conclusions?${params}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
