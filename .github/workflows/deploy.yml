@@ -40,17 +40,17 @@ jobs:
             echo ">>> Fetching latest code"
             git fetch origin main
 
-            echo ">>> Updating working tree"
+            echo ">>> Resetting to origin/main"
             git reset --hard origin/main
 
             echo ">>> Loading Node.js"
             source /home/nahjui/.nvm/nvm.sh
             nvm use 22
 
-            echo ">>> Node:"
+            echo ">>> Node version"
             node -v
 
-            echo ">>> npm:"
+            echo ">>> npm version"
             npm -v
 
             echo ">>> Installing dependencies"
@@ -59,7 +59,7 @@ jobs:
             echo ">>> Building Next.js"
             npm run build
 
-            echo ">>> Restarting UI"
+            echo ">>> Restarting Next.js"
             sudo systemctl restart nahj-ui
 
             echo ">>> Waiting for application"
@@ -75,5 +75,5 @@ jobs:
             echo "Deployment successful"
             echo "========================================"
 
-            echo ">>> Deployed commit:"
+            echo ">>> Deployed commit"
             git rev-parse --short HEAD
