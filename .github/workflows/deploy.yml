@@ -2,7 +2,7 @@ name: Deploy Frontend
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main" ]
 
 jobs:
   build-and-deploy:
@@ -24,7 +24,6 @@ jobs:
           username: ${{ secrets.SFTP_USER }}
           password: ${{ secrets.SFTP_PASS }}
           script: |
-            mkdir -p /home/nahjalbalaghah/backups
             zip -r /home/nahjalbalaghah/backups/backup_$(date +%F_%H-%M-%S).zip /home/nahjalbalaghah/t.nahjalbalaghah.org -x "/home/nahjalbalaghah/t.nahjalbalaghah.org/.git/*"  "/home/nahjalbalaghah/t.nahjalbalaghah.org/.dh-diag/*"
             # keep only last 7 days of frontend backups
             find /home/nahjalbalaghah/backups/backup_*.zip -type f -mtime +7 -delete
