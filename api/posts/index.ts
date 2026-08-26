@@ -1063,7 +1063,7 @@ export const conclusionsApi = {
         'filters[$or][1][translation][$containsi]': query,
         'sort[0]': 'number:asc'
       });
-
+      // change of url to fetch from the correct endpoint for conclusions
       const response = await fetch(`https://cms.nahjalbalaghah.org/api/conclusions?${params}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
