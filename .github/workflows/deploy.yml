@@ -1,79 +1,66 @@
-name: Deploy Next.js UI
+name: Deploy Nahj al-Balagha UI
 
 on:
   push:
     branches:
       - main
 
-  workflow_dispatch:
-
-concurrency:
-  group: production-ui
-  cancel-in-progress: true
-
 jobs:
   deploy:
-    name: Deploy UI to VPS
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build application
+        run: |
+          npm ci
+          npm run build
+
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.2.2
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          command_timeout: 15m
-
+          host: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASS }}
+          script_stop: true
           script: |
             set -e
-
-            APP_DIR="/home/nahjui/app"
 
             echo "========================================"
             echo "Deploying Nahj al-Balagha UI"
             echo "========================================"
 
-            cd "$APP_DIR"
+            sudo -u nahjui -H bash -lc '
+              set -e
 
-            echo ">>> Fetching latest code"
-            git fetch origin main
+              source ~/.nvm/nvm.sh
+              nvm use 22
 
-            echo ">>> Resetting to origin/main"
-            git reset --hard origin/main
+              cd /home/nahjui/app
 
-            echo ">>> Loading Node.js"
-            source /home/nahjui/.nvm/nvm.sh
-            nvm use 22
+              echo "Pulling latest code..."
+              git fetch origin
+              git reset --hard origin/main
 
-            echo ">>> Node version"
-            node -v
+              echo "Installing dependencies..."
+              npm ci
 
-            echo ">>> npm version"
-            npm -v
+              echo "Building Next.js..."
+              npm run build
+            '
 
-            echo ">>> Installing dependencies"
-            npm ci
+            echo "Restarting Next.js..."
+            sudo -n systemctl restart nahj-ui
 
-            echo ">>> Building Next.js"
-            npm run build
+            echo "Checking Next.js..."
+            sudo -n systemctl is-active --quiet nahj-ui
 
-            echo ">>> Restarting Next.js"
-            sudo systemctl restart nahj-ui
-
-            echo ">>> Waiting for application"
-            sleep 3
-
-            echo ">>> Checking service"
-            sudo systemctl is-active --quiet nahj-ui
-
-            echo ">>> Checking Next.js"
-            curl -f -I http://127.0.0.1:3000
+            echo "Testing local application..."
+            curl -f http://127.0.0.1:3000/ > /dev/null
 
             echo "========================================"
             echo "Deployment successful"
             echo "========================================"
-
-            echo ">>> Deployed commit"
-            git rev-parse --short HEAD
