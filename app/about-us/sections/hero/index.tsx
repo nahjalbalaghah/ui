@@ -1,31 +1,30 @@
 "use client";
 import React, { useState, useEffect } from 'react'
-import { BookOpen, Star, Heart, ChevronRight, Calendar, MapPin } from 'lucide-react'
+import { BookOpen, Star, Heart, ChevronRight } from 'lucide-react'
 import Button from '@/app/components/button';
 
 const AboutUsHero = () => {
   const [isVisible, setIsVisible] = useState(false)
-  const [currentYear] = useState(new Date().getFullYear())
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
 
   const values = [
-    { 
-      icon: BookOpen, 
-      title: "Knowledge", 
-      description: "Providing authentic Islamic scholarship rooted in classical tradition and contemporary understanding" 
+    {
+      icon: BookOpen,
+      title: "Academic Rigor",
+      description: "Grounded in scholarship, ensuring texts, translations, and analyses meet the highest academic standards"
     },
-    { 
-      icon: Heart, 
-      title: "Community", 
-      description: "Fostering a global network of learners united in faith, scholarship, and spiritual development" 
+    {
+      icon: Heart,
+      title: "Broad & Inclusive",
+      description: "Serving academics, researchers, students, and people of faith who wish to engage with Imam Ali's wisdom"
     },
-    { 
-      icon: Star, 
-      title: "Excellence", 
-      description: "Maintaining rigorous academic standards while creating an accessible learning environment" 
+    {
+      icon: Star,
+      title: "A Growing Hub",
+      description: "Hosting texts, translations, manuscripts, audio recordings, and research for academic and public engagement"
     }
   ]
 
@@ -38,10 +37,10 @@ const AboutUsHero = () => {
             <div className="text-center mb-16">
               <div className="space-y-4 sm:space-y-6 mb-8">
                 <h1 className="text-4xl lg:text-6xl font-black leading-tight text-[#43896B] break-words text-balance tracking-tight">
-                  About Our Institution
+                  About Nahjalbalaghah.org
                 </h1>
                 <p className="text-xl sm:text-2xl text-gray-700 font-semibold max-w-3xl mx-auto">
-                  A global center for Islamic scholarship and spiritual education
+                  An open-access digital platform for the study of Nahj al-Balāghah
                 </p>
               </div>
             </div>
@@ -51,32 +50,31 @@ const AboutUsHero = () => {
                   <h2 className="text-2xl font-bold text-[#43896B] mb-6">Who We Are</h2>
                   <div className="space-y-4 text-gray-700">
                     <p className="leading-relaxed">
-                      Established in 2005, we are an internationally recognized institution dedicated to 
-                      Islamic education and scholarship. Our focus centers on the teachings of Nahj al-Balaghah, 
-                      the profound wisdom of Imam Ali (AS), and comprehensive Quranic studies.
+                      <strong className="font-bold text-gray-800">Nahjalbalaghah.org</strong> is a non-profit
+                      digital humanities project dedicated to making Nahj al-Balāghah—the celebrated
+                      collection of sermons, letters, and sayings attributed to{" "}
+                      <strong className="font-bold text-gray-800">Imam Ali ibn Abi Talib (d. 661)</strong>
+                      —accessible to readers, students, and scholars around the world.
                     </p>
                     <p className="leading-relaxed">
-                      We serve a diverse community of over 10,000 students across 45 countries, offering 
-                      structured programs in Islamic sciences, jurisprudence, and spiritual development 
-                      under the guidance of distinguished scholars.
+                      Compiled by <strong className="font-bold text-gray-800">al-Sharif al-Radi (d. 1015)</strong>,
+                      Nahj al-Balāghah is revered for its eloquence, depth of thought, and enduring influence
+                      on Islamic philosophy, theology, literature, and ethics. Despite its global significance,
+                      reliable English-language resources on the text have long been limited. This project
+                      seeks to bridge that gap.
                     </p>
-                  </div>
-                  <div className="mt-8 flex items-center gap-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <MapPin size={16} className="text-[#43896B]" />
-                      <span>Based in Qom, Iran</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Calendar size={16} className="text-[#43896B]" />
-                      <span>Since {currentYear - 20}</span>
-                    </div>
                   </div>
                 </div>
               </div>
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-[#43896B] text-center lg:text-left mb-8">
-                  Our Values
+                <h2 className="text-2xl font-bold text-[#43896B] text-center lg:text-left mb-4">
+                  Our Mission
                 </h2>
+                <p className="text-gray-600 leading-relaxed text-center lg:text-left mb-4">
+                  Our mission is to provide an open-access, English-language digital platform for the
+                  study and appreciation of Nahj al-Balāghah—combining scholarship, technology, and
+                  accessibility.
+                </p>
                 {values.map((value, index) => (
                   <div
                     key={value.title}

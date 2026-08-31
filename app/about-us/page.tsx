@@ -1,5 +1,6 @@
 import AboutUsHero from "./sections/hero";
 import BannerSection from "./sections/banner";
+import OfferingsSection from "./sections/offerings";
 import AboutCardSection from "./sections/about-card";
 import TeamSection from "./sections/team";
 import SponsorsSection from "./sections/sponsors";
@@ -38,6 +39,7 @@ export default function Page() {
         <div>
             <AboutUsHero />
             <BannerSection />
+            <OfferingsSection />
             <AboutCardSection />
             <TeamSection />
             <SponsorsSection />
