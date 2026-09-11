@@ -6,7 +6,6 @@ import { ScrollText, X, Search, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
-import Select from '@/app/components/select';
 import AlphabetChips from '@/app/components/alphabet-chips';
 import { GlossaryEntry, glossaryEntriesApi } from '@/api';
 
@@ -25,7 +24,6 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
     const router = useRouter();
     const pathname = usePathname();
     const [searchQuery, setSearchQuery] = useState('');
-    const [language, setLanguage] = useState<'English' | 'Arabic'>('English');
     const [sources, setSources] = useState<GlossaryEntry[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -60,29 +58,23 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
 
     const handleClearFilters = () => {
         setSearchQuery('');
-        setLanguage('English');
     };
 
     const handleRowClick = (source: GlossaryEntry) => {
         router.push(`${pathname}/${source.documentId || source.id}`);
     };
 
-    const hasActiveFilters = searchQuery !== '' || language !== 'English';
+    const hasActiveFilters = searchQuery !== '';
 
     const filteredSources = sources.filter(source => {
         const query = searchQuery.toLowerCase();
-        const matchesSearch =
+        return !!(
             (source.word && source.word.toLowerCase().includes(query)) ||
             (source.author && source.author.toLowerCase().includes(query)) ||
             (source.title && source.title.toLowerCase().includes(query)) ||
             (source.content && source.content.toLowerCase().includes(query)) ||
-            (source.volumepage && source.volumepage.toLowerCase().includes(query));
-
-        const matchesLanguage = language === 'Arabic'
-            ? /[؀-ۿ]/.test(`${source.word || ''} ${source.content || ''} ${source.title || ''} ${source.author || ''}`)
-            : true;
-
-        return !!matchesSearch && matchesLanguage;
+            (source.volumepage && source.volumepage.toLowerCase().includes(query))
+        );
     });
 
     if (loading) {
@@ -122,19 +114,7 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                         )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block font-medium text-sm text-gray-700 mb-1">اللغة</label>
-                            <Select
-                                value={language}
-                                onChange={(value) => setLanguage(value as 'English' | 'Arabic')}
-                                options={[
-                                    { value: 'English', label: 'الإنجليزية' },
-                                    { value: 'Arabic', label: 'العربية' }
-                                ]}
-                                placeholder="اختر اللغة"
-                            />
-                        </div>
+                    <div className="grid grid-cols-1 gap-4">
                         <Input
                             label="البحث عن مصدر"
                             placeholder="ابحث حسب اسم المؤلف أو الكتاب..."
@@ -149,7 +129,7 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                     <AlphabetChips
                         selectedLetter=""
                         onSelectLetter={() => { }}
-                        language={language}
+                        language="Arabic"
                     />
                 </div>
 
