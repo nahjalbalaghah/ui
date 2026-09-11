@@ -8,6 +8,8 @@ export interface GlossaryEntry {
   author?: string | null;
   title?: string | null;
   volumepage?: string | null;
+  authorDate?: string | null;
+  publicationInformation?: string | null;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
