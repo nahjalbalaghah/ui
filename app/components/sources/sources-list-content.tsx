@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { ScrollText, ArrowRight, X, Search, Loader2 } from 'lucide-react';
+import { ScrollText, X, Search, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/app/components/button';
 import Input from '@/app/components/input';
@@ -15,6 +15,12 @@ interface SourcesListContentProps {
     itemNumber: string;
 }
 
+const CONTENT_TYPE_LABELS_AR: Record<string, string> = {
+    Oration: 'الخطبة',
+    Letter: 'الرسالة',
+    Saying: 'الحكمة',
+};
+
 export default function SourcesListContent({ contentTypeLabel, itemNumber }: SourcesListContentProps) {
     const router = useRouter();
     const pathname = usePathname();
@@ -23,6 +29,8 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
     const [sources, setSources] = useState<GlossaryEntry[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const contentTypeLabelAr = CONTENT_TYPE_LABELS_AR[contentTypeLabel] || contentTypeLabel;
 
     useEffect(() => {
         const fetchSources = async () => {
@@ -39,7 +47,7 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                 setSources(response.data || []);
             } catch (err) {
                 console.error('Failed to fetch sources:', err);
-                setError('Failed to load sources. Please try again later.');
+                setError('فشل تحميل المصادر. يرجى المحاولة مرة أخرى لاحقاً.');
             } finally {
                 setLoading(false);
             }
@@ -55,11 +63,15 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
         setLanguage('English');
     };
 
+    const handleRowClick = (source: GlossaryEntry) => {
+        router.push(`${pathname}/${source.documentId || source.id}`);
+    };
+
     const hasActiveFilters = searchQuery !== '' || language !== 'English';
 
     const filteredSources = sources.filter(source => {
         const query = searchQuery.toLowerCase();
-        const matchesSearch = 
+        const matchesSearch =
             (source.word && source.word.toLowerCase().includes(query)) ||
             (source.author && source.author.toLowerCase().includes(query)) ||
             (source.title && source.title.toLowerCase().includes(query)) ||
@@ -67,7 +79,7 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
             (source.volumepage && source.volumepage.toLowerCase().includes(query));
 
         const matchesLanguage = language === 'Arabic'
-            ? /[\u0600-\u06FF]/.test(`${source.word || ''} ${source.content || ''} ${source.title || ''} ${source.author || ''}`)
+            ? /[؀-ۿ]/.test(`${source.word || ''} ${source.content || ''} ${source.title || ''} ${source.author || ''}`)
             : true;
 
         return !!matchesSearch && matchesLanguage;
@@ -75,57 +87,57 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div dir="rtl" className="font-arabic min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <Loader2 className="w-12 h-12 text-[#43896B] animate-spin mx-auto mb-4" />
-                    <p className="text-gray-600">Loading sources...</p>
+                    <p className="text-gray-600">جارٍ تحميل المصادر...</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div dir="rtl" className="font-arabic min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-2">
                         <ScrollText className="w-6 h-6 text-[#43896B]" />
-                        <h1 className="text-3xl font-bold text-gray-900">Sources for {contentTypeLabel} {itemNumber}</h1>
+                        <h1 className="text-3xl font-bold text-gray-900">مصادر {contentTypeLabelAr} {itemNumber}</h1>
                     </div>
-                    <p className="text-gray-600">Historical sources and references verifying the authenticity of this text.</p>
+                    <p className="text-gray-600">مصادر تاريخية ومراجع تثبت صحة هذا النص.</p>
                 </div>
 
                 {/* Filter Banner Section */}
                 <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-lg font-bold text-gray-800">Filters</h2>
+                        <h2 className="text-lg font-bold text-gray-800">التصفية</h2>
                         {hasActiveFilters && (
                             <Button
                                 onClick={handleClearFilters}
                                 variant='danger'
                                 icon={<X className="w-4 h-4" />}
                             >
-                                Clear Filters
+                                مسح الفلاتر
                             </Button>
                         )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block font-medium text-sm text-gray-700 mb-1">Language</label>
+                            <label className="block font-medium text-sm text-gray-700 mb-1">اللغة</label>
                             <Select
                                 value={language}
                                 onChange={(value) => setLanguage(value as 'English' | 'Arabic')}
                                 options={[
-                                    { value: 'English', label: 'English' },
-                                    { value: 'Arabic', label: 'Arabic' }
+                                    { value: 'English', label: 'الإنجليزية' },
+                                    { value: 'Arabic', label: 'العربية' }
                                 ]}
-                                placeholder="Select Language"
+                                placeholder="اختر اللغة"
                             />
                         </div>
                         <Input
-                            label="Search Source"
-                            placeholder="Search by author or book name..."
+                            label="البحث عن مصدر"
+                            placeholder="ابحث حسب اسم المؤلف أو الكتاب..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className='h-9.5'
@@ -145,24 +157,28 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                     {error ? (
                         <div className="p-8 text-center text-red-600">{error}</div>
                     ) : filteredSources.length === 0 ? (
-                        <div className="p-8 text-center text-gray-500">No sources found for this text.</div>
+                        <div className="p-8 text-center text-gray-500">لم يتم العثور على مصادر لهذا النص.</div>
                     ) : (
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead className="bg-gray-50 border-b border-gray-200">
                                     <tr>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Source</th>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Author / Book</th>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 w-32">Action</th>
+                                        <th className="px-6 py-4 text-right text-sm font-bold text-gray-700">المصدر</th>
+                                        <th className="px-6 py-4 text-right text-sm font-bold text-gray-700">المؤلف / الكتاب</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
                                     {filteredSources.map((source) => (
-                                        <tr key={source.id} className="hover:bg-gray-50 transition-colors">
+                                        <tr
+                                            key={source.id}
+                                            onClick={() => handleRowClick(source)}
+                                            className="hover:bg-gray-50 transition-colors cursor-pointer"
+                                        >
                                             <td className="px-6 py-4">
                                                 <Link
                                                     href={`${pathname}/${source.documentId || source.id}`}
-                                                    className="inline-flex items-center gap-1 text-[#43896B] hover:text-[#367556] font-medium transition-colors group"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="inline-flex items-center gap-1 text-[#43896B] hover:text-[#367556] font-medium transition-colors"
                                                 >
                                                     {source.word}
                                                 </Link>
@@ -173,16 +189,6 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
                                             <td className="px-6 py-4">
                                                 <div className="text-gray-800 font-medium">{source.author || '-'}</div>
                                                 <div className="text-sm text-gray-500">{source.title || '-'}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <Link href={`${pathname}/${source.documentId || source.id}`}>
-                                                    <Button
-                                                        variant="outlined"
-                                                        icon={<ArrowRight className="w-4 h-4" />}
-                                                    >
-                                                        Details
-                                                    </Button>
-                                                </Link>
                                             </td>
                                         </tr>
                                     ))}
