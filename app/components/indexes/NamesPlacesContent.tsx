@@ -129,6 +129,15 @@ export default function NamesPlacesContent() {
   };
 
   useEffect(() => {
+    const filtersChanged =
+      filters.word_english !== appliedFilters.word_english ||
+      filters.word_arabic !== appliedFilters.word_arabic ||
+      filters.startsWith_english !== appliedFilters.startsWith_english ||
+      filters.startsWith_arabic !== appliedFilters.startsWith_arabic ||
+      filters.language !== appliedFilters.language;
+
+    if (!filtersChanged) return;
+
     const timeout = window.setTimeout(() => {
       handleApplyFilters(filters);
     }, 500);
