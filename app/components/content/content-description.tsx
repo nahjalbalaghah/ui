@@ -7,7 +7,7 @@ import { type Post, type Footnote, type Edition } from '@/api/orations';
 import { postsApi } from '@/api/posts';
 import { glossaryEntriesApi } from '@/api/glossary-entries';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { formatTextWithFootnotes, isArabicText } from '@/app/utils/text-formatting';
+import { formatTextWithFootnotes, isArabicText, normalizeArabic } from '@/app/utils/text-formatting';
 import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
 import Select from '@/app/components/select';
 
@@ -185,6 +185,15 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
           }
         }
 
+        const wordToHighlight = englishWord || arabicWord;
+        // Transliterated names are often passed with a leading definite article
+        // ("al-") that isn't always present verbatim in the source text, e.g.
+        // "al-ʿAbbās ibn Mirdās al-Sulamī" vs. text reading "ʿAbbās ibn Mirdās al-Sulamī".
+        const wordVariants = wordToHighlight
+          ? Array.from(new Set([wordToHighlight, wordToHighlight.replace(/^al[-\s']+/i, '')]))
+          : [];
+        let matchedInParagraph = false;
+
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
@@ -192,20 +201,55 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
           element.classList.add('highlight-text-ref');
 
           // If we have a word to highlight, do that too
-          const wordToHighlight = englishWord || arabicWord;
-          if (wordToHighlight) {
+          if (wordVariants.length > 0) {
             // Find the text container within this element
             // Look for the paragraph with font-brill class (English) or font-taha class (Arabic)
             const textElement = englishWord
               ? element.querySelector('.font-brill')
               : element.querySelector('.font-taha');
             if (textElement) {
-              highlightWordInParagraph(textElement, wordToHighlight);
-            } else {
+              matchedInParagraph = wordVariants.some((variant) => highlightWordInParagraph(textElement, variant));
+            }
+            if (!matchedInParagraph) {
               // Try to find any text container
               const anyTextElement = element.querySelector('p');
               if (anyTextElement) {
-                highlightWordInParagraph(anyTextElement, wordToHighlight);
+                matchedInParagraph = wordVariants.some((variant) => highlightWordInParagraph(anyTextElement, variant));
+              }
+            }
+          }
+        }
+
+        // If the word isn't part of the paragraph text itself, it may only appear
+        // inside a footnote (e.g. a name explained in a footnote) - scroll/highlight that instead.
+        if (wordVariants.length > 0 && !matchedInParagraph) {
+          const isArabicMatch = !!arabicWord;
+          const targets = wordVariants.map((variant) => (isArabicMatch ? normalizeArabic(variant) : variant.toLowerCase()));
+
+          const matchingFootnote = allFootnotes.find((fn) => {
+            const footnoteSection = fn.section?.replace(/^"|"$/g, '') || '';
+            const inSection = !footnoteSection || candidates.includes(footnoteSection);
+            if (!inSection) return false;
+
+            const text = isArabicMatch ? fn.arabic_interpretation : fn.english_translation;
+            const wordField = isArabicMatch ? fn.arabic_word : fn.english_word;
+            const normalizedText = text ? (isArabicMatch ? normalizeArabic(text) : text.toLowerCase()) : '';
+            const normalizedWordField = wordField ? (isArabicMatch ? normalizeArabic(wordField) : wordField.toLowerCase()) : '';
+
+            return targets.some((target) => normalizedText.includes(target) || normalizedWordField.includes(target));
+          });
+
+          if (matchingFootnote) {
+            const footnoteEl = document.getElementById(`footnote-${matchingFootnote.id}`);
+            if (footnoteEl) {
+              footnoteEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              footnoteEl.classList.add('highlight-text-ref');
+
+              const footnoteTextElement = isArabicMatch
+                ? footnoteEl.querySelector('.font-taha')
+                : footnoteEl.querySelector('.font-brill');
+              if (footnoteTextElement) {
+                wordVariants.some((variant) => highlightWordInParagraph(footnoteTextElement, variant));
               }
             }
           }
@@ -236,8 +280,8 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
     return false;
   };
 
-  // Function to highlight a word within a specific paragraph
-  const highlightWordInParagraph = (paragraphDiv: Element, word: string) => {
+  // Function to highlight a word within a specific paragraph. Returns whether a match was found.
+  const highlightWordInParagraph = (paragraphDiv: Element, word: string): boolean => {
     // Find all text nodes in the paragraph and wrap the matching word
     const walker = document.createTreeWalker(
       paragraphDiv,
@@ -266,6 +310,8 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
       }
     }
 
+    if (nodesToReplace.length === 0) return false;
+
     // Replace nodes with highlighted spans
     for (const { node, matches } of nodesToReplace.reverse()) {
       for (const match of matches.reverse()) {
@@ -288,6 +334,8 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
         }
       }
     }
+
+    return true;
   };
 
   const allFootnotesRaw = [
@@ -636,7 +684,8 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
               .map((footnote: Footnote) => (
                 <div
                   key={footnote.id}
-                  className="group relative flex flex-col sm:flex-row gap-4 p-5 rounded-2xl hover:bg-[#43896B]/5 transition-all duration-300 border border-transparent hover:border-[#43896B]/10 cursor-pointer"
+                  id={`footnote-${footnote.id}`}
+                  className="group relative flex flex-col sm:flex-row gap-4 p-5 rounded-2xl hover:bg-[#43896B]/5 transition-all duration-300 border border-transparent hover:border-[#43896B]/10 cursor-pointer scroll-mt-32"
                   onClick={() => {
                     // Try to scroll to specific reference first (English preferred, then Arabic)
                     const englishRef = document.getElementById(`footnote-ref-${footnote.id}-english`);
