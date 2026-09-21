@@ -182,12 +182,7 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
 
   const handleBackNavigation = (e: React.MouseEvent) => {
     e.preventDefault();
-
-    if (window.history.length > 1 && (returnPage || returnSort || returnSearch || editionId || display)) {
-      router.back();
-    } else {
-      router.push(getBackUrl());
-    }
+    router.push(getBackUrl());
   };
 
   useEffect(() => {
