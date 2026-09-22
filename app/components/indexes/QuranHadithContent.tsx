@@ -64,6 +64,10 @@ export default function QuranHadithContent() {
   const getDetailText = (item: QuranHadith) =>
     appliedFilters.language === 'Arabic' ? (item.verse_text || item.arabic_text || '-') : (item.verse_translation || item.english_translation || '-');
 
+  const getArabicDetailText = (item: QuranHadith) => item.verse_text || item.arabic_text || '';
+
+  const getPoetLabel = (item: QuranHadith) => item.poet || '';
+
   const getTargetUrl = (item: QuranHadith) => {
     const refs = item.text_numbers?.map(t => t.value).join(',') || '';
     const urlSlug = item.title || item.reference || item.surah_name || item.documentId;
@@ -265,7 +269,6 @@ export default function QuranHadithContent() {
                   setFilters(newFilters);
                 }}
                 options={[
-                  { value: '', label: isArabic ? 'جميع المراجع' : 'All References' },
                   { value: 'Quran', label: isArabic ? 'القرآن' : "Qur'an" },
                   { value: 'Hadith', label: isArabic ? 'الحديث' : 'Hadith' },
                   { value: 'Poetry', label: isArabic ? 'الشعر' : 'Poetry' },
@@ -328,37 +331,29 @@ export default function QuranHadithContent() {
                 <div className="overflow-x-auto">
                   <table className="w-full table-fixed">
                     <colgroup>
-                      <col className="w-40" />
-                      {appliedFilters.language === 'English' && <col className="w-32" />}
+                      <col className="w-56" />
                       <col />
-                      <col className="w-24" />
+                      {appliedFilters.language === 'English' && <col />}
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
                         <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Reference</th>
-                        {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Title</th>}
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English Translation</th>}
+                        {appliedFilters.language === 'English' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Arabic Text</th>}
                         {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Arabic Text</th>}
-                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">Details</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {[...Array(10)].map((_, index) => (
                         <tr key={index} className="animate-pulse">
                           <td className="px-6 py-4">
-                            <div className="h-4 bg-gray-200 rounded w-24"></div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="h-4 bg-gray-200 rounded w-12"></div>
+                            <div className="h-4 bg-gray-200 rounded w-32"></div>
                           </td>
                           <td className="px-6 py-4">
                             <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="flex gap-2 justify-center">
-                              <div className="h-6 bg-gray-200 rounded w-12"></div>
-                              <div className="h-6 bg-gray-200 rounded w-12"></div>
-                            </div>
+                            <div className="h-4 bg-gray-200 rounded w-3/4 ml-auto"></div>
                           </td>
                         </tr>
                       ))}
@@ -430,29 +425,25 @@ export default function QuranHadithContent() {
                 <div className="overflow-x-auto">
                   <table className="w-full table-fixed" dir={appliedFilters.language === 'Arabic' ? 'rtl' : 'ltr'}>
                     <colgroup>
-                      <col className="w-40" />
-                      {appliedFilters.language === 'English' && <col className="w-32" />}
+                      <col className="w-56" />
                       <col />
-                      <col className="w-24" />
+                      {appliedFilters.language === 'English' && <col />}
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
                         <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>
                           {appliedFilters.language === 'Arabic' ? 'المرجع' : 'Reference'}
                         </th>
-                        {appliedFilters.language === 'English' && (
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Title</th>
-                        )}
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English Translation</th>}
+                        {appliedFilters.language === 'English' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Arabic Text</th>}
                         {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">النص العربي</th>}
-                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
-                          {appliedFilters.language === 'Arabic' ? 'التفاصيل' : 'Details'}
-                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {items.map((item) => {
                         const displayText = getDetailText(item);
+                        const arabicDetailText = getArabicDetailText(item);
+                        const poetLabel = getPoetLabel(item);
                         const targetUrl = getTargetUrl(item);
 
                         return (
@@ -462,47 +453,53 @@ export default function QuranHadithContent() {
                             onClick={() => router.push(targetUrl)}
                           >
                             <td className="px-6 py-4">
-                              <div className="space-y-1">
+                              <div className="flex items-baseline gap-2 flex-wrap">
                                 <span className="text-gray-900 font-medium">
                                   {getReferenceLabel(item)}
                                 </span>
+                                {appliedFilters.language === 'English' && getTitleLabel(item) !== '-' && (
+                                  <span className="text-gray-500 text-sm">
+                                    {getTitleLabel(item)}
+                                  </span>
+                                )}
                                 {item.category && (
-                                  <div>
-                                    <span className="inline-flex items-center rounded-full bg-[#43896B]/10 px-2 py-0.5 text-xs font-medium text-[#43896B]">
-                                      {item.category}
-                                    </span>
-                                  </div>
+                                  <span className="inline-flex items-center rounded-full bg-[#43896B]/10 px-2 py-0.5 text-xs font-medium text-[#43896B]">
+                                    {item.category}
+                                  </span>
                                 )}
                               </div>
+                              {poetLabel && (
+                                <div className="text-xs text-gray-500 mt-1">
+                                  {appliedFilters.language === 'Arabic' ? 'الشاعر: ' : 'Poet: '}{poetLabel}
+                                </div>
+                              )}
                             </td>
                             {appliedFilters.language === 'English' && (
                               <td className="px-6 py-4">
-                                <span className="text-gray-600">
-                                  {getTitleLabel(item)}
+                                <span className="block text-gray-900 group-hover:text-[#43896B] transition-colors truncate">
+                                  {displayText}
                                 </span>
                               </td>
                             )}
                             {appliedFilters.language === 'English' && (
-                              <td className="px-6 py-4">
-                                <span className="text-gray-900 group-hover:text-[#43896B] transition-colors line-clamp-2">
-                                  {displayText}
-                                </span>
+                              <td className="px-6 py-4 text-right">
+                                {arabicDetailText && (
+                                  <span
+                                    className="block text-gray-500 font-taha truncate"
+                                    dir="rtl"
+                                  >
+                                    {arabicDetailText}
+                                  </span>
+                                )}
                               </td>
                             )}
                             {appliedFilters.language === 'Arabic' && (
                               <td className="px-6 py-4 text-right">
-                                <span className="text-gray-900 group-hover:text-[#43896B] transition-colors line-clamp-2">
+                                <span className="block text-gray-900 group-hover:text-[#43896B] transition-colors truncate">
                                   {displayText}
                                 </span>
                               </td>
                             )}
-                            <td className="px-6 py-4">
-                              <div className="flex justify-center">
-                                <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#43896B] group-hover:text-white transition-colors ${appliedFilters.language === 'Arabic' ? 'rotate-180' : ''}`}>
-                                  <ArrowRight className="w-4 h-4" />
-                                </div>
-                              </div>
-                            </td>
                           </tr>
                         );
                       })}
@@ -514,6 +511,8 @@ export default function QuranHadithContent() {
               <div className="md:hidden space-y-4">
                 {items.map((item) => {
                   const displayText = getDetailText(item);
+                  const arabicDetailText = getArabicDetailText(item);
+                  const poetLabel = getPoetLabel(item);
                   const targetUrl = getTargetUrl(item);
 
                   return (
@@ -535,6 +534,11 @@ export default function QuranHadithContent() {
                               </span>
                             )}
                           </div>
+                          {poetLabel && (
+                            <div className="text-xs text-gray-500 mb-1">
+                              {appliedFilters.language === 'Arabic' ? 'الشاعر: ' : 'Poet: '}{poetLabel}
+                            </div>
+                          )}
                           {appliedFilters.language === 'English' && (
                             <div className="text-sm text-gray-500 mb-1">
                               {getTitleLabel(item)}
@@ -543,6 +547,11 @@ export default function QuranHadithContent() {
                           {appliedFilters.language === 'English' && (
                             <div className="text-sm text-gray-900 line-clamp-2">
                               {displayText}
+                            </div>
+                          )}
+                          {appliedFilters.language === 'English' && arabicDetailText && (
+                            <div className="text-sm text-right text-gray-500 font-taha line-clamp-2 mt-1" dir="rtl">
+                              {arabicDetailText}
                             </div>
                           )}
                           {appliedFilters.language === 'Arabic' && (

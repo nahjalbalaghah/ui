@@ -22,6 +22,7 @@ export interface QuranHadith {
   arabic_text?: string;
   english_translation?: string;
   category?: string;
+  poet?: string;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -69,6 +70,7 @@ export const quranHadithApi = {
       arabic_text: item.arabic_text || item.verse_text || '',
       english_translation: item.english_translation || item.verse_translation || '',
       category: item.category || item.reference_type || '',
+      poet: item.poet || '',
       text_numbers: Array.isArray(item.text_numbers) ? item.text_numbers : [],
     };
   },
