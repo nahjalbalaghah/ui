@@ -18,7 +18,7 @@ export default function QuranHadithContent() {
 
   const page = parseInt(searchParams.get('page') || '1');
   const appliedFilters: QuranHadithFilters = {
-    reference_type: (searchParams.get('reference_type') as any) || '',
+    reference_type: (searchParams.get('reference_type') as any) || 'Quran',
     surah_name: searchParams.get('surah_name') || '',
     surah_number: searchParams.get('surah_number') || '',
     verse_translation: searchParams.get('verse_translation') || '',
@@ -39,7 +39,7 @@ export default function QuranHadithContent() {
   // Sync filters with URL params when they change (e.g. back button)
   useEffect(() => {
     setFilters({
-      reference_type: (searchParams.get('reference_type') as any) || '',
+      reference_type: (searchParams.get('reference_type') as any) || 'Quran',
       surah_name: searchParams.get('surah_name') || '',
       surah_number: searchParams.get('surah_number') || '',
       verse_translation: searchParams.get('verse_translation') || '',
@@ -67,6 +67,8 @@ export default function QuranHadithContent() {
   const getArabicDetailText = (item: QuranHadith) => item.verse_text || item.arabic_text || '';
 
   const getPoetLabel = (item: QuranHadith) => item.poet || '';
+
+  const getTextNumbers = (item: QuranHadith) => item.text_numbers?.map(t => t.value).filter(Boolean) || [];
 
   const getTargetUrl = (item: QuranHadith) => {
     const refs = item.text_numbers?.map(t => t.value).join(',') || '';
@@ -188,7 +190,7 @@ export default function QuranHadithContent() {
 
   const handleClearFilters = () => {
     setFilters({
-      reference_type: '',
+      reference_type: 'Quran',
       surah_name: '',
       surah_number: '',
       verse_translation: '',
@@ -334,13 +336,15 @@ export default function QuranHadithContent() {
                       <col className="w-56" />
                       <col />
                       {appliedFilters.language === 'English' && <col />}
+                      <col className="w-40" />
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Reference</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Source</th>
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English Translation</th>}
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Arabic Text</th>}
                         {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Arabic Text</th>}
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Text Number(s)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -354,6 +358,9 @@ export default function QuranHadithContent() {
                           </td>
                           <td className="px-6 py-4">
                             <div className="h-4 bg-gray-200 rounded w-3/4 ml-auto"></div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="h-4 bg-gray-200 rounded w-16"></div>
                           </td>
                         </tr>
                       ))}
@@ -428,15 +435,21 @@ export default function QuranHadithContent() {
                       <col className="w-56" />
                       <col />
                       {appliedFilters.language === 'English' && <col />}
+                      <col className="w-40" />
                     </colgroup>
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
                         <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>
-                          {appliedFilters.language === 'Arabic' ? 'المرجع' : 'Reference'}
+                          {appliedFilters.reference_type === 'Poetry'
+                            ? (appliedFilters.language === 'Arabic' ? 'الشاعر' : 'Poet')
+                            : (appliedFilters.language === 'Arabic' ? 'المصدر' : 'Source')}
                         </th>
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">English Translation</th>}
                         {appliedFilters.language === 'English' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Arabic Text</th>}
                         {appliedFilters.language === 'Arabic' && <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">النص العربي</th>}
+                        <th className={`px-6 py-4 text-sm font-semibold text-gray-700 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>
+                          {appliedFilters.language === 'Arabic' ? 'أرقام النص' : 'Text Number(s)'}
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -444,6 +457,7 @@ export default function QuranHadithContent() {
                         const displayText = getDetailText(item);
                         const arabicDetailText = getArabicDetailText(item);
                         const poetLabel = getPoetLabel(item);
+                        const textNumbers = getTextNumbers(item);
                         const targetUrl = getTargetUrl(item);
 
                         return (
@@ -453,24 +467,25 @@ export default function QuranHadithContent() {
                             onClick={() => router.push(targetUrl)}
                           >
                             <td className="px-6 py-4">
-                              <div className="flex items-baseline gap-2 flex-wrap">
+                              {appliedFilters.reference_type === 'Poetry' ? (
                                 <span className="text-gray-900 font-medium">
-                                  {getReferenceLabel(item)}
+                                  {poetLabel || '-'}
                                 </span>
-                                {appliedFilters.language === 'English' && getTitleLabel(item) !== '-' && (
-                                  <span className="text-gray-500 text-sm">
-                                    {getTitleLabel(item)}
+                              ) : (
+                                <div className="flex items-baseline gap-2 flex-wrap">
+                                  <span className="text-gray-900 font-medium">
+                                    {getReferenceLabel(item)}
                                   </span>
-                                )}
-                                {item.category && (
-                                  <span className="inline-flex items-center rounded-full bg-[#43896B]/10 px-2 py-0.5 text-xs font-medium text-[#43896B]">
-                                    {item.category}
-                                  </span>
-                                )}
-                              </div>
-                              {poetLabel && (
-                                <div className="text-xs text-gray-500 mt-1">
-                                  {appliedFilters.language === 'Arabic' ? 'الشاعر: ' : 'Poet: '}{poetLabel}
+                                  {appliedFilters.language === 'English' && getTitleLabel(item) !== '-' && (
+                                    <span className="text-gray-500 text-sm">
+                                      {getTitleLabel(item)}
+                                    </span>
+                                  )}
+                                  {item.category && !['Quran', 'Hadith', 'Proverbs'].includes(item.category) && (
+                                    <span className="inline-flex items-center rounded-full bg-[#43896B]/10 px-2 py-0.5 text-xs font-medium text-[#43896B]">
+                                      {item.category}
+                                    </span>
+                                  )}
                                 </div>
                               )}
                             </td>
@@ -500,6 +515,20 @@ export default function QuranHadithContent() {
                                 </span>
                               </td>
                             )}
+                            <td className={`px-6 py-4 ${appliedFilters.language === 'Arabic' ? 'text-right' : 'text-left'}`}>
+                              {textNumbers.length > 0 && (
+                                <div className="flex flex-wrap gap-1">
+                                  {textNumbers.map((num, idx) => (
+                                    <span
+                                      key={idx}
+                                      className="inline-flex items-center rounded-md bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600"
+                                    >
+                                      {num}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </td>
                           </tr>
                         );
                       })}
