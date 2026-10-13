@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ZoomIn, ZoomOut, Maximize2, Minimize2, ChevronLeft, ChevronRight, Grid3x3, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize2, Minimize2, ChevronLeft, ChevronRight, Grid3x3, Image as ImageIcon, Loader2, RotateCcw } from 'lucide-react';
 
 type ViewMode = 'single' | 'gallery';
 
@@ -23,7 +23,10 @@ type ZoomPanImageProps = {
 };
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
-const INITIAL_FIT_BOOST = 1.03;
+// Zoom is relative to "fit": scale 1 (100%) shows the whole page inside the viewer.
+const MIN_SCALE = 0.25;
+const MAX_SCALE = 8;
+const ZOOM_STEP = 1.25;
 
 const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, alt, onZoomChange, onLoadingChange }, ref) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -82,10 +85,17 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
     setContainerSize({ w: Math.max(1, rect.width), h: Math.max(1, rect.height) });
   }, []);
 
+  // Track the container itself (not just the window) so expanding/collapsing the viewer refits the page
   useEffect(() => {
     updateContainerSize();
-    window.addEventListener('resize', updateContainerSize);
-    return () => window.removeEventListener('resize', updateContainerSize);
+    const el = containerRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateContainerSize);
+      return () => window.removeEventListener('resize', updateContainerSize);
+    }
+    const observer = new ResizeObserver(updateContainerSize);
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [updateContainerSize]);
 
   // When src changes: mark as not ready and signal loading
@@ -110,16 +120,17 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
     const { w: imgW, h: imgH } = imageSize;
     const { w: cW, h: cH } = containerSize;
 
+    // Contain: the whole page is visible at 100%
     const fitWidth = cW / imgW;
     const fitHeight = cH / imgH;
     const nextBaseScale = (isFinite(fitWidth) && fitWidth > 0 && isFinite(fitHeight) && fitHeight > 0)
-      ? clamp(Math.max(fitWidth, fitHeight) * INITIAL_FIT_BOOST, 0.01, 5)
+      ? clamp(Math.min(fitWidth, fitHeight), 0.01, 5)
       : 1;
 
     setBaseScale(nextBaseScale);
     setScale(1);
     centerImage(nextBaseScale, 1, imgW, imgH, cW, cH);
-    onZoomChange(Math.round(nextBaseScale * 100));
+    onZoomChange(100);
     onLoadingChange?.(false);
   }, [imageSize, containerSize, centerImage, onLoadingChange, onZoomChange]);
 
@@ -128,6 +139,15 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
       const el = containerRef.current;
       if (!el || !imageSize) return;
       const rect = el.getBoundingClientRect();
+      setScale(nextScale);
+      onZoomChange(Math.round(nextScale * 100));
+
+      // At or below fit there is nothing to pan to, so keep the page centred
+      if (nextScale <= 1) {
+        centerImage(baseScale, nextScale, imageSize.w, imageSize.h, rect.width, rect.height);
+        return;
+      }
+
       const px = clamp(clientX - rect.left, 0, rect.width);
       const py = clamp(clientY - rect.top, 0, rect.height);
 
@@ -137,19 +157,14 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
       const contentX = (px - translate.x) / startTotal;
       const contentY = (py - translate.y) / startTotal;
 
-      const nextTx = px - contentX * nextTotal;
-      const nextTy = py - contentY * nextTotal;
-
-      setScale(nextScale);
-      setTranslate({ x: nextTx, y: nextTy });
-      onZoomChange(Math.round(nextTotal * 100));
+      setTranslate({ x: px - contentX * nextTotal, y: py - contentY * nextTotal });
     },
-    [baseScale, imageSize, onZoomChange, totalScale, translate.x, translate.y]
+    [baseScale, centerImage, imageSize, onZoomChange, totalScale, translate.x, translate.y]
   );
 
   const zoomIn = useCallback(
     (clientX?: number, clientY?: number) => {
-      const next = clamp(scale * 1.25, 1, 8);
+      const next = clamp(scale * ZOOM_STEP, MIN_SCALE, MAX_SCALE);
       const el = containerRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
@@ -160,7 +175,7 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
 
   const zoomOut = useCallback(
     (clientX?: number, clientY?: number) => {
-      const next = clamp(scale / 1.25, 1, 8);
+      const next = clamp(scale / ZOOM_STEP, MIN_SCALE, MAX_SCALE);
       const el = containerRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
@@ -172,21 +187,27 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
   const reset = useCallback(() => {
     if (!imageSize) return;
     setScale(1);
-    onZoomChange(Math.round(baseScale * 100));
+    onZoomChange(100);
     centerImage(baseScale, 1, imageSize.w, imageSize.h, containerSize.w, containerSize.h);
   }, [baseScale, centerImage, containerSize, imageSize, onZoomChange]);
 
   React.useImperativeHandle(ref, () => ({ zoomIn, zoomOut, reset }), [reset, zoomIn, zoomOut]);
 
-  const onWheel = useCallback(
-    (e: React.WheelEvent) => {
-      e.preventDefault();
-      const factor = Math.exp(-e.deltaY * 0.002);
-      const next = clamp(scale * factor, 1, 8);
-      setScaleAroundPoint(e.clientX, e.clientY, next);
-    },
-    [scale, setScaleAroundPoint]
-  );
+  // React registers wheel listeners as passive, so preventDefault() there can't stop the page
+  // from scrolling while zooming. Attach a non-passive native listener instead.
+  const wheelHandlerRef = useRef<(e: WheelEvent) => void>(() => {});
+  wheelHandlerRef.current = (e: WheelEvent) => {
+    e.preventDefault();
+    const factor = Math.exp(-e.deltaY * 0.002);
+    setScaleAroundPoint(e.clientX, e.clientY, clamp(scale * factor, MIN_SCALE, MAX_SCALE));
+  };
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const listener = (e: WheelEvent) => wheelHandlerRef.current(e);
+    el.addEventListener('wheel', listener, { passive: false });
+    return () => el.removeEventListener('wheel', listener);
+  }, []);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     if (e.button === 1) return;
@@ -244,14 +265,14 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
       const contentY = (cy - pinchRef.current.startTy) / startTotal;
 
       const ratio = pinchRef.current.startDistance > 0 ? dist / pinchRef.current.startDistance : 1;
-      const nextScale = clamp(pinchRef.current.startScale * ratio, 1, 8);
+      const nextScale = clamp(pinchRef.current.startScale * ratio, MIN_SCALE, MAX_SCALE);
       const nextTotal = baseScale * nextScale;
       const nextTx = cx - contentX * nextTotal;
       const nextTy = cy - contentY * nextTotal;
 
       setScale(nextScale);
       setTranslate({ x: nextTx, y: nextTy });
-      onZoomChange(Math.round(nextTotal * 100));
+      onZoomChange(Math.round(nextScale * 100));
       return;
     }
 
@@ -261,7 +282,7 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
     if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
       dragRef.current.moved = true;
     }
-    if (scale === 1) return;
+    if (scale <= 1) return;
     setTranslate({ x: dragRef.current.startTx + dx, y: dragRef.current.startTy + dy });
   }, [baseScale, onZoomChange, scale]);
 
@@ -302,7 +323,6 @@ const ZoomPanImage = React.forwardRef<ZoomPanHandle, ZoomPanImageProps>(({ src, 
       ref={containerRef}
       className={`relative w-full h-full overflow-hidden ${cursorClass}`}
       style={{ touchAction: 'none' }}
-      onWheel={onWheel}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -380,9 +400,22 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
     zoomPanRef.current?.zoomOut();
   };
 
+  const handleResetZoom = () => {
+    zoomPanRef.current?.reset();
+  };
+
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
+
+  useEffect(() => {
+    if (!isExpanded) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsExpanded(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isExpanded]);
 
   const toggleViewMode = () => {
     setViewMode((prev) => prev === 'single' ? 'gallery' : 'single');
@@ -409,32 +442,40 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
         />
       )}
 
-      <div className={`bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'fixed inset-4 z-50 animate-expand' : 'relative'
-        }`}
-        style={{
-          transform: isExpanded ? 'scale(1)' : 'scale(1)',
-          opacity: isExpanded ? 1 : 1
-        }}>
+      <div className={`bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col ${isExpanded ? 'fixed inset-4 z-50 animate-expand' : 'relative'
+        }`}>
         <div className="bg-[#F5F6FA] border-b border-[#E2E3E9] px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-1 ${viewMode === 'gallery' ? 'invisible' : ''}`}>
             <button
               onClick={handleZoomOut}
-              disabled={zoom <= 100}
+              disabled={zoom <= MIN_SCALE * 100}
               className="cursor-pointer p-2 hover:bg-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Zoom out"
+              title="Zoom out"
             >
               <ZoomOut className="w-5 h-5 text-gray-700" />
             </button>
-            <span className="text-sm font-medium text-gray-700 min-w-[60px] text-center">
+            <span className="text-sm font-medium text-gray-700 min-w-[52px] text-center tabular-nums">
               {zoom}%
             </span>
             <button
               onClick={handleZoomIn}
-              disabled={zoom >= 800}
+              disabled={zoom >= MAX_SCALE * 100}
               className="cursor-pointer p-2 hover:bg-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Zoom in"
+              title="Zoom in"
             >
               <ZoomIn className="w-5 h-5 text-gray-700" />
+            </button>
+            <button
+              onClick={handleResetZoom}
+              disabled={zoom === 100}
+              className="cursor-pointer ml-1 flex items-center gap-1.5 px-3 py-2 hover:bg-white rounded-lg transition-colors text-sm font-medium text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Reset zoom to 100% (fit whole page)"
+              title="Reset to 100% (fit whole page)"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span className="hidden sm:inline">Reset</span>
             </button>
           </div>
           <div className="flex items-center gap-2">
@@ -450,6 +491,7 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
               onClick={toggleExpand}
               className="cursor-pointer p-2 hover:bg-white rounded-lg transition-colors"
               aria-label={isExpanded ? 'Minimize' : 'Expand'}
+              title={isExpanded ? 'Exit full screen (Esc)' : 'Full screen'}
             >
               {isExpanded ? (
                 <Minimize2 className="w-5 h-5 text-gray-700" />
@@ -459,8 +501,8 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
             </button>
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row h-full">
-          <div className="lg:w-24 bg-[#F5F6FA] border-b lg:border-b-0 lg:border-r border-[#E2E3E9] p-2 overflow-y-auto">
+        <div className={`flex flex-col lg:flex-row ${isExpanded ? 'flex-1 min-h-0' : 'h-[75vh] min-h-[480px]'}`}>
+          <div className="lg:w-24 flex-shrink-0 bg-[#F5F6FA] border-b lg:border-b-0 lg:border-r border-[#E2E3E9] p-2 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto">
             <div className="flex lg:flex-col gap-2">
               {pages.map((page, index) => (
                 <button
@@ -494,11 +536,11 @@ const ManuscriptViewer: React.FC<ManuscriptViewerProps> = ({ pages, bookName }) 
               ))}
             </div>
           </div>
-          <div className="flex-1 overflow-auto bg-white">
+          <div className={`flex-1 min-h-0 bg-white ${viewMode === 'single' ? 'overflow-hidden' : 'overflow-auto'}`}>
             {viewMode === 'single' ? (
               pages[currentPage] ? (
-                <div className="flex items-center justify-center min-h-[400px] lg:min-h-[600px] p-4">
-                  <div className="relative bg-white shadow-2xl rounded-lg overflow-hidden w-full max-w-none h-[80vh] lg:h-[85vh]">
+                <div className="h-full p-3">
+                  <div className="relative bg-[#F5F6FA] rounded-lg overflow-hidden w-full h-full">
                     <ZoomPanImage
                       key={currentPage}
                       ref={zoomPanRef}
