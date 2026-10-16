@@ -247,23 +247,26 @@ function RadisContent() {
                           Introduction {radis.number}
                         </h3>
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Button
-                          variant='outlined'
-                          icon={<GitCompare className='w-4 h-4' />}
-                          onClick={() => {
-                            setSelectedRadisForComparison(radis);
-                            setIsComparisonModalOpen(true);
-                          }}
-                        >
-                          Compare Manuscripts
-                        </Button>
-                        <Link href={`/manuscripts?section=${radis.number.startsWith('0.') ? radis.number : `0.${radis.number}`}`}>
-                          <Button variant='outlined' icon={<Book className='w-4 h-4' />}>
-                            View Manuscripts
+                      {/* Manuscript buttons only on the first section of the introduction */}
+                      {(radis.number.startsWith('0.') ? radis.number : `0.${radis.number}`) === '0.1' && (
+                        <div className="flex flex-wrap gap-2">
+                          <Button
+                            variant='outlined'
+                            icon={<GitCompare className='w-4 h-4' />}
+                            onClick={() => {
+                              setSelectedRadisForComparison(radis);
+                              setIsComparisonModalOpen(true);
+                            }}
+                          >
+                            Compare Manuscripts
                           </Button>
-                        </Link>
-                      </div>
+                          <Link href="/manuscripts?section=0.1">
+                            <Button variant='outlined' icon={<Book className='w-4 h-4' />}>
+                              View Manuscripts
+                            </Button>
+                          </Link>
+                        </div>
+                      )}
                     </div>
                     <div className="mb-6">
 
