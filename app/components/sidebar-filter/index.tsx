@@ -42,6 +42,7 @@ export default function SidebarFilter({
   const [editions, setEditions] = useState<Edition[]>([]);
   // Fetch editions on component mount
   useEffect(() => {
+    if (!onEditionChange) return;
     const fetchEditions = async () => {
       try {
         const response = await postsApi.getEditions();
@@ -153,7 +154,7 @@ export default function SidebarFilter({
             </div>
 
             {/* Edition Filter */}
-            {editionOptions.length > 0 && (
+            {onEditionChange && editionOptions.length > 0 && (
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-3">
                   Edition

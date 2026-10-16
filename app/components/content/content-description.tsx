@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { formatTextWithFootnotes, isArabicText, normalizeArabic } from '@/app/utils/text-formatting';
 import { extractReferences, replaceReferencesWithSuperscripts } from '@/app/utils';
 import Select from '@/app/components/select';
+import { getPreference, setPreference, parseDisplayMode } from '@/app/utils/preferences';
 
 interface ContentDescriptionProps {
   content: Post;
@@ -41,24 +42,34 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
   }, [content.post_base_documentId]);
 
   useEffect(() => {
-    const editionParam = searchParams.get('edition');
-    if (editionParam) {
-      setSelectedEditionId(editionParam);
-    } else if (content.editions && Array.isArray(content.editions) && content.editions.length > 0) {
+    const saved = parseDisplayMode(getPreference('detailDisplay'));
+    if (saved) setDisplayMode(saved);
+  }, []);
+
+  const handleDisplayModeChange = (value: 'both' | 'english-only' | 'arabic-only') => {
+    setDisplayMode(value);
+    setPreference('detailDisplay', value);
+  };
+
+  // The selected edition is always the edition of the post being shown
+  useEffect(() => {
+    if (content.editions && Array.isArray(content.editions) && content.editions.length > 0) {
       setSelectedEditionId(content.editions[0].id.toString());
     } else if (content.editions && content.editions.id) {
       setSelectedEditionId(content.editions.id.toString());
     }
-  }, [content, searchParams]);
+  }, [content]);
 
   const handleEditionChange = (editionId: string) => {
     setSelectedEditionId(editionId);
 
-    // Update URL with edition parameter
+    // The URL and saved preference use the edition title, same as the listing pages
+    const editionTitle = editions.find(e => e.id.toString() === editionId)?.title;
     const params = new URLSearchParams(searchParams.toString());
-    params.set('edition', editionId);
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.pushState(null, '', newUrl);
+    if (editionTitle) {
+      params.set('edition', editionTitle);
+      setPreference('edition', editionTitle);
+    }
 
     if (availablePosts.length > 0) {
       const targetPost = availablePosts.find(p => {
@@ -465,7 +476,7 @@ const ContentDescription = ({ content, contentType, highlightRef, englishWord, a
           <Select
             options={displayOptions}
             value={displayMode}
-            onChange={(value) => setDisplayMode(value as 'both' | 'english-only' | 'arabic-only')}
+            onChange={(value) => handleDisplayModeChange(value as 'both' | 'english-only' | 'arabic-only')}
             placeholder="Display Mode"
             className="w-full sm:w-48"
           />

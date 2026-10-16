@@ -11,6 +11,7 @@ import Button from '../button';
 import Select from '../select';
 import ManuscriptComparisonModal from '../manuscript-comparison-modal';
 import AudioPlayer from './audio-player';
+import { getPostEditionTitles, postHasEdition } from '@/app/utils/preferences';
 
 interface ContentDetailsPageProps {
   contentType: 'orations' | 'letters' | 'sayings';
@@ -37,18 +38,29 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
   const returnPage = searchParams.get('returnPage');
   const returnSort = searchParams.get('returnSort');
   const returnSearch = searchParams.get('returnSearch');
-  const editionId = searchParams.get('edition');
+  const editionParam = searchParams.get('edition');
   const display = searchParams.get('display');
   const highlightRef = searchParams.get('highlightRef');
   const englishWord = searchParams.get('word');
   const arabicWord = searchParams.get('arabicWord');
 
+  const [content, setContent] = useState<Post | null>(null);
+
+  // The edition of the post being viewed; navigation stays within it
+  const contentEditionTitle = getPostEditionTitles(content)[0] || '';
+  const currentEditionTitle = contentEditionTitle || editionParam || '';
+
   const buildDetailsUrl = (postId: number | string) => {
-    const qs = searchParams.toString();
+    const params = new URLSearchParams(searchParams.toString());
+    if (currentEditionTitle) params.set('edition', currentEditionTitle);
+    // Paragraph/word highlights belong to the current post only
+    params.delete('highlightRef');
+    params.delete('word');
+    params.delete('arabicWord');
+    const qs = params.toString();
     return qs ? `/content/details/${contentType}/${postId}?${qs}` : `/content/details/${contentType}/${postId}`;
   };
 
-  const [content, setContent] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
@@ -101,12 +113,7 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
           'sayings': 'Saying'
         };
 
-        let editionTitle: string | undefined;
-        if (editionId) {
-          const editionsResponse = await postsApi.getEditions();
-          const matchingEdition = (editionsResponse.data || []).find((ed: any) => ed?.id?.toString() === editionId);
-          editionTitle = matchingEdition?.title;
-        }
+        const editionTitle = contentEditionTitle || undefined;
         const editionPrefix = !editionTitle ? getEditionPrefix(content?.sermonNumber) : '';
 
         while (hasMore) {
@@ -130,9 +137,13 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
         }
 
         if (allPosts.length > 0) {
-          const scopedPosts = editionPrefix
-            ? allPosts.filter((post) => getEditionPrefix(post?.sermonNumber) === editionPrefix)
-            : allPosts;
+          // A post-base holds every edition of an item, so the API filter alone
+          // returns posts from other editions too; keep only the current one.
+          const scopedPosts = editionTitle
+            ? allPosts.filter((post) => postHasEdition(post, editionTitle))
+            : editionPrefix
+              ? allPosts.filter((post) => getEditionPrefix(post?.sermonNumber) === editionPrefix)
+              : allPosts;
           const sortedPosts = sortPostsByDisplayNumber(
             scopedPosts.filter((post): post is Post => !!post?.id)
           );
@@ -165,15 +176,18 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
         setAllItemNumbers([]);
       }
     };
+    if (!content) return;
     fetchAllNumbers();
-  }, [content?.sermonNumber, contentType, editionId]);
+    // Only refetch when the edition scope changes, not on every item change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentEditionTitle, contentEditionTitle ? '' : getEditionPrefix(content?.sermonNumber), contentType, !!content]);
 
   const getBackUrl = () => {
     const urlParams = new URLSearchParams();
     if (returnPage) urlParams.set('page', returnPage);
     if (returnSort) urlParams.set('sort', returnSort);
     if (returnSearch) urlParams.set('search', returnSearch);
-    if (editionId) urlParams.set('edition', editionId);
+    if (currentEditionTitle) urlParams.set('edition', currentEditionTitle);
     if (display) urlParams.set('display', display);
 
     const queryString = urlParams.toString();
@@ -217,10 +231,10 @@ export default function ContentDetailsPage({ contentType, title, api, id: propId
     }
 
     const currentNumber = getDisplayNumber(content.sermonNumber);
-    const currentIndex = navigationPosts.findIndex((post) => {
-      if (post.id === content.id) return true;
-      return currentNumber !== '' && getDisplayNumber(post.sermonNumber) === currentNumber;
-    });
+    let currentIndex = navigationPosts.findIndex((post) => post.id === content.id);
+    if (currentIndex === -1 && currentNumber !== '') {
+      currentIndex = navigationPosts.findIndex((post) => getDisplayNumber(post.sermonNumber) === currentNumber);
+    }
 
     if (currentIndex === -1) {
       setAdjacentPosts({ previous: null, next: null });

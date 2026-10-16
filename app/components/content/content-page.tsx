@@ -8,6 +8,7 @@ import ContentListing from './content-listing';
 import { type Post, type ApiResponse } from '@/api/posts';
 
 import { normalizeTextForSearch } from '@/app/utils/text-formatting';
+import { getPreference, setPreference, parseDisplayMode, type DisplayMode } from '@/app/utils/preferences';
 
 interface ContentPageConfig {
   contentType: 'orations' | 'letters' | 'sayings';
@@ -31,13 +32,25 @@ function ContentPageContent({ config }: ContentPageProps) {
 
   const [searchTerm, setSearchTerm] = useState(() => searchParams.get('search') || '');
   const [appliedSearchTerm, setAppliedSearchTerm] = useState(() => searchParams.get('search') || '');
-  const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || 'sermon-asc');
-  const [selectedEdition, setSelectedEdition] = useState(() => searchParams.get('edition') || 'Qutbuddin');
-  const [displayMode, setDisplayMode] = useState<'both' | 'english-only' | 'arabic-only'>(() => {
-    const raw = searchParams.get('display');
-    if (raw === 'english-only' || raw === 'arabic-only' || raw === 'both') return raw;
-    return 'both';
-  });
+  // URL params win, then the user's saved preferences, then defaults
+  const resolveSort = (value: string | null) => value || getPreference('sort') || 'sermon-asc';
+  const resolveEdition = (value: string | null) => value || getPreference('edition') || 'Qutbuddin';
+  const resolveDisplay = (value: string | null): DisplayMode =>
+    parseDisplayMode(value) || parseDisplayMode(getPreference('display')) || 'both';
+
+  const [sortBy, setSortBy] = useState(() => resolveSort(searchParams.get('sort')));
+  const [selectedEdition, setSelectedEdition] = useState(() => resolveEdition(searchParams.get('edition')));
+  const [displayMode, setDisplayMode] = useState<DisplayMode>(() => resolveDisplay(searchParams.get('display')));
+
+  const handleSortChange = (value: string) => {
+    setSortBy(value);
+    setPreference('sort', value);
+  };
+
+  const handleDisplayModeChange = (value: DisplayMode) => {
+    setDisplayMode(value);
+    setPreference('display', value);
+  };
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [content, setContent] = useState<Post[]>([]);
   const [allContent, setAllContent] = useState<Post[]>([]);
@@ -352,9 +365,9 @@ function ContentPageContent({ config }: ContentPageProps) {
 
     const urlPage = page ? parseInt(page, 10) : 1;
     const urlSearch = search || '';
-    const urlSort = sort || 'sermon-asc';
-    const urlEdition = edition || 'Qutbuddin';
-    const urlDisplay = display === 'english-only' || display === 'arabic-only' || display === 'both' ? display : 'both';
+    const urlSort = resolveSort(sort);
+    const urlEdition = resolveEdition(edition);
+    const urlDisplay = resolveDisplay(display);
 
     // Check if URL params differ from current state
     const stateChanged =
@@ -578,7 +591,14 @@ function ContentPageContent({ config }: ContentPageProps) {
                   </p>
                 </div>
               )}
-              <div className="mt-4 flex justify-start">
+              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 justify-start">
+                <span className="text-sm text-gray-600">
+                  Edition: <span className="font-semibold text-gray-900">{selectedEdition}</span>
+                  {' · '}
+                  <Link href="/" className="font-semibold text-[#43896B] hover:text-[#367556] underline underline-offset-4">
+                    Change
+                  </Link>
+                </span>
                 <Link
                   href={aboutEditionHref}
                   className="text-sm font-semibold text-[#43896B] hover:text-[#367556] underline underline-offset-4"
@@ -595,20 +615,13 @@ function ContentPageContent({ config }: ContentPageProps) {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           sortBy={sortBy}
-          setSortBy={setSortBy}
+          setSortBy={handleSortChange}
           sortOptions={sortOptions}
           displayMode={displayMode}
-          setDisplayMode={setDisplayMode}
+          setDisplayMode={handleDisplayModeChange}
           onGoToNumber={handleGoToNumber}
           totalItems={total}
           onSearch={handleSearch}
-          selectedEdition={selectedEdition}
-          onEditionChange={(edition) => {
-            setSelectedEdition(edition);
-            setCurrentPage(1);
-            setContent([]);
-            setAllContent([]);
-          }}
           isOpen={sidebarOpen}
           setIsOpen={setSidebarOpen}
         />

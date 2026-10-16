@@ -5,6 +5,7 @@ import ArabicTitleImage from '@/app/assets/images/arabic-title.png'
 import Image from 'next/image';
 import Link from 'next/link';
 import Button from '@/app/components/button';
+import EditionPicker from '@/app/components/edition-picker';
 import { orationsApi, lettersApi, sayingsApi, radisApi } from '@/api';
 
 const HeroSection = () => {
@@ -153,7 +154,9 @@ const HeroSection = () => {
               </Link>
             </div>
 
-            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto px-4">
+            <EditionPicker className="mt-12 px-4" />
+
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto px-4">
               {contentTypes.map((content, index) => (
                 <Link href={content.href} key={content.label} className="block group">
                   <div className="relative bg-linear-to-br from-white via-[#43896B]/5 to-white backdrop-blur-xl rounded-3xl p-4 sm:p-6 border-2 border-[#43896B]/15 hover:border-[#43896B]/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-3 cursor-pointer overflow-visible h-full flex flex-col">
