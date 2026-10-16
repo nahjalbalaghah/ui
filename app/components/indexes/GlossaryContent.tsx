@@ -73,6 +73,8 @@ export default function GlossaryContent() {
   };
 
   useEffect(() => {
+    // Only reset to page 1 when the search actually changed
+    if (searchWord === appliedSearchWord) return;
     const timeout = window.setTimeout(handleApplyFilters, 500);
     return () => window.clearTimeout(timeout);
   }, [searchWord]);

@@ -182,6 +182,11 @@ export default function QuranHadithContent() {
   };
 
   useEffect(() => {
+    // Only reset to page 1 when a filter actually changed (not on page changes)
+    const filtersChanged = (Object.keys(filters) as (keyof typeof filters)[])
+      .some(key => (filters[key] ?? "") !== (appliedFilters[key] ?? ""));
+    if (!filtersChanged) return;
+
     const timeout = window.setTimeout(() => {
       handleApplyFilters(filters);
     }, 500);
