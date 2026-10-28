@@ -62,7 +62,7 @@ export const postsApi = {
 
   async getEditions(): Promise<{ data: Edition[] }> {
     try {
-      const response = await api.get('/api/editions');
+      const response = await api.get('/api/editions', { params: { sort: 'displayOrder:asc' } });
       return {
         data: response.data.data
       };

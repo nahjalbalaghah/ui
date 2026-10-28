@@ -84,6 +84,7 @@ export interface Edition {
   id: number;
   documentId: string;
   title: string;
+  displayOrder?: number | null;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
