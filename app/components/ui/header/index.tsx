@@ -80,7 +80,7 @@ const Header = () => {
                     Nahj al-Balaghah
                   </h1>
                   <p className="text-sm text-gray-600 font-medium mt-0.5">
-                    Way of Eloquence
+                    The Way of Eloquence
                   </p>
                 </div>
               </div>

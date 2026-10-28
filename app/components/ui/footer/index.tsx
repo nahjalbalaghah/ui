@@ -22,7 +22,7 @@ const Footer = () => {
               </div>
               <div className="text-left">
                 <h2 className="text-xl md:text-2xl font-bold text-white mb-1">Nahj al-Balaghah</h2>
-                <p className="text-sm md:text-base text-white/90 font-light tracking-wide">Way of Eloquence</p>
+                <p className="text-sm md:text-base text-white/90 font-light tracking-wide">The Way of Eloquence</p>
               </div>
             </div>
             <nav className="flex items-center gap-1 bg-white/10 backdrop-blur-sm rounded-full p-1 border border-white/20 shadow-lg">
