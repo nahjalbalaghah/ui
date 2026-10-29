@@ -184,7 +184,7 @@ export default function ListViewItem({ item, contentType, displayMode = 'both', 
               {expandedArabic && (
                 <div className={expandedEnglish ? "mt-4" : ""}>
                   <div className="text-right">
-                    <p className="text-base font-brill leading-[2.5] text-gray-900 whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1rem' }}>
+                    <p className="text-base font-taha leading-[2.5] text-gray-900 whitespace-pre-wrap" dir="rtl" style={{ fontSize: '1rem' }}>
                       {formatTextWithFootnotes(expandedArabic, [], true, item.sermonNumber || 'main')}
                     </p>
                   </div>

@@ -316,7 +316,7 @@ export default function ReligiousConceptsContent() {
                               </div>
                             </td>
                             <td className="px-6 py-4 text-right">
-                              <span className="text-gray-900 font-medium group-hover:text-[#43896B] transition-colors">
+                              <span className="text-gray-900 font-medium font-taha group-hover:text-[#43896B] transition-colors" dir="rtl">
                                 {item.word_arabic || '-'}
                               </span>
                             </td>
@@ -352,7 +352,7 @@ export default function ReligiousConceptsContent() {
                     >
                       <div className="flex items-center gap-3">
                         <div className="flex-1 min-w-0">
-                          <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
+                          <div className="text-base font-semibold font-taha text-gray-900 group-hover:text-[#43896B] transition-colors" dir="rtl">
                             {item.word_arabic || '-'}
                           </div>
                         </div>

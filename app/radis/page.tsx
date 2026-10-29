@@ -180,7 +180,7 @@ function RadisContent() {
                 Raḍī's Introduction
               </h1>
             </div>
-            <div className="text-2xl lg:text-3xl mb-6 font-[uthman-taha]" style={{ fontFamily: 'uthman-taha, serif' }}>
+            <div className="text-2xl lg:text-3xl mb-6 font-taha" dir="rtl">
               مقدمة الرضي
             </div>
             <p className="text-xl lg:text-2xl opacity-90 leading-relaxed">
@@ -271,8 +271,8 @@ function RadisContent() {
                     <div className="mb-6">
 
                       <div
-                        className="text-right lg:text-lg leading-loose text-gray-800 font-[uthman-taha] rounded-lg"
-                        style={{ fontFamily: 'uthman-taha, serif' }}
+                        className="text-right lg:text-lg leading-loose text-gray-800 font-taha rounded-lg"
+                        dir="rtl"
                       >
                         {radis.arabic}
                       </div>

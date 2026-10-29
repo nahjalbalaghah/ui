@@ -555,7 +555,7 @@ export default function IndexDetailDispatcher() {
             <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-8">
                 {category === 'names-places' && glossaryDescription && (
                     <div className="bg-[#43896B]/5 border-l-4 border-[#43896B] p-6 rounded-r-xl mb-8" dir={language === 'arabic' ? 'rtl' : 'ltr'}>
-                        <p className={`text-gray-700 italic leading-relaxed ${language === 'arabic' ? 'text-right' : ''}`}>
+                        <p className={`text-gray-700 italic leading-relaxed ${language === 'arabic' ? 'text-right font-taha' : ''}`}>
                             {glossaryDescription}
                         </p>
                     </div>
@@ -764,7 +764,7 @@ function ContentCard({ item, term, language }: { item: CombinedResult; term: str
 }
 
 function HighlightText({ text, term, language }: { text: string; term: string; language?: 'english' | 'arabic' }) {
-    if (!text || !term) return <p className={`text-gray-800 text-lg leading-loose ${language === 'arabic' ? 'text-right' : ''}`} dir={language === 'arabic' ? 'rtl' : 'ltr'}>{text}</p>;
+    if (!text || !term) return <p className={`text-gray-800 text-lg leading-loose ${language === 'arabic' ? 'text-right font-taha' : ''}`} dir={language === 'arabic' ? 'rtl' : 'ltr'}>{text}</p>;
     const t = term.toLowerCase().trim();
     const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     let regexStr = escape(t);
@@ -775,7 +775,7 @@ function HighlightText({ text, term, language }: { text: string; term: string; l
 
     const parts = text.split(new RegExp(`(${regexStr})`, 'gi'));
     return (
-        <p className={`text-gray-800 text-lg leading-loose ${language === 'arabic' ? 'text-right' : ''}`} dir={language === 'arabic' ? 'rtl' : 'ltr'}>
+        <p className={`text-gray-800 text-lg leading-loose ${language === 'arabic' ? 'text-right font-taha' : ''}`} dir={language === 'arabic' ? 'rtl' : 'ltr'}>
             {parts.map((part, i) =>
                 new RegExp(`^${regexStr}$`, 'i').test(part) ? <span key={i} className="bg-yellow-200 text-gray-900 font-medium px-1 rounded">{part}</span> : part
             )}

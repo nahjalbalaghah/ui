@@ -13,13 +13,14 @@ interface MetadataField {
   label: string;
   value: string;
   icon?: React.ReactNode;
+  arabic?: boolean;
 }
 
 const ManuscriptMetadataDisplay: React.FC<ManuscriptMetadataDisplayProps> = ({ metadata }) => {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
 
   const overviewFields: MetadataField[] = [
-    { label: 'Sigla (Arabic)', value: metadata.siglaArabic, icon: <Book className="w-4 h-4" /> },
+    { label: 'Sigla (Arabic)', value: metadata.siglaArabic, icon: <Book className="w-4 h-4" />, arabic: true },
     { label: 'Sigla (English)', value: metadata.siglaEnglish, icon: <Book className="w-4 h-4" /> },
     { label: 'Hijri Year', value: metadata.hijriYear, icon: <Calendar className="w-4 h-4" /> },
     { label: 'Gregorian Year', value: metadata.gregorianYear, icon: <Calendar className="w-4 h-4" /> },
@@ -65,7 +66,7 @@ const ManuscriptMetadataDisplay: React.FC<ManuscriptMetadataDisplayProps> = ({ m
                 {field.label}
               </dt>
               <dd className="text-sm text-gray-600 leading-relaxed">
-                {field.value}
+                {field.arabic ? <span className="font-taha text-base" dir="rtl">{field.value}</span> : field.value}
               </dd>
             </div>
           </div>

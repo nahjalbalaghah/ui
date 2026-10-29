@@ -383,7 +383,7 @@ export default function NamesPlacesContent() {
                             )}
                             {appliedFilters.language === 'Arabic' && (
                               <td className="px-6 py-4 text-right">
-                                <span className="text-gray-900 font-medium group-hover:text-[#43896B] transition-colors">
+                                <span className="text-gray-900 font-medium font-taha group-hover:text-[#43896B] transition-colors" dir="rtl">
                                   {item.word_arabic || '-'}
                                 </span>
                               </td>
@@ -429,7 +429,7 @@ export default function NamesPlacesContent() {
                             </div>
                           )}
                           {appliedFilters.language === 'Arabic' && (
-                            <div className="text-base font-semibold text-gray-900 group-hover:text-[#43896B] transition-colors">
+                            <div className="text-base font-semibold font-taha text-gray-900 group-hover:text-[#43896B] transition-colors" dir="rtl">
                               {item.word_arabic || '-'}
                             </div>
                           )}

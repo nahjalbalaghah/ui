@@ -30,7 +30,7 @@ export default function AlphabetChips({ selectedLetter, onSelectLetter, language
                 <button
                     key={letter}
                     onClick={() => onSelectLetter(letter)}
-                    className={`w-8 h-8 text-xs font-semibold rounded-full transition-all border flex items-center justify-center ${selectedLetter === letter
+                    className={`w-8 h-8 ${language === 'Arabic' ? 'text-sm font-taha' : 'text-xs'} font-semibold rounded-full transition-all border flex items-center justify-center ${selectedLetter === letter
                             ? "bg-[#43896B] text-white border-[#43896B] shadow-sm scale-110"
                             : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-[#43896B] hover:text-[#43896B]"
                         }`}

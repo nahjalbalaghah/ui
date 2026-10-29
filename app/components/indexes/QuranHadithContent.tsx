@@ -515,7 +515,7 @@ export default function QuranHadithContent() {
                             )}
                             {appliedFilters.language === 'Arabic' && (
                               <td className="px-6 py-4 text-right">
-                                <span className="block text-gray-900 group-hover:text-[#43896B] transition-colors truncate">
+                                <span className="block text-gray-900 font-taha group-hover:text-[#43896B] transition-colors truncate" dir="rtl">
                                   {displayText}
                                 </span>
                               </td>
@@ -589,7 +589,7 @@ export default function QuranHadithContent() {
                             </div>
                           )}
                           {appliedFilters.language === 'Arabic' && (
-                            <div className="text-sm text-gray-900 line-clamp-2">
+                            <div className="text-sm text-right text-gray-900 font-taha line-clamp-2" dir="rtl">
                               {displayText}
                             </div>
                           )}

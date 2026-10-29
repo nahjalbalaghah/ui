@@ -20,11 +20,6 @@ body {
    font-family: "DM Sans", sans-serif !important;
 }
 
-.font-arabic {
-  font-family: "Noto Sans Arabic", "Amiri", "Scheherazade", "Times New Roman", serif;
-  line-height: 1.8;
-}
-
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

@@ -14,7 +14,7 @@ const Footer = () => {
             <div className="flex items-center gap-4 group">
               <div className="relative transform transition-transform duration-300 group-hover:scale-105">
                 <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center shadow-lg border border-white/10">
-                  <div className="text-center leading-none font-taha">
+                  <div className="text-center leading-none font-taha" dir="rtl">
                     <div className="text-white font-bold text-base mb-1">نهج</div>
                     <div className="text-white font-bold text-base -mt-1">البلاغة</div>
                   </div>

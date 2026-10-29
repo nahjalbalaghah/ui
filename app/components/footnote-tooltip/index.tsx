@@ -189,7 +189,7 @@ export const FootnoteTooltip: React.FC<FootnoteTooltipProps> = ({
         </div>
       )}
       {matchedLanguage === 'arabic' && footnote.arabic_interpretation && (
-        <div className="text-sm text-right mb-2 leading-relaxed text-gray-800" dir="rtl">
+        <div className="text-sm text-right mb-2 leading-relaxed text-gray-800 font-taha" dir="rtl">
           {footnote.arabic_interpretation}
         </div>
       )}

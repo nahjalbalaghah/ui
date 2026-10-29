@@ -79,7 +79,7 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
 
     if (loading) {
         return (
-            <div dir="rtl" className="font-arabic min-h-screen bg-gray-50 flex items-center justify-center">
+            <div dir="rtl" className="font-taha min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <Loader2 className="w-12 h-12 text-[#43896B] animate-spin mx-auto mb-4" />
                     <p className="text-gray-600">جارٍ تحميل المصادر...</p>
@@ -89,7 +89,7 @@ export default function SourcesListContent({ contentTypeLabel, itemNumber }: Sou
     }
 
     return (
-        <div dir="rtl" className="font-arabic min-h-screen bg-gray-50">
+        <div dir="rtl" className="font-taha min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-2">

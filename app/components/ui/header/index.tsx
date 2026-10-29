@@ -69,7 +69,7 @@ const Header = () => {
               <div className="flex items-center gap-3 cursor-pointer">
                 <div className="relative">
                   <div className="w-16 h-14 bg-[#43896B] rounded-2xl flex items-center justify-center shadow-lg border border-[#43896B]/20">
-                    <div className="text-center leading-none font-taha">
+                    <div className="text-center leading-none font-taha" dir="rtl">
                       <div className="text-white font-bold text-lg mb-0.5">نهج</div>
                       <div className="text-white font-bold text-base -mt-1">البلاغة</div>
                     </div>

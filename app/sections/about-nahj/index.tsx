@@ -44,7 +44,7 @@ const AboutNahjSection = () => {
             </div>
             <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-6">
               <p className="text-lg">
-                <strong>Nahj al-Balaghah</strong> (نَهْجُ البَلَاغَة, "The Peak of Eloquence") is a collection of sermons, letters, and sayings attributed to Imam Ali ibn Abi Talib (AS), the cousin and son-in-law of Prophet Muhammad (PBUH), and the fourth caliph in Sunni Islam and the first Imam in Shia Islam.
+                <strong>Nahj al-Balaghah</strong> (<span className="font-taha" dir="rtl" lang="ar">نَهْجُ البَلَاغَة</span>, "The Peak of Eloquence") is a collection of sermons, letters, and sayings attributed to Imam Ali ibn Abi Talib (AS), the cousin and son-in-law of Prophet Muhammad (PBUH), and the fourth caliph in Sunni Islam and the first Imam in Shia Islam.
               </p>
               <p>
                 Compiled in the 10th century CE by Sharif al-Radi, a renowned Shia scholar, this work is celebrated as one of the most significant pieces of Arabic literature and Islamic thought. It addresses themes of governance, justice, spirituality, ethics, and human nature with profound eloquence and wisdom.

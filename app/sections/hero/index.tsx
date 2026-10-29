@@ -66,7 +66,7 @@ const HeroSection = () => {
   const progress = (currentTime / duration) * 100
 
   const introCard = {
-    arabic: "المقدمة",
+    arabic: "مقدمة الرضي",
     label: "Introduction",
     href: "/radis",
     type: "Introduction"
@@ -137,7 +137,7 @@ const HeroSection = () => {
                       <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#43896B] mb-2 leading-tight">
                         {introCard.label}
                       </div>
-                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#43896B] font-[uthman-taha] mb-2 leading-tight" style={{ fontFamily: 'uthman-taha, serif', letterSpacing: '0.05em' }}>
+                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#43896B] font-taha text-left mb-2 leading-tight" dir="rtl">
                         {introCard.arabic}
                       </div>
                     </div>
@@ -166,7 +166,7 @@ const HeroSection = () => {
                       <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#43896B] mb-2 lg:mb-5 group-hover:scale-110 transition-transform duration-500 px-2 min-h-12 flex items-center justify-center" style={{ lineHeight: '1.2' }}>
                         {content.label}
                       </div>
-                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#43896B] mb-2 font-[uthman-taha] group-hover:scale-110 transition-transform duration-500 px-2 min-h-12 flex items-center justify-center" style={{ fontFamily: 'uthman-taha, serif', letterSpacing: '0.05em', lineHeight: '1.2' }}>
+                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#43896B] mb-2 font-taha group-hover:scale-110 transition-transform duration-500 px-2 min-h-12 flex items-center justify-center" dir="rtl" style={{ lineHeight: '1.2' }}>
                         {content.arabic}
                       </div>
                       <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-[#43896B]/40 to-transparent rounded-full mb-4"></div>
@@ -190,7 +190,7 @@ const HeroSection = () => {
                       <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#43896B] mb-2 lg:mb-5 leading-tight">
                         {conclusionCard.label}
                       </div>
-                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#43896B] font-[uthman-taha] mb-2 leading-tight" style={{ fontFamily: 'uthman-taha, serif', letterSpacing: '0.05em' }}>
+                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-[#43896B] font-taha text-left mb-2 leading-tight" dir="rtl">
                         {conclusionCard.arabic}
                       </div>
                     </div>

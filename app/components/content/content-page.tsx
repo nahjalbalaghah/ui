@@ -579,7 +579,7 @@ function ContentPageContent({ config }: ContentPageProps) {
             <div className="flex flex-col">
               {config.tocArabic && (
                 <div className="text-right">
-                  <h2 className="lg:text-2xl font-bold text-gray-900 leading-relaxed font-arabic mb-2" dir="rtl">
+                  <h2 className="lg:text-2xl font-bold text-gray-900 leading-relaxed font-taha mb-2" dir="rtl">
                     {config.tocArabic}
                   </h2>
                 </div>

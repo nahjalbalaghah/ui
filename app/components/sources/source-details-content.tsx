@@ -50,7 +50,7 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
 
     if (loading) {
         return (
-            <div dir="rtl" className="font-arabic min-h-screen bg-gray-50 flex items-center justify-center">
+            <div dir="rtl" className="font-taha min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <Loader2 className="w-12 h-12 text-[#43896B] animate-spin mx-auto mb-4" />
                     <p className="text-gray-600">جارٍ تحميل تفاصيل المصدر...</p>
@@ -61,7 +61,7 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
 
     if (error || !source) {
         return (
-            <div dir="rtl" className="font-arabic min-h-screen bg-gray-50 flex items-center justify-center">
+            <div dir="rtl" className="font-taha min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <p className="text-red-600 mb-4">{error || 'المصدر غير موجود'}</p>
                     <button
@@ -77,7 +77,7 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
     }
 
     return (
-        <div dir="rtl" className="font-arabic min-h-screen bg-gray-50">
+        <div dir="rtl" className="font-taha min-h-screen bg-gray-50">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <button
                     onClick={() => router.back()}
@@ -104,7 +104,7 @@ export default function SourceDetailsContent({ documentId: propDocumentId }: Sou
                     </div>
                     <div className="p-8 md:p-12">
                         <div className="prose prose-lg max-w-none text-gray-700 border-r-4 border-[#43896B] p-4 lg:p-6 bg-[#43896B]/5 rounded-l-xl mb-12">
-                            <p className="whitespace-pre-wrap text-right font-arabic text-lg">{source.content}</p>
+                            <p className="whitespace-pre-wrap text-right font-taha text-lg">{source.content}</p>
                         </div>
                     </div>
                 </div>
